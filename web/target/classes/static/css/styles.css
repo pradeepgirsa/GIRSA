@@ -1,0 +1,48 @@
+#main {
+    background-color: lightgoldenrodyellow;
+}
+header {
+    background: white;
+    padding: 5px;
+    height: 150px;
+}
+body>header>a>img, body>header a {
+    display: inline-block;
+    vertical-align: middle;
+    padding: 0px 5px;
+    font-size: 1.2em;
+    height: auto;
+}
+footer {
+    background: limegreen;
+    text-align: center;
+    font-size: 12px;
+    vertical-align: bottom;
+    height: auto;
+    /*width: 100%;*/
+}
+#logged-in-info {
+    float: right;
+    margin-top: 18px;
+}
+#logged-in-info form {
+    display: inline-block;
+    margin-right: 10px;
+}
+#wrapper {
+    width: 70%;
+    margin: 0 auto;
+    padding-bottom: 0px;
+    /*height: 400px;*/
+    background-color: transparent;
+    background: #FFFFFF;
+    border:2px solid limegreen;
+}
+
+#mainTable {
+    height: 75vh;
+    text-align: center;
+    alignment: center;
+    border: solid 0px red;
+    width: 100%;
+}

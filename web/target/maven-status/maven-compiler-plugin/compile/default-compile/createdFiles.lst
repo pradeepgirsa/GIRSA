@@ -1,0 +1,7 @@
+GirsaApplication.class
+za\co\global\controllers\utils\SpringBootWebApplication.class
+za\co\global\controllers\utils\GlobalExceptionHandler.class
+za\co\global\controllers\client\ClientController.class
+za\co\global\controllers\login\LoginController.class
+za\co\global\controllers\product\ProductController.class
+za\co\global\controllers\uplaod\FileUploadController.class
