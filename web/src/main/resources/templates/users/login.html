@@ -1,37 +1,95 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" id="main">
-<head th:replace="layout :: site-head"/>
-<body>
+<html xmlns:th="https://www.thymeleaf.org" xmlns="https://www.w3.org/1999/xhtml" lang="en">
+<head lang="en">
+    <title>LEPO</title>
+    <!--<link rel="icon" th:if="${environment} == 'prod'" th:href="@{/images/gir.png}" type="image/x-icon"/>
 
-<div id="wrapper">
-    <header th:replace="layout :: site-header"/>
-    <section>
-        <form role="form" method="post" th:action="@{/verify_login}">
-            <table id="mainTable" border="0">
-                <tr>
-                    <td colspan="2"><span th:text="${message}"/></td>
-                </tr>
-                <tr>
-                    <td/>
-                    <td/>
-                    <td align="right">Username:</td>
-                    <td align="left"><input name="username" th:object="${username}"/></td>
-                </tr>
-                <tr>
-                    <td/>
-                    <td/>
-                    <td align="right">Password:</td>
-                    <td align="left"><input id="password" type="password" name="password" th:object="${password}"/></td>
-                </tr>
-                <tr>
-                    <!--<td align="right"><a th:href="@{/register}">SignUp</a></td>-->
-                    <td align="right">
-                        <input type="submit" value="SignIn"/></td>
-                </tr>
-            </table>
-        </form>
-    </section>
-    <footer th:replace="layout :: site-footer"/>
+    <link rel="shortcut icon" th:if="${environment} == 'prod'" th:href="@{/images/gir.png}" type="image/x-icon"/>-->
+
+    <meta http-equiv="CONTENT-TYPE" content="text/html; charset=UTF-8" />
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+    <meta name="description" content=""/>
+    <meta name="author" content=""/>
+
+    <link th:if="${environment} == 'prod'" th:href="@{css/style.default.css}" rel="stylesheet" />
+
+</head>
+<body class="signin">
+
+<div id="stage" class="loading">
+    <div id="loading-image"></div>
 </div>
+<section>
+    <div class="panel panel-signin">
+        <div class="panel-body">
+            <div  th:if="${loginError}" class="alert alert-danger">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                Incorrect username and password!</div>
+            <div  th:if="${logoutMessage}" class="alert alert-info" align="center">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                You've been logged out successfully.</div>
+           <!-- <div  th:if="${requestMessage}" >
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                Your request have been logged, you should receive an email with your login details shortly!</div>-->
+            <div style="width: 100%; text-align: center;">
+                <div class="logo text-center" style="display: inline-block;">
+                    <img th:if="${environment} == 'prod'" th:src="@{/images/lepo.png}" th:alt="@{Lepo Logo}" />
+                </div>
+                <div style="display: inline-block;">
+                    <p th:text="${environment}" id="lepoLoginEnvironment"></p>
+                </div>
+            </div>
+
+
+            <div class="mb30"></div>
+
+            <form  th:action="@{/login}" method="POST" name='loginForm' role="form">
+                <div class="input-group mb15">
+                    <span class="input-group-addon"><i class="glyphicon glyphicon-user"/></span>
+                    <input type="text" class="form-control" placeholder="Username" id="usr" name='username'/>
+                </div><!-- input-group -->
+                <div class="input-group mb15">
+                    <span class="input-group-addon"><i class="glyphicon glyphicon-lock"/></span>
+                    <input type="password" class="form-control" placeholder="Password" id="pwd" name='password'/>
+                </div><!-- input-group -->
+
+                <div class="clearfix">
+                    <div class="pull-left">
+                        <div class="ckbox ckbox-primary mt10">
+                            <input type="checkbox" id="rememberMe" value="1"/>
+                            <label for="rememberMe">Remember Me</label>
+                        </div>
+                    </div>
+                    <div class="pull-right">
+                        <button type="submit" class="btn btn-lepo" onclick="loadingScreen()" id="login-button">Log In</button>
+                    </div>
+                </div>
+                <input type="hidden" name="${_csrf.parameterName}"
+                       value="${_csrf.token}" />
+            </form>
+
+        </div><!-- panel-body -->
+        <!--<div class="panel-footer">
+            <a th:href="@{/login?request}" class="btn btn-default btn-block">Request username and password</a>
+        </div>-->
+    </div><!-- panel -->
+
+</section>
+
+<script th:src="@{/js/jquery-1.11.1.min.js}"></script>
+<script th:src="@{/js/jquery-migrate-1.2.1.min.js}"></script>
+<script th:src="@{/js/bootstrap.min.js}"></script>
+<script th:src="@{/js/modernizr.min.js}"></script>
+<script th:src="@{/js/pace.min.js}"></script>
+<script th:src="@{/js/retina.min.js}"></script>
+<script th:src="@{/js/jquery.cookies.js}"></script>
+
+<script th:src="@{/js/custom.js}"></script>
+
+<script th:replace="layout :: site-screen-loader">
+</script>
+
+
 </body>
 </html>

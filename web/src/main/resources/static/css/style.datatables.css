@@ -1,0 +1,115 @@
+
+@import url('https://cdn.datatables.net/plug-ins/725b2a2115b/integration/bootstrap/3/dataTables.bootstrap.css');
+
+.dataTables_length, .dataTables_filter {
+    margin-top: 8px;
+}
+
+div.dataTables_length label {
+    margin-top: 3px;
+    margin-bottom: 5px !important;
+}
+
+.dataTables_length .form-control,
+.dataTables_filter .form-control {
+    margin-left: 5px;
+    vertical-align: baseline;
+}
+
+.table.dataTable thead .sorting_asc {
+    background-image: url('../images/datatables/sort_asc.png');
+}
+
+.table.dataTable thead .sorting_desc {
+    background-image: url('../images/datatables/sort_desc.png');
+}
+
+.table.dataTable thead > tr > th {
+    padding-left: 8px;
+}
+
+td.details-control {
+    cursor: pointer;
+}
+
+td.details-control:before {
+    font-family: 'FontAwesome';
+    content: '\f105';
+    display: block;
+    text-align: center;
+    font-size: 16px;
+}
+
+tr.shown td.details-control:before {
+    font-family: 'FontAwesome';
+    content: '\f107';
+    display: block;
+    text-align: center;
+    font-size: 16px;
+}
+
+.dataTables_wrapper table > tbody > tr > td table {
+    width: 500px;
+}
+
+
+/* For table length select using select2 */
+.select2-container .select2-choice {
+    padding-top: 2px;
+    padding-bottom: 2px;
+}
+
+.select2-container .select2-choice .select2-arrow {
+    top: -1px;
+}
+
+/*!******** Adding missing css from missing dataTables.bootstrap.css file ********!*/
+/*.table.dataTable thead .sorting_asc {*/
+    /*background: url('../images/datatables/sort_asc.png') no-repeat center right !important;*/
+/*}*/
+
+/*table.dataTable thead .sorting_desc {*/
+    /*background: url('../images/datatables/sort_desc.png') no-repeat center right !important;*/
+/*}*/
+
+/*!******** Custom styling to pagination controls ********!*/
+/*#table_unprocessed_info, .dataTables_info {*/
+    /*float: left;*/
+/*}*/
+
+/*#table_unprocessed_paginate, .dataTables_paginate {*/
+    /*float: right;*/
+/*}*/
+
+/*.paginate_button {*/
+    /*position: relative;*/
+    /*float: left;*/
+    /*padding: 6px 12px;*/
+    /*margin-left: -1px;*/
+    /*line-height: 1.42857143;*/
+    /*color: #337ab7;*/
+    /*text-decoration: none;*/
+    /*background-color: #fff;*/
+    /*border: 1px solid #ddd;*/
+/*}*/
+
+/*.dataTables_paginate .current {*/
+    /*z-index: 2;*/
+    /*color: #fff;*/
+    /*cursor: default;*/
+    /*background-color: #337ab7;*/
+    /*border-color: #337ab7;*/
+/*}*/
+
+/*.dataTables_paginate a:hover {*/
+    /*color: #23527c;*/
+    /*background-color: #eee;*/
+    /*border-color: #ddd;*/
+/*}*/
+
+/*.dataTables_paginate a.disabled {*/
+    /*color: #777;*/
+    /*cursor: not-allowed;*/
+    /*background-color: #fff;*/
+    /*border-color: #ddd*/
+/*}*/

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet id="gui_menu_table_1" author="Pradeep" runOnChange="true">
+        <createTable tableName="gui_menu" >
+            <column name="id" type="bigint">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="class_type" type="varchar(10)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="has_role" type="varchar(255)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="href" type="varchar(255)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="icon" type="varchar(50)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="javascript_function" type="varchar(45)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="name" type="varchar(125)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="notification_count" type="BIT(1)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="parent_id" type="bigint">
+                <constraints nullable="true"/>
+            </column>
+            <!--<column name="active" type="boolean">
+                <constraints nullable="true"/>
+            </column>-->
+        </createTable>
+
+        <addForeignKeyConstraint baseColumnNames="parent_id"
+                                 baseTableName="gui_menu"
+                                 constraintName="fk_gui_menu_parent"
+                                 onDelete="RESTRICT"
+                                 onUpdate="RESTRICT"
+                                 referencedColumnNames="id"
+                                 referencedTableName="gui_menu"/>
+
+    </changeSet>
+
+</databaseChangeLog>

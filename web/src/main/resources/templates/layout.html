@@ -1,66 +1,165 @@
-<html xmlns:th="http://www.thymeleaf.org">
+<!DOCTYPE html>
+<html  xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity4" xmlns:th="https://www.thymeleaf.org" xmlns="https://www.w3.org/1999/xhtml" lang="en">
 <head th:fragment="site-head">
-    <meta charset="UTF-8"/>
-    <link rel="stylesheet" href="../static/css/styles.css" th:href="@{/css/styles.css}"/>
-    <link rel="icon" href="../static/images/favicon.ico" th:href="@{/img/favicon.ico}"/>
-    <script src="../static/js/jquery-3.1.0.min.js" th:src="@{/js/jquery-3.1.0.min.js}"></script>
-    <script src="../static/js/blog-scripts.js" th:src="@{/js/blog-scripts.js}"></script>
-    <meta th:include="this :: head" th:remove="tag"/>
-    <title>UDYANA</title>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+    <meta name="description" content=""/>
+    <meta name="author" content=""/>
+
+    <title>LEPO</title>
+    <link rel="icon" th:if="${environment} == 'prod'" th:href="@{/images/lepo.ico}" type="image/x-icon"/>
+
+    <link rel="shortcut icon" th:if="${environment} == 'prod'" th:href="@{/images/lepo.ico}" type="image/x-icon"/>
+
+    <link th:if="${environment} == 'prod'" th:href="@{css/style.default.css}" rel="stylesheet" />
+
+    <link th:href="@{css/select2.css}" rel="stylesheet" />
+    <!--<link th:href="@{css/bootstrap.min.css}" rel="stylesheet"/>-->
+    <link th:href="@{css/toggles.css}" rel="stylesheet" />
+
+    <link th:if="${environment} == 'prod'" th:href="@{css/style.calendar.css}" rel="stylesheet" />
+
+    <link th:href="@{css/style.datatables.css}" rel="stylesheet"/>
+    <link th:href="@{https://cdn.datatables.net/responsive/1.0.1/css/dataTables.responsive.css}" rel="stylesheet"/>
+    <link th:href="@{css/magnific-popup/magnific-popup.css}" rel="stylesheet" />
+
 </head>
 <body>
+
 <header th:fragment="site-header">
-    <section>
-        <table width="100%" height="150px" style="border: solid 0px red; padding-top: 0px;" cellspacing="0" cellpadding="0">
-            <tr align="top" style="border: solid 1px yellow;">
-                <td width="25%" style="border: solid 0px blue" >
-                    <!--<a href="/home" th:href="@{/home}">-->
-                        <img align="top" src="../static/images/site-logo.jpg" height="120px" width="100%" alt="img" th:src="@{/images/site-logo.jpg}"/>
-                    <!--</a>-->
-                </td>
-                <td>
-                    <img  align="top" src="../static/images/index.jpeg" height="120px" width="100%" alt="img" th:src="@{/images/index.jpeg}"/>
-                </td>
-            </tr>
-        </table>
-    </section>
-    <section style="background: limegreen;">
-        <table width="100%" style="text-align: center; ">
-            <tr>
-                <td width="25%"><a href="home" th:href="@{/home}">Home</a></td>
-                <td width="25%"><a href="client" th:href="@{/client}">Client</a></td>
-                <td width="25%"><a href="product" th:href="@{/product}">Product</a></td>
-                <td width="25%"><a href="upload" th:href="@{/upload_file}">Upload</a></td>
-                <!--<td width="25%"><a href="crop/crops.html" th:href="@{/crop}">Crops</a></td>-->
-                <!--<td width="25%"><a href="home" th:href="@{/home}">About Us</a></td>-->
-                <!--<td width="25%"><a href="contact/contactUs.html" th:href="@{/contact}">Contact Us</a></td>-->
-                <!---->
-                <!--<a href="pohome.htmlhtml" th:href="@{/posts}">Posts</a>-->
-                <!--<a href="posts/create.html" th:href="@{/posts/create}">Create Post</a>-->
-                <!--<a href="ushome.htmlhtml" th:href="@{/users}">Users</a>-->
-                <!--<div id="logged-in-info"><span>Hello, <b>(user)</b></span>-->
-                <!--<form method="post" th:action="@{/users/logout}">-->
-                <!--<input type="submit" value="Logout"/>-->
-                <!--</form>-->
-                <!--</div>-->
-            </tr>
+    <div class="headerwrapper">
+        <div class="header-left">
+            <a href="index.html" class="logo" th:switch="${environment}">
+                <img th:case="'prod'" th:src="@{/images/lepo_small.png}" alt="" />
+            </a>
+            <p th:text="${version}" id="lepoVersion"></p>
+            <p th:text="${environment}" id="lepoEnvironment"></p>
+            <div class="pull-right">
+                <a href="#" class="menu-collapse">
+                    <i class="fa fa-bars"></i>
+                </a>
+            </div>
+        </div><!-- header-left -->
+        <div class="header-right">
+            <div class="pull-right">
+                <div class="btn-group btn-group-option">
+                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" id="header-dropdown-toggle-right">
+                        <img class="img-circle avatar-img" alt="" th:src="@{/images/photos/avatar.png}" />
+                        &nbsp; <span class="user-name" sec:authentication="name" th:text="${username}"/>
+                        <i class="fa fa-caret-down"></i>
+                    </button>
+                    <ul class="dropdown-menu pull-right" role="menu">
+                        <li><a th:href="|/profile|"><i class="glyphicon glyphicon-user"></i> My Profile</a></li>
+                        <li><a th:href="|/profile?accountSettings|"><i class="glyphicon glyphicon-cog"></i> Account Settings</a></li>
+                        <li><a th:href="|/profile?help|"><i class="glyphicon glyphicon-question-sign"></i> Help</a></li>
+                        <li class="divider"></li>
+                        <li><a th:href="@{#}" th:onclick="${'javascript:formSubmit()'}" id="logout-anchor"><i class="glyphicon glyphicon-log-out"></i>Logout</a></li>
+                    </ul>
+                </div><!-- btn-group -->
 
-        </table>
+            </div><!-- pull-right -->
 
-    </section>
+        </div><!-- header-right -->
 
-
-
+    </div><!-- headerwrapper -->
 </header>
-<!--<section th:fragment="site-center">-->
-    <!--<table th:width="90%" th:height="100%">-->
-        <!---->
-    <!--</table>-->
-<!--&lt;!&ndash;</section>&ndash;&gt;-->
-<!--<h1>Welcome</h1>-->
-<!--<p>Welcome to the Spring MVC Blog.</p>-->
-<footer th:fragment="site-footer">
-    Copyright © 2012 www.udyana.com Powered by Udyana Trust.
-</footer>
+
+<section>
+    <div class="mainwrapper">
+        <div class="leftpanel" th:fragment="site-leftPanel">
+            <div class="media profile-left">
+                <a class="pull-left profile-thumb" th:href="@{profile.html}">
+                    <img class="img-circle" th:src="@{/images/photos/avatar.png}" alt=""/>
+                </a>
+                <div class="media-body">
+                    <h4 class="media-heading"><span sec:authentication="name" th:text="${username}"/> </h4>
+                    <span class="user-options"><a th:href="|/profile|"><i class="glyphicon glyphicon-user"></i></a>
+                        <!--<a href="#"><i class="glyphicon glyphicon-envelope"></i></a>-->
+                      <a th:href="|/profile?accountSettings|"><i class="glyphicon glyphicon-cog"></i></a>
+                      <a th:href="@{#}" th:onclick="${'javascript:formSubmit()'}" ><i class="glyphicon glyphicon-log-out"></i></a>
+                    </span>
+                </div>
+                <br/>
+                <!--<div id="progressDiv" th:if="${hasLiabilityRole} != null">
+                    <p id="paragraphProgressBar">Liability Reports Queued:</p>
+                    <div id="progressBox" class="progress">
+                        <div class="progress-bar" role="progressbar" th:style="${progressbarWidth}" id="progressBar">
+                            <span th:text="${numberOfReports}"/>
+                        </div>
+                    </div>
+                </div>-->
+            </div><!-- media -->
+
+
+            <ul class="nav nav-pills nav-stacked" id="nav-pills-stacked">
+                <li th:each="s : ${menuList}" th:class="|${s.classType}|" th:if="|${s.parent}| == null"> <a th:href="|${s.href}|" th:onclick="|${s.javascriptFunction}|">
+                    <span th:if="|${s.notificationCount}| != null" class="pull-right badge" th:text="|${s.notificationCount}|" />
+                    <i  th:class="|${s.icon}|" /> <span th:text="|${s.name}|"/> </a>
+                    <ul class="children" th:if="|${s.children}| != null">
+                        <li th:each="c : |${s.children}|"><a th:href="|${c.href}|" th:onclick="|${c.javascriptFunction}|"> <span th:if="|${c.notificationCount}| != null" class="pull-right badge" th:text="|${c.notificationCount}|"/>
+                            <i  th:class="|${c.icon}|" /> <span th:text="|${c.name}|"/> </a></li>
+                    </ul>
+                </li>
+            </ul>
+
+        </div><!-- leftpanel -->
+
+    </div><!-- mainwrapper -->
+</section>
+
+<script th:fragment="site-screen-loader">
+     $(window).load(function() {
+        $('#stage').removeClass('loading').addClass('loaded');
+    });
+
+    function loadingScreen() {
+       $('#stage').removeClass('loaded').addClass('loading');
+    }
+</script>
+
+<script th:fragment="site-datatables">
+    function format(item) {
+            return item.text;
+        }
+
+        jQuery('select option:first-child').text('');
+
+        jQuery('#PublicHolidays').DataTable({
+            responsive: true
+        });
+
+        var shTable = jQuery('#shTable').DataTable({
+            "fnDrawCallback": function(oSettings) {
+                jQuery('#shTable_paginate ul').addClass('pagination-active-dark');
+            },
+            responsive: true
+        });
+
+        // Show/Hide Columns Dropdown
+        jQuery('#shCol').click(function(event){
+            event.stopPropagation();
+        });
+
+        jQuery('#shCol input').on('click', function() {
+
+            // Get the column API object
+            var column = shTable.column($(this).val());
+
+            // Toggle the visibility
+            if ($(this).is(':checked'))
+                column.visible(true);
+            else
+                column.visible(false);
+        });
+
+        // DataTables Length to Select2
+        jQuery('div.dataTables_length select').removeClass('form-control input-sm');
+        jQuery('div.dataTables_length select').css({width: '60px'});
+        jQuery('div.dataTables_length select').select2({
+            minimumResultsForSearch: -1
+        });
+</script>
+
+
 </body>
 </html>

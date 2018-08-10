@@ -54,7 +54,7 @@ public class DSU5_GIRREP4 {
     @ExcelColumnHeader(columnHeader = "Africa Values", dataType = "string")
     private String africaValues;
 
-    @ExcelColumnHeader(columnHeader = "SARB Classification", dataType = "string")
+    /*@ExcelColumnHeader(columnHeader = "SARB Classification", dataType = "string")
     private String price;
 
     @ExcelColumnHeader(columnHeader = "Price", dataType = "string")
@@ -67,7 +67,7 @@ public class DSU5_GIRREP4 {
     private String price;
 
     @ExcelColumnHeader(columnHeader = "Price", dataType = "string")
-    private String price;
+    private String price;*/
 
 
 
