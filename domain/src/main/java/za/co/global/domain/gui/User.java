@@ -6,7 +6,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Objects;
 
-@Entity(name = "user")
+@Entity(name = "girsa_user")
 public class User implements Serializable{
 
     private static final long serialVersionUID = 5500456350911177632L;
@@ -25,7 +25,7 @@ public class User implements Serializable{
     @Column(name = "enabled", nullable = false)
     private boolean enabled;
 
-    @Column(name = "password", nullable = false)
+    @Column(name = "pwd", nullable = false)
     private String password;
 
     public Long getId() {

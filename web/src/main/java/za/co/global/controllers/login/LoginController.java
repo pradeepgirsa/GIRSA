@@ -52,15 +52,15 @@ public class LoginController {
    }
 
 
-   /* @RequestMapping(value = "/verify_login", method = RequestMethod.POST)
+    @RequestMapping(value = "/verify_login", method = RequestMethod.POST)
     public String verifyLogin(Model model, String username, String password){
         if("girsa".equals(username) && "girsa123".equals(password) ){
-            return "home";
+            return "upload/uploadFile";
         } else {
-            model.addAttribute("message", "Incorrect Username and password");
-            return "home";
+            model.addAttribute("loginError", true);
+            return "user/login";
         }
-    }*/
+    }
 
     @RequestMapping(value = {"/logout"})
     public ModelAndView logoutPage(){

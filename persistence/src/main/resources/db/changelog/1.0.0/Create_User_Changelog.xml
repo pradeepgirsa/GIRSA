@@ -7,17 +7,20 @@
          http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
 
     <changeSet id="user_table_1" author="Pradeep" runOnChange="true">
-        <createTable tableName="user" >
+        <createTable tableName="girsa_user" >
             <column name="id" type="bigint">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="username" type="varchar(45)">
                 <constraints nullable="false" unique="true"/>
             </column>
-            <!--<column name="enabled" type="BOOLEAN">
+            <column name="enabled" type="boolean">
                 <constraints nullable="false"/>
-            </column>-->
-            <column name="password" type="varchar(45)">
+            </column>
+            <column name="pwd" type="varchar(45)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="status" type="varchar(15)">
                 <constraints nullable="false"/>
             </column>
         </createTable>

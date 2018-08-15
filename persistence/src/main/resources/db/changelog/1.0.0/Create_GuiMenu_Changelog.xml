@@ -35,9 +35,9 @@
             <column name="parent_id" type="bigint">
                 <constraints nullable="true"/>
             </column>
-            <!--<column name="active" type="boolean">
+            <column name="active" type="boolean">
                 <constraints nullable="true"/>
-            </column>-->
+            </column>
         </createTable>
 
         <addForeignKeyConstraint baseColumnNames="parent_id"
