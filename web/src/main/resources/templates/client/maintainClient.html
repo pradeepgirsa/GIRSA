@@ -1,34 +1,153 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" id="main">
+<html  xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity4" xmlns:th="https://www.thymeleaf.org" xmlns="https://www.w3.org/1999/xhtml" lang="en">
 <head th:replace="layout :: site-head">
-    <title>GIRSA</title>
 </head>
+
 <body>
-<div id="wrapper">
-    <header th:replace="layout :: site-header" />
-    <section>
-        <form method="post" th:object="${client}" th:action="@{/update_client}">
-            <table id="mainTable" >
-                <thead align="center">
-                <h4 align="center">Client</h4>
-                <tr>
-                    <td>Name*:</td>
-                    <td><input id="name" required="true" th:field="*{clientName}"/> </td>
-                </tr>
-                <tr>
-                    <td>Description</td>
-                    <td><input id="description" required="true" th:field="*{description}"/> </td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td align="center">
-                        <input type="submit" value="Create Client"/></td>
-                </tr>
-                </thead>
-            </table>
-        </form>
-    </section>
-    <footer th:replace="layout :: site-footer" />
+<div id="stage" class="loading">
+    <div id="loading-image"></div>
 </div>
+
+<header th:replace="layout :: site-header">
+</header>
+
+<section>
+    <div class="mainwrapper">
+        <div class="leftpanel" th:replace="layout :: site-leftPanel">
+        </div><!-- leftpanel -->
+
+        <div class="mainpanel">
+            <div class="contentpanel">
+
+                <div  th:if="${saveError} != null" class="alert alert-danger">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                    <span th:text="${saveError}"/> </div>
+                <div  th:if="${saveMessage} != null" class="alert alert-info" align="center">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                    <span id="success-message" th:text="${saveMessage}"/></div>
+
+                <div class="row">
+
+                    <div class="col-md-6 col-md-offset-3">
+                        <form role="form" method="POST" th:action="@{/update_client}" th:object="${client}">
+                            <div class="panel panel-lepo">
+                                <div class="panel-heading">
+                                    <!--<div class="panel-btns">
+                                        <a href="#" th:class="${cashChangeTooltip}" data-toggle="tooltip" th:title="${cashChangeMinMaxPanel}"><i th:class="${cashChangeMinusPlus}"></i></a>
+                                        <a href="#" class="panel-close tooltips" data-toggle="tooltip" title="Close Panel"><i class="fa fa-times"></i></a>
+                                    </div>-->
+                                    <h4 class="panel-title">Create Client</h4>
+                                </div>
+                                <div class="panel-body">
+                                    <div th:class="|form-group|">
+                                        <label> <strong>Name * </strong></label>
+                                               <input id="name" required="true" th:field="*{clientName}"/>
+                                    </div>
+                                    <div th:class="|form-group|">
+                                        <label> <strong>Description * </strong></label>
+                                        <input id="description" required="true" th:field="*{description}"/>
+                                    </div>
+
+                                    <div class="panel-footer">
+                                        <div class="col-md-12" align="right">
+                                           <button type="submit" value="Submit">Create Client</button>
+                                            <!--<button type="reset" class="btn btn-dark">Reset</button>-->
+                                        </div>
+                                    </div></div>
+                            </div>
+                        </form>
+
+                    </div><!-- col-md-6 -->
+
+                </div><!-- row -->
+            </div><!-- contentpanel -->
+        </div><!-- mainpanel -->
+    </div><!-- mainwrapper -->
+</section>
+<form th:action="@{/logout}" method="POST" id="logoutForm" />
+<script>
+    function formSubmit() {
+        document.getElementById("logoutForm").submit();
+    }
+</script>
+
+<script th:src="@{js/jquery-1.11.1.min.js}"></script>
+<script th:src="@{js/jquery-migrate-1.2.1.min.js}"></script>
+<script th:src="@{js/jquery-ui-1.10.3.min.js}"></script>
+<script th:src="@{js/bootstrap.min.js}"></script>
+<script th:src="@{js/modernizr.min.js}"></script>
+<script th:src="@{js/pace.min.js}"></script>
+<script th:src="@{js/retina.min.js}"></script>
+<script th:src="@{js/jquery.cookies.js}"></script>
+
+<script th:src="@{js/select2.min.js}"></script>
+<script th:src="@{js/custom.js}"></script>
+
+<!--<script th:src="@{js/tax/it3bCertificate.js}"></script>-->
+
+<script th:replace="layout :: site-screen-loader">
+</script>
+
+
+<script>
+
+    jQuery(document).ready(function() {
+        // Date Pickers
+        jQuery('#from_date').datepicker({
+            dateFormat: 'dd/mm/yy',
+            numberOfMonths: 3,
+            startDate: '-50d',
+            showButtonPanel: true
+        });
+
+
+        jQuery('#to_date').datepicker({
+            dateFormat: 'dd/mm/yy',
+            numberOfMonths: 3,
+            startDate: '-10d',
+            showButtonPanel: true
+        });
+
+        jQuery('#select-financialServiceGroup').click(function() {
+
+            var value = "";
+
+            if(jQuery('#from_date').val() != ''){
+
+                var text = "from_date=";
+                value = value.concat("\u0026",text, jQuery('#from_date').val());
+
+            }
+
+            if(jQuery('#to_date').val() != ''){
+
+                var text = "to_date=";
+                value = value.concat( "\u0026",text, jQuery('#to_date').val());
+
+            }
+            value = value.concat( "\u0026","report=", "annuity tax config");
+            location.href = '/report_annuity_tax_config?fsg='.concat(jQuery( "#select-financialServiceGroup option:selected" ).text(), value);
+        });
+
+        // Select2
+        jQuery("#select-financialServiceGroup").select2({
+            minimumResultsForSearch: 10
+        });
+
+        jQuery("#select-product").select2({
+            minimumResultsForSearch: 10
+        });
+
+        jQuery("#select-report-type").select2({
+            minimumResultsForSearch: 10
+        });
+
+        jQuery('#select-search-hide').select2({
+            minimumResultsForSearch: -1
+        });
+    });
+</script>
+
+
 </body>
 </html>

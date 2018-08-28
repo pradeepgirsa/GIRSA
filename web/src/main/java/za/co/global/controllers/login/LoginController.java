@@ -3,10 +3,7 @@ package za.co.global.controllers.login;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
@@ -25,7 +22,7 @@ public class LoginController {
     @Value("${lepo.version}")
     private String version;
 
-   @RequestMapping(value = {"/login", "/" }, method = RequestMethod.GET)
+   @RequestMapping(value = {"/login", "/" })
    public ModelAndView loginPage(@RequestParam(value = "error", required = false) String error,
                                  @RequestParam(value = "logout", required = false) String logout,
                                  @RequestParam(value = "request", required = false) String request){
@@ -51,9 +48,35 @@ public class LoginController {
        return model;
    }
 
+    @PostMapping(value = {"/logout"})
+    public String logout(Model model, @RequestParam(value = "error", required = false) String error,
+                                  @RequestParam(value = "logout", required = false) String logout,
+                                  @RequestParam(value = "request", required = false) String request){
+
+        model.addAttribute("environment", environment);
+        model.addAttribute("version", version);
+
+        if (error != null) {
+            model.addAttribute("loginError", true);
+        }
+
+        if (logout != null) {
+            model.addAttribute("logoutMessage", true); //TODO - add logout message
+        }
+
+        if (request != null) {
+            model.addAttribute("requestMessage", true);
+        }
+
+        return "users/login";
+    }
+
 
     @RequestMapping(value = "/verify_login", method = RequestMethod.POST)
     public String verifyLogin(Model model, String username, String password){
+
+        model.addAttribute("environment", environment);
+        model.addAttribute("version", version);
         if("girsa".equals(username) && "girsa123".equals(password) ){
             return "upload/uploadFile";
         } else {
