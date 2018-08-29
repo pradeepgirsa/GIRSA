@@ -6,15 +6,14 @@
     <meta name="description" content=""/>
     <meta name="author" content=""/>
 
-    <title>GIRSA</title>
-    <link rel="icon"  th:href="@{/images/girsa_icon.png}" type="image/x-icon"/>
+    <title>LEPO</title>
+    <link rel="icon" th:href="@{/images/girsa_icon.png}" type="image/x-icon"/>
 
     <link rel="shortcut icon"  th:href="@{/images/girsa_icon.png}" type="image/x-icon"/>
 
-    <link  th:href="@{css/style.default.css}" rel="stylesheet" />
+    <link th:href="@{css/style.default.css}" rel="stylesheet" />
 
     <link th:href="@{css/select2.css}" rel="stylesheet" />
-    <!--<link th:href="@{css/bootstrap.min.css}" rel="stylesheet"/>-->
     <link th:href="@{css/toggles.css}" rel="stylesheet" />
 
     <link  th:href="@{css/style.calendar.css}" rel="stylesheet" />
@@ -29,13 +28,9 @@
 <header th:fragment="site-header">
     <div class="headerwrapper">
         <div class="header-left">
-            <a href="index.html" class="logo" >
-                <img th:src="@{/images/girsa_small_icon.png}" alt="" />
-            </a>
-            <p th:text="1.0" id="version"></p>
-            <p th:text="prod" id="environment"></p>
-            <!--<p th:text="${version}" id="version"></p>-->
-            <!--<p th:text="${environment}" id="environment"></p>-->
+            <a href="index.html" class="logo"><img  th:src="@{/images/girsa_small_icon.png}" alt="" /></a>
+            <p th:text="1.1" id="lepoVersion"></p>
+            <p th:text="prod" id="lepoEnvironment"></p>
             <div class="pull-right">
                 <a href="#" class="menu-collapse">
                     <i class="fa fa-bars"></i>
@@ -52,9 +47,21 @@
                         <i class="fa fa-caret-down"></i>
                     </button>
                     <ul class="dropdown-menu pull-right" role="menu">
-                        <li><a th:href="|/profile|"><i class="glyphicon glyphicon-user"></i> My Profile</a></li>
-                        <li><a th:href="|/profile?accountSettings|"><i class="glyphicon glyphicon-cog"></i> Account Settings</a></li>
-                        <li><a th:href="|/profile?help|"><i class="glyphicon glyphicon-question-sign"></i> Help</a></li>
+                        <li>
+                            <!--<a th:href="|/profile|">-->
+                                <i class="glyphicon glyphicon-user"></i> My Profile
+                            <!--</a>-->
+                        </li>
+                        <li>
+                            <!--<a th:href="|/profile?accountSettings|">-->
+                                <i class="glyphicon glyphicon-cog"></i> Account Settings
+                            <!--</a>-->
+                        </li>
+                        <li>
+                            <!--<a th:href="|/profile?help|">-->
+                                <i class="glyphicon glyphicon-question-sign"></i> Help
+                            <!--</a>-->
+                        </li>
                         <li class="divider"></li>
                         <li><a th:href="@{#}" th:onclick="${'javascript:formSubmit()'}" id="logout-anchor"><i class="glyphicon glyphicon-log-out"></i>Logout</a></li>
                     </ul>
@@ -71,39 +78,47 @@
     <div class="mainwrapper">
         <div class="leftpanel" th:fragment="site-leftPanel">
             <div class="media profile-left">
-                <a class="pull-left profile-thumb" th:href="@{profile.html}">
+                <!--<a class="pull-left profile-thumb" th:href="@{profile.html}">-->
                     <img class="img-circle" th:src="@{/images/photos/avatar.png}" alt=""/>
-                </a>
+                <!--</a>-->
                 <div class="media-body">
                     <h4 class="media-heading"><span sec:authentication="name" th:text="${username}"/> </h4>
-                    <span class="user-options"><a th:href="|/profile|"><i class="glyphicon glyphicon-user"></i></a>
-                        <!--<a href="#"><i class="glyphicon glyphicon-envelope"></i></a>-->
-                      <a th:href="|/profile?accountSettings|"><i class="glyphicon glyphicon-cog"></i></a>
+                    <span class="user-options">
+                        <!--<a th:href="|/profile|">-->
+                            <i class="glyphicon glyphicon-user"></i>
+                        <!--</a>-->
+                      <!--<a th:href="|/profile?accountSettings|">-->
+                          <i class="glyphicon glyphicon-cog"></i>
+                      <!--</a>-->
                       <a th:href="@{#}" th:onclick="${'javascript:formSubmit()'}" ><i class="glyphicon glyphicon-log-out"></i></a>
                     </span>
                 </div>
                 <br/>
-                <!--<div id="progressDiv" th:if="${hasLiabilityRole} != null">-->
-                <!--<p id="paragraphProgressBar">Liability Reports Queued:</p>-->
-                <!--<div id="progressBox" class="progress">-->
-                <!--<div class="progress-bar" role="progressbar" th:style="${progressbarWidth}" id="progressBar">-->
-                <!--<span th:text="${numberOfReports}"/>-->
-                <!--</div>-->
-                <!--</div>-->
-                <!--</div>-->
+                <div id="progressDiv" th:if="${hasLiabilityRole} != null">
+                    <p id="paragraphProgressBar">Liability Reports Queued:</p>
+                    <div id="progressBox" class="progress">
+                        <div class="progress-bar" role="progressbar" th:style="${progressbarWidth}" id="progressBar">
+                            <span th:text="${numberOfReports}"/>
+                        </div>
+                    </div>
+                </div>
             </div><!-- media -->
 
 
             <ul class="nav nav-pills nav-stacked" id="nav-pills-stacked">
-                <li>
-                    <a th:href="|/upload_file|" th:onclick="|loadingScreen()|">
-                        <i th:class="|fa fa-home|" /> <span th:text="|Upload|"/> </a>
+                <li th:class="|parent|">
+                    <a th:href="|/upload_file|" >
+                    <i  th:class="|fa fa-home|" /> <span th:text="|Upload|"/> </a>
+                    <!--<ul class="children" th:if="|${s.children}| != null">-->
+                        <!--<li th:each="c : |${s.children}|"><a th:href="|${c.href}|" th:onclick="|${c.javascriptFunction}|"> <span th:if="|${c.notificationCount}| != null" class="pull-right badge" th:text="|${c.notificationCount}|"/>-->
+                            <!--<i  th:class="|${c.icon}|" /> <span th:text="|${c.name}|"/> </a></li>-->
+                    <!--</ul>-->
                 </li>
-                <li>
-                    <a th:href="|/client|" th:onclick="|loadingScreen()|" ><i  th:class="|fa fa-leaf|" /> <span th:text="|Client|"/> </a>
+                <li th:class="|parent|">
+                    <a th:href="|/client|" ><i  th:class="|fa fa-leaf|" /> <span th:text="|Client|"/> </a>
                 </li>
-                <li>
-                    <a th:href="|/product|" th:onclick="|loadingScreen()|"><i  th:class="|fa fa-leaf|" /> <span th:text="|Product|"/></a>
+                <li th:class="|parent|">
+                    <a th:href="|/product|" ><i  th:class="|fa fa-leaf|" /> <span th:text="|Product|"/></a>
                 </li>
             </ul>
 
@@ -119,12 +134,6 @@
 
     function loadingScreen() {
         $('#stage').removeClass('loaded').addClass('loading');
-    }
-</script>
-
-<script th:fragment="logout-form">
-    function formSubmit() {
-        document.getElementById("logoutForm").submit();
     }
 </script>
 
@@ -170,7 +179,6 @@
         minimumResultsForSearch: -1
     });
 </script>
-
 
 
 </body>

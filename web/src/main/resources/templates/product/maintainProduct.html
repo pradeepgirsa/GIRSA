@@ -65,11 +65,6 @@
     </div><!-- mainwrapper -->
 </section>
 <form th:action="@{/logout}" method="POST" id="logoutForm" />
-<script>
-    function formSubmit() {
-        document.getElementById("logoutForm").submit();
-    }
-</script>
 
 <script th:src="@{js/jquery-1.11.1.min.js}"></script>
 <script th:src="@{js/jquery-migrate-1.2.1.min.js}"></script>
@@ -85,68 +80,8 @@
 
 <!--<script th:src="@{js/tax/it3bCertificate.js}"></script>-->
 
-<script th:replace="layout :: site-screen-loader">
-</script>
-
-
-<script>
-
-    jQuery(document).ready(function() {
-        // Date Pickers
-        jQuery('#from_date').datepicker({
-            dateFormat: 'dd/mm/yy',
-            numberOfMonths: 3,
-            startDate: '-50d',
-            showButtonPanel: true
-        });
-
-
-        jQuery('#to_date').datepicker({
-            dateFormat: 'dd/mm/yy',
-            numberOfMonths: 3,
-            startDate: '-10d',
-            showButtonPanel: true
-        });
-
-        jQuery('#select-financialServiceGroup').click(function() {
-
-            var value = "";
-
-            if(jQuery('#from_date').val() != ''){
-
-                var text = "from_date=";
-                value = value.concat("\u0026",text, jQuery('#from_date').val());
-
-            }
-
-            if(jQuery('#to_date').val() != ''){
-
-                var text = "to_date=";
-                value = value.concat( "\u0026",text, jQuery('#to_date').val());
-
-            }
-            value = value.concat( "\u0026","report=", "annuity tax config");
-            location.href = '/report_annuity_tax_config?fsg='.concat(jQuery( "#select-financialServiceGroup option:selected" ).text(), value);
-        });
-
-        // Select2
-        jQuery("#select-financialServiceGroup").select2({
-            minimumResultsForSearch: 10
-        });
-
-        jQuery("#select-product").select2({
-            minimumResultsForSearch: 10
-        });
-
-        jQuery("#select-report-type").select2({
-            minimumResultsForSearch: 10
-        });
-
-        jQuery('#select-search-hide').select2({
-            minimumResultsForSearch: -1
-        });
-    });
-</script>
+<script th:replace="layout :: site-screen-loader"/>
+<script th:replace="layout :: logout-form"/>
 
 
 </body>

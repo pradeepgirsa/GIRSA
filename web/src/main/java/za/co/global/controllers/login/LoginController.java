@@ -3,19 +3,15 @@ package za.co.global.controllers.login;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 public class LoginController {
 
-   /* @GetMapping(value = {"/","/login"})
-    public String login(Model model, String username, String password) {
-        //model.addAttribute("now", LocalDateTime.now());
-        //System.out.println("udyanaUserRepository = " + udyanaUserRepository.findAll());
-        return "users/login";
-
-    }*/
    @Value("${lepo.environment}")
    private String environment;
 
@@ -74,11 +70,10 @@ public class LoginController {
 
     @RequestMapping(value = "/verify_login", method = RequestMethod.POST)
     public String verifyLogin(Model model, String username, String password){
-
         model.addAttribute("environment", environment);
         model.addAttribute("version", version);
         if("girsa".equals(username) && "girsa123".equals(password) ){
-            return "upload/uploadFile";
+            return "home";
         } else {
             model.addAttribute("loginError", true);
             return "user/login";

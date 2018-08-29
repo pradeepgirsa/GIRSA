@@ -5,5 +5,5 @@ databaseChangeLog:
       file: db/changelog/1.0.0/Create_Product_Changelog.xml
   - include:
       file: db/changelog/1.0.0/Create_User_Changelog.xml
-#  - include:
-#        file: db/changelog/1.0.0/Create_GuiMenu_Changelog.xml
+  - include:
+        file: db/changelog/1.0.0/Create_FileDetails_Changelog.xml

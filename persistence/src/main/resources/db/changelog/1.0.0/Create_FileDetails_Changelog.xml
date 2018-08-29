@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet id="file_details_table_1" author="Sharanya">
+        <createTable tableName="file_details" >
+            <column name="id" type="bigint">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="client_id" type="bigint">
+            </column>
+            <column name="product_id" type="bigint">
+            </column>
+            <column name="file_path" type="varchar(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="file_extension" type="varchar(10)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="received_date" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+            <column name="parent_file_id" type="bigint"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="file_details_constraints_1" author="Sharanya">
+
+        <addForeignKeyConstraint baseColumnNames="client_id"
+                                 baseTableName="file_details"
+                                 constraintName="fileDetails_client_id_fk"
+                                 deferrable="true"
+                                 initiallyDeferred="true"
+                                 onDelete="CASCADE"
+                                 onUpdate="RESTRICT"
+                                 referencedColumnNames="id"
+                                 referencedTableName="client"/>
+
+        <addForeignKeyConstraint baseColumnNames="product_id"
+                                 baseTableName="file_details"
+                                 constraintName="fileDetails_product_id_fk"
+                                 deferrable="true"
+                                 initiallyDeferred="true"
+                                 onDelete="CASCADE"
+                                 onUpdate="RESTRICT"
+                                 referencedColumnNames="id"
+                                 referencedTableName="product"/>
+
+        <addForeignKeyConstraint baseColumnNames="parent_file_id"
+                                 baseTableName="file_details"
+                                 constraintName="fileDetails_parent_id_fk"
+                                 deferrable="true"
+                                 initiallyDeferred="true"
+                                 onDelete="CASCADE"
+                                 onUpdate="RESTRICT"
+                                 referencedColumnNames="id"
+                                 referencedTableName="file_details"/>
+
+    </changeSet>
+
+</databaseChangeLog>

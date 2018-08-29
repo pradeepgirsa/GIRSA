@@ -1,23 +1,61 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" id="main">
+<html  xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity4" xmlns:th="https://www.thymeleaf.org" xmlns="https://www.w3.org/1999/xhtml" lang="en">
 <head th:replace="layout :: site-head">
-    <title>UDYANA</title>
 </head>
+
 <body>
-<div id="wrapper">
-    <header th:replace="layout :: site-header" />
-    <section>
-        <table id="mainTable" >
-
-            <h1>File Upload Status</h1>
-
-            <div th:if="${message}">
-                <h2 th:text="${message}"/>
-            </div>
-
-        </table>
-    </section>
-    <footer th:replace="layout :: site-footer" />
+<div id="stage" class="loading">
+    <div id="loading-image"></div>
 </div>
+
+<header th:replace="layout :: site-header">
+</header>
+
+<section>
+    <div class="mainwrapper">
+        <div class="leftpanel" th:replace="layout :: site-leftPanel">
+        </div><!-- leftpanel -->
+
+        <div class="mainpanel">
+            <div class="contentpanel">
+
+                <div  th:if="${saveError} != null" class="alert alert-danger">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                    <span th:text="${saveError}"/> </div>
+                <div  th:if="${saveMessage} != null" class="alert alert-info" align="center">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                    <span id="success-message" th:text="${saveMessage}"/></div>
+
+                <div class="row">
+
+                    <div class="col-md-6 col-md-offset-3">
+                        <div th:if="${message}">
+                            <h2 th:text="${message}"/>
+                        </div>
+
+                    </div><!-- col-md-6 -->
+
+                </div><!-- row -->
+            </div><!-- contentpanel -->
+        </div><!-- mainpanel -->
+    </div><!-- mainwrapper -->
+</section>
+<form th:action="@{/logout}" method="POST" id="logoutForm" />
+
+<script th:src="@{js/jquery-1.11.1.min.js}"></script>
+<script th:src="@{js/jquery-migrate-1.2.1.min.js}"></script>
+<script th:src="@{js/jquery-ui-1.10.3.min.js}"></script>
+<script th:src="@{js/bootstrap.min.js}"></script>
+<script th:src="@{js/modernizr.min.js}"></script>
+<script th:src="@{js/pace.min.js}"></script>
+<script th:src="@{js/retina.min.js}"></script>
+<script th:src="@{js/jquery.cookies.js}"></script>
+
+<script th:src="@{js/select2.min.js}"></script>
+<script th:src="@{js/custom.js}"></script>
+
+<script th:replace="layout :: site-screen-loader"/>
+<script th:replace="layout :: logout-form"/>
+
 </body>
 </html>
