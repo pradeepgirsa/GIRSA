@@ -5,6 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import za.co.global.domain.EntityStatus;
 import za.co.global.domain.client.Client;
 import za.co.global.persistence.client.ClientRepository;
@@ -17,15 +18,24 @@ public class ClientController {
 
 
     @GetMapping(value = {"/client"})
-    public String login(Model model, Client client) {
-        //model.addAttribute("now", LocalDateTime.now());
-        //System.out.println("udyanaUserRepository = " + udyanaUserRepository.findAll());
+    public String createorUpdateClient(Model model, Client client) {
         return "client/maintainClient";
+    }
+
+    @GetMapping(value = {"/updateClient"})
+    public String createorUpdateClient(Model model, @RequestParam("clientId") String clientId) {
+        return "client/maintainClient";
+    }
+
+    @GetMapping(value = {"/view_clients"})
+    public String viewClients(Model model) {
+        model.addAttribute("clients", clientRepository.findAll());
+        return "client/viewClients";
 
     }
 
     @PostMapping(value = {"/update_client"})
-    public String updateClient(Model model, Client client) {
+    public String saveClient(Model model, Client client) {
         client.setStatus(EntityStatus.ACTIVE);
         clientRepository.save(client);
         return "client/maintainClient";

@@ -99,11 +99,24 @@
                     <a th:href="|/upload_file|" th:onclick="|loadingScreen()|">
                         <i th:class="|fa fa-home|" /> <span th:text="|Upload|"/> </a>
                 </li>
-                <li>
-                    <a th:href="|/client|" th:onclick="|loadingScreen()|" ><i  th:class="|fa fa-leaf|" /> <span th:text="|Client|"/> </a>
+                <li th:class="|parent|">
+                    <a><i  th:class="|fa fa-leaf|" /> <span th:text="|Client|"/> </a>
+                    <ul class="children">
+                        <li><a th:href="|/view_clients|" th:onclick="|loadingScreen()|">
+                            <i  th:class="|fa fa-leaf|" /> <span th:text="|View Clients|"/> </a></li>
+                        <li><a th:href="|/client|" th:onclick="|loadingScreen()|">
+                            <i  th:class="|fa fa-leaf|" /> <span th:text="|Create Client|"/> </a></li>
+                    </ul>
+
                 </li>
-                <li>
-                    <a th:href="|/product|" th:onclick="|loadingScreen()|"><i  th:class="|fa fa-leaf|" /> <span th:text="|Product|"/></a>
+                <li th:class="|parent|">
+                    <a><i  th:class="|fa fa-leaf|" /> <span th:text="|Product|"/> </a>
+                    <ul class="children">
+                        <li><a th:href="|/view_products|" th:onclick="|loadingScreen()|">
+                            <i  th:class="|fa fa-leaf|" /> <span th:text="|View Products|"/> </a></li>
+                        <li><a th:href="|/product|" th:onclick="|loadingScreen()|">
+                            <i  th:class="|fa fa-leaf|" /> <span th:text="|Create Product|"/> </a></li>
+                    </ul>
                 </li>
             </ul>
 
