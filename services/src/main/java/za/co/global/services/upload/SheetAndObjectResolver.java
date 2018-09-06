@@ -2,7 +2,8 @@ package za.co.global.services.upload;
 
 public enum SheetAndObjectResolver {
 
-    DSU5_GIRREP4("DSU5_GIRREP4", za.co.global.domain.upload.DSU5_GIRREP4.class);
+    DSU5_GIRREP4("DSU5_GIRREP4", za.co.global.domain.upload.DSU5_GIRREP4.class),
+    DSU5("DSU5", za.co.global.domain.upload.DSU5_GIRREP4.class);
 
     private String sheetName;
     private Class clazz;

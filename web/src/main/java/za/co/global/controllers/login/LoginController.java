@@ -12,10 +12,10 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class LoginController {
 
-   @Value("${lepo.environment}")
+   @Value("${girsa.environment}")
    private String environment;
 
-    @Value("${lepo.version}")
+    @Value("${girsa.version}")
     private String version;
 
    @RequestMapping(value = {"/login", "/" })

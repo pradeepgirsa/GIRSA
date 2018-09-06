@@ -213,27 +213,27 @@ h1, .h1 {
     color: #222;
 }
 /*new */
-#lepoVersion {
+#girsaVersion {
     margin-top: 20px;
     font-size: 9px;
     margin-left: 104px;
     color: #9c9c9c;
 }
 
-#lepoEnvironment {
+#girsaEnvironment {
     margin-top: -12px;
     font-size: 9px;
     margin-left: 104px;
     color: #9c9c9c;
 }
 
-#lepoLoginVersion {
+#girsaLoginVersion {
     margin-top: 20px;
     font-size: 9px;
     color: #9c9c9c;
 }
 
-#lepoLoginEnvironment {
+#girsaLoginEnvironment {
     margin-top: -12px;
     font-size: 9px;
     color: #9c9c9c;
@@ -848,17 +848,17 @@ h1, .h1 {
     background-color: #ccc;
 }
 
-.panel-lepo .panel-heading{
+.panel-girsa .panel-heading{
     background-color: #dff0d8;
 }
 
-.btn-lepo {
+.btn-girsa {
     background-color: #3f9338;
     color: #fff;
     border-color: #3f9338;
 }
 
-.panel-lepo {
+.panel-girsa {
     border: 1px solid #ddd;
 }
 
@@ -3492,7 +3492,7 @@ body.signin {
     width: 20px;
 }
 
-.lepoUserSuccessMessage {
+.girsaUserSuccessMessage {
     padding: 10px;
 }
 
@@ -4665,12 +4665,12 @@ a.event-close:hover {
     width: 101px;
     height: 100px;
     background: url(../images/loadingProduction.png) 0 0 no-repeat;
-    animation: lepoSpin 2.5s steps(31) infinite;
+    animation: girsaSpin 2.5s steps(31) infinite;
 }
 
-/*lepoLoadingFullTransparent*/
+/*girsaLoadingFullTransparent*/
 
-@keyframes lepoSpin {
+@keyframes girsaSpin {
 	0% {background-position: 0 0}
 	100% {background-position: 0 -3100px}
 }

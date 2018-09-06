@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet id="DSU5_GIRREP4_table_1" author="Sharanya">
+        <createTable tableName="DSU5_GIRREP4" >
+            <column name="id" type="bigint">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="ASSET_ID" type="varchar(255)"/>
+            <column name="ASSET_ID_TYPE" type="varchar(255)"/>
+            <column name="ASSET_NAME" type="varchar(255)"/>
+            <column name="AFRICA_VALUES" type="varchar(255)"/>
+            <column name="EFF_EXPOSURE" type="varchar(255)"/>
+            <column name="EFF_WEIGHT" type="varchar(255)"/>
+            <column name="GIR_ISSUER" type="varchar(255)"/>
+            <column name="HOLDINGS" type="varchar(255)"/>
+            <column name="ICB_INDUSTRY" type="varchar(255)"/>
+            <column name="ICB_SUPER_SECTOR" type="varchar(255)"/>
+            <column name="INST_SUB_TYPE" type="varchar(255)"/>
+            <column name="INST_TYPE" type="varchar(255)"/>
+            <column name="LOCAL_MARKET" type="varchar(255)"/>
+            <column name="MARKET_CAPITALIZATION" type="varchar(255)"/>
+            <column name="PRICE" type="varchar(255)"/>
+            <column name="REG28INSTR_TYPE" type="varchar(255)"/>
+            <column name="REG30INSTR_TYPE" type="varchar(255)"/>
+            <column name="SARB_CLASSIFICATION" type="varchar(255)"/>
+            <column name="SHARES_OUTSTANDING" type="varchar(255)"/>
+            <column name="AMOUNT_ISSUED" type="varchar(255)"/>
+            <column name="GIR_INDUSTRY_ICB" type="varchar(255)"/>
+            <column name="GIR_SECTOR_ICB" type="varchar(255)"/>
+            <column name="GIR_SUB_SECTOR_ICB" type="varchar(255)"/>
+            <column name="GIR_SUPER_SECTOR_ICB" type="varchar(255)"/>
+            <column name="SECTOR" type="varchar(255)"/>
+            <column name="SUB_SECTOR" type="varchar(255)"/>
+            <column name="GICS_INDUSTRY" type="varchar(255)"/>
+            <column name="GICS_INDUSTRY_GROUP" type="varchar(255)"/>
+            <column name="GICS_SECTOR" type="varchar(255)"/>
+            <column name="GICS_SUB_INDUSTRY" type="varchar(255)"/>
+            <column name="MATURITY_DATE" type="varchar(255)"/>
+            <column name="TIME_TO_MATURITY" type="varchar(255)"/>
+            <column name="WEIGHTED_AVG_LIFE" type="varchar(255)"/>
+            <column name="PRICING_REDEMPTION_DATE" type="varchar(255)"/>
+            <column name="CURRENT_YIELD_IN_PERCENT" type="varchar(255)"/>
+            <column name="COUPON_IN_PERCENTAGE" type="varchar(255)"/>
+            <column name="FIRST_COUPON_DATE" type="varchar(255)"/>
+            <column name="EFFECTIVE_DURATION" type="varchar(255)"/>
+            <column name="MACAULAY_DURATION" type="varchar(255)"/>
+            <column name="MODIFIED_DURATION" type="varchar(255)"/>
+            <column name="PRICE_CURRENCY" type="varchar(255)"/>
+            <column name="COUNTRY_OF_EXPOSURE" type="varchar(255)"/>
+            <column name="COUNTRY_OF_INCORPORATION" type="varchar(255)"/>
+            <column name="COUNTRY_OF_QUOTATION" type="varchar(255)"/>
+            <column name="ISSUER" type="varchar(255)"/>
+            <column name="MOODY_RATING" type="varchar(255)"/>
+            <column name="MOODY_LONG_TERM_ISSUER_RATING_D" type="varchar(255)"/>
+            <column name="MOODY_LONG_TERM_ISSUER_RATING_F" type="varchar(255)"/>
+            <column name="SP_LONG_TERM_ISSUER_RATING_D" type="varchar(255)"/>
+            <column name="SP_LONG_TERM_ISSUER_RATING_F" type="varchar(255)"/>
+            <column name="PARENT_ISSUER_ID" type="varchar(255)"/>
+            <column name="PARENT_ISSUER_NAME" type="varchar(255)"/>
+            <column name="ULTIMATE_ISSUER_ID" type="varchar(255)"/>
+            <column name="ULTIMATE_ISSUER_NAME" type="varchar(255)"/>
+
+        </createTable>
+    </changeSet>
+
+
+</databaseChangeLog>

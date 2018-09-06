@@ -85,6 +85,8 @@ public class GirsaExcelParser {
         for (int i = 0; i < invoiceWorkbook.getNumberOfSheets(); i++) {
             Sheet sheet = invoiceWorkbook.getSheetAt(i);
 
+            /* Getting the bean based on sheet name */
+            //TODO - sheet name can be null in future
             Class clazz = SheetAndObjectResolver.getClazzFromSheetName(sheet.getSheetName());
 
             Map<String, Field> fieldsMap = new HashMap();

@@ -9,7 +9,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @ExcelBean
-@Entity
 public class DSU9 {
 
     @Id
