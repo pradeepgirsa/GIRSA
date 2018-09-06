@@ -6,7 +6,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @SpringBootApplication
-@ComponentScan({"za.co.global.domain", "za.co.global.persistence", "za.co.global.controllers"})
+@ComponentScan({"za.co.global.domain", "za.co.global.persistence", "za.co.global.controllers", "za.co.global.services"})
 @EntityScan("za.co.global.domain")
 @EnableJpaRepositories(basePackages = {"za.co.global.persistence"})
 public class GirsaApplication {
