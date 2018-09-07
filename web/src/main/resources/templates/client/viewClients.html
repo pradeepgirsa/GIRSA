@@ -106,21 +106,7 @@
 
 <script th:replace="layout :: site-screen-loader"/>
 <script th:replace="layout :: logout-form"/>
-<script>
 
-    $('body').on('hide.bs.modal', '.modal', function () {
-        $(this).removeData('bs.modal');
-    });
-
-    jQuery(document).ready(function() {
-
-        jQuery('#TableClients').DataTable({
-            responsive: true,
-            stateSave: true,
-            stateDuration: -1
-        });
-    });
-</script>
 
 </body>
 </html>
