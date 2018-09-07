@@ -18,6 +18,7 @@ import za.co.global.persistence.client.ClientRepository;
 import za.co.global.persistence.product.ProductRepository;
 import za.co.global.persistence.upload.FileDetailsRepository;
 import za.co.global.services.upload.GirsaExcelParser;
+import za.co.global.services.upload.SheetAndObjectResolver;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -207,9 +208,9 @@ public class FileUploadController {
             System.out.println("---" + key);
             List<Object> value = map.getValue();
             for (Object obj : value) {
-                if (key.equals("DSU5_GIRREP4")) {
+                Class clazz = SheetAndObjectResolver.getClazzFromSheetName(key);
+                if(DSU5_GIRREP4.class.getCanonicalName().equals(clazz.getCanonicalName())) {
                     DSU5_GIRREP4 ex = (DSU5_GIRREP4) obj;
-                    System.out.println("col1: " + ex.getHoldings());
                     entityManager.persist(ex);
                 }
             }
