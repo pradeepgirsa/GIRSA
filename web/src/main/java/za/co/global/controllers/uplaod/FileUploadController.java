@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
+import utils.FileUtil;
 import za.co.global.domain.client.Client;
 import za.co.global.domain.product.Product;
 import za.co.global.domain.upload.DSU5_GIRREP4;
@@ -22,7 +23,10 @@ import za.co.global.services.upload.SheetAndObjectResolver;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.zip.ZipEntry;
@@ -75,56 +79,29 @@ public class FileUploadController {
             // read and write the file to the selected location-
             byte[] bytes = file.getBytes();
 
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy_MM_dd");
-            String date = dateFormat.format(new Date());
-
             Client client = clientRepository.findOne(Long.parseLong(clientId));
             Product product = productRepository.findOne(Long.parseLong(productId));
 
-            String folderName = String.format("%s%s%s%s%s%s%s", fileUploadFolder, File.separator, date, File.separator,
-                    client.getClientName(), File.separator, product.getProductName());
+            //store the uploaded file in specified directory and also persist in database
+            File uploadedFile = storeFileDetails(file, client, product, bytes);
 
-//            String fileName = folderName + File.separator + file.getOriginalFilename();
-//
-            File uploadedFile = new File(folderName, file.getOriginalFilename());
-
-//            FileDetails fileDetails = new FileDetails();
-//            fileDetails.setClient(client);
-//            fileDetails.setProduct(product);
-//            fileDetails.setFilePath(fileName);
-//            fileDetails.setFileExtension(extension);
-//            fileDetails.setReceivedDate(new Date());
-//
-//            fileDetailsRepository.save(fileDetails);
-            FileDetails fileDetails = createFileDetailsEntry(client, product, null, uploadedFile);
-
-
-            if (!uploadedFile.getParentFile().exists()) {
-                uploadedFile.getParentFile().mkdirs();
-            }
-
-            BufferedOutputStream stream = new BufferedOutputStream(
-                    new FileOutputStream(uploadedFile));
-            stream.write(bytes);
-            stream.close();
+            FileDetails fileDetails = saveFileDetails(client, product, null, uploadedFile);
 
             String extension = FilenameUtils.getExtension(file.getOriginalFilename());
             if ("xls".equals(extension) || "xlsx".equals(extension)) {
                 readFileAndStoreInDB(uploadedFile);
             } else if ("zip".equals(extension)) {
-                String unzipFolderName = folderName + File.separator + FilenameUtils.removeExtension(uploadedFile.getName());
+                String unzipFolderName = uploadedFile.getParent() + File.separator + FilenameUtils.removeExtension(uploadedFile.getName());
                 List<File> extractedFiles = unZipIt(uploadedFile, unzipFolderName);
                 for (File extractedFile : extractedFiles) {
 
-                    createFileDetailsEntry(client, product, fileDetails, extractedFile);
+                    saveFileDetails(client, product, fileDetails, extractedFile);
 
                     readFileAndStoreInDB(extractedFile);
                 }
             } else {
                 System.out.println("some other format");
             }
-
-
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -135,7 +112,22 @@ public class FileUploadController {
         return new ModelAndView("upload/status", "message", "File Uploaded sucessfully... " + file.getOriginalFilename());
     }
 
-    private FileDetails createFileDetailsEntry(Client client, Product product, FileDetails parent, File file) {
+    private File storeFileDetails(MultipartFile file, Client client, Product product, byte[] bytes) throws IOException {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy_MM_dd");
+        String folderWithDate = dateFormat.format(new Date());
+
+
+        String folderName = String.format("%s%s%s%s%s%s%s", fileUploadFolder, File.separator, folderWithDate, File.separator,
+                client.getClientName(), File.separator, product.getProductName());
+
+        String filename = folderName + File.separator + file.getOriginalFilename();
+
+        File uploadedFile = FileUtil.createFile(filename, bytes);
+        return uploadedFile;
+    }
+
+
+    private FileDetails saveFileDetails(Client client, Product product, FileDetails parent, File file) {
         FileDetails subFileDetails = new FileDetails();
         subFileDetails.setClient(client);
         subFileDetails.setProduct(product);
