@@ -33,7 +33,7 @@ public class FileDetails {
     private Date receivedDate;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "parent_file_id", nullable = false)
+    @JoinColumn(name = "parent_file_id")
     private FileDetails parentFileDetails;
 
     public Long getId() {
