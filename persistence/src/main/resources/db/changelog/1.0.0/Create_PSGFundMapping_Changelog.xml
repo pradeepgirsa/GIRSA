@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet id="psgFundMapping_table_1" author="Sharanya" runOnChange="true">
+        <createTable tableName="psg_fund_mapping" >
+            <column name="id" type="bigint">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="mgr_fund_code" type="varchar(20)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="psg_fund_code" type="varchar(20)"/>
+            <column name="mgr_fund_name" type="varchar(100)"/>
+            <column name="barra_fund_name" type="varchar(100)"/>
+            <column name="fund_currency" type="varchar(3)"/>
+            <column name="comments" type="varchar(255)"/>
+        </createTable>
+    </changeSet>
+
+</databaseChangeLog>

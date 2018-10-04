@@ -12,13 +12,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
-import utils.FileUtil;
 import za.co.global.domain.client.Client;
 import za.co.global.domain.product.Product;
 import za.co.global.domain.upload.*;
 import za.co.global.persistence.client.ClientRepository;
 import za.co.global.persistence.product.ProductRepository;
 import za.co.global.persistence.upload.FileDetailsRepository;
+import za.co.global.services.helper.FileUtil;
 import za.co.global.services.upload.GirsaExcelParser;
 import za.co.global.services.upload.SheetAndObjectResolver;
 

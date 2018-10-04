@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet id="issuer_mappings_table_1" author="Sharanya" runOnChange="true">
+        <createTable tableName="issuer_mapping" >
+            <column name="id" type="bigint">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="daily_pricing_issuer_name" type="varchar(100)"/>
+            <column name="barra_gir_Issuer_name" type="varchar(100)"/>
+            <column name="barra_code" type="varchar(20)"/>
+            <column name="issuer_code" type="varchar(20)"/>
+            <column name="market_capitalisation" type="NUMERIC(15,3)"/>
+            <column name="capital_reserves" type="NUMERIC(15,3)"/>
+        </createTable>
+    </changeSet>
+
+</databaseChangeLog>

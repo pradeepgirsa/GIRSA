@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
-import utils.FileUtil;
+import za.co.global.services.helper.FileUtil;
 import za.co.global.domain.client.Client;
 import za.co.global.domain.product.Product;
 import za.co.global.domain.upload.DSU5_GIRREP4;

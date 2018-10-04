@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet id="additional_classification_table_1" author="Sharanya" runOnChange="true">
+        <createTable tableName="additional_classification" >
+            <column name="id" type="bigint">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="industry" type="varchar(100)"/>
+            <column name="supersector" type="varchar(100)"/>
+            <column name="subsector" type="varchar(100)"/>
+            <column name="sector" type="varchar(100)"/>
+            <column name="alphaCode" type="varchar(20)"/>
+        </createTable>
+    </changeSet>
+
+</databaseChangeLog>

@@ -10,9 +10,8 @@ public class Product implements Serializable {
 
     private static final long serialVersionUID = 5500456840911177632L;
 
-
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @Column(name = "product_name", unique = true, nullable = false)

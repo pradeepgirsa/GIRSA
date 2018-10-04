@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet id="institutional_details_table_1" author="Sharanya" runOnChange="true">
+        <createTable tableName="institutional_details" >
+            <column name="id" type="bigint">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="fund_name" type="varchar(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="fund_code" type="varchar(20)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="asset_Market_value" type="NUMERIC(15,3)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="split" type="NUMERIC(15,3)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="percentage" type="NUMERIC(15,3)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+</databaseChangeLog>

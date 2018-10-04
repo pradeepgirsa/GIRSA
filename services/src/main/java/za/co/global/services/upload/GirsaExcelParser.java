@@ -12,6 +12,7 @@ import org.apache.poi.ss.usermodel.*;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -217,6 +218,10 @@ public class GirsaExcelParser {
                         if (dataType.equals("long")) {
                             var7 = 1;
                         }
+                    case 3327613:
+                        if (dataType.equals("big_decimal")) {
+                            var7 = 5;
+                        }
                 }
 
                 switch (var7) {
@@ -235,6 +240,9 @@ public class GirsaExcelParser {
                         break;
                     case 4:
                         field.set(classObj, this.dateParser(columnValue));
+                        break;
+                    case 5:
+                        field.set(classObj, new BigDecimal(columnValue));
                         break;
                     default:
                         field.set(classObj, columnValue);
