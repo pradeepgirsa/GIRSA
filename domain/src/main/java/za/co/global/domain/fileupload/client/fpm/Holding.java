@@ -1,4 +1,4 @@
-package za.co.global.domain.upload;
+package za.co.global.domain.fileupload.client.fpm;
 
 import javax.persistence.*;
 import java.io.Serializable;

@@ -1,4 +1,4 @@
-package za.co.global.domain.system;
+package za.co.global.domain.fileupload.client;
 
 import com.gizbel.excel.annotations.ExcelColumnHeader;
 

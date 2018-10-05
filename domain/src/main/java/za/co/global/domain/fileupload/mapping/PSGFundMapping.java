@@ -1,4 +1,4 @@
-package za.co.global.domain.system.mapping;
+package za.co.global.domain.fileupload.mapping;
 
 import com.gizbel.excel.annotations.ExcelBean;
 import com.gizbel.excel.annotations.ExcelColumnHeader;

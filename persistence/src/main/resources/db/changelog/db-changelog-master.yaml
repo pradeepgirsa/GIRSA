@@ -20,4 +20,8 @@ databaseChangeLog:
   - include:
         file: db/changelog/1.0.0/Create_AdditionalClassification_Changelog.xml
   - include:
-          file: db/changelog/1.0.0/Create_IssuerMappings_Changelog.xml
+        file: db/changelog/1.0.0/Create_IssuerMappings_Changelog.xml
+  - include:
+        file: db/changelog/1.0.0/Create_SecurityListing_Changelog.xml
+  - include:
+        file: db/changelog/1.0.0/Create_InstrumentCode_Changelog.xml

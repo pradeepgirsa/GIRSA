@@ -1,4 +1,4 @@
-package za.co.global.domain.upload;
+package za.co.global.domain.fileupload;
 
 import za.co.global.domain.client.Client;
 import za.co.global.domain.product.Product;

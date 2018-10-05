@@ -1,13 +1,5 @@
 package za.co.global.services.upload;
 
-import com.gizbel.excel.enums.ExcelFactoryType;
-import za.co.global.domain.upload.DSU5_GIRREP4;
-
-import java.io.File;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 public class ReadExcel {
 
     public static void main(String[] args) throws Exception {
