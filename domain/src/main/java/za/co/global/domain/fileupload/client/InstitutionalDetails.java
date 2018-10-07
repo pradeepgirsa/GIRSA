@@ -13,7 +13,7 @@ public class InstitutionalDetails implements Serializable {
     private static final long serialVersionUID = 5510446840911177632L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @Column(name = "fund_name", nullable = false)

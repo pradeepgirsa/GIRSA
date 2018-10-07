@@ -33,7 +33,7 @@ public class AdditionalClassification implements Serializable {
     @ExcelColumnHeader(columnHeader = "Sector")
     private String sector;
 
-    @Column(name = "alphaCode", nullable = false)
+    @Column(name = "alpha_code", nullable = false)
     @ExcelColumnHeader(columnHeader = "Alpha Code")
     private String alphaCode;
 

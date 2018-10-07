@@ -12,11 +12,11 @@ public class HoldingCategory implements Serializable {
     private static final long serialVersionUID = 5500456840911112332L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "holding_id", nullable = false)
+    @JoinColumn(name = "holding_id", nullable = false, insertable = false, updatable = false)
     private Holding holding;
 
     @Column(name = "category")
@@ -37,6 +37,22 @@ public class HoldingCategory implements Serializable {
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "holding_category_id", referencedColumnName = "ID", nullable = false)
     private List<Instrument> instruments;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Holding getHolding() {
+        return holding;
+    }
+
+    public void setHolding(Holding holding) {
+        this.holding = holding;
+    }
 
     public String getCategory() {
         return category;

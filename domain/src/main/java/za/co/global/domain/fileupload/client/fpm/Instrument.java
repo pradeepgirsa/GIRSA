@@ -15,7 +15,7 @@ public class Instrument implements Serializable {
     private Long id;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "holding_category_id", nullable = false)
+    @JoinColumn(name = "holding_category_id", nullable = false, insertable = false, updatable = false)
     private HoldingCategory holdingCategory;
 
     @Column(name = "instrument_code")
@@ -170,6 +170,22 @@ public class Instrument implements Serializable {
 
     public void setPercentOfMarketValue(BigDecimal percentOfMarketValue) {
         this.percentOfMarketValue = percentOfMarketValue;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public HoldingCategory getHoldingCategory() {
+        return holdingCategory;
+    }
+
+    public void setHoldingCategory(HoldingCategory holdingCategory) {
+        this.holdingCategory = holdingCategory;
     }
 
     @Override

@@ -15,7 +15,7 @@
             <column name="supersector" type="varchar(100)"/>
             <column name="subsector" type="varchar(100)"/>
             <column name="sector" type="varchar(100)"/>
-            <column name="alphaCode" type="varchar(20)"/>
+            <column name="alpha_code" type="varchar(20)"/>
         </createTable>
     </changeSet>
 

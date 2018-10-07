@@ -15,7 +15,7 @@
             </column>
             <column name="product_id" type="bigint">
             </column>
-            <column name="file_path" type="varchar(100)">
+            <column name="file_path" type="varchar(255)">
                 <constraints nullable="false"/>
             </column>
             <column name="file_extension" type="varchar(10)">

@@ -7,7 +7,7 @@
          http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
 
     <changeSet id="DSU5_GIRREP4_table_1" author="Sharanya">
-        <createTable tableName="DSU5_GIRREP4" >
+        <createTable tableName="dsu5_girrep4" >
             <column name="id" type="bigint">
                 <constraints primaryKey="true" nullable="false"/>
             </column>

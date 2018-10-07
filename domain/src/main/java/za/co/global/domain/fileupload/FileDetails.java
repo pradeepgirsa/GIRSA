@@ -12,7 +12,7 @@ public class FileDetails {
     private static final long serialVersionUID = 5510456840222177632L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @ManyToOne(fetch = FetchType.EAGER)

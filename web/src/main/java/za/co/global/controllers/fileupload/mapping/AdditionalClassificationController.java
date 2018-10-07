@@ -45,7 +45,7 @@ public class AdditionalClassificationController {
 
     @GetMapping("/upload_additionalClassification")
     public ModelAndView showUpload() {
-        ModelAndView modelAndView = new ModelAndView("fileupload/additionalClassification.html");
+        ModelAndView modelAndView = new ModelAndView("fileupload/mapping/additionalClassification");
         return modelAndView;
     }
 
