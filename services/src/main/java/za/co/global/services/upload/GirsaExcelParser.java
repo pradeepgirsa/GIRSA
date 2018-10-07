@@ -79,7 +79,7 @@ public class GirsaExcelParser {
         return defaultValue;
     }
 
-    public Map<String, List<Object>> parse(File file) throws InvalidFormatException, IOException, InstantiationException, IllegalAccessException, IllegalArgumentException, ParseException {
+    public Map<String, List<Object>> parse(File file, String fileType) throws InvalidFormatException, IOException, InstantiationException, IllegalAccessException, IllegalArgumentException, ParseException {
 
         Map<String, List<Object>> r = new HashMap<>();
         Workbook invoiceWorkbook = WorkbookFactory.create(file);
@@ -88,7 +88,7 @@ public class GirsaExcelParser {
 
             /* Getting the bean based on sheet name */
             //TODO - sheet name can be null in future
-            Class clazz = SheetAndObjectResolver.getClazzFromSheetName(sheet.getSheetName());
+            Class clazz = FileAndObjectResolver.getClazzFromFileType(fileType);
 
             Map<String, Field> fieldsMap = new HashMap();
 

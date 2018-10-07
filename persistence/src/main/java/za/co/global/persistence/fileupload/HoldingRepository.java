@@ -1,4 +1,4 @@
-package za.co.global.persistence.upload;
+package za.co.global.persistence.fileupload;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

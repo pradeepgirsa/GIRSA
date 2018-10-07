@@ -171,4 +171,81 @@ public class Instrument implements Serializable {
     public void setPercentOfMarketValue(BigDecimal percentOfMarketValue) {
         this.percentOfMarketValue = percentOfMarketValue;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Instrument that = (Instrument) o;
+
+        if (holdingCategory != null ? !holdingCategory.equals(that.holdingCategory) : that.holdingCategory != null)
+            return false;
+        if (instrumentCode != null ? !instrumentCode.equals(that.instrumentCode) : that.instrumentCode != null)
+            return false;
+        if (instrumentDescription != null ? !instrumentDescription.equals(that.instrumentDescription) : that.instrumentDescription != null)
+            return false;
+        if (issueCurrency != null ? !issueCurrency.equals(that.issueCurrency) : that.issueCurrency != null)
+            return false;
+        if (nominalValue != null ? !nominalValue.equals(that.nominalValue) : that.nominalValue != null) return false;
+        if (basePrice != null ? !basePrice.equals(that.basePrice) : that.basePrice != null) return false;
+        if (holdingPrice != null ? !holdingPrice.equals(that.holdingPrice) : that.holdingPrice != null) return false;
+        if (percentOfChangeBaseChange != null ? !percentOfChangeBaseChange.equals(that.percentOfChangeBaseChange) : that.percentOfChangeBaseChange != null)
+            return false;
+        if (currentBookValue != null ? !currentBookValue.equals(that.currentBookValue) : that.currentBookValue != null)
+            return false;
+        if (baseCurrentBookValue != null ? !baseCurrentBookValue.equals(that.baseCurrentBookValue) : that.baseCurrentBookValue != null)
+            return false;
+        if (basePriorMarketValue != null ? !basePriorMarketValue.equals(that.basePriorMarketValue) : that.basePriorMarketValue != null)
+            return false;
+        if (baseCurrentMarketValue != null ? !baseCurrentMarketValue.equals(that.baseCurrentMarketValue) : that.baseCurrentMarketValue != null)
+            return false;
+        if (baseChangeMarketValue != null ? !baseChangeMarketValue.equals(that.baseChangeMarketValue) : that.baseChangeMarketValue != null)
+            return false;
+        if (percentOfChangeMarketValue != null ? !percentOfChangeMarketValue.equals(that.percentOfChangeMarketValue) : that.percentOfChangeMarketValue != null)
+            return false;
+        return percentOfMarketValue != null ? percentOfMarketValue.equals(that.percentOfMarketValue) : that.percentOfMarketValue == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = holdingCategory != null ? holdingCategory.hashCode() : 0;
+        result = 31 * result + (instrumentCode != null ? instrumentCode.hashCode() : 0);
+        result = 31 * result + (instrumentDescription != null ? instrumentDescription.hashCode() : 0);
+        result = 31 * result + (issueCurrency != null ? issueCurrency.hashCode() : 0);
+        result = 31 * result + (nominalValue != null ? nominalValue.hashCode() : 0);
+        result = 31 * result + (basePrice != null ? basePrice.hashCode() : 0);
+        result = 31 * result + (holdingPrice != null ? holdingPrice.hashCode() : 0);
+        result = 31 * result + (percentOfChangeBaseChange != null ? percentOfChangeBaseChange.hashCode() : 0);
+        result = 31 * result + (currentBookValue != null ? currentBookValue.hashCode() : 0);
+        result = 31 * result + (baseCurrentBookValue != null ? baseCurrentBookValue.hashCode() : 0);
+        result = 31 * result + (basePriorMarketValue != null ? basePriorMarketValue.hashCode() : 0);
+        result = 31 * result + (baseCurrentMarketValue != null ? baseCurrentMarketValue.hashCode() : 0);
+        result = 31 * result + (baseChangeMarketValue != null ? baseChangeMarketValue.hashCode() : 0);
+        result = 31 * result + (percentOfChangeMarketValue != null ? percentOfChangeMarketValue.hashCode() : 0);
+        result = 31 * result + (percentOfMarketValue != null ? percentOfMarketValue.hashCode() : 0);
+        return result;
+    }
+
+    @Override
+    public String toString() {
+        return "Instrument{" +
+                "id=" + id +
+                ", holdingCategory=" + holdingCategory +
+                ", instrumentCode='" + instrumentCode + '\'' +
+                ", instrumentDescription='" + instrumentDescription + '\'' +
+                ", issueCurrency='" + issueCurrency + '\'' +
+                ", nominalValue=" + nominalValue +
+                ", basePrice=" + basePrice +
+                ", holdingPrice=" + holdingPrice +
+                ", percentOfChangeBaseChange=" + percentOfChangeBaseChange +
+                ", currentBookValue=" + currentBookValue +
+                ", baseCurrentBookValue=" + baseCurrentBookValue +
+                ", basePriorMarketValue=" + basePriorMarketValue +
+                ", baseCurrentMarketValue=" + baseCurrentMarketValue +
+                ", baseChangeMarketValue=" + baseChangeMarketValue +
+                ", percentOfChangeMarketValue=" + percentOfChangeMarketValue +
+                ", percentOfMarketValue=" + percentOfMarketValue +
+                '}';
+    }
 }

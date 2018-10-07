@@ -120,6 +120,14 @@
                     </a>
                 </li>
                 <li th:class="|parent|">
+                    <a><i  th:class="|fa fa-leaf|" /> <span th:text="|Mapping|"/> </a>
+                    <ul class="children">
+                        <li><a th:href="|/upload_additionalClassification|" th:onclick="|loadingScreen()|">
+                            <i  th:class="|fa fa-leaf|" /> <span th:text="|Additional Classification|"/> </a></li>
+                    </ul>
+
+                </li>
+                <li th:class="|parent|">
                     <a><i  th:class="|fa fa-leaf|" /> <span th:text="|Client|"/> </a>
                     <ul class="children">
                         <li><a th:href="|/view_clients|" th:onclick="|loadingScreen()|">

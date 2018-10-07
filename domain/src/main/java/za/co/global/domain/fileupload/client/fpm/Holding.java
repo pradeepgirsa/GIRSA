@@ -103,4 +103,56 @@ public class Holding implements Serializable {
     public void setNetPercentOfMarketValue(BigDecimal netPercentOfMarketValue) {
         this.netPercentOfMarketValue = netPercentOfMarketValue;
     }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Holding holding = (Holding) o;
+
+        if (portfolioCode != null ? !portfolioCode.equals(holding.portfolioCode) : holding.portfolioCode != null)
+            return false;
+        if (portfolioName != null ? !portfolioName.equals(holding.portfolioName) : holding.portfolioName != null)
+            return false;
+        if (currency != null ? !currency.equals(holding.currency) : holding.currency != null) return false;
+        if (netBaseCurrentBookValue != null ? !netBaseCurrentBookValue.equals(holding.netBaseCurrentBookValue) : holding.netBaseCurrentBookValue != null)
+            return false;
+        if (netBasePriorMarketValue != null ? !netBasePriorMarketValue.equals(holding.netBasePriorMarketValue) : holding.netBasePriorMarketValue != null)
+            return false;
+        if (netBaseCurrentMarketValue != null ? !netBaseCurrentMarketValue.equals(holding.netBaseCurrentMarketValue) : holding.netBaseCurrentMarketValue != null)
+            return false;
+        if (netPercentOfMarketValue != null ? !netPercentOfMarketValue.equals(holding.netPercentOfMarketValue) : holding.netPercentOfMarketValue != null)
+            return false;
+        return holdingCategories != null ? holdingCategories.equals(holding.holdingCategories) : holding.holdingCategories == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = portfolioCode != null ? portfolioCode.hashCode() : 0;
+        result = 31 * result + (portfolioName != null ? portfolioName.hashCode() : 0);
+        result = 31 * result + (currency != null ? currency.hashCode() : 0);
+        result = 31 * result + (netBaseCurrentBookValue != null ? netBaseCurrentBookValue.hashCode() : 0);
+        result = 31 * result + (netBasePriorMarketValue != null ? netBasePriorMarketValue.hashCode() : 0);
+        result = 31 * result + (netBaseCurrentMarketValue != null ? netBaseCurrentMarketValue.hashCode() : 0);
+        result = 31 * result + (netPercentOfMarketValue != null ? netPercentOfMarketValue.hashCode() : 0);
+        result = 31 * result + (holdingCategories != null ? holdingCategories.hashCode() : 0);
+        return result;
+    }
+
+    @Override
+    public String toString() {
+        return "Holding{" +
+                "id=" + id +
+                ", portfolioCode='" + portfolioCode + '\'' +
+                ", portfolioName='" + portfolioName + '\'' +
+                ", currency='" + currency + '\'' +
+                ", netBaseCurrentBookValue=" + netBaseCurrentBookValue +
+                ", netBasePriorMarketValue=" + netBasePriorMarketValue +
+                ", netBaseCurrentMarketValue=" + netBaseCurrentMarketValue +
+                ", netPercentOfMarketValue=" + netPercentOfMarketValue +
+                ", holdingCategories=" + holdingCategories +
+                '}';
+    }
 }

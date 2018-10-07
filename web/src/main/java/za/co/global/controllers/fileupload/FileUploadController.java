@@ -1,4 +1,4 @@
-package za.co.global.controllers.uplaod;
+package za.co.global.controllers.fileupload;
 
 import com.gizbel.excel.enums.ExcelFactoryType;
 import org.apache.commons.io.FilenameUtils;
@@ -18,23 +18,21 @@ import za.co.global.domain.fileupload.barra.DSU5_GIRREP4;
 import za.co.global.domain.fileupload.FileDetails;
 import za.co.global.persistence.client.ClientRepository;
 import za.co.global.persistence.product.ProductRepository;
-import za.co.global.persistence.upload.FileDetailsRepository;
+import za.co.global.persistence.fileupload.FileDetailsRepository;
 import za.co.global.services.upload.GirsaExcelParser;
-import za.co.global.services.upload.SheetAndObjectResolver;
+import za.co.global.services.upload.FileAndObjectResolver;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipInputStream;
 
 @Controller
 public class FileUploadController {
+
+    public static final String FILE_TYPE = FileAndObjectResolver.DSU5_GIRREP4.getFileType();
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -94,7 +92,7 @@ public class FileUploadController {
                 readFileAndStoreInDB(uploadedFile);
             } else if ("zip".equals(extension)) {
                 String unzipFolderName = uploadedFile.getParent() + File.separator + FilenameUtils.removeExtension(uploadedFile.getName());
-                List<File> extractedFiles = unZipIt(uploadedFile, unzipFolderName);
+                List<File> extractedFiles = FileUtil.unZipIt(uploadedFile, unzipFolderName);
                 for (File extractedFile : extractedFiles) {
 
                     saveFileDetails(client, product, fileDetails, extractedFile);
@@ -111,7 +109,7 @@ public class FileUploadController {
             e.printStackTrace();
         }
 
-        return new ModelAndView("upload/status", "message", "File Uploaded sucessfully... " + file.getOriginalFilename());
+        return new ModelAndView("upload/status", "message", "File Uploaded successfully... " + file.getOriginalFilename());
     }
 
     private File storeFileDetails(MultipartFile file, Client client, Product product, byte[] bytes) throws IOException {
@@ -140,69 +138,18 @@ public class FileUploadController {
         return fileDetailsRepository.save(subFileDetails);
     }
 
-    public List<File> unZipIt(File zipFile, String outputFolder) {
 
-        byte[] buffer = new byte[1024];
-        List<File> files = new ArrayList<>();
-
-        try {
-
-            //create output directory is not exists
-//            File folder = new File(OUTPUT_FOLDER);
-//            if(!folder.exists()){
-//                folder.mkdir();
-//            }
-
-            //get the zip file content
-            ZipInputStream zis =
-                    new ZipInputStream(new FileInputStream(zipFile));
-            //get the zipped file list entry
-            ZipEntry ze = zis.getNextEntry();
-
-            while (ze != null) {
-
-                String fileName = ze.getName();
-                File newFile = new File(outputFolder + File.separator + fileName);
-
-//                System.out.println("file unzip : "+ newFile.getAbsoluteFile());
-                files.add(newFile.getAbsoluteFile());
-
-                //create all non exists folders
-                //else you will hit FileNotFoundException for compressed folder
-                new File(newFile.getParent()).mkdirs();
-
-                FileOutputStream fos = new FileOutputStream(newFile);
-
-                int len;
-                while ((len = zis.read(buffer)) > 0) {
-                    fos.write(buffer, 0, len);
-                }
-
-                fos.close();
-                ze = zis.getNextEntry();
-            }
-
-            zis.closeEntry();
-            zis.close();
-
-            System.out.println("Done");
-
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
-        return files;
-    }
 
     private void readFileAndStoreInDB(File file) throws Exception {
         GirsaExcelParser parser = new GirsaExcelParser(ExcelFactoryType.COLUMN_NAME_BASED_EXTRACTION);
-        Map<String, List<Object>> result = parser.parse(file); //Whatever excel file you want
+        Map<String, List<Object>> result = parser.parse(file, FILE_TYPE); //Whatever excel file you want
         Set<Map.Entry<String, List<Object>>> entries = result.entrySet();
         for (Map.Entry<String, List<Object>> map : entries) {
             String key = map.getKey();
             System.out.println("---" + key);
             List<Object> value = map.getValue();
             for (Object obj : value) {
-                Class clazz = SheetAndObjectResolver.getClazzFromSheetName(key);
+                Class clazz = FileAndObjectResolver.getClazzFromFileType(key);
                 if(DSU5_GIRREP4.class.getCanonicalName().equals(clazz.getCanonicalName())) {
                     DSU5_GIRREP4 ex = (DSU5_GIRREP4) obj;
                     entityManager.persist(ex);

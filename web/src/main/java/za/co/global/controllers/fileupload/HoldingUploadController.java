@@ -1,4 +1,4 @@
-package za.co.global.controllers.uplaod;
+package za.co.global.controllers.fileupload;
 
 import com.gizbel.excel.enums.ExcelFactoryType;
 import org.apache.commons.io.FilenameUtils;
@@ -21,10 +21,10 @@ import za.co.global.domain.fileupload.client.fpm.Instrument;
 import za.co.global.domain.product.Product;
 import za.co.global.persistence.client.ClientRepository;
 import za.co.global.persistence.product.ProductRepository;
-import za.co.global.persistence.upload.FileDetailsRepository;
+import za.co.global.persistence.fileupload.FileDetailsRepository;
 import za.co.global.services.helper.FileUtil;
 import za.co.global.services.upload.GirsaExcelParser;
-import za.co.global.services.upload.SheetAndObjectResolver;
+import za.co.global.services.upload.FileAndObjectResolver;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -32,8 +32,6 @@ import java.io.*;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipInputStream;
 
 @Controller
 public class HoldingUploadController {
@@ -82,7 +80,18 @@ public class HoldingUploadController {
         return new ModelAndView("upload/status", "message", "File Uploaded sucessfully... " + file.getOriginalFilename());
     }
 
-    private void readAndStoreFundManagerHoldingSheetData(File uploadedFile) throws IOException, InvalidFormatException {
+    public static void main(String[] args) {
+        File file = new File("C:\\Users\\SHARANYAREDDY\\Desktop\\TSR\\GIRSA\\2.FPM\\FPM.xlsx");
+        try {
+            readAndStoreFundManagerHoldingSheetData(file);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (InvalidFormatException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static void readAndStoreFundManagerHoldingSheetData(File uploadedFile) throws IOException, InvalidFormatException {
         Workbook workbook = WorkbookFactory.create(uploadedFile);
         DataFormatter dataFormatter = new DataFormatter();
         Holding holding = new Holding();
@@ -94,11 +103,10 @@ public class HoldingUploadController {
                 Iterator<Row> rowIterator = sheet.rowIterator();
                 while (rowIterator.hasNext()) {
                     Row row = rowIterator.next();
-                    System.out.println(row.getPhysicalNumberOfCells());
                      /*
                        * This used to store portfolio data
                      */
-                    if (row.getPhysicalNumberOfCells() == 2) {
+                    if (row.getPhysicalNumberOfCells() == 2 || row.getPhysicalNumberOfCells() == 3) {
                         String value = dataFormatter.formatCellValue(row.getCell(0)).trim();
                         if ("Portfolio Code:".equals(value)) {
                             holding.setPortfolioCode(dataFormatter.formatCellValue(row.getCell(1)));
@@ -172,6 +180,8 @@ public class HoldingUploadController {
                 }
             }
         }
+
+        System.out.println( "===="+holding);
     }
 
     private File storeFileDetails(@RequestParam("file") MultipartFile file, String productId, String clientId, byte[] bytes) throws IOException {
@@ -193,7 +203,7 @@ public class HoldingUploadController {
         return uploadedFile;
     }
 
-    private HoldingCategory getInstrumentData(Map<Integer, String> headersMap, Sheet sheet, Row row) {
+    private static HoldingCategory getInstrumentData(Map<Integer, String> headersMap, Sheet sheet, Row row) {
         HoldingCategory holdingCategory = new HoldingCategory();
         DataFormatter dataFormatter = new DataFormatter();
         String category = dataFormatter.formatCellValue(row.getCell(0)).trim();
@@ -239,7 +249,7 @@ public class HoldingUploadController {
         return holdingCategory;
     }
 
-    private Instrument getInstrumentDetail(Map<Integer, String> headersMap, Row row) {
+    private static Instrument getInstrumentDetail(Map<Integer, String> headersMap, Row row) {
         Instrument instrument = new Instrument();
 
 
@@ -322,76 +332,9 @@ public class HoldingUploadController {
         return fileDetailsRepository.save(subFileDetails);
     }
 
-    public List<File> unZipIt(File zipFile, String outputFolder) {
 
-        byte[] buffer = new byte[1024];
-        List<File> files = new ArrayList<>();
 
-        try {
 
-            //create output directory is not exists
-//            File folder = new File(OUTPUT_FOLDER);
-//            if(!folder.exists()){
-//                folder.mkdir();
-//            }
-
-            //get the zip file content
-            ZipInputStream zis =
-                    new ZipInputStream(new FileInputStream(zipFile));
-            //get the zipped file list entry
-            ZipEntry ze = zis.getNextEntry();
-
-            while (ze != null) {
-
-                String fileName = ze.getName();
-                File newFile = new File(outputFolder + File.separator + fileName);
-
-//                System.out.println("file unzip : "+ newFile.getAbsoluteFile());
-                files.add(newFile.getAbsoluteFile());
-
-                //create all non exists folders
-                //else you will hit FileNotFoundException for compressed folder
-                new File(newFile.getParent()).mkdirs();
-
-                FileOutputStream fos = new FileOutputStream(newFile);
-
-                int len;
-                while ((len = zis.read(buffer)) > 0) {
-                    fos.write(buffer, 0, len);
-                }
-
-                fos.close();
-                ze = zis.getNextEntry();
-            }
-
-            zis.closeEntry();
-            zis.close();
-
-            System.out.println("Done");
-
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
-        return files;
-    }
-
-    private void readFileAndStoreInDB(File file) throws Exception {
-        GirsaExcelParser parser = new GirsaExcelParser(ExcelFactoryType.COLUMN_NAME_BASED_EXTRACTION);
-        Map<String, List<Object>> result = parser.parse(file); //Whatever excel file you want
-        Set<Map.Entry<String, List<Object>>> entries = result.entrySet();
-        for (Map.Entry<String, List<Object>> map : entries) {
-            String key = map.getKey();
-            System.out.println("---" + key);
-            List<Object> value = map.getValue();
-            for (Object obj : value) {
-                Class clazz = SheetAndObjectResolver.getClazzFromSheetName(key);
-                if (DSU5_GIRREP4.class.getCanonicalName().equals(clazz.getCanonicalName())) {
-                    DSU5_GIRREP4 ex = (DSU5_GIRREP4) obj;
-                    entityManager.persist(ex);
-                }
-            }
-        }
-    }
 
     public List<Client> getClients() {
         return clients;
