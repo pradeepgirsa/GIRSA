@@ -124,8 +124,24 @@
                     <ul class="children">
                         <li><a th:href="|/upload_additionalClassification|" th:onclick="|loadingScreen()|">
                             <i  th:class="|fa fa-leaf|" /> <span th:text="|Additional Classification|"/> </a></li>
+                        <li><a th:href="|/upload_instrumentCode|" th:onclick="|loadingScreen()|">
+                            <i  th:class="|fa fa-leaf|" /> <span th:text="|Instrument Code|"/> </a></li>
+                        <li><a th:href="|/upload_issuerMappings|" th:onclick="|loadingScreen()|">
+                            <i  th:class="|fa fa-leaf|" /> <span th:text="|Issuer Mappings|"/> </a></li>
+                        <li><a th:href="|/upload_psgFundMapping|" th:onclick="|loadingScreen()|">
+                            <i  th:class="|fa fa-leaf|" /> <span th:text="|PSG Fund Mapping|"/> </a></li>
                     </ul>
-
+                </li>
+                <li th:class="|parent|">
+                    <a><i  th:class="|fa fa-leaf|" /> <span th:text="|Client Related|"/> </a>
+                    <ul class="children">
+                        <li><a th:href="|/upload_institutionalDetails|" th:onclick="|loadingScreen()|">
+                            <i  th:class="|fa fa-leaf|" /> <span th:text="|Institutional Details|"/> </a></li>
+                        <li><a th:href="|/upload_numberOfAccounts|" th:onclick="|loadingScreen()|">
+                            <i  th:class="|fa fa-leaf|" /> <span th:text="|Number Of Accounts|"/> </a></li>
+                        <li><a th:href="|/upload_security Listing|" th:onclick="|loadingScreen()|">
+                            <i  th:class="|fa fa-leaf|" /> <span th:text="|Security Listing|"/> </a></li>
+                    </ul>
                 </li>
                 <li th:class="|parent|">
                     <a><i  th:class="|fa fa-leaf|" /> <span th:text="|Client|"/> </a>
