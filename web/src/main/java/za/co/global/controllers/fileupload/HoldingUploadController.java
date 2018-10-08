@@ -34,10 +34,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Controller
-public class HoldingUploadController {
-
-    @PersistenceContext
-    private EntityManager entityManager;
+public class HoldingUploadController extends BaseFileUploadController {
 
     @Autowired
     private ClientRepository clientRepository;
@@ -45,16 +42,8 @@ public class HoldingUploadController {
     @Autowired
     private ProductRepository productRepository;
 
-    @Autowired
-    private FileDetailsRepository fileDetailsRepository;
-
     private List<Client> clients;
     private List<Product> products;
-
-    @Value("${file.upload.folder}")
-    private String fileUploadFolder;
-
-
 
     @PostMapping("/holding_upload")
     public ModelAndView fileUpload(@RequestParam("file") MultipartFile file, String productId, String clientId) {
@@ -321,17 +310,10 @@ public class HoldingUploadController {
         return instrument;
     }
 
-    private FileDetails saveFileDetails(Client client, Product product, FileDetails parent, File file) {
-        FileDetails subFileDetails = new FileDetails();
-        subFileDetails.setClient(client);
-        subFileDetails.setProduct(product);
-        subFileDetails.setFilePath(file.getAbsolutePath());
-        subFileDetails.setFileExtension(FilenameUtils.getExtension(file.getName()));
-        subFileDetails.setReceivedDate(new Date());
-        subFileDetails.setParentFileDetails(parent);
-        return fileDetailsRepository.save(subFileDetails);
-    }
 
+    protected void processObject(Object obj) {
+        // no
+    }
 
 
 
