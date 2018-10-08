@@ -18,6 +18,12 @@
             <column name="market_capitalisation" type="NUMERIC(15,3)"/>
             <column name="capital_reserves" type="NUMERIC(15,3)"/>
         </createTable>
+
+        <addAutoIncrement columnDataType="bigint"
+                          columnName="id"
+                          incrementBy="1"
+                          startWith="100"
+                          tableName="issuer_mapping"/>
     </changeSet>
 
 </databaseChangeLog>

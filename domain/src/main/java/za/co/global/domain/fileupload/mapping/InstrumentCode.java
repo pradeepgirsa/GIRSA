@@ -14,7 +14,7 @@ public class InstrumentCode implements Serializable {
     private static final long serialVersionUID = 5321556232211177632L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "manager_code")

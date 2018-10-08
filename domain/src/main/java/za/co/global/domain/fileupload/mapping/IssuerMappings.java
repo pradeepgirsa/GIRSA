@@ -15,7 +15,7 @@ public class IssuerMappings implements Serializable {
     private static final long serialVersionUID = 5410446232211177632L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "daily_pricing_issuer_name", unique = true, nullable = false)

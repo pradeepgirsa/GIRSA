@@ -12,7 +12,7 @@ public class HoldingCategory implements Serializable {
     private static final long serialVersionUID = 5500456840911112332L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne(fetch = FetchType.EAGER)

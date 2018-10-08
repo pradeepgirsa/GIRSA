@@ -26,6 +26,12 @@
             </column>
             <column name="parent_file_id" type="bigint"/>
         </createTable>
+
+        <addAutoIncrement columnDataType="bigint"
+                          columnName="id"
+                          incrementBy="1"
+                          startWith="100"
+                          tableName="file_details"/>
     </changeSet>
 
     <changeSet id="file_details_constraints_1" author="Sharanya">

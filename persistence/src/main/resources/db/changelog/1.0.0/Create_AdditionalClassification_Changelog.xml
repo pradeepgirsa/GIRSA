@@ -9,7 +9,7 @@
     <changeSet id="additional_classification_table_1" author="Sharanya" runOnChange="true">
         <createTable tableName="additional_classification" >
             <column name="id" type="bigint">
-                <constraints primaryKey="true" nullable="false"/>
+                <constraints primaryKey="true"   nullable="false"/>
             </column>
             <column name="industry" type="varchar(100)"/>
             <column name="supersector" type="varchar(100)"/>
@@ -17,6 +17,12 @@
             <column name="sector" type="varchar(100)"/>
             <column name="alpha_code" type="varchar(20)"/>
         </createTable>
+
+        <addAutoIncrement columnDataType="bigint"
+                          columnName="id"
+                          incrementBy="1"
+                          startWith="100"
+                          tableName="additional_classification"/>
     </changeSet>
 
 </databaseChangeLog>

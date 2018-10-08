@@ -67,7 +67,12 @@
             <column name="ULTIMATE_ISSUER_NAME" type="varchar(255)"/>
 
         </createTable>
-    </changeSet>
 
+        <addAutoIncrement columnDataType="bigint"
+                          columnName="id"
+                          incrementBy="1"
+                          startWith="100"
+                          tableName="dsu5_girrep4"/>
+    </changeSet>
 
 </databaseChangeLog>

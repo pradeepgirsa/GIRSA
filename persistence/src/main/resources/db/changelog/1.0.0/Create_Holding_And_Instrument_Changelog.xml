@@ -21,6 +21,12 @@
             <column name="net_base_current_market_value" type="NUMERIC(15, 3)"/>
             <column name="net_percent_of_market_value" type="NUMERIC(15, 3)"/>
         </createTable>
+
+        <addAutoIncrement columnDataType="bigint"
+                          columnName="id"
+                          incrementBy="1"
+                          startWith="100"
+                          tableName="holding"/>
     </changeSet>
 
     <changeSet id="holding_category_table_1" author="Sharanya">
@@ -37,6 +43,12 @@
             <column name="t_percent_of_market_value" type="NUMERIC(15, 3)"/>
             <column name="t_base_current_market_value" type="NUMERIC(15, 3)"/>
         </createTable>
+
+        <addAutoIncrement columnDataType="bigint"
+                          columnName="id"
+                          incrementBy="1"
+                          startWith="100"
+                          tableName="holding_category"/>
     </changeSet>
 
     <changeSet id="holding_category_constraints_1" author="Sharanya">
@@ -83,6 +95,12 @@
             <column name="percent_of_change_mkt_value" type="NUMERIC(15, 3)"/>
             <column name="percent_of_market_value" type="NUMERIC(15, 3)"/>
         </createTable>
+
+        <addAutoIncrement columnDataType="bigint"
+                          columnName="id"
+                          incrementBy="1"
+                          startWith="100"
+                          tableName="instrument"/>
     </changeSet>
 
     <changeSet id="instrument_constraints_1" author="Sharanya">

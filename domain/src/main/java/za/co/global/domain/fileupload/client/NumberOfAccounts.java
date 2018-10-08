@@ -14,7 +14,7 @@ public class NumberOfAccounts  implements Serializable {
     private static final long serialVersionUID = 5511446840911177632L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "fund_code", unique = true, nullable = false)

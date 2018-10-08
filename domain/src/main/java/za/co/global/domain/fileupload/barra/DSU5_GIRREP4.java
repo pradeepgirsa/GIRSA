@@ -14,7 +14,7 @@ public class DSU5_GIRREP4 implements Serializable {
     private static final long serialVersionUID = 5501452100911177632L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID")
     private Long id;
 
