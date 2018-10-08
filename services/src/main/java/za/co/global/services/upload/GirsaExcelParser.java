@@ -85,71 +85,73 @@ public class GirsaExcelParser {
         Workbook invoiceWorkbook = WorkbookFactory.create(file);
         for (int i = 0; i < invoiceWorkbook.getNumberOfSheets(); i++) {
             Sheet sheet = invoiceWorkbook.getSheetAt(i);
+            if(sheet.getPhysicalNumberOfRows() > 0) {
 
             /* Getting the bean based on sheet name */
-            //TODO - sheet name can be null in future
-            Class clazz = FileAndObjectResolver.getClazzFromFileType(fileType);
+                //TODO - sheet name can be null in future
+                Class clazz = FileAndObjectResolver.getClazzFromFileType(fileType);
 
-            Map<String, Field> fieldsMap = new HashMap();
+                Map<String, Field> fieldsMap = new HashMap();
 
-            if (clazz != null) {
-                if (clazz.isAnnotationPresent(ExcelBean.class)) {
-                    Field[] fields = clazz.getDeclaredFields();
-                    Field[] var4 = fields;
-                    int var5 = fields.length;
+                if (clazz != null) {
+                    if (clazz.isAnnotationPresent(ExcelBean.class)) {
+                        Field[] fields = clazz.getDeclaredFields();
+                        Field[] var4 = fields;
+                        int var5 = fields.length;
 
-                    for (int var6 = 0; var6 < var5; ++var6) {
-                        Field field = var4[var6];
-                        switch (this.excelFactoryType) {
-                            case COLUMN_INDEX_BASED_EXTRACTION:
-                                this.prepareColumnIndexBasedFieldMap(field, fieldsMap);
-                                break;
-                            case COLUMN_NAME_BASED_EXTRACTION:
-                                this.prepareColumnHeaderBasedFieldMap(field, fieldsMap);
+                        for (int var6 = 0; var6 < var5; ++var6) {
+                            Field field = var4[var6];
+                            switch (this.excelFactoryType) {
+                                case COLUMN_INDEX_BASED_EXTRACTION:
+                                    this.prepareColumnIndexBasedFieldMap(field, fieldsMap);
+                                    break;
+                                case COLUMN_NAME_BASED_EXTRACTION:
+                                    this.prepareColumnHeaderBasedFieldMap(field, fieldsMap);
+                            }
+                        }
+
+                    } else {
+                        //throw new Exception("Provided class is not annotated with ExcelBean");
+                    }
+
+                    List<Object> result = new ArrayList();
+                    if (this.excelFactoryType == ExcelFactoryType.COLUMN_NAME_BASED_EXTRACTION) {
+                        Row firstRow = sheet.getRow(0);
+                        Iterator var6 = firstRow.iterator();
+
+                        while (var6.hasNext()) {
+                            Cell column = (Cell) var6.next();
+                            Field field = (Field) fieldsMap.get(column.getStringCellValue());
+                            if (field != null) {
+                                fieldsMap.remove(column.getStringCellValue());
+                                fieldsMap.put(String.valueOf(column.getColumnIndex()), field);
+                            }
                         }
                     }
 
-                } else {
-                    //throw new Exception("Provided class is not annotated with ExcelBean");
-                }
+                    Iterator var9 = sheet.iterator();
 
-                List<Object> result = new ArrayList();
-                if (this.excelFactoryType == ExcelFactoryType.COLUMN_NAME_BASED_EXTRACTION) {
-                    Row firstRow = sheet.getRow(0);
-                    Iterator var6 = firstRow.iterator();
-
-                    while (var6.hasNext()) {
-                        Cell column = (Cell) var6.next();
-                        Field field = (Field) fieldsMap.get(column.getStringCellValue());
-                        if (field != null) {
-                            fieldsMap.remove(column.getStringCellValue());
-                            fieldsMap.put(String.valueOf(column.getColumnIndex()), field);
-                        }
-                    }
-                }
-
-                Iterator var9 = sheet.iterator();
-
-                while (var9.hasNext()) {
-                    Row row = (Row) var9.next();
-                    if (this.excelFactoryType == ExcelFactoryType.COLUMN_INDEX_BASED_EXTRACTION) {
-                        if (row.getRowNum() == 0 && this.skipHeader) {
+                    while (var9.hasNext()) {
+                        Row row = (Row) var9.next();
+                        if (this.excelFactoryType == ExcelFactoryType.COLUMN_INDEX_BASED_EXTRACTION) {
+                            if (row.getRowNum() == 0 && this.skipHeader) {
+                                continue;
+                            }
+                        } else if (this.excelFactoryType == ExcelFactoryType.COLUMN_NAME_BASED_EXTRACTION && row.getRowNum() == 0) {
                             continue;
                         }
-                    } else if (this.excelFactoryType == ExcelFactoryType.COLUMN_NAME_BASED_EXTRACTION && row.getRowNum() == 0) {
-                        continue;
+
+                        if (!this.isEmptyRow(row)) {
+                            Object beanObj = this.getBeanForARow(clazz, row, fieldsMap);
+                            result.add(beanObj);
+                        } else if (this.breakAfterEmptyRow) {
+                            break;
+                        }
                     }
 
-                    if (!this.isEmptyRow(row)) {
-                        Object beanObj = this.getBeanForARow(clazz, row, fieldsMap);
-                        result.add(beanObj);
-                    } else if (this.breakAfterEmptyRow) {
-                        break;
-                    }
-                }
-
-                r.put(sheet.getSheetName(), result);
-            } //if close to check null on clazz
+                    r.put(sheet.getSheetName(), result);
+                } //if close to check null on clazz
+            }//If check for sheet with 0 rows.
         } //for close
 
         return r;
