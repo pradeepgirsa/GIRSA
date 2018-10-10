@@ -26,15 +26,7 @@ public class FileUtil {
 
         byte[] buffer = new byte[1024];
         List<File> files = new ArrayList<>();
-
         try {
-
-            //create output directory is not exists
-//            File folder = new File(OUTPUT_FOLDER);
-//            if(!folder.exists()){
-//                folder.mkdir();
-//            }
-
             //get the zip file content
             ZipInputStream zis =
                     new ZipInputStream(new FileInputStream(zipFile));
@@ -46,7 +38,6 @@ public class FileUtil {
                 String fileName = ze.getName();
                 File newFile = new File(outputFolder + File.separator + fileName);
 
-//                System.out.println("file unzip : "+ newFile.getAbsoluteFile());
                 files.add(newFile.getAbsoluteFile());
 
                 //create all non exists folders
@@ -67,7 +58,6 @@ public class FileUtil {
             zis.closeEntry();
             zis.close();
 
-            System.out.println("Done");
 
         } catch (IOException ex) {
             ex.printStackTrace();

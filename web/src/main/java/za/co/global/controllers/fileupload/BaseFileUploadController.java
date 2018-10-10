@@ -46,10 +46,12 @@ public abstract class BaseFileUploadController {
             String unzipFolderName = uploadedFile.getParent() + File.separator + FilenameUtils.removeExtension(uploadedFile.getName());
             List<File> extractedFiles = FileUtil.unZipIt(uploadedFile, unzipFolderName);
             for (File extractedFile : extractedFiles) {
+                extension = FilenameUtils.getExtension(extractedFile.getName());
+                if ("xls".equals(extension) || "xlsx".equals(extension)) {
+                    saveFileDetails(null, null, fileDetails, extractedFile);
 
-                saveFileDetails(null, null, fileDetails, extractedFile);
-
-                readFileAndStoreInDB(extractedFile, fileType);
+                    readFileAndStoreInDB(extractedFile, fileType);
+                }
             }
         } else {
             System.out.println("some other format");

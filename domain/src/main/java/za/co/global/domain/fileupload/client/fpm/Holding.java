@@ -3,6 +3,7 @@ package za.co.global.domain.fileupload.client.fpm;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -38,7 +39,7 @@ public class Holding implements Serializable {
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "holding_id", referencedColumnName = "ID", nullable = false)
-    private List<HoldingCategory> holdingCategories;
+    private List<HoldingCategory> holdingCategories = new ArrayList<>();
 
     public String getPortfolioCode() {
         return portfolioCode;
