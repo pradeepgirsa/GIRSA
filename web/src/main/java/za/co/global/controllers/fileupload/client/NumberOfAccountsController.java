@@ -18,7 +18,7 @@ import java.io.IOException;
 @Controller
 public class NumberOfAccountsController extends BaseFileUploadController {
 
-    public static final String FILE_TYPE = FileAndObjectResolver.ADDITIONAL_CLASSIFICATION.getFileType();
+    public static final String FILE_TYPE = FileAndObjectResolver.NUMBER_OF_ACCOUNTS.getFileType();
 
     @Autowired
     private NumberOfAccountsRepository numberOfAccountsRepository;

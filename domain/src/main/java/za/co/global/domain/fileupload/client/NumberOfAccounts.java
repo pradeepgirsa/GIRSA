@@ -1,5 +1,6 @@
 package za.co.global.domain.fileupload.client;
 
+import com.gizbel.excel.annotations.ExcelBean;
 import com.gizbel.excel.annotations.ExcelColumnHeader;
 
 import javax.persistence.*;
@@ -9,6 +10,7 @@ import java.math.BigDecimal;
 
 @Entity
 @Table(name = "number_of_accounts")
+@ExcelBean
 public class NumberOfAccounts  implements Serializable {
 
     private static final long serialVersionUID = 5511446840911177632L;

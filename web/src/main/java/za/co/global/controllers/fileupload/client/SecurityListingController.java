@@ -18,7 +18,7 @@ import java.io.IOException;
 @Controller
 public class SecurityListingController extends BaseFileUploadController {
 
-    public static final String FILE_TYPE = FileAndObjectResolver.ADDITIONAL_CLASSIFICATION.getFileType();
+    public static final String FILE_TYPE = FileAndObjectResolver.SECUTIY_LISTING_CONTROLLER.getFileType();
 
     @Autowired
     private SecurityListingRepository securityListingRepository;

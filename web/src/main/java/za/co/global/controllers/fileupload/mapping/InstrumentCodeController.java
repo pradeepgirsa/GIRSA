@@ -18,7 +18,7 @@ import java.io.IOException;
 @Controller
 public class InstrumentCodeController extends BaseFileUploadController {
 
-    private static final String FILE_TYPE = FileAndObjectResolver.ADDITIONAL_CLASSIFICATION.getFileType();
+    private static final String FILE_TYPE = FileAndObjectResolver.INSTRUMENT_CODE.getFileType();
 
     @Autowired
     private InstrumentCodeRepository instrumentCodeRepository;

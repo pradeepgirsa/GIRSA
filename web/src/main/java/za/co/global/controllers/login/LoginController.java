@@ -76,7 +76,7 @@ public class LoginController {
             return "home";
         } else {
             model.addAttribute("loginError", true);
-            return "user/login";
+            return "users/login";
         }
     }
 

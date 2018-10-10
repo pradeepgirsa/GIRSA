@@ -18,7 +18,7 @@ import java.io.IOException;
 @Controller
 public class PSGFundMappingController extends BaseFileUploadController {
 
-    public static final String FILE_TYPE = FileAndObjectResolver.ADDITIONAL_CLASSIFICATION.getFileType();
+    public static final String FILE_TYPE = FileAndObjectResolver.PSG_FUND_MAPPING.getFileType();
 
     @Autowired
     private PSGFundMappingRepository psgFundMappingRepository;

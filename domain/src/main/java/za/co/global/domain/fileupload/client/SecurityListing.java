@@ -1,5 +1,6 @@
 package za.co.global.domain.fileupload.client;
 
+import com.gizbel.excel.annotations.ExcelBean;
 import com.gizbel.excel.annotations.ExcelColumnHeader;
 
 import javax.persistence.*;
@@ -8,6 +9,7 @@ import java.util.Date;
 
 @Entity
 @Table(name = "security_listing")
+@ExcelBean
 public class SecurityListing implements Serializable {
 
     private static final long serialVersionUID = 5511446840911177632L;

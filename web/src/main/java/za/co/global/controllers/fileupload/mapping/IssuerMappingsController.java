@@ -18,7 +18,7 @@ import java.io.IOException;
 @Controller
 public class IssuerMappingsController extends BaseFileUploadController {
 
-    private static final String FILE_TYPE = FileAndObjectResolver.ADDITIONAL_CLASSIFICATION.getFileType();
+    private static final String FILE_TYPE = FileAndObjectResolver.ISSUER_MAPPINGS.getFileType();
 
     @Autowired
     private IssuerMappingsRepository issuerMappingsRepository;

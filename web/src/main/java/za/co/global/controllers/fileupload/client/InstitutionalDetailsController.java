@@ -18,7 +18,7 @@ import java.io.IOException;
 @Controller
 public class InstitutionalDetailsController extends BaseFileUploadController {
 
-    public static final String FILE_TYPE = FileAndObjectResolver.ADDITIONAL_CLASSIFICATION.getFileType();
+    public static final String FILE_TYPE = FileAndObjectResolver.INSTITUTIONAL_DETAILS.getFileType();
 
     @Autowired
     private InstitutionalDetailsRepository institutionalDetailsRepository;
