@@ -26,6 +26,7 @@ import za.co.global.domain.fileupload.client.fpm.Instrument;
 import za.co.global.domain.product.Product;
 import za.co.global.persistence.client.ClientRepository;
 import za.co.global.persistence.fileupload.FileDetailsRepository;
+import za.co.global.persistence.fileupload.HoldingRepository;
 import za.co.global.persistence.product.ProductRepository;
 import za.co.global.services.helper.FileUtil;
 
@@ -52,6 +53,9 @@ public class HoldingUploadController  {
 
     @Autowired
     private FileDetailsRepository fileDetailsRepository;
+
+    @Autowired
+    private HoldingRepository holdingRepository;
 
     private static String[] categories = {"16001-CASH", "16001-A-UNITCLASS", "16001-D-UNITCLASS", "16001-B-UNITCLASS", "16001-PRICETRADED",
             "16001-YIELDTRADED", "16001-E-UNITCLASS", "16001-FEE"};
@@ -99,7 +103,8 @@ public class HoldingUploadController  {
 
             String extension = FilenameUtils.getExtension(file.getOriginalFilename());
             if ("xls".equals(extension) || "xlsx".equals(extension)) {
-                readAndStoreFundManagerHoldingSheetData(uploadedFile);
+                Holding holding = readAndStoreFundManagerHoldingSheetData(uploadedFile);
+                holdingRepository.save(holding);
             } else if ("zip".equals(extension)) {
                 String unzipFolderName = uploadedFile.getParent() + File.separator + FilenameUtils.removeExtension(uploadedFile.getName());
                 List<File> extractedFiles = FileUtil.unZipIt(uploadedFile, unzipFolderName);
@@ -107,7 +112,8 @@ public class HoldingUploadController  {
                     extension = FilenameUtils.getExtension(extractedFile.getName());
                     if ("xls".equals(extension) || "xlsx".equals(extension)) {
                         saveFileDetails(client, product, fileDetails, extractedFile);
-                        readAndStoreFundManagerHoldingSheetData(extractedFile);
+                        Holding holding = readAndStoreFundManagerHoldingSheetData(extractedFile);
+                        holdingRepository.save(holding);
                     }
                 }
             } else {
@@ -139,7 +145,7 @@ public class HoldingUploadController  {
 //        }
 //    }
 
-    private void readAndStoreFundManagerHoldingSheetData(File uploadedFile) throws IOException, InvalidFormatException {
+    private Holding readAndStoreFundManagerHoldingSheetData(File uploadedFile) throws IOException, InvalidFormatException {
         FileInputStream fis = new FileInputStream(uploadedFile);
         XSSFWorkbook workbook = new XSSFWorkbook(fis);
         DataFormatter dataFormatter = new DataFormatter();
@@ -223,6 +229,7 @@ public class HoldingUploadController  {
                 } //while - row iterator
             } //if -Holding sheet checking
         } //for - Sheet iterator
+        return holding;
     }
 
     private boolean checkIfRowIsEmpty(XSSFRow row) {
