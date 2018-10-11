@@ -75,7 +75,7 @@ public class HoldingUploadController  {
     public ModelAndView showUpload() {
         clients = clientRepository.findAll();
         products = productRepository.findAll();
-        ModelAndView modelAndView = new ModelAndView("upload/uploadFile");
+        ModelAndView modelAndView = new ModelAndView("fileupload/uploadFile");
         modelAndView.addObject("clients", clients);
         modelAndView.addObject("products", products);
         return modelAndView;
@@ -85,7 +85,7 @@ public class HoldingUploadController  {
     @PostMapping("/holding_upload")
     public ModelAndView fileUpload(@RequestParam("file") MultipartFile file, String productId, String clientId) {
         if (file.isEmpty()) {
-            return new ModelAndView("upload/status", "message", "Please select a file and try again");
+            return new ModelAndView("fileupload/status", "message", "Please select a file and try again");
         }
 
         try {
@@ -121,17 +121,17 @@ public class HoldingUploadController  {
             }
 
         } catch (IOException e) {
-            return new ModelAndView("upload/uploadFile", "message", e.getMessage());
+            return new ModelAndView("fileupload/uploadFile", "message", e.getMessage());
         } catch (InvalidFormatException e) {
             e.printStackTrace();
 
-            return new ModelAndView("upload/uploadFile", "message", e.getMessage());
+            return new ModelAndView("fileupload/uploadFile", "message", e.getMessage());
         } catch (Exception e) {
-            return new ModelAndView("upload/uploadFile", "message", e.getMessage());
+            return new ModelAndView("fileupload/uploadFile", "message", e.getMessage());
         }
 
 
-        return new ModelAndView("upload/status", "message", "File Uploaded sucessfully... " + file.getOriginalFilename());
+        return new ModelAndView("fileupload/status", "message", "File Uploaded sucessfully... " + file.getOriginalFilename());
     }
 
 //    public static void main(String[] args) {

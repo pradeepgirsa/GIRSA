@@ -3,6 +3,7 @@ package za.co.global.services.upload;
 public enum FileAndObjectResolver {
 
     DSU5_GIRREP4("GIR_C4", za.co.global.domain.fileupload.barra.DSU5_GIRREP4.class),
+    BARRA_FILE("BARRA_FILE", za.co.global.domain.fileupload.barra.BarraFile.class),
     ADDITIONAL_CLASSIFICATION("ADDITIONAL_CLASSIFICATION", za.co.global.domain.fileupload.mapping.AdditionalClassification.class),
     INSTRUMENT_CODE("INSTRUMENT_CODE", za.co.global.domain.fileupload.mapping.InstrumentCode.class),
     ISSUER_MAPPINGS("ISSUER_MAPPINGS", za.co.global.domain.fileupload.mapping.IssuerMappings.class),

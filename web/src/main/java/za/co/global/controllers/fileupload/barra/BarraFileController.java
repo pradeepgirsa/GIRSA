@@ -1,4 +1,4 @@
-package za.co.global.controllers.fileupload.mapping;
+package za.co.global.controllers.fileupload.barra;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -9,29 +9,30 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import za.co.global.controllers.fileupload.BaseFileUploadController;
-import za.co.global.domain.fileupload.mapping.IssuerMappings;
-import za.co.global.persistence.fileupload.mapping.IssuerMappingsRepository;
+import za.co.global.domain.fileupload.barra.BarraFile;
+import za.co.global.domain.fileupload.client.InstitutionalDetails;
+import za.co.global.persistence.fileupload.barra.BarraFileRepository;
+import za.co.global.persistence.fileupload.client.InstitutionalDetailsRepository;
 import za.co.global.services.upload.FileAndObjectResolver;
 
 import java.io.IOException;
 
 @Controller
-public class IssuerMappingsController extends BaseFileUploadController {
+public class BarraFileController extends BaseFileUploadController {
 
-    private static final String FILE_TYPE = FileAndObjectResolver.ISSUER_MAPPINGS.getFileType();
+    public static final String FILE_TYPE = FileAndObjectResolver.BARRA_FILE.getFileType();
 
     @Autowired
-    private IssuerMappingsRepository issuerMappingsRepository;
+    private BarraFileRepository barraFileRepository;
 
-
-    @GetMapping("/upload_issuerMappings")
+    @GetMapping("/upload_barraFile")
     public ModelAndView showUpload() {
-        ModelAndView modelAndView = new ModelAndView("fileupload/mapping/issuerMappings");
+        ModelAndView modelAndView = new ModelAndView("fileupload/barra/barraFile");
         return modelAndView;
     }
 
     @Transactional
-    @PostMapping("/upload_issuerMappings")
+    @PostMapping("/upload_barraFile")
     public ModelAndView fileUpload(@RequestParam("file") MultipartFile file) {
         if (file.isEmpty()) {
             return new ModelAndView("fileupload/status", "message", "Please select a file and try again");
@@ -48,9 +49,9 @@ public class IssuerMappingsController extends BaseFileUploadController {
 
     @Override
     protected void processObject(Object obj) {
-        if(obj instanceof IssuerMappings) {
-            IssuerMappings ex = (IssuerMappings) obj;
-            issuerMappingsRepository.save(ex);
+        if (obj instanceof InstitutionalDetails) {
+            BarraFile ex = (BarraFile) obj;
+            barraFileRepository .save(ex);
         }
     }
 
