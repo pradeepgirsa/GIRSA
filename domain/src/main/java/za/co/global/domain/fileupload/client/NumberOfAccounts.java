@@ -2,6 +2,7 @@ package za.co.global.domain.fileupload.client;
 
 import com.gizbel.excel.annotations.ExcelBean;
 import com.gizbel.excel.annotations.ExcelColumnHeader;
+import org.hibernate.annotations.NaturalId;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -21,6 +22,7 @@ public class NumberOfAccounts  implements Serializable {
 
     @Column(name = "fund_code", unique = true, nullable = false)
     @ExcelColumnHeader(columnHeader = "ACIFundCode")
+    @NaturalId
     private String fundCode;
 
     @Column(name = "total")

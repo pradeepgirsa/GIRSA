@@ -7,4 +7,6 @@ import za.co.global.domain.fileupload.mapping.AdditionalClassification;
 
 @Repository
 public interface InstrumentCodeRepository extends JpaRepository<InstrumentCode, Long> {
+
+    InstrumentCode findByManagerCode(String managerCode);
 }

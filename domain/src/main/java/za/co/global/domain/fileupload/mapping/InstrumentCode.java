@@ -2,6 +2,7 @@ package za.co.global.domain.fileupload.mapping;
 
 import com.gizbel.excel.annotations.ExcelBean;
 import com.gizbel.excel.annotations.ExcelColumnHeader;
+import org.hibernate.annotations.NaturalId;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -19,6 +20,7 @@ public class InstrumentCode implements Serializable {
 
     @Column(name = "manager_code")
     @ExcelColumnHeader(columnHeader = "MANAGER CODE")
+    @NaturalId
     private String managerCode;
 
     @Column(name = "barra_code")

@@ -1,6 +1,8 @@
 package za.co.global.services.helper;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.poi.xssf.usermodel.XSSFCell;
+import org.apache.poi.xssf.usermodel.XSSFRow;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -63,5 +65,16 @@ public class FileUtil {
             ex.printStackTrace();
         }
         return files;
+    }
+
+    public static boolean checkIfRowIsEmpty(XSSFRow row) {
+        if (row == null || row.getLastCellNum() <= 0) {
+            return true;
+        }
+        XSSFCell cell = row.getCell((int)row.getFirstCellNum());
+        if (cell == null || "".equals(cell.getRichStringCellValue().getString())) {
+            return true;
+        }
+        return false;
     }
 }

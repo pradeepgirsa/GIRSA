@@ -2,6 +2,7 @@ package za.co.global.domain.fileupload.mapping;
 
 import com.gizbel.excel.annotations.ExcelBean;
 import com.gizbel.excel.annotations.ExcelColumnHeader;
+import org.hibernate.annotations.NaturalId;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -19,6 +20,7 @@ public class PSGFundMapping implements Serializable {
 
     @Column(name = "mgr_fund_code", unique = true, nullable = false)
     @ExcelColumnHeader(columnHeader = "Manager Fund Code")
+    @NaturalId
     private String managerFundCode;
 
     @Column(name = "psg_fund_code")
