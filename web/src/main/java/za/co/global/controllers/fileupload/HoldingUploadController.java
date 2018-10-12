@@ -85,7 +85,7 @@ public class HoldingUploadController  {
     @PostMapping("/holding_upload")
     public ModelAndView fileUpload(@RequestParam("file") MultipartFile file, String productId, String clientId) {
         if (file.isEmpty()) {
-            return new ModelAndView("fileupload/status", "message", "Please select a file and try again");
+            return new ModelAndView("fileupload/uploadFile", "saveError", "Please select a file and try again");
         }
 
         try {
@@ -121,17 +121,17 @@ public class HoldingUploadController  {
             }
 
         } catch (IOException e) {
-            return new ModelAndView("fileupload/uploadFile", "message", e.getMessage());
+            return new ModelAndView("fileupload/uploadFile", "saveError", e.getMessage());
         } catch (InvalidFormatException e) {
             e.printStackTrace();
 
-            return new ModelAndView("fileupload/uploadFile", "message", e.getMessage());
+            return new ModelAndView("fileupload/uploadFile", "saveError", e.getMessage());
         } catch (Exception e) {
-            return new ModelAndView("fileupload/uploadFile", "message", e.getMessage());
+            return new ModelAndView("fileupload/uploadFile", "saveError", e.getMessage());
         }
 
 
-        return new ModelAndView("fileupload/status", "message", "File Uploaded sucessfully... " + file.getOriginalFilename());
+        return new ModelAndView("fileupload/uploadFile", "saveMessage", "File Uploaded sucessfully... " + file.getOriginalFilename());
     }
 
 //    public static void main(String[] args) {
@@ -307,7 +307,7 @@ public class HoldingUploadController  {
     private static BigDecimal getCellValue(Row row, Integer index) {
         BigDecimal dataValue = BigDecimal.ZERO;
         if(index != null && row.getCell(index) != null && row.getCell(index).getCellType() == 0) {
-            dataValue = new BigDecimal(row.getCell(index).getNumericCellValue());
+            dataValue = new BigDecimal(row.getCell(index).getNumericCellValue()).setScale(3, BigDecimal.ROUND_FLOOR);
         }
         return dataValue;
     }

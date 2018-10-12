@@ -82,78 +82,79 @@ public class GirsaExcelParser {
     public Map<String, List<Object>> parse(File file, String fileType) throws InvalidFormatException, IOException, InstantiationException, IllegalAccessException, IllegalArgumentException, ParseException {
 
         Map<String, List<Object>> r = new HashMap<>();
-        Workbook invoiceWorkbook = WorkbookFactory.create(file);
-        for (int i = 0; i < invoiceWorkbook.getNumberOfSheets(); i++) {
-            Sheet sheet = invoiceWorkbook.getSheetAt(i);
-            if(sheet.getPhysicalNumberOfRows() > 0) {
+       try ( Workbook invoiceWorkbook = WorkbookFactory.create(file);) {
+           for (int i = 0; i < invoiceWorkbook.getNumberOfSheets(); i++) {
+               Sheet sheet = invoiceWorkbook.getSheetAt(i);
+               if (sheet.getPhysicalNumberOfRows() > 0) {
 
             /* Getting the bean based on sheet name */
-                //TODO - sheet name can be null in future
-                Class clazz = FileAndObjectResolver.getClazzFromFileType(fileType);
+                   //TODO - sheet name can be null in future
+                   Class clazz = FileAndObjectResolver.getClazzFromFileType(fileType);
 
-                Map<String, Field> fieldsMap = new HashMap();
+                   Map<String, Field> fieldsMap = new HashMap();
 
-                if (clazz != null) {
-                    if (clazz.isAnnotationPresent(ExcelBean.class)) {
-                        Field[] fields = clazz.getDeclaredFields();
-                        Field[] var4 = fields;
-                        int var5 = fields.length;
+                   if (clazz != null) {
+                       if (clazz.isAnnotationPresent(ExcelBean.class)) {
+                           Field[] fields = clazz.getDeclaredFields();
+                           Field[] var4 = fields;
+                           int var5 = fields.length;
 
-                        for (int var6 = 0; var6 < var5; ++var6) {
-                            Field field = var4[var6];
-                            switch (this.excelFactoryType) {
-                                case COLUMN_INDEX_BASED_EXTRACTION:
-                                    this.prepareColumnIndexBasedFieldMap(field, fieldsMap);
-                                    break;
-                                case COLUMN_NAME_BASED_EXTRACTION:
-                                    this.prepareColumnHeaderBasedFieldMap(field, fieldsMap);
-                            }
-                        }
+                           for (int var6 = 0; var6 < var5; ++var6) {
+                               Field field = var4[var6];
+                               switch (this.excelFactoryType) {
+                                   case COLUMN_INDEX_BASED_EXTRACTION:
+                                       this.prepareColumnIndexBasedFieldMap(field, fieldsMap);
+                                       break;
+                                   case COLUMN_NAME_BASED_EXTRACTION:
+                                       this.prepareColumnHeaderBasedFieldMap(field, fieldsMap);
+                               }
+                           }
 
-                    } else {
-                        //throw new Exception("Provided class is not annotated with ExcelBean");
-                    }
+                       } else {
+                           //throw new Exception("Provided class is not annotated with ExcelBean");
+                       }
 
-                    List<Object> result = new ArrayList();
-                    if (this.excelFactoryType == ExcelFactoryType.COLUMN_NAME_BASED_EXTRACTION) {
-                        Row firstRow = sheet.getRow(0);
-                        Iterator var6 = firstRow.iterator();
+                       List<Object> result = new ArrayList();
+                       if (this.excelFactoryType == ExcelFactoryType.COLUMN_NAME_BASED_EXTRACTION) {
+                           Row firstRow = sheet.getRow(0);
+                           Iterator var6 = firstRow.iterator();
 
-                        while (var6.hasNext()) {
-                            Cell column = (Cell) var6.next();
-                            Field field = (Field) fieldsMap.get(column.getStringCellValue());
-                            if (field != null) {
-                                fieldsMap.remove(column.getStringCellValue());
-                                fieldsMap.put(String.valueOf(column.getColumnIndex()), field);
-                            }
-                        }
-                    }
+                           while (var6.hasNext()) {
+                               Cell column = (Cell) var6.next();
+                               Field field = (Field) fieldsMap.get(column.getStringCellValue());
+                               if (field != null) {
+                                   fieldsMap.remove(column.getStringCellValue());
+                                   fieldsMap.put(String.valueOf(column.getColumnIndex()), field);
+                               }
+                           }
+                       }
 
-                    Iterator var9 = sheet.iterator();
+                       Iterator var9 = sheet.iterator();
 
-                    while (var9.hasNext()) {
-                        Row row = (Row) var9.next();
-                        if (this.excelFactoryType == ExcelFactoryType.COLUMN_INDEX_BASED_EXTRACTION) {
-                            if (row.getRowNum() == 0 && this.skipHeader) {
-                                continue;
-                            }
-                        } else if (this.excelFactoryType == ExcelFactoryType.COLUMN_NAME_BASED_EXTRACTION && row.getRowNum() == 0) {
-                            continue;
-                        }
+                       while (var9.hasNext()) {
+                           Row row = (Row) var9.next();
+                           if (this.excelFactoryType == ExcelFactoryType.COLUMN_INDEX_BASED_EXTRACTION) {
+                               if (row.getRowNum() == 0 && this.skipHeader) {
+                                   continue;
+                               }
+                           } else if (this.excelFactoryType == ExcelFactoryType.COLUMN_NAME_BASED_EXTRACTION && row.getRowNum() == 0) {
+                               continue;
+                           }
 
-                        if (!this.isEmptyRow(row)) {
-                            Object beanObj = this.getBeanForARow(clazz, row, fieldsMap);
-                            result.add(beanObj);
-                        } else if (this.breakAfterEmptyRow) {
-                            break;
-                        }
-                    }
+                           if (!this.isEmptyRow(row)) {
+                               Object beanObj = this.getBeanForARow(clazz, row, fieldsMap);
+                               result.add(beanObj);
+                           } else if (this.breakAfterEmptyRow) {
+                               break;
+                           }
+                       }
 
-                    r.put(sheet.getSheetName(), result);
-                } //if close to check null on clazz
-            }//If check for sheet with 0 rows.
-        } //for close
+                       r.put(sheet.getSheetName(), result);
+                   } //if close to check null on clazz
+               }//If check for sheet with 0 rows.
+           } //for close
 
+       }
         return r;
     }
 
@@ -188,6 +189,9 @@ public class GirsaExcelParser {
     private void setCellValueBasedOnDesiredExcelFactoryType(Object classObj, Map<String, Field> fieldsMap, String columnValue, int columnIndex) throws IllegalArgumentException, IllegalAccessException, ParseException {
         Field field = (Field) fieldsMap.get(String.valueOf(columnIndex));
         if (field != null) {
+            if(columnValue.equalsIgnoreCase("N/A") || columnValue.equalsIgnoreCase("NA")) {
+                columnValue = null;
+            }
             if (columnValue == null || columnValue.trim().isEmpty()) {
                 columnValue = this.getDefaultValueFor(field);
             }
@@ -220,6 +224,7 @@ public class GirsaExcelParser {
                         if (dataType.equals("long")) {
                             var7 = 1;
                         }
+                        break;
                     case 3327613:
                         if (dataType.equals("big_decimal")) {
                             var7 = 5;
@@ -244,7 +249,7 @@ public class GirsaExcelParser {
                         field.set(classObj, this.dateParser(columnValue));
                         break;
                     case 5:
-                        field.set(classObj, new BigDecimal(columnValue));
+                        field.set(classObj, BigDecimal.valueOf(Double.parseDouble(columnValue)));
                         break;
                     default:
                         field.set(classObj, columnValue);

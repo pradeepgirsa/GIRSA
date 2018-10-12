@@ -21,32 +21,34 @@ import java.util.Map;
 public class DailyPricingMappingController {
 
     private static void readAndStoreFundManagerHoldingSheetData(File uploadedFile) throws IOException, InvalidFormatException {
-        FileInputStream fis = new FileInputStream(uploadedFile);
-        XSSFWorkbook workbook = new XSSFWorkbook(fis);
-        DataFormatter dataFormatter = new DataFormatter();
 
-        Map<String, Integer> headersMap = new HashMap<>();
+        try(FileInputStream fis = new FileInputStream(uploadedFile);
+                XSSFWorkbook workbook = new XSSFWorkbook(fis);) {
+            DataFormatter dataFormatter = new DataFormatter();
 
-        for (int i = 0; i < workbook.getNumberOfSheets(); i++) {
-            XSSFSheet sheet = workbook.getSheetAt(i);
-            if (sheet.getPhysicalNumberOfRows() > 0) {
-                Iterator<Row> rowIterator = sheet.rowIterator();
+            Map<String, Integer> headersMap = new HashMap<>();
 
-                while (rowIterator.hasNext()) {
-                    XSSFRow row = (XSSFRow) rowIterator.next();
-                    //If it is empty row skip it
-                    if (FileUtil.checkIfRowIsEmpty(row)) {
-                        continue;
+            for (int i = 0; i < workbook.getNumberOfSheets(); i++) {
+                XSSFSheet sheet = workbook.getSheetAt(i);
+                if (sheet.getPhysicalNumberOfRows() > 0) {
+                    Iterator<Row> rowIterator = sheet.rowIterator();
+
+                    while (rowIterator.hasNext()) {
+                        XSSFRow row = (XSSFRow) rowIterator.next();
+                        //If it is empty row skip it
+                        if (FileUtil.checkIfRowIsEmpty(row)) {
+                            continue;
+                        }
+
+                        //Get first row
+                        String firstCellValue = dataFormatter.formatCellValue(row.getCell(0));
+                        firstCellValue = !StringUtils.isEmpty(firstCellValue) ? firstCellValue.trim() : firstCellValue;
                     }
 
-                    //Get first row
-                    String firstCellValue = dataFormatter.formatCellValue(row.getCell(0));
-                    firstCellValue = !StringUtils.isEmpty(firstCellValue) ? firstCellValue.trim() : firstCellValue;
-                }
 
-
-            } //if - emty sheet checking
-        } //for - Sheet iterator
+                } //if - emty sheet checking
+            } //for - Sheet iterator
+        }
     }
 
 //    public static void main(String[] args) {

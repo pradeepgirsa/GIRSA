@@ -35,16 +35,16 @@ public class BarraFileController extends BaseFileUploadController {
     @PostMapping("/upload_barraFile")
     public ModelAndView fileUpload(@RequestParam("file") MultipartFile file) {
         if (file.isEmpty()) {
-            return new ModelAndView("fileupload/status", "message", "Please select a file and try again");
+            return new ModelAndView("fileupload/barra/barraFile", "saveError", "Please select a file and try again");
         }
         try {
             processFile(file, FILE_TYPE, null, null);
         } catch (IOException e) {
-            return new ModelAndView("fileupload/status", "message", e.getMessage());
+            return new ModelAndView("fileupload/barra/barraFile", "saveError", e.getMessage());
         } catch (Exception e) {
-            return new ModelAndView("fileupload/status", "message", e.getMessage());
+            return new ModelAndView("fileupload/barra/barraFile", "saveError", e.getMessage());
         }
-        return new ModelAndView("fileupload/status", "message", "File Uploaded sucessfully... " + file.getOriginalFilename());
+        return new ModelAndView("fileupload/barra/barraFile", "saveMessage", "File Uploaded sucessfully... " + file.getOriginalFilename());
     }
 
     @Override

@@ -36,16 +36,16 @@ public class Reg28InstrumentTypeController extends BaseFileUploadController {
     @PostMapping("/upload_reg28InstrumentType")
     public ModelAndView fileUpload(@RequestParam("file") MultipartFile file) {
         if (file.isEmpty()) {
-            return new ModelAndView("fileupload/status", "message", "Please select a file and try again");
+            return new ModelAndView("fileupload/mapping/reg28InstrumentType", "saveError", "Please select a file and try again");
         }
         try {
             processFile(file, FILE_TYPE, null, null);
         } catch (IOException e) {
-            return new ModelAndView("fileupload/status", "message", e.getMessage());
+            return new ModelAndView("fileupload/mapping/reg28InstrumentType", "saveError", e.getMessage());
         } catch (Exception e) {
-            return new ModelAndView("fileupload/status", "message", e.getMessage());
+            return new ModelAndView("fileupload/mapping/reg28InstrumentType", "saveError", e.getMessage());
         }
-        return new ModelAndView("fileupload/status", "message", "File Uploaded sucessfully... " + file.getOriginalFilename());
+        return new ModelAndView("fileupload/mapping/reg28InstrumentType", "saveMessage", "File Uploaded sucessfully... " + file.getOriginalFilename());
     }
 
     @Override
