@@ -12,8 +12,10 @@
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="client_id" type="bigint">
+                <constraints nullable="true"/>
             </column>
             <column name="product_id" type="bigint">
+                <constraints nullable= "true" />
             </column>
             <column name="file_path" type="varchar(255)">
                 <constraints nullable="false"/>

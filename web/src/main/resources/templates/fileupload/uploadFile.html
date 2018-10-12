@@ -42,7 +42,7 @@
 
                                 <div th:class="|form-group|">
                                     <label> <strong>Client * </strong></label>
-                                    <select required="true" id="client" data-placeholder="Choose One..."  class="form-control width100p" name="clientId" >
+                                    <select required="false" id="client" data-placeholder="Choose One..."  class="form-control width100p" name="clientId" >
                                         <option value="">Choose One...</option>
                                         <option th:each="item : ${clients}"
                                                 th:value="${item.id}"
@@ -52,7 +52,7 @@
 
                                 <div th:class="|form-group|">
                                     <label> <strong>Product * </strong></label>
-                                    <select required="true"  id="product" data-placeholder="Choose One..." class="form-control width100p" name="productId">
+                                    <select required="false"  id="product" data-placeholder="Choose One..." class="form-control width100p" name="productId">
                                         <option value="">Choose One...</option>
                                         <option th:each="item : ${products}"
                                                 th:value="${item.id}"

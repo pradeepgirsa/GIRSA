@@ -189,7 +189,7 @@ public class GirsaExcelParser {
     private void setCellValueBasedOnDesiredExcelFactoryType(Object classObj, Map<String, Field> fieldsMap, String columnValue, int columnIndex) throws IllegalArgumentException, IllegalAccessException, ParseException {
         Field field = (Field) fieldsMap.get(String.valueOf(columnIndex));
         if (field != null) {
-            if(columnValue.equalsIgnoreCase("N/A") || columnValue.equalsIgnoreCase("NA")) {
+            if(columnValue != null && (columnValue.equalsIgnoreCase("N/A") || columnValue.equalsIgnoreCase("NA"))) {
                 columnValue = null;
             }
             if (columnValue == null || columnValue.trim().isEmpty()) {
@@ -225,7 +225,7 @@ public class GirsaExcelParser {
                             var7 = 1;
                         }
                         break;
-                    case 3327613:
+                    case -1045350638:
                         if (dataType.equals("big_decimal")) {
                             var7 = 5;
                         }

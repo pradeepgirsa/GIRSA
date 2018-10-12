@@ -5,6 +5,7 @@ import com.gizbel.excel.annotations.ExcelColumnHeader;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 @ExcelBean
 @Entity
@@ -30,21 +31,21 @@ public class BarraFile implements Serializable {
     @Column(name = "ASSET_NAME")
     private String assetName;
 
-    @ExcelColumnHeader(columnHeader = "Holdings")
+    @ExcelColumnHeader(columnHeader = "Holdings", dataType = "big_decimal")
     @Column(name = "HOLDINGS")
-    private String holdings;
+    private BigDecimal holdings;
 
-    @ExcelColumnHeader(columnHeader = "Price")
+    @ExcelColumnHeader(columnHeader = "Price", dataType = "big_decimal")
     @Column(name = "PRICE")
-    private Double price;
+    private BigDecimal price;
 
-    @ExcelColumnHeader(columnHeader = "Eff Exposure")
+    @ExcelColumnHeader(columnHeader = "Eff Exposure", dataType = "big_decimal")
     @Column(name = "EFF_EXPOSURE")
-    private String effExposure;
+    private BigDecimal effExposure;
 
-    @ExcelColumnHeader(columnHeader = "Mkt Value")
+    @ExcelColumnHeader(columnHeader = "Mkt Value", dataType = "big_decimal")
     @Column(name = "MARKET_VALUE")
-    private Double marketValue;
+    private BigDecimal marketValue;
 
     @ExcelColumnHeader(columnHeader = "Inst. Type")
     @Column(name = "INST_TYPE")
@@ -54,9 +55,9 @@ public class BarraFile implements Serializable {
     @Column(name = "INST_SUB_TYPE")
     private String instSubType;
 
-    @ExcelColumnHeader(columnHeader = "Eff Weight (%)")
+    @ExcelColumnHeader(columnHeader = "Eff Weight (%)", dataType = "big_decimal")
     @Column(name = "EFF_WEIGHT")
-    private String effWeight;
+    private BigDecimal effWeight;
 
     @ExcelColumnHeader(columnHeader = "GIR Issuer")
     @Column(name = "GIR_ISSUER")
@@ -74,21 +75,21 @@ public class BarraFile implements Serializable {
     @Column(name = "SARB_CLASSIFICATION")
     private String sarbClassification;
 
-    @ExcelColumnHeader(columnHeader = "Africa Values")
+    @ExcelColumnHeader(columnHeader = "Africa Values", dataType = "big_decimal")
     @Column(name = "AFRICA_VALUES")
-    private String africaValues;
+    private BigDecimal africaValues;
 
-    @ExcelColumnHeader(columnHeader = "Market Capitalization")
+    @ExcelColumnHeader(columnHeader = "Market Capitalization", dataType = "big_decimal")
     @Column(name = "MARKET_CAPITALIZATION")
-    private String marketCapitalization;
+    private BigDecimal marketCapitalization;
 
-    @ExcelColumnHeader(columnHeader = "Shares Outstanding")
+    @ExcelColumnHeader(columnHeader = "Shares Outstanding", dataType = "big_decimal")
     @Column(name = "SHARES_OUTSTANDING")
-    private String sharesOutstanding;
+    private BigDecimal sharesOutstanding;
 
-    @ExcelColumnHeader(columnHeader = "Amount Issued")
+    @ExcelColumnHeader(columnHeader = "Amount Issued", dataType = "big_decimal")
     @Column(name = "AMOUNT_ISSUED")
-    private String amountIssued;
+    private BigDecimal amountIssued;
 
     @ExcelColumnHeader(columnHeader = "ICB Industry")
     @Column(name = "ICB_INDUSTRY")
@@ -154,13 +155,13 @@ public class BarraFile implements Serializable {
     @Column(name = "PRICING_REDEMPTION_DATE")
     private String pricingRedemptionDate;
 
-    @ExcelColumnHeader(columnHeader = "Current Yield (%)")
+    @ExcelColumnHeader(columnHeader = "Current Yield (%)", dataType = "big_decimal")
     @Column(name = "CURRENT_YIELD_IN_PERCENT")
-    private String currentYield;
+    private BigDecimal currentYield;
 
-    @ExcelColumnHeader(columnHeader = "Coupon (%)")
+    @ExcelColumnHeader(columnHeader = "Coupon (%)", dataType = "big_decimal")
     @Column(name = "COUPON_IN_PERCENTAGE")
-    private String coupon;
+    private BigDecimal coupon;
 
     @ExcelColumnHeader(columnHeader = "First Coupon Date")
     @Column(name = "FIRST_COUPON_DATE")
@@ -271,36 +272,20 @@ public class BarraFile implements Serializable {
         this.assetName = assetName;
     }
 
-    public String getHoldings() {
-        return holdings;
-    }
-
-    public void setHoldings(String holdings) {
-        this.holdings = holdings;
-    }
-
-    public Double getPrice() {
+    public BigDecimal getPrice() {
         return price;
     }
 
-    public void setPrice(Double price) {
+    public void setPrice(BigDecimal price) {
         this.price = price;
     }
 
-    public Double getMarketValue() {
+    public BigDecimal getMarketValue() {
         return marketValue;
     }
 
-    public void setMarketValue(Double marketValue) {
+    public void setMarketValue(BigDecimal marketValue) {
         this.marketValue = marketValue;
-    }
-
-    public String getEffExposure() {
-        return effExposure;
-    }
-
-    public void setEffExposure(String effExposure) {
-        this.effExposure = effExposure;
     }
 
     public String getInstType() {
@@ -317,14 +302,6 @@ public class BarraFile implements Serializable {
 
     public void setInstSubType(String instSubType) {
         this.instSubType = instSubType;
-    }
-
-    public String getEffWeight() {
-        return effWeight;
-    }
-
-    public void setEffWeight(String effWeight) {
-        this.effWeight = effWeight;
     }
 
     public String getGirIssuer() {
@@ -357,38 +334,6 @@ public class BarraFile implements Serializable {
 
     public void setSarbClassification(String sarbClassification) {
         this.sarbClassification = sarbClassification;
-    }
-
-    public String getAfricaValues() {
-        return africaValues;
-    }
-
-    public void setAfricaValues(String africaValues) {
-        this.africaValues = africaValues;
-    }
-
-    public String getMarketCapitalization() {
-        return marketCapitalization;
-    }
-
-    public void setMarketCapitalization(String marketCapitalization) {
-        this.marketCapitalization = marketCapitalization;
-    }
-
-    public String getSharesOutstanding() {
-        return sharesOutstanding;
-    }
-
-    public void setSharesOutstanding(String sharesOutstanding) {
-        this.sharesOutstanding = sharesOutstanding;
-    }
-
-    public String getAmountIssued() {
-        return amountIssued;
-    }
-
-    public void setAmountIssued(String amountIssued) {
-        this.amountIssued = amountIssued;
     }
 
     public String getIcbIndustry() {
@@ -517,22 +462,6 @@ public class BarraFile implements Serializable {
 
     public void setPricingRedemptionDate(String pricingRedemptionDate) {
         this.pricingRedemptionDate = pricingRedemptionDate;
-    }
-
-    public String getCurrentYield() {
-        return currentYield;
-    }
-
-    public void setCurrentYield(String currentYield) {
-        this.currentYield = currentYield;
-    }
-
-    public String getCoupon() {
-        return coupon;
-    }
-
-    public void setCoupon(String coupon) {
-        this.coupon = coupon;
     }
 
     public String getFirstCouponDate() {
@@ -681,6 +610,78 @@ public class BarraFile implements Serializable {
 
     public String getUltimateIssuerName() {
         return ultimateIssuerName;
+    }
+
+    public BigDecimal getHoldings() {
+        return holdings;
+    }
+
+    public void setHoldings(BigDecimal holdings) {
+        this.holdings = holdings;
+    }
+
+    public BigDecimal getEffExposure() {
+        return effExposure;
+    }
+
+    public void setEffExposure(BigDecimal effExposure) {
+        this.effExposure = effExposure;
+    }
+
+    public BigDecimal getEffWeight() {
+        return effWeight;
+    }
+
+    public void setEffWeight(BigDecimal effWeight) {
+        this.effWeight = effWeight;
+    }
+
+    public BigDecimal getAfricaValues() {
+        return africaValues;
+    }
+
+    public void setAfricaValues(BigDecimal africaValues) {
+        this.africaValues = africaValues;
+    }
+
+    public BigDecimal getMarketCapitalization() {
+        return marketCapitalization;
+    }
+
+    public void setMarketCapitalization(BigDecimal marketCapitalization) {
+        this.marketCapitalization = marketCapitalization;
+    }
+
+    public BigDecimal getSharesOutstanding() {
+        return sharesOutstanding;
+    }
+
+    public void setSharesOutstanding(BigDecimal sharesOutstanding) {
+        this.sharesOutstanding = sharesOutstanding;
+    }
+
+    public BigDecimal getAmountIssued() {
+        return amountIssued;
+    }
+
+    public void setAmountIssued(BigDecimal amountIssued) {
+        this.amountIssued = amountIssued;
+    }
+
+    public BigDecimal getCurrentYield() {
+        return currentYield;
+    }
+
+    public void setCurrentYield(BigDecimal currentYield) {
+        this.currentYield = currentYield;
+    }
+
+    public BigDecimal getCoupon() {
+        return coupon;
+    }
+
+    public void setCoupon(BigDecimal coupon) {
+        this.coupon = coupon;
     }
 
     @Override

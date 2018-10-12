@@ -10,9 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import za.co.global.controllers.fileupload.BaseFileUploadController;
 import za.co.global.domain.fileupload.barra.BarraFile;
-import za.co.global.domain.fileupload.client.InstitutionalDetails;
 import za.co.global.persistence.fileupload.barra.BarraFileRepository;
-import za.co.global.persistence.fileupload.client.InstitutionalDetailsRepository;
 import za.co.global.services.upload.FileAndObjectResolver;
 
 import java.io.IOException;
@@ -40,8 +38,10 @@ public class BarraFileController extends BaseFileUploadController {
         try {
             processFile(file, FILE_TYPE, null, null);
         } catch (IOException e) {
+            e.printStackTrace();
             return new ModelAndView("fileupload/barra/barraFile", "saveError", e.getMessage());
         } catch (Exception e) {
+            e.printStackTrace();
             return new ModelAndView("fileupload/barra/barraFile", "saveError", e.getMessage());
         }
         return new ModelAndView("fileupload/barra/barraFile", "saveMessage", "File Uploaded sucessfully... " + file.getOriginalFilename());

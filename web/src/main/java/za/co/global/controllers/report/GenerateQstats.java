@@ -68,7 +68,7 @@ public class GenerateQstats {
 
     @GetMapping("/generate_qstats")
     public ModelAndView displayScreen() {
-        return new ModelAndView("report/asisaQueueStats.html");
+        return new ModelAndView("report/asisaQueueStats");
     }
 
     @PostMapping("/generate_qstats")
@@ -86,7 +86,11 @@ public class GenerateQstats {
                     QStatsBean qStatsBean = new QStatsBean();
 
                     InstrumentCode instrumentCode = instrumentCodeRepository.findByManagerCode(instrument.getInstrumentCode());
-                    BarraFile dsu5_girrep4 = barraFileRepository.findByAssetId(instrumentCode.getBarraCode());
+
+                    BarraFile dsu5_girrep4 = null;
+                    if(instrumentCode != null && instrumentCode.getBarraCode() != null) {
+                        dsu5_girrep4 = barraFileRepository.findByAssetId(instrumentCode.getBarraCode());
+                    }
 
                     qStatsBean.setAciFundCode(psgFundMapping.getPsgFundCode());
                     qStatsBean.setFundName(psgFundMapping.getManagerFundName()); //TODO - fpm source
@@ -106,30 +110,41 @@ public class GenerateQstats {
                     qStatsBean.setSecurityName(instrument.getInstrumentDescription());
                     qStatsBean.setMarketValue(instrument.getBaseCurrentMarketValue());
 
-                    BigDecimal perOfPort = qStatsBean.getMarketValue().divide(qStatsBean.getMvTotal());
+                    BigDecimal perOfPort = qStatsBean.getMarketValue().divide(qStatsBean.getMvTotal(), 3, BigDecimal.ROUND_FLOOR);
                     qStatsBean.setPerOfPort(perOfPort); //TODO - calculation
 
                     qStatsBean.setWeighting(BigDecimal.ZERO); //TODO - calculation
                     qStatsBean.setEqtIndexLink(Boolean.FALSE); //TODO - check
                     qStatsBean.setAfrican(Boolean.FALSE); //TODO - check
-                    qStatsBean.setMarketCap(new BigDecimal(dsu5_girrep4.getMarketCapitalization().replaceAll(",", "")));
-                    qStatsBean.setSharesInIssue(new BigDecimal(dsu5_girrep4.getSharesOutstanding().replaceAll(",", ""))); //TODO - verify
+                    BigDecimal barraMarketCap = Optional.ofNullable(dsu5_girrep4).map(BarraFile::getMarketCapitalization).orElse(BigDecimal.ZERO);
+                    BigDecimal sharesInIssue = Optional.ofNullable(dsu5_girrep4).map(BarraFile::getSharesOutstanding).orElse(BigDecimal.ZERO);
+                    qStatsBean.setMarketCap(barraMarketCap);
+                    qStatsBean.setSharesInIssue(sharesInIssue); //TODO - verify
                     qStatsBean.setAddClassification("Classfication"); //TODO - calculation
                     qStatsBean.setTtmInc(BigDecimal.ZERO); //TODO - calculation
-                    qStatsBean.setIssuerCode(dsu5_girrep4.getIssuer()); //TODO - verify
-                    qStatsBean.setCouponRate(new BigDecimal(dsu5_girrep4.getCoupon().replaceAll(",", ""))); //TODO - verify
+
+                    String issuer = Optional.ofNullable(dsu5_girrep4).map(BarraFile::getIssuer).orElse(null);
+                    BigDecimal coupon = Optional.ofNullable(dsu5_girrep4).map(BarraFile::getCoupon).orElse(BigDecimal.ZERO);
+                    qStatsBean.setIssuerCode(issuer); //TODO - verify
+                    qStatsBean.setCouponRate(coupon); //TODO - verify
                     qStatsBean.setInstrRateST("InstraRateST"); //TODO - check
                     qStatsBean.setInstrRateLT("InstraRateLT"); //TODO - check
                     qStatsBean.setIssuerRateST("IssuerRateST"); //TODO - check
                     qStatsBean.setIssuerRateLT("IssuerRateLT"); //TODO - check
-                    qStatsBean.setRateAgency(dsu5_girrep4.getGirIssuer()); //TODO - check
+
+                    String girIssuer = Optional.ofNullable(dsu5_girrep4).map(BarraFile::getGirIssuer).orElse(null);
+
+                    qStatsBean.setRateAgency(girIssuer); //TODO - check
                     qStatsBean.setCompConDeb(Boolean.FALSE);
 
-                    IssuerMappings issuerMappings = issuerMappingsRepository.findByIssuerCode(dsu5_girrep4.getIssuer());
 
-                    qStatsBean.setMarketCap(issuerMappings.getMarketCapitalisation()); //TODO - verify
+
+                    IssuerMappings issuerMappings = issuerMappingsRepository.findByIssuerCode(issuer);
+                    BigDecimal marketCap = Optional.ofNullable(issuerMappings).map(IssuerMappings::getMarketCapitalisation).orElse(BigDecimal.ZERO);
+                    BigDecimal capReserves = Optional.ofNullable(issuerMappings).map(IssuerMappings::getCapitalReserves).orElse(BigDecimal.ZERO);
+                    qStatsBean.setMarketCap(marketCap); //TODO - verify
                     qStatsBean.setPerIssuedCap(BigDecimal.ZERO);
-                    qStatsBean.setCapitalReserves(issuerMappings.getCapitalReserves());
+                    qStatsBean.setCapitalReserves(capReserves);
                     qStatsBean.setAsiSADefined1("NA");
                     qStatsBean.setAsiSADefined2("NA");
                     qStatsBean.setAsiSADefined3("NA");
@@ -143,20 +158,23 @@ public class GenerateQstats {
             }
         }
 
-        ModelAndView modelAndView = new ModelAndView("report/asisaQueueStats.html");
+        ModelAndView modelAndView = new ModelAndView("report/asisaQueueStats");
         try {
-            createExcel(qStatsBeans);
+            String filePath = fileUploadFolder + File.separator + "result.xlsx";
+            createExcel(qStatsBeans, filePath);
+            modelAndView.addObject("saveMessage", "Qstats file created successfully, file: "+filePath);
         } catch (Exception e) {
+            e.printStackTrace();
            modelAndView.addObject("saveError", e.getMessage());
         }
         return modelAndView;
     }
 
 
-    private void createExcel(List<QStatsBean> qStatsBeans) throws Exception {
+    private void createExcel(List<QStatsBean> qStatsBeans, String filePath) throws Exception {
         // Create a Workbook
         try (Workbook workbook = new XSSFWorkbook();
-             FileOutputStream fileOut = new FileOutputStream(fileUploadFolder + File.separator + "result.xlsx");) {
+             FileOutputStream fileOut = new FileOutputStream(filePath)) {
             // new HSSFWorkbook() for generating `.xls` file
 
         /* CreationHelper helps us create instances of various things like DataFormat,
@@ -241,7 +259,7 @@ public class GenerateQstats {
                 resetMaturityDate.setCellValue(qStatsBean.getResetMaturityDate());
                 resetMaturityDate.setCellStyle(dateCellStyle);
 
-                row.createCell(29).setCellValue(qStatsBean.getTtmCur().doubleValue());
+                row.createCell(29).setCellValue(qStatsBean.getTtmCur() != null ? qStatsBean.getTtmCur().doubleValue(): 0.0);
                 row.createCell(30).setCellValue(qStatsBean.getInstrRateST());
                 row.createCell(31).setCellValue(qStatsBean.getInstrRateLT());
                 row.createCell(32).setCellValue(qStatsBean.getIssuerRateST());
@@ -249,9 +267,9 @@ public class GenerateQstats {
                 row.createCell(34).setCellValue(qStatsBean.getIssuerName());
                 row.createCell(35).setCellValue(qStatsBean.getRateAgency());
                 row.createCell(36).setCellValue(qStatsBean.isCompConDeb());
-                row.createCell(37).setCellValue(qStatsBean.getMarketCapIssuer().doubleValue());
-                row.createCell(38).setCellValue(qStatsBean.getPerIssuedCap().doubleValue());
-                row.createCell(39).setCellValue(qStatsBean.getCapitalReserves().doubleValue());
+                row.createCell(37).setCellValue(qStatsBean.getMarketCapIssuer() != null ? qStatsBean.getMarketCapIssuer().doubleValue() : 0.0);
+                row.createCell(38).setCellValue(qStatsBean.getPerIssuedCap() != null ? qStatsBean.getPerIssuedCap().doubleValue() : 0.0);
+                row.createCell(39).setCellValue(qStatsBean.getCapitalReserves() != null ? qStatsBean.getCapitalReserves().doubleValue() : 0.0);
                 row.createCell(40).setCellValue(qStatsBean.getAsiSADefined1());
                 row.createCell(41).setCellValue(qStatsBean.getAsiSADefined2());
                 row.createCell(42).setCellValue(qStatsBean.getAsiSADefined3());

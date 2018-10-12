@@ -9,9 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import za.co.global.controllers.fileupload.BaseFileUploadController;
-import za.co.global.domain.fileupload.mapping.AdditionalClassification;
 import za.co.global.domain.fileupload.mapping.DerivativeTypes;
-import za.co.global.persistence.fileupload.mapping.AdditionalClassificationRepository;
 import za.co.global.persistence.fileupload.mapping.DerivativeTypesRepository;
 import za.co.global.services.upload.FileAndObjectResolver;
 
@@ -41,8 +39,10 @@ public class DerivativeTypesController extends BaseFileUploadController {
         try {
             processFile(file, FILE_TYPE, null, null);
         } catch (IOException e) {
+            e.printStackTrace();
             return new ModelAndView("fileupload/mapping/derivativeTypes", "saveError", e.getMessage());
         } catch (Exception e) {
+            e.printStackTrace();
             return new ModelAndView("fileupload/mapping/derivativeTypes", "saveError", e.getMessage());
         }
         return new ModelAndView("fileupload/mapping/derivativeTypes", "saveMessage", "File Uploaded sucessfully... " + file.getOriginalFilename());

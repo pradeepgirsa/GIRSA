@@ -57,13 +57,13 @@ public class HoldingUploadController  {
     @Autowired
     private HoldingRepository holdingRepository;
 
-    private static String[] categories = {"16001-CASH", "16001-A-UNITCLASS", "16001-D-UNITCLASS", "16001-B-UNITCLASS", "16001-PRICETRADED",
-            "16001-YIELDTRADED", "16001-E-UNITCLASS", "16001-FEE"};
+    private static String[] categories = {"CASH", "A-UNITCLASS", "D-UNITCLASS", "B-UNITCLASS", "PRICETRADED",
+            "YIELDTRADED", "E-UNITCLASS", "FEE"};
 
-    private static String[] categoriesTotal = {"16001-CASH TOTAL", "16001-A-UNITCLASS TOTAL", "16001-D-UNITCLASS TOTAL",
-            "16001-B-UNITCLASS TOTAL", "16001-PRICETRADED TOTAL", "16001-YIELDTRADED TOTAL", "16001-E-UNITCLASS TOTAL", "16001-FEE TOTAL"};
-    private static List<String> categoryList = Arrays.asList(categories);
-    private static List<String> categoryTotalList = Arrays.asList(categoriesTotal);
+    private static String[] categoriesTotal = {"CASH TOTAL", "A-UNITCLASS TOTAL", "D-UNITCLASS TOTAL",
+            "B-UNITCLASS TOTAL", "PRICETRADED TOTAL", "YIELDTRADED TOTAL", "E-UNITCLASS TOTAL", "FEE TOTAL"};
+//    private static List<String> categoryList = Arrays.asList(categories);
+//    private static List<String> categoryTotalList = Arrays.asList(categoriesTotal);
 
     private static String[] holdingBaseValues = {"Portfolio Code:", "Portfolio Name:", "Currency:"};
     private static List<String> holdingBaseValuesList = Arrays.asList(holdingBaseValues);
@@ -151,6 +151,8 @@ public class HoldingUploadController  {
         DataFormatter dataFormatter = new DataFormatter();
         Holding holding = new Holding();
         Map<String, Integer> headersMap = new HashMap<>();
+        List<String> categoryList = new ArrayList<>();
+        List<String> categoryTotalList = new ArrayList<>();
 
         for (int i = 0; i < workbook.getNumberOfSheets(); i++) {
             XSSFSheet sheet = workbook.getSheetAt(i);
@@ -177,6 +179,12 @@ public class HoldingUploadController  {
                             switch (firstCellValue) {
                                 case "Portfolio Code:":
                                     holding.setPortfolioCode(secondCellValue);
+                                    for(int j = 0; j < categories.length; j++) {
+                                        categoryList.add(holding.getPortfolioCode()+"-"+categories[j]);
+                                    }
+                                    for(int j = 0; j < categoriesTotal.length; j++) {
+                                        categoryTotalList.add(holding.getPortfolioCode()+"-"+categoriesTotal[j]);
+                                    }
                                     break;
                                 case "Portfolio Name:":
                                     holding.setPortfolioName(secondCellValue);
@@ -193,7 +201,8 @@ public class HoldingUploadController  {
                     This will store all actual instrument data
                      */
                     if (categoryList.contains(firstCellValue) && headersMap.size() > 0) {
-                        HoldingCategory holdingCategory = getInstrumentData(headersMap, firstCellValue, rowIterator);
+                        HoldingCategory holdingCategory = getInstrumentData(headersMap, firstCellValue, rowIterator, categoryList,
+                                categoryTotalList);
                         holding.getHoldingCategories().add(holdingCategory);
                     }
                     /*
@@ -270,7 +279,8 @@ public class HoldingUploadController  {
         return fileDetailsRepository.save(subFileDetails);
     }
 
-    private HoldingCategory getInstrumentData(Map<String, Integer> headersMap, String category, Iterator<Row> rowIterator) {
+    private HoldingCategory getInstrumentData(Map<String, Integer> headersMap, String category, Iterator<Row> rowIterator, List<String> categoryList,
+                                              List<String> categoryTotalList) {
         HoldingCategory holdingCategory = new HoldingCategory();
         DataFormatter dataFormatter = new DataFormatter();
         holdingCategory.setCategory(category);
@@ -295,7 +305,7 @@ public class HoldingUploadController  {
 
                 break;
             } else {
-                Instrument instrument = getInstrumentDetail(headersMap, row);
+                Instrument instrument = getInstrumentDetail(headersMap, row, categoryList, categoryTotalList);
                 if(instrument != null ) {
                     holdingCategory.getInstruments().add(instrument);
                 }
@@ -312,7 +322,8 @@ public class HoldingUploadController  {
         return dataValue;
     }
 
-    private static Instrument getInstrumentDetail(Map<String, Integer> headersMap, Row row) {
+    private static Instrument getInstrumentDetail(Map<String, Integer> headersMap, Row row, List<String> categoryList,
+                                                  List<String> categoryTotalList) {
         if(row.getPhysicalNumberOfCells() < headersMap.size()) {
             return null;
         }

@@ -37,11 +37,11 @@ public class IssuerMappings implements Serializable {
     private String issuerCode;
 
     @Column(name = "market_capitalisation")
-    @ExcelColumnHeader(columnHeader = "Market Capitalisation")
-    private String marketCapitalisation;
+    @ExcelColumnHeader(columnHeader = "Market Capitalisation", dataType = "big_decimal")
+    private BigDecimal marketCapitalisation;
 
     @Column(name = "capital_reserves")
-    @ExcelColumnHeader(columnHeader = "Capital & Reserves")
+    @ExcelColumnHeader(columnHeader = "Capital & Reserves", dataType = "big_decimal")
     private BigDecimal capitalReserves;
 
     public Long getId() {
@@ -84,11 +84,11 @@ public class IssuerMappings implements Serializable {
         this.issuerCode = issuerCode;
     }
 
-    public String getMarketCapitalisation() {
+    public BigDecimal getMarketCapitalisation() {
         return marketCapitalisation;
     }
 
-    public void setMarketCapitalisation(String marketCapitalisation) {
+    public void setMarketCapitalisation(BigDecimal marketCapitalisation) {
         this.marketCapitalisation = marketCapitalisation;
     }
 
@@ -127,5 +127,18 @@ public class IssuerMappings implements Serializable {
         result = 31 * result + (marketCapitalisation != null ? marketCapitalisation.hashCode() : 0);
         result = 31 * result + (capitalReserves != null ? capitalReserves.hashCode() : 0);
         return result;
+    }
+
+    @Override
+    public String toString() {
+        return "IssuerMappings{" +
+                "id=" + id +
+                ", dailyPricingIssuerName='" + dailyPricingIssuerName + '\'' +
+                ", barraGIRIssuerName='" + barraGIRIssuerName + '\'' +
+                ", barraCode='" + barraCode + '\'' +
+                ", issuerCode='" + issuerCode + '\'' +
+                ", marketCapitalisation=" + marketCapitalisation +
+                ", capitalReserves=" + capitalReserves +
+                '}';
     }
 }
