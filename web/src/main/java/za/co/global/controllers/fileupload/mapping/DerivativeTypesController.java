@@ -20,7 +20,7 @@ import java.io.IOException;
 @Controller
 public class DerivativeTypesController extends BaseFileUploadController {
 
-    private static final String FILE_TYPE = FileAndObjectResolver.ADDITIONAL_CLASSIFICATION.getFileType();
+    private static final String FILE_TYPE = FileAndObjectResolver.DERIVATIVE_TYPES.getFileType();
 
     @Autowired
     private DerivativeTypesRepository derivativeTypesRepository;

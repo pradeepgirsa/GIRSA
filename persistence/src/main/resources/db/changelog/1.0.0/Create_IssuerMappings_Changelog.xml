@@ -15,7 +15,7 @@
             <column name="barra_gir_Issuer_name" type="varchar(100)"/>
             <column name="barra_code" type="varchar(20)"/>
             <column name="issuer_code" type="varchar(20)"/>
-            <column name="market_capitalisation" type="NUMERIC(15,3)"/>
+            <column name="market_capitalisation" type="varchar(100)"/>
             <column name="capital_reserves" type="NUMERIC(15,3)"/>
         </createTable>
 
