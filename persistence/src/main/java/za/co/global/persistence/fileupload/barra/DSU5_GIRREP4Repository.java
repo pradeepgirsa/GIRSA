@@ -8,5 +8,5 @@ import za.co.global.domain.fileupload.client.NumberOfAccounts;
 @Repository
 public interface DSU5_GIRREP4Repository extends JpaRepository<NumberOfAccounts, Long> {
 
-    DSU5_GIRREP4 findByAssetId(String assetId);
+//    DSU5_GIRREP4 findByAssetId(String assetId);
 }

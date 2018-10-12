@@ -2,6 +2,7 @@ package za.co.global.domain.fileupload.mapping;
 
 import com.gizbel.excel.annotations.ExcelBean;
 import com.gizbel.excel.annotations.ExcelColumnHeader;
+import org.hibernate.annotations.NaturalId;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -31,6 +32,7 @@ public class IssuerMappings implements Serializable {
     private String barraCode;
 
     @Column(name = "issuer_code")
+    @NaturalId
     @ExcelColumnHeader(columnHeader = "Issuer Code")
     private String issuerCode;
 
