@@ -8,7 +8,7 @@ import java.io.Serializable;
 
 @ExcelBean
 @Entity
-@Table(name = "dsu2_girl2")
+@Table(name = "dsu5_girrep4")
 public class BarraFile implements Serializable {
 
     private static final long serialVersionUID = 5501452100911177632L;

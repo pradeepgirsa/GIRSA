@@ -16,6 +16,7 @@
             <column name="ASSET_NAME" type="varchar(255)"/>
             <column name="AFRICA_VALUES" type="varchar(255)"/>
             <column name="EFF_EXPOSURE" type="varchar(255)"/>
+            <column name="MARKET_VALUE" type="NUMERIC(15, 3)"/>
             <column name="EFF_WEIGHT" type="varchar(255)"/>
             <column name="GIR_ISSUER" type="varchar(255)"/>
             <column name="HOLDINGS" type="varchar(255)"/>

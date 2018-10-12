@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org" xmlns="https://www.w3.org/1999/xhtml" lang="en">
+<head th:replace="layout :: site-head">
+</head>
+
+<body>
+<div id="stage" class="loading">
+    <div id="loading-image"></div>
+</div>
+
+<header th:replace="layout :: site-header">
+</header>
+
+<section>
+    <div class="mainwrapper">
+        <div class="leftpanel" th:replace="layout :: site-leftPanel">
+        </div><!-- leftpanel -->
+
+        <div class="mainpanel">
+            <div class="contentpanel">
+
+                <div  th:if="${saveError} != null" class="alert alert-danger">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                    <span th:text="${saveError}"/> </div>
+                <div  th:if="${saveMessage} != null" class="alert alert-info" align="center">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                    <span id="success-message" th:text="${saveMessage}"/></div>
+
+                <div class="row">
+
+                    <div class="col-md-6 col-md-offset-3">
+
+                        <form role="form" method="post" th:object="${asisaForm}" th:action="@{/generate_report}" >
+                            <div class="panel panel-lepo">
+                                <div class="panel-heading">
+                                    <h4 class="panel-title">ASISA QUEUE STATS</h4>
+                                </div>
+                                <div class="panel-footer" th:style="${asisaDisplay}">
+                                    <div class="col-md-12" align="right">
+                                        <button id="generate-asisa-report" type="submit" class="btn btn-lepo mr5" onclick="loadingScreen()">Generate</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div><!-- col-md-6 -->
+                </div><!-- row -->
+            </div><!-- contentpanel -->
+        </div><!-- mainpanel -->
+    </div><!-- mainwrapper -->
+</section>
+<form th:action="@{/logout}" method="POST" id="logoutForm" />
+
+<script>
+		function formSubmit() {
+			document.getElementById("logoutForm").submit();
+		}
+</script>
+
+<script th:src="@{js/jquery-1.11.1.min.js}"></script>
+<script th:src="@{js/jquery-migrate-1.2.1.min.js}"></script>
+<script th:src="@{js/jquery-ui-1.10.3.min.js}"></script>
+<script th:src="@{js/bootstrap.min.js}"></script>
+<script th:src="@{js/modernizr.min.js}"></script>
+<script th:src="@{js/pace.min.js}"></script>
+<script th:src="@{js/retina.min.js}"></script>
+<script th:src="@{js/jquery.cookies.js}"></script>
+
+<script th:src="@{js/select2.min.js}"></script>
+<script th:src="@{js/custom.js}"></script>
+<!--<script th:src="@{js/tax/it3bCertificate.js}"></script>-->
+
+<script th:replace="layout :: site-screen-loader">
+</script>
+
+<script>
+
+jQuery(document).ready(function() {
+ });
+</script>
+</body>
+</html>

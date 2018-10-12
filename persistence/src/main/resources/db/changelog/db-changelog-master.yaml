@@ -25,3 +25,7 @@ databaseChangeLog:
         file: db/changelog/1.0.0/Create_SecurityListing_Changelog.xml
   - include:
         file: db/changelog/1.0.0/Create_InstrumentCode_Changelog.xml
+  - include:
+        file: db/changelog/1.0.0/Create_DerivativeTypes_Changelog.xml
+  - include:
+        file: db/changelog/1.0.0/Create_Reg28InstrumentType_Changelog.xml

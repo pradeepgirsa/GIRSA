@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet id="reg28_instr_type_table_1" author="Sharanya" runOnChange="true">
+        <createTable tableName="reg28_instr_type" >
+            <column name="id" type="bigint">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="reg28_instr_type" type="varchar(20)"/>
+            <column name="rsa_or_foreign" type="varchar(50)"/>
+            <column name="security_type" type="varchar(100)"/>
+            <column name="institution_type" type="varchar(100)"/>
+            <column name="market_cap" type="varchar(255)"/>
+            <column name="bn_categories" type="varchar(20)"/>
+            <column name="asisa_defined2" type="varchar(50)"/>
+            <column name="aci_asset_Class" type="varchar(20)"/>
+            <column name="add_classification1" type="varchar(20)"/>
+            <column name="add_classification2" type="varchar(20)"/>
+            <column name="add_classification3" type="varchar(20)"/>
+        </createTable>
+
+        <addAutoIncrement columnDataType="bigint"
+                          columnName="id"
+                          incrementBy="1"
+                          startWith="100"
+                          tableName="reg28_instr_type"/>
+    </changeSet>
+
+</databaseChangeLog>

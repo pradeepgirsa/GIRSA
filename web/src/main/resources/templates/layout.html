@@ -120,6 +120,13 @@
                     </a>
                 </li>
                 <li th:class="|parent|">
+                    <a><i  th:class="|fa fa-leaf|" /> <span th:text="|Barra File|"/> </a>
+                    <ul class="children">
+                        <li><a th:href="|/upload_barraFile|" th:onclick="|loadingScreen()|">
+                            <i  th:class="|fa fa-leaf|" /> <span th:text="|Barra File|"/> </a></li>
+                    </ul>
+                </li>
+                <li th:class="|parent|">
                     <a><i  th:class="|fa fa-leaf|" /> <span th:text="|Mapping|"/> </a>
                     <ul class="children">
                         <li><a th:href="|/upload_additionalClassification|" th:onclick="|loadingScreen()|">
@@ -130,10 +137,14 @@
                             <i  th:class="|fa fa-leaf|" /> <span th:text="|Issuer Mappings|"/> </a></li>
                         <li><a th:href="|/upload_psgFundMapping|" th:onclick="|loadingScreen()|">
                             <i  th:class="|fa fa-leaf|" /> <span th:text="|PSG Fund Mapping|"/> </a></li>
+                        <li><a th:href="|/upload_derivativeTypes|" th:onclick="|loadingScreen()|">
+                            <i  th:class="|fa fa-leaf|" /> <span th:text="|Derivative Types|"/> </a></li>
+                        <li><a th:href="|/upload_reg28InstrumentType|" th:onclick="|loadingScreen()|">
+                            <i  th:class="|fa fa-leaf|" /> <span th:text="|Reg28 Instrument Type|"/> </a></li>
                     </ul>
                 </li>
                 <li th:class="|parent|">
-                    <a><i  th:class="|fa fa-leaf|" /> <span th:text="|Client Related|"/> </a>
+                    <a><i  th:class="|fa fa-leaf|" /> <span th:text="|Client Mapping|"/> </a>
                     <ul class="children">
                         <li><a th:href="|/upload_institutionalDetails|" th:onclick="|loadingScreen()|">
                             <i  th:class="|fa fa-leaf|" /> <span th:text="|Institutional Details|"/> </a></li>
@@ -160,6 +171,13 @@
                             <i  th:class="|fa fa-leaf|" /> <span th:text="|View Products|"/> </a></li>
                         <li><a th:href="|/product|" th:onclick="|loadingScreen()|">
                             <i  th:class="|fa fa-leaf|" /> <span th:text="|Create Product|"/> </a></li>
+                    </ul>
+                </li>
+                <li th:class="|parent|">
+                    <a><i  th:class="|fa fa-leaf|" /> <span th:text="|Generate Report|"/> </a>
+                    <ul class="children">
+                        <li><a th:href="|/generate|" th:onclick="|loadingScreen()|">
+                            <i  th:class="|fa fa-leaf|" /> <span th:text="|ASISA QUEUE STATS|"/> </a></li>
                     </ul>
                 </li>
             </ul>
