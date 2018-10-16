@@ -3,6 +3,7 @@ package za.co.global.controllers.fileupload.mapping;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -43,6 +44,13 @@ public class PSGFundMappingController extends BaseFileUploadController {
             return new ModelAndView("fileupload/mapping/psgFundMapping", "saveError", e.getMessage());
         }
         return new ModelAndView("fileupload/mapping/psgFundMapping", "saveMessage", "File Uploaded sucessfully... " + file.getOriginalFilename());
+    }
+
+    @GetMapping(value = {"/view_psg_fund_mapping"})
+    public String viewPSGFundMapping(Model model) {
+        model.addAttribute("psgFundMappings", psgFundMappingRepository.findAll());
+        return "fileupload/mapping/view/viewPSGFundMapping";
+
     }
 
     @Override

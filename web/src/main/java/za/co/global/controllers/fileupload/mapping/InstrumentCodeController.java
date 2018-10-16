@@ -3,6 +3,7 @@ package za.co.global.controllers.fileupload.mapping;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -44,6 +45,13 @@ public class InstrumentCodeController extends BaseFileUploadController {
             return new ModelAndView("fileupload/mapping/instrumentCode", "saveError", e.getMessage());
         }
         return new ModelAndView("fileupload/mapping/instrumentCode", "saveMessage", "File Uploaded sucessfully... " + file.getOriginalFilename());
+    }
+
+    @GetMapping(value = {"/view_instrument_code"})
+    public String viewInstrumentCode(Model model) {
+        model.addAttribute("instrumentCodes", instrumentCodeRepository.findAll());
+        return "fileupload/mapping/view/viewInstrumentCode";
+
     }
 
     @Override

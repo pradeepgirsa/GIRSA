@@ -3,6 +3,7 @@ package za.co.global.controllers.fileupload.barra;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -45,6 +46,13 @@ public class BarraFileController extends BaseFileUploadController {
             return new ModelAndView("fileupload/barra/barraFile", "saveError", e.getMessage());
         }
         return new ModelAndView("fileupload/barra/barraFile", "saveMessage", "File Uploaded sucessfully... " + file.getOriginalFilename());
+    }
+
+    @GetMapping(value = {"/view_barra_file"})
+    public String viewBarraFile(Model model) {
+        model.addAttribute("barraFiles", barraFileRepository.findAll());
+        return "fileupload/barra/viewBarraFile";
+
     }
 
     @Override

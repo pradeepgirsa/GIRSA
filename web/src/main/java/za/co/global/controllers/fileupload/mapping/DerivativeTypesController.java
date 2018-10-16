@@ -3,6 +3,7 @@ package za.co.global.controllers.fileupload.mapping;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -46,6 +47,13 @@ public class DerivativeTypesController extends BaseFileUploadController {
             return new ModelAndView("fileupload/mapping/derivativeTypes", "saveError", e.getMessage());
         }
         return new ModelAndView("fileupload/mapping/derivativeTypes", "saveMessage", "File Uploaded sucessfully... " + file.getOriginalFilename());
+    }
+
+    @GetMapping(value = {"/view_derivative_types"})
+    public String viewDerivativeTypes(Model model) {
+        model.addAttribute("derivativeTypes", derivativeTypesRepository.findAll());
+        return "fileupload/mapping/view/viewDerivativeTypes";
+
     }
 
     @Override

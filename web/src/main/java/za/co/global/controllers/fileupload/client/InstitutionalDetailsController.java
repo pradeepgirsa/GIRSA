@@ -3,6 +3,7 @@ package za.co.global.controllers.fileupload.client;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -43,6 +44,13 @@ public class InstitutionalDetailsController extends BaseFileUploadController {
             return new ModelAndView("fileupload/client/institutionalDetails", "saveError", e.getMessage());
         }
         return new ModelAndView("fileupload/client/institutionalDetails", "saveMessage", "File Uploaded sucessfully... " + file.getOriginalFilename());
+    }
+
+    @GetMapping(value = {"/view_institutional_details"})
+    public String viewInstitutionalDetails(Model model) {
+        model.addAttribute("institutionalDetails", institutionalDetailsRepository.findAll());
+        return "fileupload/client/view/viewInstitutionalDetails";
+
     }
 
     @Override

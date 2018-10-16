@@ -122,36 +122,50 @@
                 <li th:class="|parent|">
                     <a><i  th:class="|fa fa-leaf|" /> <span th:text="|Barra File|"/> </a>
                     <ul class="children">
-                        <li><a th:href="|/upload_barraFile|" th:onclick="|loadingScreen()|">
-                            <i  th:class="|fa fa-leaf|" /> <span th:text="|Barra File|"/> </a></li>
+                        <li><a th:href="|/upload_barraFile|" th:onclick="|loadingScreen()|"><i  th:class="|fa fa-leaf|" /> <span th:text="|Barra File|"/> </a></li>
+                        <li><a th:href="|/view_barra_file|" th:onclick="|loadingScreen()|"><i  th:class="|fa fa-leaf|" /> <span th:text="|View Barra File|"/> </a></li>
                     </ul>
                 </li>
                 <li th:class="|parent|">
                     <a><i  th:class="|fa fa-leaf|" /> <span th:text="|Mapping|"/> </a>
                     <ul class="children">
-                        <li><a th:href="|/upload_additionalClassification|" th:onclick="|loadingScreen()|">
-                            <i  th:class="|fa fa-leaf|" /> <span th:text="|Additional Classification|"/> </a></li>
-                        <li><a th:href="|/upload_instrumentCode|" th:onclick="|loadingScreen()|">
-                            <i  th:class="|fa fa-leaf|" /> <span th:text="|Instrument Code|"/> </a></li>
-                        <li><a th:href="|/upload_issuerMappings|" th:onclick="|loadingScreen()|">
-                            <i  th:class="|fa fa-leaf|" /> <span th:text="|Issuer Mappings|"/> </a></li>
-                        <li><a th:href="|/upload_psgFundMapping|" th:onclick="|loadingScreen()|">
-                            <i  th:class="|fa fa-leaf|" /> <span th:text="|PSG Fund Mapping|"/> </a></li>
-                        <li><a th:href="|/upload_derivativeTypes|" th:onclick="|loadingScreen()|">
-                            <i  th:class="|fa fa-leaf|" /> <span th:text="|Derivative Types|"/> </a></li>
-                        <li><a th:href="|/upload_reg28InstrumentType|" th:onclick="|loadingScreen()|">
-                            <i  th:class="|fa fa-leaf|" /> <span th:text="|Reg28 Instrument Type|"/> </a></li>
+                        <li><a th:href="|/upload_additionalClassification|" th:onclick="|loadingScreen()|"><i  th:class="|fa fa-leaf|" /> <span th:text="|Additional Classification|"/> </a></li>
+                        <li><a th:href="|/view_additional_classification|" th:onclick="|loadingScreen()|"> <i  th:class="|fa fa-leaf|" /> <span th:text="|View Additional Classification|"/> </a></li>
+
+                        <li><a th:href="|/upload_instrumentCode|" th:onclick="|loadingScreen()|"><i  th:class="|fa fa-leaf|" /> <span th:text="|Instrument Code|"/> </a></li>
+                        <li><a th:href="|/view_instrument_code|" th:onclick="|loadingScreen()|"><i  th:class="|fa fa-leaf|" /> <span th:text="|View Instrument Code|"/> </a></li>
+
+                        <li><a th:href="|/upload_issuerMappings|" th:onclick="|loadingScreen()|"><i  th:class="|fa fa-leaf|" /> <span th:text="|Issuer Mappings|"/> </a></li>
+                        <li><a th:href="|/view_issuer_mappings|" th:onclick="|loadingScreen()|"><i  th:class="|fa fa-leaf|" /> <span th:text="|View Issuer Mappings|"/> </a></li>
+
+                        <li><a th:href="|/upload_psgFundMapping|" th:onclick="|loadingScreen()|"><i  th:class="|fa fa-leaf|" /> <span th:text="|PSG Fund Mapping|"/> </a></li>
+                        <li><a th:href="|/view_psg_fund_mapping|" th:onclick="|loadingScreen()|"><i  th:class="|fa fa-leaf|" /> <span th:text="|View PSG Fund Mapping|"/> </a></li>
+
+                        <li><a th:href="|/upload_derivative_types|" th:onclick="|loadingScreen()|"><i  th:class="|fa fa-leaf|" /> <span th:text="|Derivative Types|"/> </a></li>
+                        <li><a th:href="|/view_derivative_types|" th:onclick="|loadingScreen()|"><i  th:class="|fa fa-leaf|" /> <span th:text="|View Derivative Types|"/> </a></li>
+
+                        <li><a th:href="|/upload_reg28InstrumentType|" th:onclick="|loadingScreen()|"><i  th:class="|fa fa-leaf|" /> <span th:text="|Reg28 Instrument Type|"/> </a></li>
+                        <li><a th:href="|/view_reg28_instrument_type|" th:onclick="|loadingScreen()|"><i  th:class="|fa fa-leaf|" /> <span th:text="|View Reg28 Instrument Type|"/> </a></li>
                     </ul>
                 </li>
+                <!--<li th:class="|parent|">
+                    <a><i  th:class="|fa fa-leaf|" /> <span th:text="|View Mapping|"/> </a>
+                    <ul class="children">
+                        <li><a th:href="|/view_additional_classification|" th:onclick="|loadingScreen()|">
+                            <i  th:class="|fa fa-leaf|" /> <span th:text="|View Additional Classification|"/> </a></li>
+                    </ul>
+                </li>-->
                 <li th:class="|parent|">
                     <a><i  th:class="|fa fa-leaf|" /> <span th:text="|Client Mapping|"/> </a>
                     <ul class="children">
-                        <li><a th:href="|/upload_institutionalDetails|" th:onclick="|loadingScreen()|">
-                            <i  th:class="|fa fa-leaf|" /> <span th:text="|Institutional Details|"/> </a></li>
-                        <li><a th:href="|/upload_numberOfAccounts|" th:onclick="|loadingScreen()|">
-                            <i  th:class="|fa fa-leaf|" /> <span th:text="|Number Of Accounts|"/> </a></li>
-                        <li><a th:href="|/upload_securityListing|" th:onclick="|loadingScreen()|">
-                            <i  th:class="|fa fa-leaf|" /> <span th:text="|Security Listing|"/> </a></li>
+                        <li><a th:href="|/upload_institutionalDetails|" th:onclick="|loadingScreen()|"><i  th:class="|fa fa-leaf|" /> <span th:text="|Institutional Details|"/></a></li>
+                        <li><a th:href="|/view_institutional_details|" th:onclick="|loadingScreen()|"><i  th:class="|fa fa-leaf|" /> <span th:text="|View Institutional Details|"/> </a></li>
+
+                        <li><a th:href="|/upload_numberOfAccounts|" th:onclick="|loadingScreen()|"><i  th:class="|fa fa-leaf|" /> <span th:text="|Number Of Accounts|"/></a></li>
+                        <li><a th:href="|/view_number_of_Accounts|" th:onclick="|loadingScreen()|"><i  th:class="|fa fa-leaf|" /> <span th:text="|View Number Of Accounts|"/> </a></li>
+
+                        <li><a th:href="|/upload_securityListing|" th:onclick="|loadingScreen()|"><i  th:class="|fa fa-leaf|" /> <span th:text="|Security Listing|"/></a></li>
+                        <li><a th:href="|/view_security_listing|" th:onclick="|loadingScreen()|"><i  th:class="|fa fa-leaf|" /> <span th:text="|View Security Listing|"/> </a></li>
                     </ul>
                 </li>
                 <li th:class="|parent|">

@@ -36,6 +36,14 @@
                                     <h4 class="panel-title">ASISA QUEUE STATS</h4>
                                 </div>
                                 <div class="panel-body">
+                                    <!--<div th:class="${#fields.hasErrors('reportDate')} ? 'form-group has-error' : 'form-group'">
+                                        <label> <strong>Report Date * </strong></label>
+                                        <label class="error" th:if="${#fields.hasErrors('reportDate')}" th:errors="*{reportDate}">Error</label>
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" placeholder="DD-MM-YYYY" id="reportDate" th:field="*{reportDate}"/>
+                                            <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                                        </div>
+                                    </div>-->
                                 <div class="panel-footer" th:style="${cashChangePanelDisplay}">
                                     <div class="col-md-12" align="right">
                                         <button id="generate-asisa-report" type="submit" onclick="loadingScreen()">Generate Report</button>
@@ -77,6 +85,13 @@
 <script>
 
 jQuery(document).ready(function() {
+ // Date Pickers
+    jQuery('#reportDate').datepicker({
+        dateFormat: 'dd/mm/yy',
+        numberOfMonths: 3,
+        startDate: '-50d',
+        showButtonPanel: true
+    });
  });
 </script>
 </body>

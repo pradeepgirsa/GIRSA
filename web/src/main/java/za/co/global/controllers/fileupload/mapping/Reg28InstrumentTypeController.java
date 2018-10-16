@@ -3,6 +3,7 @@ package za.co.global.controllers.fileupload.mapping;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -46,6 +47,13 @@ public class Reg28InstrumentTypeController extends BaseFileUploadController {
             return new ModelAndView("fileupload/mapping/reg28InstrumentType", "saveError", e.getMessage());
         }
         return new ModelAndView("fileupload/mapping/reg28InstrumentType", "saveMessage", "File Uploaded sucessfully... " + file.getOriginalFilename());
+    }
+
+    @GetMapping(value = {"/view_reg28_instrument_type"})
+    public String viewReg28InstrumentType(Model model) {
+        model.addAttribute("reg28InstrumentTypes", reg28InstrumentTypeRepository.findAll());
+        return "fileupload/mapping/view/viewReg28InstrumentType";
+
     }
 
     @Override

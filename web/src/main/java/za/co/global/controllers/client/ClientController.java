@@ -6,6 +6,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
 import za.co.global.domain.EntityStatus;
 import za.co.global.domain.client.Client;
 import za.co.global.persistence.client.ClientRepository;
@@ -19,7 +20,7 @@ public class ClientController {
 
     @GetMapping(value = {"/client"})
     public String createorUpdateClient(Model model, Client client) {
-        return "client/maintainClient";
+        return "client/createClient";
     }
 
     @GetMapping(value = {"/updateClient"})
@@ -34,11 +35,11 @@ public class ClientController {
 
     }
 
-    @PostMapping(value = {"/update_client"})
-    public String saveClient(Model model, Client client) {
+    @PostMapping(value = {"/create_client"})
+    public ModelAndView saveClient(Model model, Client client) {
         client.setStatus(EntityStatus.ACTIVE);
         clientRepository.save(client);
-        return "client/maintainClient";
+        return new ModelAndView("client/createClient", "saveMessage", client.getClientName() + " Client created successfully... ");
     }
 
 

@@ -3,6 +3,7 @@ package za.co.global.controllers.fileupload.mapping;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -44,6 +45,13 @@ public class AdditionalClassificationController extends BaseFileUploadController
             return new ModelAndView("fileupload/mapping/additionalClassification", "saveError", e.getMessage());
         }
         return new ModelAndView("fileupload/mapping/additionalClassification", "saveMessage", "File Uploaded sucessfully... " + file.getOriginalFilename());
+    }
+
+    @GetMapping(value = {"/view_additional_classification"})
+    public String viewAdditionalClassifications(Model model) {
+        model.addAttribute("additionalClassifications", additionalClassificationRepository.findAll());
+        return "fileupload/mapping/view/viewAdditionalClassification";
+
     }
 
     @Override
