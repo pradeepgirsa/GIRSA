@@ -1,5 +1,6 @@
 package za.co.global.controllers.report;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +8,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import za.co.global.domain.fileupload.barra.BarraFile;
 import za.co.global.domain.fileupload.client.InstitutionalDetails;
@@ -72,11 +74,13 @@ public class GenerateQstats {
     }
 
     @PostMapping("/generate_qstats")
-    public ModelAndView generateReport() {
+    public ModelAndView generateReport(@RequestParam("reportDate") Date reportDate) {
+        ModelAndView modelAndView = new ModelAndView("report/asisaQueueStats");
         List<Holding> holdings = holdingRepository.findAll();
 
         Map<String, PSGFundMapping> psgFundMappings = getPSGFundMappings();
         List<QStatsBean> qStatsBeans = new ArrayList<>();
+        BarraFile net = barraFileRepository.findByAssetId("897");
         for(Holding holding: holdings) {
             PSGFundMapping psgFundMapping = psgFundMappings.get(holding.getPortfolioCode());
             NumberOfAccounts numberofAccounts = numberOfAccountsRepository.findByFundCode(psgFundMapping.getPsgFundCode());
@@ -91,12 +95,33 @@ public class GenerateQstats {
                     if(instrumentCode != null && instrumentCode.getBarraCode() != null) {
                         dsu5_girrep4 = barraFileRepository.findByAssetId(instrumentCode.getBarraCode());
                     }
+                    if(dsu5_girrep4 == null) {
+                        return modelAndView.addObject("saveError",
+                                "There is no mapping to barra asset to the instrument code: " + instrumentCode.getBarraCode());
+                        //return modelAndView;
+                    }
+                    if(dsu5_girrep4.getEffExposure() == null) {
+                        return modelAndView.addObject("saveError",
+                                "There is no value for eff exposure in barra, asset id:" + dsu5_girrep4.getAssetId());
+                    }
+                    if(holding.getNetBaseCurrentMarketValue() == null) {
+                        return modelAndView.addObject("saveError",
+                                "There is no value for current market base value, portfolio code:"+holding.getPortfolioCode()
+                                +", instrument code:" + dsu5_girrep4.getAssetId());
+                    }
+                    if(holding.getNetBaseCurrentMarketValue() == null
+                            || dsu5_girrep4.getEffExposure().compareTo(holding.getNetBaseCurrentMarketValue()) != 0) {
+                        return modelAndView.addObject("saveError",
+                                "There is no mapping to barra asset to the instrument code: " + instrumentCode.getBarraCode());
+                    }
 
                     qStatsBean.setAciFundCode(psgFundMapping.getPsgFundCode());
-                    qStatsBean.setFundName(psgFundMapping.getManagerFundName()); //TODO - fpm source
-                    qStatsBean.setMancoCode("PSG"); //TODO - fpm source
-                    qStatsBean.setCreatedDate(new Date()); //TODO - fpm source
-                    qStatsBean.setQuarter(new Date()); //TODO - fpm source
+                    String fundName = !StringUtils.isEmpty(psgFundMapping.getManagerFundName()) ?
+                            psgFundMapping.getManagerFundName() : holding.getPortfolioName();
+                    qStatsBean.setFundName(fundName);
+                    qStatsBean.setMancoCode("PSG"); //TODO - Get client name
+                    qStatsBean.setCreatedDate(new Date()); //TODO - verify - when the report generate or when it uploaded
+                    qStatsBean.setQuarter(reportDate); //TODO - fpm source
                     qStatsBean.setMvTotal(holding.getNetBaseCurrentMarketValue()); //TODO - check correct field
                     qStatsBean.setInstitutionalTotal(institutionalDetails.getSplit());
                     qStatsBean.setNoOfAccounts(numberofAccounts.getTotal());
@@ -158,7 +183,7 @@ public class GenerateQstats {
             }
         }
 
-        ModelAndView modelAndView = new ModelAndView("report/asisaQueueStats");
+
         try {
             String filePath = fileUploadFolder + File.separator + "result.xlsx";
             createExcel(qStatsBeans, filePath);
@@ -188,7 +213,7 @@ public class GenerateQstats {
             Font headerFont = workbook.createFont();
             headerFont.setBold(true);
             headerFont.setFontHeightInPoints((short) 14);
-            headerFont.setColor(IndexedColors.RED.getIndex());
+//            headerFont.setColor(IndexedColors.RED.getIndex());
 
             // Create a CellStyle with the font
             CellStyle headerCellStyle = workbook.createCellStyle();
