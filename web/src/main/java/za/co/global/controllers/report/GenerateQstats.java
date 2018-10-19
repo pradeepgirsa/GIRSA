@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+import za.co.global.domain.client.Client;
 import za.co.global.domain.fileupload.barra.BarraFile;
 import za.co.global.domain.fileupload.client.InstitutionalDetails;
 import za.co.global.domain.fileupload.client.NumberOfAccounts;
@@ -20,6 +21,8 @@ import za.co.global.domain.fileupload.mapping.InstrumentCode;
 import za.co.global.domain.fileupload.mapping.IssuerMappings;
 import za.co.global.domain.fileupload.mapping.PSGFundMapping;
 import za.co.global.domain.report.QStatsBean;
+import za.co.global.domain.report.ReportData;
+import za.co.global.persistence.client.ClientRepository;
 import za.co.global.persistence.fileupload.HoldingRepository;
 import za.co.global.persistence.fileupload.barra.BarraFileRepository;
 import za.co.global.persistence.fileupload.client.InstitutionalDetailsRepository;
@@ -27,6 +30,7 @@ import za.co.global.persistence.fileupload.client.NumberOfAccountsRepository;
 import za.co.global.persistence.fileupload.mapping.InstrumentCodeRepository;
 import za.co.global.persistence.fileupload.mapping.IssuerMappingsRepository;
 import za.co.global.persistence.fileupload.mapping.PSGFundMappingRepository;
+import za.co.global.persistence.report.ReportDataRepository;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -68,19 +72,28 @@ public class GenerateQstats {
     @Autowired
     private IssuerMappingsRepository issuerMappingsRepository;
 
+    @Autowired
+    private ClientRepository clientRepository;
+
+    @Autowired
+    private ReportDataRepository reportDataRepository;
+
     @GetMapping("/generate_qstats")
     public ModelAndView displayScreen() {
         return new ModelAndView("report/asisaQueueStats");
     }
 
     @PostMapping("/generate_qstats")
-    public ModelAndView generateReport(@RequestParam("reportDate") Date reportDate) {
+    public ModelAndView generateReport(@RequestParam("reportDate") Date reportDate, String clientId) {
         ModelAndView modelAndView = new ModelAndView("report/asisaQueueStats");
-        List<Holding> holdings = holdingRepository.findAll();
+
+        Client client = clientRepository.findOne(Long.parseLong(clientId));
+        ReportData reportData = reportDataRepository.findByReportDateAndClient(reportDate, client);
+        List<Holding> holdings = holdingRepository.findByClientAndReportData(client, reportData); //TODO - test
 
         Map<String, PSGFundMapping> psgFundMappings = getPSGFundMappings();
         List<QStatsBean> qStatsBeans = new ArrayList<>();
-        BarraFile net = barraFileRepository.findByAssetId("897");
+        BarraFile netAsset = barraFileRepository.findByAssetId("897"); //TODO - verify
         for(Holding holding: holdings) {
             PSGFundMapping psgFundMapping = psgFundMappings.get(holding.getPortfolioCode());
             NumberOfAccounts numberofAccounts = numberOfAccountsRepository.findByFundCode(psgFundMapping.getPsgFundCode());
@@ -91,41 +104,25 @@ public class GenerateQstats {
 
                     InstrumentCode instrumentCode = instrumentCodeRepository.findByManagerCode(instrument.getInstrumentCode());
 
-                    BarraFile dsu5_girrep4 = null;
+                    BarraFile girrep4 = null;
                     if(instrumentCode != null && instrumentCode.getBarraCode() != null) {
-                        dsu5_girrep4 = barraFileRepository.findByAssetId(instrumentCode.getBarraCode());
+                        girrep4 = barraFileRepository.findByAssetId(instrumentCode.getBarraCode());
                     }
-                    if(dsu5_girrep4 == null) {
-                        return modelAndView.addObject("saveError",
-                                "There is no mapping to barra asset to the instrument code: " + instrumentCode.getBarraCode());
-                        //return modelAndView;
-                    }
-                    if(dsu5_girrep4.getEffExposure() == null) {
-                        return modelAndView.addObject("saveError",
-                                "There is no value for eff exposure in barra, asset id:" + dsu5_girrep4.getAssetId());
-                    }
-                    if(holding.getNetBaseCurrentMarketValue() == null) {
-                        return modelAndView.addObject("saveError",
-                                "There is no value for current market base value, portfolio code:"+holding.getPortfolioCode()
-                                +", instrument code:" + dsu5_girrep4.getAssetId());
-                    }
-                    if(holding.getNetBaseCurrentMarketValue() == null
-                            || dsu5_girrep4.getEffExposure().compareTo(holding.getNetBaseCurrentMarketValue()) != 0) {
-                        return modelAndView.addObject("saveError",
-                                "There is no mapping to barra asset to the instrument code: " + instrumentCode.getBarraCode());
-                    }
+                    String error = validate(netAsset, holding, institutionalDetails, girrep4, instrumentCode, psgFundMapping, numberofAccounts);
+                    if (error != null)
+                        return modelAndView.addObject("saveError", error);
 
                     qStatsBean.setAciFundCode(psgFundMapping.getPsgFundCode());
                     String fundName = !StringUtils.isEmpty(psgFundMapping.getManagerFundName()) ?
                             psgFundMapping.getManagerFundName() : holding.getPortfolioName();
                     qStatsBean.setFundName(fundName);
-                    qStatsBean.setMancoCode("PSG"); //TODO - Get client name
-                    qStatsBean.setCreatedDate(new Date()); //TODO - verify - when the report generate or when it uploaded
-                    qStatsBean.setQuarter(reportDate); //TODO - fpm source
-                    qStatsBean.setMvTotal(holding.getNetBaseCurrentMarketValue()); //TODO - check correct field
+                    qStatsBean.setMancoCode(client.getMancoCode());
+                    qStatsBean.setCreatedDate(new Date()); //report generated date
+                    qStatsBean.setQuarter(reportDate); //Selected report date
+                    qStatsBean.setMvTotal(netAsset.getEffExposure()); //Validated this with total current market base value for equality
                     qStatsBean.setInstitutionalTotal(institutionalDetails.getSplit());
                     qStatsBean.setNoOfAccounts(numberofAccounts.getTotal());
-                    qStatsBean.setWeightedAvgDuration(BigDecimal.ZERO); //TODO - calculation
+                    qStatsBean.setWeightedAvgDuration(null); //TODO - calculation
                     qStatsBean.setWeightedAvgMaturity(BigDecimal.ZERO); //TODO - calculation
                     qStatsBean.setAciAssetclass("DE"); ////TODO - calculation
                     qStatsBean.setInstrCode(instrument.getInstrumentCode());
@@ -141,15 +138,15 @@ public class GenerateQstats {
                     qStatsBean.setWeighting(BigDecimal.ZERO); //TODO - calculation
                     qStatsBean.setEqtIndexLink(Boolean.FALSE); //TODO - check
                     qStatsBean.setAfrican(Boolean.FALSE); //TODO - check
-                    BigDecimal barraMarketCap = Optional.ofNullable(dsu5_girrep4).map(BarraFile::getMarketCapitalization).orElse(BigDecimal.ZERO);
-                    BigDecimal sharesInIssue = Optional.ofNullable(dsu5_girrep4).map(BarraFile::getSharesOutstanding).orElse(BigDecimal.ZERO);
+                    BigDecimal barraMarketCap = Optional.ofNullable(girrep4).map(BarraFile::getMarketCapitalization).orElse(BigDecimal.ZERO);
+                    BigDecimal sharesInIssue = Optional.ofNullable(girrep4).map(BarraFile::getSharesOutstanding).orElse(BigDecimal.ZERO);
                     qStatsBean.setMarketCap(barraMarketCap);
                     qStatsBean.setSharesInIssue(sharesInIssue); //TODO - verify
                     qStatsBean.setAddClassification("Classfication"); //TODO - calculation
                     qStatsBean.setTtmInc(BigDecimal.ZERO); //TODO - calculation
 
-                    String issuer = Optional.ofNullable(dsu5_girrep4).map(BarraFile::getIssuer).orElse(null);
-                    BigDecimal coupon = Optional.ofNullable(dsu5_girrep4).map(BarraFile::getCoupon).orElse(BigDecimal.ZERO);
+                    String issuer = Optional.ofNullable(girrep4).map(BarraFile::getIssuer).orElse(null);
+                    BigDecimal coupon = Optional.ofNullable(girrep4).map(BarraFile::getCoupon).orElse(BigDecimal.ZERO);
                     qStatsBean.setIssuerCode(issuer); //TODO - verify
                     qStatsBean.setCouponRate(coupon); //TODO - verify
                     qStatsBean.setInstrRateST("InstraRateST"); //TODO - check
@@ -157,7 +154,7 @@ public class GenerateQstats {
                     qStatsBean.setIssuerRateST("IssuerRateST"); //TODO - check
                     qStatsBean.setIssuerRateLT("IssuerRateLT"); //TODO - check
 
-                    String girIssuer = Optional.ofNullable(dsu5_girrep4).map(BarraFile::getGirIssuer).orElse(null);
+                    String girIssuer = Optional.ofNullable(girrep4).map(BarraFile::getGirIssuer).orElse(null);
 
                     qStatsBean.setRateAgency(girIssuer); //TODO - check
                     qStatsBean.setCompConDeb(Boolean.FALSE);
@@ -193,6 +190,33 @@ public class GenerateQstats {
            modelAndView.addObject("saveError", e.getMessage());
         }
         return modelAndView;
+    }
+
+    private String validate(BarraFile netAsset, Holding holding, InstitutionalDetails institutionalDetails, BarraFile girrep4,
+                            InstrumentCode instrumentCode, PSGFundMapping psgFundMapping, NumberOfAccounts numberOfAccounts) {
+        if(girrep4 == null) {
+            return "There is no mapping to barra asset to the instrument code: " + instrumentCode.getBarraCode();
+        }
+        if(netAsset == null || netAsset.getEffExposure() == null) {
+            return "There is no value for net eff exposure in barra";
+        }
+        if(holding.getNetBaseCurrentMarketValue() == null) {
+            return "There is no net value for current market base value, portfolio code:"+holding.getPortfolioCode()
+                    +", instrument code:" + girrep4.getAssetId();
+        }
+        if(netAsset.getEffExposure().compareTo(holding.getNetBaseCurrentMarketValue()) != 0) {
+            return "Net eff exposure from barra and net base current market values are not equal- portfolio code:"+holding.getPortfolioCode()
+                            +", instrument code:" + girrep4.getAssetId();
+        }
+        if(institutionalDetails == null || institutionalDetails.getSplit() == null) {
+            return "There is no institutional split matching to fund code:"+holding.getPortfolioCode()
+                            + ", FPM fund code:"+ psgFundMapping.getPsgFundCode();
+        }
+        if(numberOfAccounts == null || numberOfAccounts.getTotal() == null) {
+            return "Number of accounts are not mapped for fund code:"+holding.getPortfolioCode()
+                            + ", FPM fund code:"+ psgFundMapping.getPsgFundCode();
+        }
+        return null;
     }
 
 

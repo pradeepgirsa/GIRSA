@@ -2,6 +2,7 @@ package za.co.global.domain.fileupload.client;
 
 import com.gizbel.excel.annotations.ExcelBean;
 import com.gizbel.excel.annotations.ExcelColumnHeader;
+import org.hibernate.annotations.NaturalId;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -20,6 +21,7 @@ public class SecurityListing implements Serializable {
 
     @Column(name = "sec_code", nullable = false)
     @ExcelColumnHeader(columnHeader = "sec_code")
+    @NaturalId
     private String securityCode;
 
     @Column(name = "first_payment_date")

@@ -6,30 +6,21 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
          http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
 
-    <changeSet id="client_table_1" author="Sharanya">
-        <createTable tableName="client" >
+    <changeSet id="report_data_table_1" author="Sharanya">
+        <createTable tableName="report_data" >
             <column name="id" type="bigint">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="client_name" type="varchar(100)">
-                <constraints nullable="false" unique="true"/>
-            </column>
-            <column name="status" type="varchar(15)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="description" type="varchar(255)">
-                <constraints nullable="true"/>
-            </column>
-            <column name="manco_code" type="varchar(100)">
-                <constraints nullable="false"/>
-            </column>
+            <column name="report_date" type="date"/>
+            <column name="created_date" type="date"/>
+            <column name="reportStatus" type="varchar(12)"/>
         </createTable>
 
         <addAutoIncrement columnDataType="bigint"
                           columnName="id"
                           incrementBy="1"
                           startWith="100"
-                          tableName="client"/>
+                          tableName="report_data"/>
     </changeSet>
 
 </databaseChangeLog>

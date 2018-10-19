@@ -10,6 +10,8 @@ databaseChangeLog:
   - include:
         file: db/changelog/1.0.0/Create_DSU5_GIRREP4_table_Changelog.xml
   - include:
+        file: db/changelog/1.0.0/Create_ReportData_Changelog.xml
+  - include:
         file: db/changelog/1.0.0/Create_Holding_And_Instrument_Changelog.xml
   - include:
         file: db/changelog/1.0.0/Create_InstitutionalDetails_Changelog.xml

@@ -1,9 +1,13 @@
 package za.co.global.domain.fileupload.client.fpm;
 
+import za.co.global.domain.client.Client;
+import za.co.global.domain.report.ReportData;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -40,6 +44,18 @@ public class Holding implements Serializable {
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "holding_id", referencedColumnName = "ID", nullable = false)
     private List<HoldingCategory> holdingCategories = new ArrayList<>();
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "client_id", nullable = true, insertable = false, updatable = false)
+    private Client client;
+
+    @Column
+    @ManyToOne
+    @JoinColumn(name = "report_data_id", nullable = true, insertable = false, updatable = false)
+    private ReportData reportData;
+
+    @Column(name = "updated_date")
+    private Date updatedDate;
 
     public String getPortfolioCode() {
         return portfolioCode;
@@ -113,6 +129,22 @@ public class Holding implements Serializable {
         this.id = id;
     }
 
+    public Client getClient() {
+        return client;
+    }
+
+    public void setClient(Client client) {
+        this.client = client;
+    }
+
+    public Date getUpdatedDate() {
+        return updatedDate;
+    }
+
+    public void setUpdatedDate(Date updatedDate) {
+        this.updatedDate = updatedDate;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -133,7 +165,10 @@ public class Holding implements Serializable {
             return false;
         if (netPercentOfMarketValue != null ? !netPercentOfMarketValue.equals(holding.netPercentOfMarketValue) : holding.netPercentOfMarketValue != null)
             return false;
-        return holdingCategories != null ? holdingCategories.equals(holding.holdingCategories) : holding.holdingCategories == null;
+        if (holdingCategories != null ? !holdingCategories.equals(holding.holdingCategories) : holding.holdingCategories != null)
+            return false;
+        if (client != null ? !client.equals(holding.client) : holding.client != null) return false;
+        return reportData != null ? reportData.equals(holding.reportData) : holding.reportData == null;
     }
 
     @Override
@@ -146,21 +181,8 @@ public class Holding implements Serializable {
         result = 31 * result + (netBaseCurrentMarketValue != null ? netBaseCurrentMarketValue.hashCode() : 0);
         result = 31 * result + (netPercentOfMarketValue != null ? netPercentOfMarketValue.hashCode() : 0);
         result = 31 * result + (holdingCategories != null ? holdingCategories.hashCode() : 0);
+        result = 31 * result + (client != null ? client.hashCode() : 0);
+        result = 31 * result + (reportData != null ? reportData.hashCode() : 0);
         return result;
-    }
-
-    @Override
-    public String toString() {
-        return "Holding{" +
-                "id=" + id +
-                ", portfolioCode='" + portfolioCode + '\'' +
-                ", portfolioName='" + portfolioName + '\'' +
-                ", currency='" + currency + '\'' +
-                ", netBaseCurrentBookValue=" + netBaseCurrentBookValue +
-                ", netBasePriorMarketValue=" + netBasePriorMarketValue +
-                ", netBaseCurrentMarketValue=" + netBaseCurrentMarketValue +
-                ", netPercentOfMarketValue=" + netPercentOfMarketValue +
-                ", holdingCategories=" + holdingCategories +
-                '}';
     }
 }

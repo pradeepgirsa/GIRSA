@@ -20,13 +20,34 @@
             <column name="net_base_prior_market_value" type="NUMERIC(20, 3)"/>
             <column name="net_base_current_market_value" type="NUMERIC(20, 3)"/>
             <column name="net_percent_of_market_value" type="NUMERIC(20, 3)"/>
+            <column name="client_id" type="bigint" />
+            <column name="report_data_id" type="bigint">
+                <constraints nullable="true"/>
+            </column>
+            <column name="updated_date" type="datetime" />
         </createTable>
-
         <addAutoIncrement columnDataType="bigint"
                           columnName="id"
                           incrementBy="1"
                           startWith="100"
                           tableName="holding"/>
+    </changeSet>
+
+    <changeSet id="holding_fk_constraints_1" author="Sharanya">
+        <addForeignKeyConstraint baseColumnNames="client_id"
+                             baseTableName="holding"
+                             constraintName="holding_client_id_fk"
+                             onDelete="CASCADE"
+                             onUpdate="RESTRICT"
+                             referencedColumnNames="id"
+                             referencedTableName="client"/>
+        <addForeignKeyConstraint baseColumnNames="report_data_id"
+                                 baseTableName="holding"
+                                 constraintName="holding_report_data_id_fk"
+                                 onDelete="CASCADE"
+                                 onUpdate="RESTRICT"
+                                 referencedColumnNames="id"
+                                 referencedTableName="report_data"/>
     </changeSet>
 
     <changeSet id="holding_category_table_1" author="Sharanya">

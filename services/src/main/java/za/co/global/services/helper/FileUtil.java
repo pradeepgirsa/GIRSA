@@ -28,10 +28,9 @@ public class FileUtil {
 
         byte[] buffer = new byte[1024];
         List<File> files = new ArrayList<>();
-        try {
-            //get the zip file content
-            ZipInputStream zis =
-                    new ZipInputStream(new FileInputStream(zipFile));
+        try(//get the zip file content
+            ZipInputStream zis = new ZipInputStream(new FileInputStream(zipFile));) {
+
             //get the zipped file list entry
             ZipEntry ze = zis.getNextEntry();
 
@@ -46,14 +45,15 @@ public class FileUtil {
                 //else you will hit FileNotFoundException for compressed folder
                 new File(newFile.getParent()).mkdirs();
 
-                FileOutputStream fos = new FileOutputStream(newFile);
+                try (FileOutputStream fos = new FileOutputStream(newFile)) {
 
-                int len;
-                while ((len = zis.read(buffer)) > 0) {
-                    fos.write(buffer, 0, len);
+                    int len;
+                    while ((len = zis.read(buffer)) > 0) {
+                        fos.write(buffer, 0, len);
+                    }
+
+                    fos.close();
                 }
-
-                fos.close();
                 ze = zis.getNextEntry();
             }
 
@@ -62,7 +62,7 @@ public class FileUtil {
 
 
         } catch (IOException ex) {
-            ex.printStackTrace();
+            throw new IllegalArgumentException(ex);
         }
         return files;
     }

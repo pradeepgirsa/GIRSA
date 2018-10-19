@@ -56,8 +56,14 @@ public class SecurityListingController extends BaseFileUploadController {
     @Override
     protected void processObject(Object obj) {
         if (obj instanceof SecurityListing) {
-            SecurityListing ex = (SecurityListing) obj;
-            securityListingRepository.save(ex);
+            SecurityListing securityListing = (SecurityListing) obj;
+            SecurityListing existingSecurityListing = securityListingRepository.findBySecurityCode(securityListing.getSecurityCode());
+            if(existingSecurityListing != null) {
+                existingSecurityListing.setFirstPaymentDate(securityListing.getFirstPaymentDate());
+                securityListingRepository.save(existingSecurityListing);
+            } else {
+                securityListingRepository.save(securityListing);
+            }
         }
     }
 

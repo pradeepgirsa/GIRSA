@@ -10,6 +10,7 @@ import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -30,6 +31,7 @@ import za.co.global.persistence.fileupload.HoldingRepository;
 import za.co.global.persistence.product.ProductRepository;
 import za.co.global.services.helper.FileUtil;
 
+import javax.transaction.Transactional;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -57,6 +59,9 @@ public class HoldingUploadController  {
     @Autowired
     private HoldingRepository holdingRepository;
 
+    @Autowired
+    private Logger logger;
+
     private static String[] categories = {"CASH", "A-UNITCLASS", "D-UNITCLASS", "B-UNITCLASS", "PRICETRADED",
             "YIELDTRADED", "E-UNITCLASS", "FEE"};
 
@@ -83,6 +88,7 @@ public class HoldingUploadController  {
 
 
     @PostMapping("/holding_upload")
+    @Transactional
     public ModelAndView fileUpload(@RequestParam("file") MultipartFile file, String productId, String clientId) {
         if (file.isEmpty()) {
             return new ModelAndView("fileupload/uploadFile", "saveError", "Please select a file and try again");
@@ -104,7 +110,7 @@ public class HoldingUploadController  {
             String extension = FilenameUtils.getExtension(file.getOriginalFilename());
             if ("xls".equals(extension) || "xlsx".equals(extension)) {
                 Holding holding = readAndStoreFundManagerHoldingSheetData(uploadedFile);
-                holdingRepository.save(holding);
+                saveHolding(client, holding);
             } else if ("zip".equals(extension)) {
                 String unzipFolderName = uploadedFile.getParent() + File.separator + FilenameUtils.removeExtension(uploadedFile.getName());
                 List<File> extractedFiles = FileUtil.unZipIt(uploadedFile, unzipFolderName);
@@ -113,25 +119,52 @@ public class HoldingUploadController  {
                     if ("xls".equals(extension) || "xlsx".equals(extension)) {
                         saveFileDetails(client, product, fileDetails, extractedFile);
                         Holding holding = readAndStoreFundManagerHoldingSheetData(extractedFile);
-                        holdingRepository.save(holding);
+                        saveHolding(client, holding);
                     }
                 }
             } else {
-                System.out.println("some other format");
+                return new ModelAndView("fileupload/uploadFile", "saveError", "Please upload excel files");
             }
 
         } catch (IOException e) {
+            logger.error(e.getMessage(), e);
             return new ModelAndView("fileupload/uploadFile", "saveError", e.getMessage());
         } catch (InvalidFormatException e) {
-            e.printStackTrace();
-
+            logger.error(e.getMessage(), e);
             return new ModelAndView("fileupload/uploadFile", "saveError", e.getMessage());
-        } catch (Exception e) {
+        }  catch (Exception e) {
+            logger.error(e.getMessage(), e);
             return new ModelAndView("fileupload/uploadFile", "saveError", e.getMessage());
         }
-
-
         return new ModelAndView("fileupload/uploadFile", "saveMessage", "File Uploaded sucessfully... " + file.getOriginalFilename());
+    }
+
+    private void saveHolding(Client client, Holding holding) throws IllegalStateException {
+        if(holding == null){
+            throw new IllegalStateException("Something wrong with data");
+        }
+        List<Holding> holdings = holdingRepository.findByPortfolioCodeAndClientAndReportDataIsNull(holding.getPortfolioCode(), client);
+        if(holdings.size() > 1) {
+            throw new IllegalStateException("Found duplicate holdings with same Portfolio:"+holding.getPortfolioCode()+", client:"+client.getClientName());
+        }
+        if(holdings.size() == 1) {
+            Holding holdingToSave = holdings.get(0);
+            holdingToSave.getHoldingCategories().clear();
+            holdingToSave.getHoldingCategories().addAll(holding.getHoldingCategories());
+            holdingToSave.setNetBaseCurrentBookValue(holding.getNetBaseCurrentBookValue());
+            holdingToSave.setNetBaseCurrentMarketValue(holding.getNetBaseCurrentMarketValue());
+            holdingToSave.setNetBasePriorMarketValue(holding.getNetBasePriorMarketValue());
+            holdingToSave.setNetPercentOfMarketValue(holding.getNetPercentOfMarketValue());
+            holdingToSave.setPortfolioCode(holding.getPortfolioCode());
+            holdingToSave.setPortfolioName(holding.getPortfolioName());
+            holdingToSave.setCurrency(holding.getCurrency());
+            holdingToSave.setUpdatedDate(new Date());
+            holdingRepository.save(holdingToSave);
+        } else {
+            holding.setClient(client);
+            holding.setUpdatedDate(new Date());
+            holdingRepository.save(holding);
+        }
     }
 
 //    public static void main(String[] args) {
@@ -147,97 +180,99 @@ public class HoldingUploadController  {
 
     private Holding readAndStoreFundManagerHoldingSheetData(File uploadedFile) throws IOException, InvalidFormatException {
         FileInputStream fis = new FileInputStream(uploadedFile);
-        XSSFWorkbook workbook = new XSSFWorkbook(fis);
-        DataFormatter dataFormatter = new DataFormatter();
-        Holding holding = new Holding();
-        Map<String, Integer> headersMap = new HashMap<>();
-        List<String> categoryList = new ArrayList<>();
-        List<String> categoryTotalList = new ArrayList<>();
+        Holding holding;
+        try (XSSFWorkbook workbook = new XSSFWorkbook(fis)) {
+            DataFormatter dataFormatter = new DataFormatter();
+            holding = new Holding();
+            Map<String, Integer> headersMap = new HashMap<>();
+            List<String> categoryList = new ArrayList<>();
+            List<String> categoryTotalList = new ArrayList<>();
 
-        for (int i = 0; i < workbook.getNumberOfSheets(); i++) {
-            XSSFSheet sheet = workbook.getSheetAt(i);
-            if ("Holdings".equals(sheet.getSheetName())) {
-                Iterator<Row> rowIterator = sheet.rowIterator();
+            for (int i = 0; i < workbook.getNumberOfSheets(); i++) {
+                XSSFSheet sheet = workbook.getSheetAt(i);
+                if ("Holdings".equals(sheet.getSheetName())) {
+                    Iterator<Row> rowIterator = sheet.rowIterator();
 
-                while (rowIterator.hasNext()) {
-                    XSSFRow row = (XSSFRow) rowIterator.next();
-                    //If it is empty row skip it
-                    if (checkIfRowIsEmpty(row)) {
-                        continue;
-                    }
-
-                    //Get first row
-                    String firstCellValue = dataFormatter.formatCellValue(row.getCell(0));
-                    firstCellValue = !StringUtils.isEmpty(firstCellValue) ? firstCellValue.trim() : firstCellValue;
-
-                     /*
-                       * This used to store portfolio data
-                     */
-                    if (holding.getPortfolioCode() == null || holding.getPortfolioName() == null || holding.getCurrency() == null) {
-                        if (!StringUtils.isEmpty(firstCellValue) && holdingBaseValuesList.contains(firstCellValue)) {
-                            String secondCellValue = dataFormatter.formatCellValue(row.getCell(1));
-                            switch (firstCellValue) {
-                                case "Portfolio Code:":
-                                    holding.setPortfolioCode(secondCellValue);
-                                    for(int j = 0; j < categories.length; j++) {
-                                        categoryList.add(holding.getPortfolioCode()+"-"+categories[j]);
-                                    }
-                                    for(int j = 0; j < categoriesTotal.length; j++) {
-                                        categoryTotalList.add(holding.getPortfolioCode()+"-"+categoriesTotal[j]);
-                                    }
-                                    break;
-                                case "Portfolio Name:":
-                                    holding.setPortfolioName(secondCellValue);
-                                    break;
-                                case "Currency:":
-                                    holding.setCurrency(secondCellValue);
-                                    break;
-                            }
+                    while (rowIterator.hasNext()) {
+                        XSSFRow row = (XSSFRow) rowIterator.next();
+                        //If it is empty row skip it
+                        if (checkIfRowIsEmpty(row)) {
                             continue;
                         }
-                    }
 
-                    /*
-                    This will store all actual instrument data
-                     */
-                    if (categoryList.contains(firstCellValue) && headersMap.size() > 0) {
-                        HoldingCategory holdingCategory = getInstrumentData(headersMap, firstCellValue, rowIterator, categoryList,
-                                categoryTotalList);
-                        holding.getHoldingCategories().add(holdingCategory);
-                    }
-                    /*
-                    This will store last row of file which has net values
-                     */
-                    else if (headersMap.size() > 0 && "TOTAL NET ASSETS".equals(firstCellValue)) {
-                        Integer index = headersMap.get("Book Value Base Current");
-                        holding.setNetBaseCurrentBookValue(getCellValue(row, index));
+                        //Get first row
+                        String firstCellValue = dataFormatter.formatCellValue(row.getCell(0));
+                        firstCellValue = !StringUtils.isEmpty(firstCellValue) ? firstCellValue.trim() : firstCellValue;
 
-                        index = headersMap.get("Prior Market Value (Base)");
-                        holding.setNetBasePriorMarketValue(getCellValue(row, index));
-
-                        index = headersMap.get("Current Market Value (Base)");
-                        holding.setNetBaseCurrentMarketValue(getCellValue(row, index));
-
-                        index = headersMap.get("% of Market Value");
-                        holding.setNetPercentOfMarketValue(getCellValue(row, index));
-
-                        break;
-                    }
-                    /*
-                    This will read header data and put it in the map
-                     */
-                    else if (headersMap.size() == 0) {
-                        //Header data
-                        Iterator<Cell> cellIterator = row.cellIterator();
-                        while (cellIterator.hasNext()) {
-                            XSSFCell cell = (XSSFCell) cellIterator.next();
-                            String cellValue = dataFormatter.formatCellValue(cell);
-                            headersMap.put(cellValue, cell.getColumnIndex());
+                 /*
+                   * This used to store portfolio data
+                 */
+                        if (holding.getPortfolioCode() == null || holding.getPortfolioName() == null || holding.getCurrency() == null) {
+                            if (!StringUtils.isEmpty(firstCellValue) && holdingBaseValuesList.contains(firstCellValue)) {
+                                String secondCellValue = dataFormatter.formatCellValue(row.getCell(1));
+                                switch (firstCellValue) {
+                                    case "Portfolio Code:":
+                                        holding.setPortfolioCode(secondCellValue);
+                                        for (int j = 0; j < categories.length; j++) {
+                                            categoryList.add(holding.getPortfolioCode() + "-" + categories[j]);
+                                        }
+                                        for (int j = 0; j < categoriesTotal.length; j++) {
+                                            categoryTotalList.add(holding.getPortfolioCode() + "-" + categoriesTotal[j]);
+                                        }
+                                        break;
+                                    case "Portfolio Name:":
+                                        holding.setPortfolioName(secondCellValue);
+                                        break;
+                                    case "Currency:":
+                                        holding.setCurrency(secondCellValue);
+                                        break;
+                                }
+                                continue;
+                            }
                         }
-                    } //else- if header data reading
-                } //while - row iterator
-            } //if -Holding sheet checking
-        } //for - Sheet iterator
+
+                /*
+                This will store all actual instrument data
+                 */
+                        if (categoryList.contains(firstCellValue) && headersMap.size() > 0) {
+                            HoldingCategory holdingCategory = getInstrumentData(headersMap, firstCellValue, rowIterator, categoryList,
+                                    categoryTotalList);
+                            holding.getHoldingCategories().add(holdingCategory);
+                        }
+                /*
+                This will store last row of file which has net values
+                 */
+                        else if (headersMap.size() > 0 && "TOTAL NET ASSETS".equals(firstCellValue)) {
+                            Integer index = headersMap.get("Book Value Base Current");
+                            holding.setNetBaseCurrentBookValue(getCellValue(row, index));
+
+                            index = headersMap.get("Prior Market Value (Base)");
+                            holding.setNetBasePriorMarketValue(getCellValue(row, index));
+
+                            index = headersMap.get("Current Market Value (Base)");
+                            holding.setNetBaseCurrentMarketValue(getCellValue(row, index));
+
+                            index = headersMap.get("% of Market Value");
+                            holding.setNetPercentOfMarketValue(getCellValue(row, index));
+
+                            break;
+                        }
+                /*
+                This will read header data and put it in the map
+                 */
+                        else if (headersMap.size() == 0) {
+                            //Header data
+                            Iterator<Cell> cellIterator = row.cellIterator();
+                            while (cellIterator.hasNext()) {
+                                XSSFCell cell = (XSSFCell) cellIterator.next();
+                                String cellValue = dataFormatter.formatCellValue(cell);
+                                headersMap.put(cellValue, cell.getColumnIndex());
+                            }
+                        } //else- if header data reading
+                    } //while - row iterator
+                } //if -Holding sheet checking
+            } //for - Sheet iterator
+        }
         return holding;
     }
 

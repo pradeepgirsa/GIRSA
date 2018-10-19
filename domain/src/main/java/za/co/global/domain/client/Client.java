@@ -1,5 +1,6 @@
 package za.co.global.domain.client;
 
+import org.hibernate.annotations.NaturalId;
 import za.co.global.domain.EntityStatus;
 
 import javax.persistence.*;
@@ -15,6 +16,7 @@ public class Client implements Serializable {
     private Long id;
 
     @Column(name = "client_name", unique = true, nullable = false)
+    @NaturalId
     private String clientName;
 
     @Column(name="status", nullable = false)
@@ -23,6 +25,9 @@ public class Client implements Serializable {
 
     @Column(name = "description")
     private String description;
+
+    @Column(name = "manco_code")
+    private String mancoCode;
 
     public Long getId() {
         return id;
@@ -56,6 +61,14 @@ public class Client implements Serializable {
         this.description = description;
     }
 
+    public String getMancoCode() {
+        return mancoCode;
+    }
+
+    public void setMancoCode(String mancoCode) {
+        this.mancoCode = mancoCode;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -65,7 +78,8 @@ public class Client implements Serializable {
 
         if (clientName != null ? !clientName.equals(client.clientName) : client.clientName != null) return false;
         if (status != client.status) return false;
-        return description != null ? description.equals(client.description) : client.description == null;
+        if (description != null ? !description.equals(client.description) : client.description != null) return false;
+        return mancoCode != null ? mancoCode.equals(client.mancoCode) : client.mancoCode == null;
     }
 
     @Override
@@ -73,6 +87,7 @@ public class Client implements Serializable {
         int result = clientName != null ? clientName.hashCode() : 0;
         result = 31 * result + (status != null ? status.hashCode() : 0);
         result = 31 * result + (description != null ? description.hashCode() : 0);
+        result = 31 * result + (mancoCode != null ? mancoCode.hashCode() : 0);
         return result;
     }
 
@@ -83,6 +98,7 @@ public class Client implements Serializable {
                 ", clientName='" + clientName + '\'' +
                 ", status=" + status +
                 ", description='" + description + '\'' +
+                ", mancoCode='" + mancoCode + '\'' +
                 '}';
     }
 }
