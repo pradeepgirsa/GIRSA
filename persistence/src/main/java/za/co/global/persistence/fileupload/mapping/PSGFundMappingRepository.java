@@ -6,4 +6,6 @@ import za.co.global.domain.fileupload.mapping.PSGFundMapping;
 
 @Repository
 public interface PSGFundMappingRepository extends JpaRepository<PSGFundMapping, Long> {
+
+    PSGFundMapping findByManagerFundCode(String managerFundCode);
 }

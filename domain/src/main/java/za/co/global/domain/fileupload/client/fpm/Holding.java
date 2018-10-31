@@ -145,6 +145,14 @@ public class Holding implements Serializable {
         this.updatedDate = updatedDate;
     }
 
+    public ReportData getReportData() {
+        return reportData;
+    }
+
+    public void setReportData(ReportData reportData) {
+        this.reportData = reportData;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

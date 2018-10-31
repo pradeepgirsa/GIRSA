@@ -30,6 +30,7 @@
             <column name="sub_industry" type="varchar(20)"/>
             <column name="gics_code" type="varchar(20)"/>
             <column name="pe_ratio" type="NUMERIC(20, 3)"/>
+            <column name="type" type="varchar(50)"/>
         </createTable>
 
         <addAutoIncrement columnDataType="bigint"

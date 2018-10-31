@@ -59,9 +59,29 @@ public class Reg28InstrumentTypeController extends BaseFileUploadController {
     @Override
     protected void processObject(Object obj) {
         if(obj instanceof Reg28InstrumentType) {
-            Reg28InstrumentType ex = (Reg28InstrumentType) obj;
-            reg28InstrumentTypeRepository.save(ex);
+            Reg28InstrumentType reg28InstrumentType = getReg28InstrumentType(obj);
+            reg28InstrumentTypeRepository.save(reg28InstrumentType);
         }
+    }
+
+    private Reg28InstrumentType getReg28InstrumentType(Object object) {
+        Reg28InstrumentType reg28InstrumentType = (Reg28InstrumentType) object;
+        Reg28InstrumentType existingReg28InstrType= reg28InstrumentTypeRepository.findByReg28InstrType(reg28InstrumentType.getReg28InstrType());
+        if(existingReg28InstrType == null) {
+           return reg28InstrumentType;
+        }
+
+        existingReg28InstrType.setAciAssetClass(reg28InstrumentType.getAciAssetClass());
+        existingReg28InstrType.setAddClassificationOne(reg28InstrumentType.getAddClassificationOne());
+        existingReg28InstrType.setAddClassificationThree(reg28InstrumentType.getAddClassificationThree());
+        existingReg28InstrType.setAddClassificationTwo(reg28InstrumentType.getAddClassificationTwo());
+        existingReg28InstrType.setAsisaDefined2(reg28InstrumentType.getAsisaDefined2());
+        existingReg28InstrType.setBnCategories(reg28InstrumentType.getBnCategories());
+        existingReg28InstrType.setInstitutionType(reg28InstrumentType.getInstitutionType());
+        existingReg28InstrType.setMarketCap(reg28InstrumentType.getMarketCap());
+        existingReg28InstrType.setRsaOrForeign(reg28InstrumentType.getRsaOrForeign());
+        existingReg28InstrType.setSecurityType(reg28InstrumentType.getSecurityType());
+        return existingReg28InstrType;
     }
 
 }

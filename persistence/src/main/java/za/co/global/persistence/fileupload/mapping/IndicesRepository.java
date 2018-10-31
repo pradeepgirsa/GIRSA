@@ -7,4 +7,6 @@ import za.co.global.domain.fileupload.mapping.Reg28InstrumentType;
 
 @Repository
 public interface IndicesRepository extends JpaRepository<Indices, Long> {
+
+    Indices findBySecurityAndType(String security, String type);
 }

@@ -13,7 +13,7 @@
             </column>
             <column name="report_date" type="date"/>
             <column name="created_date" type="date"/>
-            <column name="reportStatus" type="varchar(12)"/>
+            <column name="report_status" type="varchar(12)"/>
         </createTable>
 
         <addAutoIncrement columnDataType="bigint"

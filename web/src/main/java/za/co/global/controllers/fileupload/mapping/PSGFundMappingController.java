@@ -56,9 +56,23 @@ public class PSGFundMappingController extends BaseFileUploadController {
     @Override
     protected void processObject(Object obj) {
         if(obj instanceof PSGFundMapping) {
-            PSGFundMapping ex = (PSGFundMapping) obj;
-            psgFundMappingRepository.save(ex);
+            PSGFundMapping psgFundMapping = getPSPsgFundMapping(obj);
+            psgFundMappingRepository.save(psgFundMapping);
         }
+    }
+
+    private PSGFundMapping getPSPsgFundMapping(Object object) {
+        PSGFundMapping psgFundMapping = (PSGFundMapping) object;
+        PSGFundMapping existingPSGFundMapping = psgFundMappingRepository.findByManagerFundCode(psgFundMapping.getManagerFundCode());
+        if(existingPSGFundMapping == null) {
+            return psgFundMapping;
+        }
+        existingPSGFundMapping.setBarraFundName(psgFundMapping.getBarraFundName());
+        existingPSGFundMapping.setManagerFundName(psgFundMapping.getManagerFundName());
+        existingPSGFundMapping.setPsgFundCode(psgFundMapping.getPsgFundCode());
+        existingPSGFundMapping.setComments(psgFundMapping.getComments());
+        existingPSGFundMapping.setFundCurrency(psgFundMapping.getFundCurrency());
+        return existingPSGFundMapping;
     }
 
 }

@@ -2,6 +2,7 @@ package za.co.global.domain.fileupload.mapping;
 
 import com.gizbel.excel.annotations.ExcelBean;
 import com.gizbel.excel.annotations.ExcelColumnHeader;
+import org.hibernate.annotations.NaturalId;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -20,6 +21,7 @@ public class Reg28InstrumentType implements Serializable {
 
     @Column(name = "reg28_instr_type", unique = true, nullable = false)
     @ExcelColumnHeader(columnHeader = "Reg28_InstrType")
+    @NaturalId
     private String reg28InstrType;
 
     @Column(name = "rsa_or_foreign")

@@ -83,7 +83,7 @@ public abstract class BaseFileUploadController {
         return uploadedFile;
     }
 
-    private void readFileAndStoreInDB(File file, String fileType) throws Exception {
+    protected void readFileAndStoreInDB(File file, String fileType) throws Exception {
         GirsaExcelParser parser = new GirsaExcelParser(ExcelFactoryType.COLUMN_NAME_BASED_EXTRACTION);
         Map<String, List<Object>> result = parser.parse(file, fileType); //Whatever excel file you want
         Set<Map.Entry<String, List<Object>>> entries = result.entrySet();

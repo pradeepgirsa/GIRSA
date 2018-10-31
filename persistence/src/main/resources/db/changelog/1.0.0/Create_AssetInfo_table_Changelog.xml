@@ -6,8 +6,8 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
          http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
 
-    <changeSet id="DSU5_GIRREP4_table_1" author="Sharanya">
-        <createTable tableName="dsu5_girrep4" >
+    <changeSet id="barra_asset_info_table_1" author="Sharanya">
+        <createTable tableName="barra_asset_info" >
             <column name="id" type="bigint">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
@@ -66,6 +66,7 @@
             <column name="PARENT_ISSUER_NAME" type="varchar(255)"/>
             <column name="ULTIMATE_ISSUER_ID" type="varchar(255)"/>
             <column name="ULTIMATE_ISSUER_NAME" type="varchar(255)"/>
+            <column name="NET_INDICATOR" type="NUMERIC(1,0)"/>
 
         </createTable>
 

@@ -56,15 +56,19 @@ public class NumberOfAccountsController extends BaseFileUploadController {
     @Override
     protected void processObject(Object obj) {
         if (obj instanceof NumberOfAccounts) {
-            NumberOfAccounts numberOfAccounts = (NumberOfAccounts) obj;
-            NumberOfAccounts existingNumberOfAccounts = numberOfAccountsRepository.findByFundCode(numberOfAccounts.getFundCode());
-            if(existingNumberOfAccounts != null) {
-                existingNumberOfAccounts.setTotal(numberOfAccounts.getTotal());
-                numberOfAccountsRepository.save(existingNumberOfAccounts);
-            } else {
-                numberOfAccountsRepository.save(numberOfAccounts);
-            }
+            NumberOfAccounts numberOfAccounts = getNumberOfAccounts(obj);
+            numberOfAccountsRepository.save(numberOfAccounts);
         }
+    }
+
+    private NumberOfAccounts getNumberOfAccounts(Object obj) {
+        NumberOfAccounts numberOfAccounts = (NumberOfAccounts) obj;
+        NumberOfAccounts existingNumberOfAccounts = numberOfAccountsRepository.findByFundCode(numberOfAccounts.getFundCode());
+        if (existingNumberOfAccounts == null) {
+            return numberOfAccounts;
+        }
+        existingNumberOfAccounts.setTotal(numberOfAccounts.getTotal());
+        return existingNumberOfAccounts;
     }
 
 

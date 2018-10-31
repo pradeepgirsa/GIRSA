@@ -3,6 +3,8 @@ package za.co.global.controllers.report;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -11,30 +13,41 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import za.co.global.domain.client.Client;
-import za.co.global.domain.fileupload.barra.BarraFile;
+import za.co.global.domain.exception.GirsaException;
 import za.co.global.domain.fileupload.client.InstitutionalDetails;
 import za.co.global.domain.fileupload.client.NumberOfAccounts;
+import za.co.global.domain.fileupload.client.SecurityListing;
 import za.co.global.domain.fileupload.client.fpm.Holding;
 import za.co.global.domain.fileupload.client.fpm.HoldingCategory;
 import za.co.global.domain.fileupload.client.fpm.Instrument;
 import za.co.global.domain.fileupload.mapping.InstrumentCode;
 import za.co.global.domain.fileupload.mapping.IssuerMappings;
 import za.co.global.domain.fileupload.mapping.PSGFundMapping;
+import za.co.global.domain.fileupload.system.BarraAssetInfo;
+import za.co.global.domain.report.HoldingValidationBean;
 import za.co.global.domain.report.QStatsBean;
 import za.co.global.domain.report.ReportData;
+import za.co.global.domain.report.ReportStatus;
 import za.co.global.persistence.client.ClientRepository;
 import za.co.global.persistence.fileupload.HoldingRepository;
-import za.co.global.persistence.fileupload.barra.BarraFileRepository;
 import za.co.global.persistence.fileupload.client.InstitutionalDetailsRepository;
 import za.co.global.persistence.fileupload.client.NumberOfAccountsRepository;
+import za.co.global.persistence.fileupload.client.SecurityListingRepository;
 import za.co.global.persistence.fileupload.mapping.InstrumentCodeRepository;
 import za.co.global.persistence.fileupload.mapping.IssuerMappingsRepository;
 import za.co.global.persistence.fileupload.mapping.PSGFundMappingRepository;
+import za.co.global.persistence.fileupload.system.BarraAssetInfoRepository;
 import za.co.global.persistence.report.ReportDataRepository;
+import za.co.global.services.Validator;
+import za.co.global.services.report.ReportCreationService;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.math.BigDecimal;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Controller
@@ -43,13 +56,7 @@ public class GenerateQstats {
     @Value("${file.upload.folder}")
     protected String fileUploadFolder;
 
-    private static String[] columns = {"ACIFundCode", "FundName", "ManCoCode", "CreatedDate", "Quarter",
-        "MVTotal", "InstitutionalTotal", "NoOfAccounts", "WeightAvgDuration", "WeightAvgMaturity", "ACIAssetClass",
-        "InstrCode", "Holding", "BV", "CurrencyCode", "SecurityName", "MV", "PerOfPort", "Weighting", "EqtIndexLink",
-            "African", "MarketCap", "SharesInIssue", "AddClassification", "TTMInc", "IssuerCode", "CouponRate",
-            "MaturityDate", "ResetMaturityDate", "TTMCur", "InstrRateST", "InstrRateLT", "IssuerRateST", "IssuerRateLT",
-            "IssuerName", "RateAgency", "CompConDeb", "MarketCapIssuer", "PerIssuedCap", "CapitalReserves", "ASISADefined1",
-            "ASISADefined2", "ASISADefined3", "ASISADefined4", "ASISADefined5"};
+
 
     @Autowired
     private HoldingRepository holdingRepository;
@@ -67,7 +74,7 @@ public class GenerateQstats {
     private InstrumentCodeRepository instrumentCodeRepository;
 
     @Autowired
-    private BarraFileRepository barraFileRepository;
+    private BarraAssetInfoRepository barraAssetInfoRepository;
 
     @Autowired
     private IssuerMappingsRepository issuerMappingsRepository;
@@ -78,6 +85,19 @@ public class GenerateQstats {
     @Autowired
     private ReportDataRepository reportDataRepository;
 
+    @Autowired
+    private SecurityListingRepository securityListingRepository;
+
+    @Autowired
+    private Validator<HoldingValidationBean> validator;
+
+    @Autowired
+    private ReportCreationService reportCreationService;
+
+    private Map<String, Date> maturityDateMap;
+
+    private static final Logger LOGGER = LoggerFactory.getLogger("GenerateQstats");
+
     @GetMapping("/generate_qstats")
     public ModelAndView displayScreen() {
         return new ModelAndView("report/asisaQueueStats");
@@ -87,31 +107,57 @@ public class GenerateQstats {
     public ModelAndView generateReport(@RequestParam("reportDate") Date reportDate, String clientId) {
         ModelAndView modelAndView = new ModelAndView("report/asisaQueueStats");
 
-        Client client = clientRepository.findOne(Long.parseLong(clientId));
-        ReportData reportData = reportDataRepository.findByReportDateAndClient(reportDate, client);
-        List<Holding> holdings = holdingRepository.findByClientAndReportData(client, reportData); //TODO - test
+        Map<String, Date> maturityDateMap = new HashMap<>();
 
-        Map<String, PSGFundMapping> psgFundMappings = getPSGFundMappings();
+        Client client = clientRepository.findOne(Long.parseLong(clientId));
+        ReportData reportData = reportDataRepository.findByReportStatusAndClient(ReportStatus.REGISTERED, client);
+        List<Holding> holdings;
+        if(reportData != null) {
+            holdings = holdingRepository.findByClientAndReportDataIsNullOrReportData(client, reportData);
+        } else {
+            reportData = new ReportData();
+            reportData.setCreatedDate(new Date());
+            reportData.setClient(client);
+            holdings = holdingRepository.findByClientAndReportDataIsNull(client);
+        }
+
         List<QStatsBean> qStatsBeans = new ArrayList<>();
-        BarraFile netAsset = barraFileRepository.findByAssetId("897"); //TODO - verify
+//        BarraAssetInfo netAsset = assetInfoRepository.findByAssetId("897"); //TODO - verify
+        BarraAssetInfo netAsset = barraAssetInfoRepository.findByNetIndicatorIsTrue(); //TODO - verify
         for(Holding holding: holdings) {
-            PSGFundMapping psgFundMapping = psgFundMappings.get(holding.getPortfolioCode());
+            PSGFundMapping psgFundMapping = psgFundMappingRepository.findByManagerFundCode(holding.getPortfolioCode());
             NumberOfAccounts numberofAccounts = numberOfAccountsRepository.findByFundCode(psgFundMapping.getPsgFundCode());
             InstitutionalDetails institutionalDetails = institutionalDetailsRepository.findByFundCode(psgFundMapping.getPsgFundCode());
             for(HoldingCategory holdingCategory : holding.getHoldingCategories()) {
                 for(Instrument instrument : holdingCategory.getInstruments()) {
-                    QStatsBean qStatsBean = new QStatsBean();
-
                     InstrumentCode instrumentCode = instrumentCodeRepository.findByManagerCode(instrument.getInstrumentCode());
 
-                    BarraFile girrep4 = null;
+                    BarraAssetInfo barraAssetInfo = null;
                     if(instrumentCode != null && instrumentCode.getBarraCode() != null) {
-                        girrep4 = barraFileRepository.findByAssetId(instrumentCode.getBarraCode());
+                        barraAssetInfo = barraAssetInfoRepository.findByAssetId(instrumentCode.getBarraCode());
                     }
-                    String error = validate(netAsset, holding, institutionalDetails, girrep4, instrumentCode, psgFundMapping, numberofAccounts);
-                    if (error != null)
-                        return modelAndView.addObject("saveError", error);
 
+                    Date maturityDate = getMaturityDate(barraAssetInfo);
+
+                    HoldingValidationBean holdingValidationBean = new HoldingValidationBean.Builder()
+                            .setHolding(holding)
+                            .setBarraAssetInfo(barraAssetInfo)
+                            .setInstitutionalDetails(institutionalDetails)
+                            .setInstrumentCode(instrumentCode)
+                            .setNetAsset(netAsset)
+                            .setMaturityDate(maturityDate)
+                            .setPsgFundMapping(psgFundMapping)
+                            .setNumberOfAccounts(numberofAccounts)
+                            .build();
+
+
+                    String error = validator.validate(holdingValidationBean);
+                    if (error != null)
+                        return modelAndView.addObject("saveError", "report.generation.error");
+
+
+                    QStatsBean qStatsBean = new QStatsBean();
+                    qStatsBean.setMaturityDate(maturityDateMap.get(barraAssetInfo.getAssetId()));
                     qStatsBean.setAciFundCode(psgFundMapping.getPsgFundCode());
                     String fundName = !StringUtils.isEmpty(psgFundMapping.getManagerFundName()) ?
                             psgFundMapping.getManagerFundName() : holding.getPortfolioName();
@@ -119,11 +165,19 @@ public class GenerateQstats {
                     qStatsBean.setMancoCode(client.getMancoCode());
                     qStatsBean.setCreatedDate(new Date()); //report generated date
                     qStatsBean.setQuarter(reportDate); //Selected report date
+                    qStatsBean.setPricingRedemptionDate(barraAssetInfo.getPricingRedemptionDate());
                     qStatsBean.setMvTotal(netAsset.getEffExposure()); //Validated this with total current market base value for equality
                     qStatsBean.setInstitutionalTotal(institutionalDetails.getSplit());
                     qStatsBean.setNoOfAccounts(numberofAccounts.getTotal());
-                    qStatsBean.setWeightedAvgDuration(null); //TODO - calculation
-                    qStatsBean.setWeightedAvgMaturity(BigDecimal.ZERO); //TODO - calculation
+                  //  qStatsBean.setWeightedAvgDuration(null); //TODO - do calculation at cell creation and remove this field
+
+                    qStatsBean.setModifiedDuration(barraAssetInfo.getModifiedDuration());
+                    qStatsBean.setEffWeight(barraAssetInfo.getEffWeight());
+
+                   // qStatsBean.setWeightedAvgMaturity(weightedAvgMaturity); //TODO - do calculation at cell creation and remove this field
+
+
+                    qStatsBean.setEffWeight(barraAssetInfo.getEffWeight());
                     qStatsBean.setAciAssetclass("DE"); ////TODO - calculation
                     qStatsBean.setInstrCode(instrument.getInstrumentCode());
                     qStatsBean.setHolding(instrument.getHoldingPrice());
@@ -138,28 +192,27 @@ public class GenerateQstats {
                     qStatsBean.setWeighting(BigDecimal.ZERO); //TODO - calculation
                     qStatsBean.setEqtIndexLink(Boolean.FALSE); //TODO - check
                     qStatsBean.setAfrican(Boolean.FALSE); //TODO - check
-                    BigDecimal barraMarketCap = Optional.ofNullable(girrep4).map(BarraFile::getMarketCapitalization).orElse(BigDecimal.ZERO);
-                    BigDecimal sharesInIssue = Optional.ofNullable(girrep4).map(BarraFile::getSharesOutstanding).orElse(BigDecimal.ZERO);
+                    BigDecimal barraMarketCap = Optional.ofNullable(barraAssetInfo).map(BarraAssetInfo::getMarketCapitalization).orElse(BigDecimal.ZERO);
+                    BigDecimal sharesInIssue = Optional.ofNullable(barraAssetInfo).map(BarraAssetInfo::getSharesOutstanding).orElse(BigDecimal.ZERO);
                     qStatsBean.setMarketCap(barraMarketCap);
                     qStatsBean.setSharesInIssue(sharesInIssue); //TODO - verify
                     qStatsBean.setAddClassification("Classfication"); //TODO - calculation
                     qStatsBean.setTtmInc(BigDecimal.ZERO); //TODO - calculation
 
-                    String issuer = Optional.ofNullable(girrep4).map(BarraFile::getIssuer).orElse(null);
-                    BigDecimal coupon = Optional.ofNullable(girrep4).map(BarraFile::getCoupon).orElse(BigDecimal.ZERO);
+                    String issuer = Optional.ofNullable(barraAssetInfo).map(BarraAssetInfo::getIssuer).orElse(null);
+                    BigDecimal coupon = Optional.ofNullable(barraAssetInfo).map(BarraAssetInfo::getCoupon).orElse(BigDecimal.ZERO);
                     qStatsBean.setIssuerCode(issuer); //TODO - verify
-                    qStatsBean.setCouponRate(coupon); //TODO - verify
+                    qStatsBean.setCouponRate(coupon);
+                    qStatsBean.setCurrentYield(barraAssetInfo.getCurrentYield());
                     qStatsBean.setInstrRateST("InstraRateST"); //TODO - check
                     qStatsBean.setInstrRateLT("InstraRateLT"); //TODO - check
                     qStatsBean.setIssuerRateST("IssuerRateST"); //TODO - check
                     qStatsBean.setIssuerRateLT("IssuerRateLT"); //TODO - check
 
-                    String girIssuer = Optional.ofNullable(girrep4).map(BarraFile::getGirIssuer).orElse(null);
+                    String girIssuer = Optional.ofNullable(barraAssetInfo).map(BarraAssetInfo::getGirIssuer).orElse(null);
 
                     qStatsBean.setRateAgency(girIssuer); //TODO - check
                     qStatsBean.setCompConDeb(Boolean.FALSE);
-
-
 
                     IssuerMappings issuerMappings = issuerMappingsRepository.findByIssuerCode(issuer);
                     BigDecimal marketCap = Optional.ofNullable(issuerMappings).map(IssuerMappings::getMarketCapitalisation).orElse(BigDecimal.ZERO);
@@ -173,57 +226,85 @@ public class GenerateQstats {
                     qStatsBean.setAsiSADefined4("NA");
                     qStatsBean.setAsiSADefined5("NA");
 
-
                     qStatsBeans.add(qStatsBean);
+
 
                 }
             }
+
+            holding.setUpdatedDate(new Date());
+            holding.setReportData(reportData);
+
+
         }
 
+        reportData.getHoldings().clear();
+        reportData.getHoldings().addAll(holdings);
+        reportData.setReportDate(reportDate);
+
+        reportDataRepository.save(reportData);
 
         try {
             String filePath = fileUploadFolder + File.separator + "result.xlsx";
-            createExcel(qStatsBeans, filePath);
+            reportCreationService.createExcelFile(qStatsBeans, filePath);
             modelAndView.addObject("saveMessage", "Qstats file created successfully, file: "+filePath);
-        } catch (Exception e) {
+        } catch (GirsaException e) {
             e.printStackTrace();
            modelAndView.addObject("saveError", e.getMessage());
         }
         return modelAndView;
     }
 
-    private String validate(BarraFile netAsset, Holding holding, InstitutionalDetails institutionalDetails, BarraFile girrep4,
-                            InstrumentCode instrumentCode, PSGFundMapping psgFundMapping, NumberOfAccounts numberOfAccounts) {
-        if(girrep4 == null) {
-            return "There is no mapping to barra asset to the instrument code: " + instrumentCode.getBarraCode();
+    private Date getMaturityDate(BarraAssetInfo barraAssetInfo) {
+        Date maturityDate = null;
+        if(barraAssetInfo != null) {
+            if (maturityDateMap.get(barraAssetInfo.getAssetId()) != null) {
+                maturityDate = maturityDateMap.get(barraAssetInfo.getAssetId());
+            } else {
+                maturityDate = getMaturityDateFromSecurityListing(barraAssetInfo.getMaturityDate(), barraAssetInfo.getAssetId());
+                maturityDateMap.put(barraAssetInfo.getAssetId(), maturityDate);
+            }
         }
-        if(netAsset == null || netAsset.getEffExposure() == null) {
-            return "There is no value for net eff exposure in barra";
+        return maturityDate;
+    }
+
+    private Date getMaturityDateFromSecurityListing(Date barraMaturityDate, String instrumentCode) {
+        if(barraMaturityDate != null) {
+            return barraMaturityDate;
         }
-        if(holding.getNetBaseCurrentMarketValue() == null) {
-            return "There is no net value for current market base value, portfolio code:"+holding.getPortfolioCode()
-                    +", instrument code:" + girrep4.getAssetId();
+        SecurityListing securityListing = securityListingRepository.findBySecurityCode(instrumentCode);
+        String couponPaymentDates = securityListing.getCouponPaymentDates() != null ?
+                securityListing.getCouponPaymentDates().replace(" ", "") : null;
+        String[] dates = couponPaymentDates.split(",");
+        for(String dateInString : dates) {
+            Date date = parseDate(dateInString);
+            if(date != null && date.after(new Date())) {
+                return date;
+            }
         }
-        if(netAsset.getEffExposure().compareTo(holding.getNetBaseCurrentMarketValue()) != 0) {
-            return "Net eff exposure from barra and net base current market values are not equal- portfolio code:"+holding.getPortfolioCode()
-                            +", instrument code:" + girrep4.getAssetId();
-        }
-        if(institutionalDetails == null || institutionalDetails.getSplit() == null) {
-            return "There is no institutional split matching to fund code:"+holding.getPortfolioCode()
-                            + ", FPM fund code:"+ psgFundMapping.getPsgFundCode();
-        }
-        if(numberOfAccounts == null || numberOfAccounts.getTotal() == null) {
-            return "Number of accounts are not mapped for fund code:"+holding.getPortfolioCode()
-                            + ", FPM fund code:"+ psgFundMapping.getPsgFundCode();
+        if(securityListing.getMaturityDate() != null && securityListing.getMaturityDate().after(new Date())) {
+            return securityListing.getMaturityDate();
         }
         return null;
     }
 
 
-    private void createExcel(List<QStatsBean> qStatsBeans, String filePath) throws Exception {
-        // Create a Workbook
+
+
+    private Date parseDate(String dateInString) {
+        String datePattern = "ddMMMyyyy";
+        try {
+            DateFormat dateFormat = new SimpleDateFormat(datePattern);
+            return dateFormat.parse(dateInString);
+        } catch (ParseException e) {
+            LOGGER.error("Date parse error to format:{}, value: {}", datePattern, dateInString);
+        }
+        return null;
+    }
+
+    public static void main(String[] args) {
         try (Workbook workbook = new XSSFWorkbook();
-             FileOutputStream fileOut = new FileOutputStream(filePath)) {
+             FileOutputStream fileOut = new FileOutputStream("C:\\Users\\SHARANYAREDDY\\Desktop\\TSR\\GIRSA\\abc.xlsx")) {
             // new HSSFWorkbook() for generating `.xls` file
 
         /* CreationHelper helps us create instances of various things like DataFormat,
@@ -233,122 +314,31 @@ public class GenerateQstats {
             // Create a Sheet
             Sheet sheet = workbook.createSheet("Qstats");
 
-            // Create a Font for styling header cells
-            Font headerFont = workbook.createFont();
-            headerFont.setBold(true);
-            headerFont.setFontHeightInPoints((short) 14);
-//            headerFont.setColor(IndexedColors.RED.getIndex());
+            java.sql.Date quarterDate = new java.sql.Date(118, 0, 1);
+            java.sql.Date sqlPricingRedemptionDate = new java.sql.Date(118, 2, 1);
+            java.sql.Date sqlResetMaturityDate = new java.sql.Date(118, 3, 1);
+            BigDecimal couponRate = new BigDecimal(2.1d);
+            BigDecimal currentYield = new BigDecimal(1.1d);
+            BigDecimal effWeight = new BigDecimal(5.3d);
 
-            // Create a CellStyle with the font
-            CellStyle headerCellStyle = workbook.createCellStyle();
-            headerCellStyle.setFont(headerFont);
+            String formula = "(=MDURATION("+quarterDate+";"+";"+sqlResetMaturityDate+";"
+                    +couponRate+";"+currentYield+";"
+                    +2+"))*"+effWeight+"*"+365.25;
 
-            // Create a Row
             Row headerRow = sheet.createRow(0);
-
-            // Create cells
-            for (int i = 0; i < columns.length; i++) {
-                Cell cell = headerRow.createCell(i);
-                cell.setCellValue(columns[i]);
-                cell.setCellStyle(headerCellStyle);
-            }
-
-
-            // Create Cell Style for formatting Date
-            CellStyle dateCellStyle = workbook.createCellStyle();
-            dateCellStyle.setDataFormat(createHelper.createDataFormat().getFormat("dd-MM-yyyy"));
-
-            int rowNum = 1;
-
-
-            // Create Other rows and cells with employees data
-            for (QStatsBean qStatsBean : qStatsBeans) {
-                Row row = sheet.createRow(rowNum++);
-
-                row.createCell(0).setCellValue(qStatsBean.getAciFundCode());
-                row.createCell(1).setCellValue(qStatsBean.getFundName());
-                row.createCell(2).setCellValue(qStatsBean.getMancoCode());
-
-                Cell createdDateCell = row.createCell(3);
-                createdDateCell.setCellValue(qStatsBean.getCreatedDate());
-                createdDateCell.setCellStyle(dateCellStyle);
-
-                Cell quarterDateCell = row.createCell(4);
-                quarterDateCell.setCellValue(qStatsBean.getQuarter());
-                quarterDateCell.setCellStyle(dateCellStyle);
-
-                row.createCell(5).setCellValue(qStatsBean.getMvTotal().doubleValue());
-                row.createCell(6).setCellValue(qStatsBean.getInstitutionalTotal().doubleValue());
-                row.createCell(7).setCellValue(qStatsBean.getNoOfAccounts().doubleValue());
-                row.createCell(8).setCellValue(qStatsBean.getWeightedAvgDuration().doubleValue());
-                row.createCell(9).setCellValue(qStatsBean.getWeightedAvgMaturity().doubleValue());
-                row.createCell(10).setCellValue(qStatsBean.getAciAssetclass());
-                row.createCell(11).setCellValue(qStatsBean.getInstrCode());
-                row.createCell(12).setCellValue(qStatsBean.getHolding().doubleValue());
-                row.createCell(13).setCellValue(qStatsBean.getBookValue().doubleValue());
-                row.createCell(14).setCellValue(qStatsBean.getCurrencyCode());
-                row.createCell(15).setCellValue(qStatsBean.getSecurityName());
-                row.createCell(16).setCellValue(qStatsBean.getMarketValue().doubleValue());
-                row.createCell(17).setCellValue(qStatsBean.getPerOfPort().doubleValue());
-                row.createCell(18).setCellValue(qStatsBean.getWeighting().doubleValue());
-                row.createCell(19).setCellValue(qStatsBean.isEqtIndexLink());
-                row.createCell(20).setCellValue(qStatsBean.isAfrican());
-                row.createCell(21).setCellValue(qStatsBean.getMarketCap().doubleValue());
-                row.createCell(22).setCellValue(qStatsBean.getSharesInIssue().doubleValue());
-                row.createCell(23).setCellValue(qStatsBean.getAddClassification());
-                row.createCell(24).setCellValue(qStatsBean.getTtmInc().doubleValue());
-                row.createCell(25).setCellValue(qStatsBean.getIssuerCode());
-                row.createCell(26).setCellValue(qStatsBean.getCouponRate().doubleValue());
-
-                Cell maturityDate = row.createCell(27);
-                maturityDate.setCellValue(qStatsBean.getMaturityDate());
-                maturityDate.setCellStyle(dateCellStyle);
-
-                Cell resetMaturityDate = row.createCell(28);
-                resetMaturityDate.setCellValue(qStatsBean.getResetMaturityDate());
-                resetMaturityDate.setCellStyle(dateCellStyle);
-
-                row.createCell(29).setCellValue(qStatsBean.getTtmCur() != null ? qStatsBean.getTtmCur().doubleValue(): 0.0);
-                row.createCell(30).setCellValue(qStatsBean.getInstrRateST());
-                row.createCell(31).setCellValue(qStatsBean.getInstrRateLT());
-                row.createCell(32).setCellValue(qStatsBean.getIssuerRateST());
-                row.createCell(33).setCellValue(qStatsBean.getIssuerRateLT());
-                row.createCell(34).setCellValue(qStatsBean.getIssuerName());
-                row.createCell(35).setCellValue(qStatsBean.getRateAgency());
-                row.createCell(36).setCellValue(qStatsBean.isCompConDeb());
-                row.createCell(37).setCellValue(qStatsBean.getMarketCapIssuer() != null ? qStatsBean.getMarketCapIssuer().doubleValue() : 0.0);
-                row.createCell(38).setCellValue(qStatsBean.getPerIssuedCap() != null ? qStatsBean.getPerIssuedCap().doubleValue() : 0.0);
-                row.createCell(39).setCellValue(qStatsBean.getCapitalReserves() != null ? qStatsBean.getCapitalReserves().doubleValue() : 0.0);
-                row.createCell(40).setCellValue(qStatsBean.getAsiSADefined1());
-                row.createCell(41).setCellValue(qStatsBean.getAsiSADefined2());
-                row.createCell(42).setCellValue(qStatsBean.getAsiSADefined3());
-                row.createCell(43).setCellValue(qStatsBean.getAsiSADefined4());
-                row.createCell(44).setCellValue(qStatsBean.getAsiSADefined5());
-
-            }
-
-            // Resize all columns to fit the content size
-            for (int i = 0; i < columns.length; i++) {
-                sheet.autoSizeColumn(i);
-            }
-
-            // Write the output to a file
+            Cell cell = headerRow.createCell(0);
+            cell.setCellValue(formula);
 
             workbook.write(fileOut);
 
-            // Closing the workbook
+        } catch (IOException ie) {
+            ie.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
 
-    private Map<String, PSGFundMapping> getPSGFundMappings() {
-        Map<String, PSGFundMapping> psgFundMappingMap = new HashMap<>();
-        List<PSGFundMapping> all = psgFundMappingRepository.findAll();
-        for(PSGFundMapping psgFundMapping : all) {
-            psgFundMappingMap.put(psgFundMapping.getManagerFundCode(), psgFundMapping);
-        }
-        return psgFundMappingMap;
-    }
 }
 
 

@@ -1,4 +1,4 @@
-package za.co.global.domain.fileupload.barra;
+package za.co.global.domain.fileupload.system;
 
 import com.gizbel.excel.annotations.ExcelBean;
 import com.gizbel.excel.annotations.ExcelColumnHeader;
@@ -6,11 +6,12 @@ import com.gizbel.excel.annotations.ExcelColumnHeader;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Date;
 
 @ExcelBean
 @Entity
-@Table(name = "dsu5_girrep4")
-public class BarraFile implements Serializable {
+@Table(name = "barra_asset_info")
+public class BarraAssetInfo implements Serializable {
 
     private static final long serialVersionUID = 5501452100911177632L;
 
@@ -139,9 +140,9 @@ public class BarraFile implements Serializable {
     @Column(name = "GICS_SUB_INDUSTRY")
     private String gicsSubIndustry;
 
-    @ExcelColumnHeader(columnHeader = "Maturity Date")
+    @ExcelColumnHeader(columnHeader = "Maturity Date", dataType = "date")
     @Column(name = "MATURITY_DATE")
-    private String maturityDate;
+    private Date maturityDate;
 
     @ExcelColumnHeader(columnHeader = "Time to Maturity")
     @Column(name = "TIME_TO_MATURITY")
@@ -151,9 +152,9 @@ public class BarraFile implements Serializable {
     @Column(name = "WEIGHTED_AVG_LIFE")
     private String weightedAverageLife;
 
-    @ExcelColumnHeader(columnHeader = "Pricing Redemption Date")
+    @ExcelColumnHeader(columnHeader = "Pricing Redemption Date", dataType = "date")
     @Column(name = "PRICING_REDEMPTION_DATE")
-    private String pricingRedemptionDate;
+    private Date pricingRedemptionDate;
 
     @ExcelColumnHeader(columnHeader = "Current Yield (%)", dataType = "big_decimal")
     @Column(name = "CURRENT_YIELD_IN_PERCENT")
@@ -164,7 +165,7 @@ public class BarraFile implements Serializable {
     private BigDecimal coupon;
 
     @ExcelColumnHeader(columnHeader = "First Coupon Date")
-    @Column(name = "FIRST_COUPON_DATE")
+    @Column(name = "FIRST_COUPON_DATE") //TODO - check for date field
     private String firstCouponDate;
 
     @ExcelColumnHeader(columnHeader = "Effective Duration")
@@ -175,9 +176,9 @@ public class BarraFile implements Serializable {
     @Column(name = "MACAULAY_DURATION")
     private String macaulayDuration;
 
-    @ExcelColumnHeader(columnHeader = "Modified Duration")
+    @ExcelColumnHeader(columnHeader = "Modified Duration", dataType="big_decimal")
     @Column(name = "MODIFIED_DURATION")
-    private String modifiedDuration;
+    private BigDecimal modifiedDuration;
 
     @ExcelColumnHeader(columnHeader = "Price Currency")
     @Column(name = "PRICE_CURRENCY")
@@ -239,6 +240,8 @@ public class BarraFile implements Serializable {
     @Column(name = "ULTIMATE_ISSUER_NAME")
     private String ultimateIssuerName;
 
+    @Column(name = "NET_INDICATOR")
+    private boolean netIndicator = Boolean.FALSE.booleanValue();
 
     public Long getId() {
         return id;
@@ -432,11 +435,11 @@ public class BarraFile implements Serializable {
         this.gicsSubIndustry = gicsSubIndustry;
     }
 
-    public String getMaturityDate() {
+    public Date getMaturityDate() {
         return maturityDate;
     }
 
-    public void setMaturityDate(String maturityDate) {
+    public void setMaturityDate(Date maturityDate) {
         this.maturityDate = maturityDate;
     }
 
@@ -456,11 +459,11 @@ public class BarraFile implements Serializable {
         this.weightedAverageLife = weightedAverageLife;
     }
 
-    public String getPricingRedemptionDate() {
+    public Date getPricingRedemptionDate() {
         return pricingRedemptionDate;
     }
 
-    public void setPricingRedemptionDate(String pricingRedemptionDate) {
+    public void setPricingRedemptionDate(Date pricingRedemptionDate) {
         this.pricingRedemptionDate = pricingRedemptionDate;
     }
 
@@ -488,11 +491,11 @@ public class BarraFile implements Serializable {
         this.macaulayDuration = macaulayDuration;
     }
 
-    public String getModifiedDuration() {
+    public BigDecimal getModifiedDuration() {
         return modifiedDuration;
     }
 
-    public void setModifiedDuration(String modifiedDuration) {
+    public void setModifiedDuration(BigDecimal modifiedDuration) {
         this.modifiedDuration = modifiedDuration;
     }
 
@@ -684,12 +687,20 @@ public class BarraFile implements Serializable {
         this.coupon = coupon;
     }
 
+    public boolean isNetIndicator() {
+        return netIndicator;
+    }
+
+    public void setNetIndicator(boolean netIndicator) {
+        this.netIndicator = netIndicator;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        BarraFile that = (BarraFile) o;
+        BarraAssetInfo that = (BarraAssetInfo) o;
 
         if (assetId != null ? !assetId.equals(that.assetId) : that.assetId != null) return false;
         if (assetIdType != null ? !assetIdType.equals(that.assetIdType) : that.assetIdType != null) return false;

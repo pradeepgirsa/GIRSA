@@ -9,10 +9,14 @@ public class QStatsBean {
     private String mancoCode;
     private Date createdDate;
     private Date quarter;
+    private Date pricingRedemptionDate;
     private BigDecimal mvTotal;
     private BigDecimal institutionalTotal;
     private BigDecimal noOfAccounts;
+
+    @Deprecated
     private BigDecimal weightedAvgDuration;
+
     private BigDecimal weightedAvgMaturity;
     private String aciAssetclass;
     private String instrCode;
@@ -31,8 +35,9 @@ public class QStatsBean {
     private BigDecimal ttmInc;
     private String issuerCode;
     private BigDecimal couponRate;
+    private BigDecimal currentYield;
     private String issuerName;
-    private String maturityDate;
+    private Date maturityDate;
     private String resetMaturityDate;
     private BigDecimal ttmCur;
     private String instrRateST;
@@ -49,6 +54,8 @@ public class QStatsBean {
     private String asiSADefined3;
     private String asiSADefined4;
     private String asiSADefined5;
+    private BigDecimal effWeight;
+    private BigDecimal modifiedDuration;
 
     public String getAciFundCode() {
         return aciFundCode;
@@ -114,18 +121,22 @@ public class QStatsBean {
         this.noOfAccounts = noOfAccounts;
     }
 
+    @Deprecated
     public BigDecimal getWeightedAvgDuration() {
         return weightedAvgDuration;
     }
 
+    @Deprecated
     public void setWeightedAvgDuration(BigDecimal weightedAvgDuration) {
         this.weightedAvgDuration = weightedAvgDuration;
     }
 
+    @Deprecated
     public BigDecimal getWeightedAvgMaturity() {
         return weightedAvgMaturity;
     }
 
+    @Deprecated
     public void setWeightedAvgMaturity(BigDecimal weightedAvgMaturity) {
         this.weightedAvgMaturity = weightedAvgMaturity;
     }
@@ -274,11 +285,11 @@ public class QStatsBean {
         this.issuerName = issuerName;
     }
 
-    public String getMaturityDate() {
+    public Date getMaturityDate() {
         return maturityDate;
     }
 
-    public void setMaturityDate(String maturityDate) {
+    public void setMaturityDate(Date maturityDate) {
         this.maturityDate = maturityDate;
     }
 
@@ -408,5 +419,37 @@ public class QStatsBean {
 
     public void setAsiSADefined5(String asiSADefined5) {
         this.asiSADefined5 = asiSADefined5;
+    }
+
+    public Date getPricingRedemptionDate() {
+        return pricingRedemptionDate;
+    }
+
+    public void setPricingRedemptionDate(Date pricingRedemptionDate) {
+        this.pricingRedemptionDate = pricingRedemptionDate;
+    }
+
+    public BigDecimal getCurrentYield() {
+        return currentYield;
+    }
+
+    public void setCurrentYield(BigDecimal currentYield) {
+        this.currentYield = currentYield;
+    }
+
+    public BigDecimal getEffWeight() {
+        return effWeight;
+    }
+
+    public void setEffWeight(BigDecimal effWeight) {
+        this.effWeight = effWeight;
+    }
+
+    public BigDecimal getModifiedDuration() {
+        return modifiedDuration;
+    }
+
+    public void setModifiedDuration(BigDecimal modifiedDuration) {
+        this.modifiedDuration = modifiedDuration;
     }
 }

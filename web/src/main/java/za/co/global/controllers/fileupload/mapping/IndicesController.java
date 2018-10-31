@@ -1,5 +1,6 @@
 package za.co.global.controllers.fileupload.mapping;
 
+import com.gizbel.excel.enums.ExcelFactoryType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,8 +14,13 @@ import za.co.global.controllers.fileupload.BaseFileUploadController;
 import za.co.global.domain.fileupload.mapping.Indices;
 import za.co.global.persistence.fileupload.mapping.IndicesRepository;
 import za.co.global.services.upload.FileAndObjectResolver;
+import za.co.global.services.upload.GirsaExcelParser;
 
+import java.io.File;
 import java.io.IOException;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 @Controller
 public class IndicesController extends BaseFileUploadController {
@@ -54,12 +60,56 @@ public class IndicesController extends BaseFileUploadController {
 
     }
 
+    @Override //TODO - check asset info stored correctly or not
+    protected void readFileAndStoreInDB(File file, String fileType) throws Exception {
+        GirsaExcelParser parser = new GirsaExcelParser(ExcelFactoryType.COLUMN_NAME_BASED_EXTRACTION);
+        Map<String, List<Object>> result = parser.parse(file, fileType); //Whatever excel file you want
+        Set<Map.Entry<String, List<Object>>> entries = result.entrySet();
+        for (Map.Entry<String, List<Object>> map : entries) {
+            String sheetName = map.getKey();
+            List<Object> value = map.getValue();
+            for (Object obj : value) {
+                if (obj instanceof Indices) {
+                    Indices indices = getIndices(obj, sheetName);
+                    indices.setType(sheetName);
+                    indicesRepository.save(indices);
+                }
+            }
+        }
+    }
+
+    private Indices getIndices(Object object, String type) {
+        Indices indices = (Indices) object;
+        Indices existingIndice = indicesRepository.findBySecurityAndType(indices.getSecurity(), type);
+        if(existingIndice == null) {
+            return indices;
+        }
+        existingIndice.setAsk(indices.getAsk());
+        existingIndice.setBid(indices.getBid());
+        existingIndice.setDescription(indices.getDescription());
+        existingIndice.setExch(indices.getExch());
+        existingIndice.setGicsCode(indices.getGicsCode());
+        existingIndice.setIndex(indices.getIndex());
+        existingIndice.setIndexPoints(indices.getIndexPoints());
+        existingIndice.setIndexPrice(indices.getIndexPrice());
+        existingIndice.setIssue(indices.getIssue());
+        existingIndice.setIwf(indices.getIwf());
+        existingIndice.setLast(indices.getLast());
+        existingIndice.setMarketCap(indices.getMarketCap());
+        existingIndice.setMarketCapLive(indices.getMarketCapLive());
+        existingIndice.setPeRatio(indices.getPeRatio());
+        existingIndice.setPositiveOrNegative(indices.getPositiveOrNegative());
+        existingIndice.setR(indices.getR());
+        existingIndice.setSecurity(indices.getSecurity());
+        existingIndice.setSubIndustry(indices.getSubIndustry());
+        existingIndice.setYldHist(indices.getYldHist());
+
+        return existingIndice;
+    }
+
     @Override
     protected void processObject(Object obj) {
-        if(obj instanceof Indices) {
-            Indices ex = (Indices) obj;
-            indicesRepository.save(ex);
-        }
+
     }
 
 }

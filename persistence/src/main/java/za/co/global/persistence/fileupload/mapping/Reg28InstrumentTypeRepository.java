@@ -7,4 +7,6 @@ import za.co.global.domain.fileupload.mapping.Reg28InstrumentType;
 
 @Repository
 public interface Reg28InstrumentTypeRepository extends JpaRepository<Reg28InstrumentType, Long> {
+
+    Reg28InstrumentType findByReg28InstrType(String reg28InstrType);
 }

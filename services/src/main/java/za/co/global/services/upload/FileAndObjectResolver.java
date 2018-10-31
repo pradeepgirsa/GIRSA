@@ -1,8 +1,10 @@
 package za.co.global.services.upload;
 
+import za.co.global.domain.fileupload.system.BarraAssetInfo;
+
 public enum FileAndObjectResolver {
 
-    BARRA_FILE("BARRA_FILE", za.co.global.domain.fileupload.barra.BarraFile.class),
+    BARRA_FILE("BARRA_FILE", BarraAssetInfo.class),
     ADDITIONAL_CLASSIFICATION("ADDITIONAL_CLASSIFICATION", za.co.global.domain.fileupload.mapping.AdditionalClassification.class),
     INSTRUMENT_CODE("INSTRUMENT_CODE", za.co.global.domain.fileupload.mapping.InstrumentCode.class),
     ISSUER_MAPPINGS("ISSUER_MAPPINGS", za.co.global.domain.fileupload.mapping.IssuerMappings.class),

@@ -56,18 +56,22 @@ public class InstitutionalDetailsController extends BaseFileUploadController {
     @Override
     protected void processObject(Object obj) {
         if (obj instanceof InstitutionalDetails) {
-            InstitutionalDetails institutionalDetails = (InstitutionalDetails) obj;
-            InstitutionalDetails existingInstitutionalDetails = institutionalDetailsRepository.findByFundCode(institutionalDetails.getFundCode());
-            if(existingInstitutionalDetails != null) {
-                existingInstitutionalDetails.setAssetMktValue(institutionalDetails.getAssetMktValue());
-                existingInstitutionalDetails.setFundName(institutionalDetails.getFundName());
-                existingInstitutionalDetails.setPercentage(institutionalDetails.getPercentage());
-                existingInstitutionalDetails.setSplit(institutionalDetails.getSplit());
-                institutionalDetailsRepository.save(existingInstitutionalDetails);
-            } else {
-                institutionalDetailsRepository.save(institutionalDetails);
-            }
+            InstitutionalDetails institutionalDetails = getInstitutionalDetails(obj);
+            institutionalDetailsRepository.save(institutionalDetails);
         }
+    }
+
+    private InstitutionalDetails getInstitutionalDetails(Object object) {
+        InstitutionalDetails institutionalDetails = (InstitutionalDetails) object;
+        InstitutionalDetails existingInstitutionalDetails = institutionalDetailsRepository.findByFundCode(institutionalDetails.getFundCode());
+        if (existingInstitutionalDetails == null) {
+            return institutionalDetails;
+        }
+        existingInstitutionalDetails.setAssetMktValue(institutionalDetails.getAssetMktValue());
+        existingInstitutionalDetails.setFundName(institutionalDetails.getFundName());
+        existingInstitutionalDetails.setPercentage(institutionalDetails.getPercentage());
+        existingInstitutionalDetails.setSplit(institutionalDetails.getSplit());
+        return existingInstitutionalDetails;
     }
 
 }

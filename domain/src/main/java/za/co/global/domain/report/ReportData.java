@@ -30,7 +30,7 @@ public class ReportData implements Serializable {
     private List<Holding> holdings = new ArrayList<>();
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "PAYMENT_STATUS", nullable = false)
+    @Column(name = "report_status", nullable = false)
     private ReportStatus reportStatus = ReportStatus.REGISTERED;
 
     @ManyToOne(fetch = FetchType.LAZY)

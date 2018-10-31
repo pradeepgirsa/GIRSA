@@ -95,6 +95,9 @@ public class Indices implements Serializable {
     @ExcelColumnHeader(columnHeader = "PERatio")
     private BigDecimal peRatio;
 
+    @Column(name = "type")
+    private String type; //TODO - refactor to specific name
+
     public Long getId() {
         return id;
     }
@@ -195,6 +198,10 @@ public class Indices implements Serializable {
         this.peRatio = peRatio;
     }
 
+    public BigDecimal getPeRatio() {
+        return peRatio;
+    }
+
     public String getIssue() {
         return issue;
     }
@@ -282,5 +289,13 @@ public class Indices implements Serializable {
     public int hashCode() {
 
         return Objects.hash(id, security, description, exch, r, marketCap, marketCapLive, index, indexPrice, indexPoints, yldHist, iwf, issue, bid, ask, last, positiveOrNegative, subIndustry, gicsCode, peRatio);
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 }
