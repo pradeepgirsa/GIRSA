@@ -33,3 +33,5 @@ databaseChangeLog:
         file: db/changelog/1.0.0/Create_Reg28InstrumentType_Changelog.xml
   - include:
         file: db/changelog/1.0.0/Create_indices_Changelog.xml
+  - include:
+        file: db/changelog/1.0.0/Create_DailyPricing_Changelog.xml

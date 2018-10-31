@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet id="daily_pricing_table_1" author="Sharanya" runOnChange="true">
+        <createTable tableName="daily_pricing" >
+            <column name="id" type="bigint">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="issuer" type="varchar(20)"/>
+            <column name="bond_code" type="varchar(50)"/>
+            <column name="type" type="varchar(100)"/>
+            <column name="features" type="varchar(100)"/>
+            <column name="moodys" type="varchar(50)"/>
+            <column name="fitch" type="varchar(50)"/>
+            <column name="s_and_p" type="varchar(50)"/>
+            <column name="global" type="varchar(50)"/>
+            <column name="summary_rating" type="varchar(20)"/>
+            <column name="issue_size" type="varchar(50)"/>
+            <column name="coupon" type="varchar(50)"/>
+            <column name="issue_date" type="varchar(20)"/>
+            <column name="maturity_or_call_date" type="varchar(50)"/>
+            <column name="govi_benchmark" type="varchar(20)"/>
+            <column name="spread_at_issue" type="varchar(20)"/>
+            <column name="spread_to_govi_current_day" type="varchar(20)"/>
+            <column name="spread_to_govi_next_day" type="varchar(20)"/>
+            <column name="spread_to_govi_one_day_change" type="varchar(20)"/>
+            <column name="spread_to_jibar_or_asw_current_day" type="varchar(50)"/>
+            <column name="spread_to_jibar_or_asw_next_day" type="varchar(50)"/>
+            <column name="spread_to_jibar_or_asw_one_day_change" type="varchar(20)"/>
+            <column name="liquidity_no_of_trades" type="varchar(50)"/>
+            <column name="liquidity_nominal_traded" type="varchar(20)"/>
+            <column name="last_traded_date" type="varchar(20)"/>
+            <column name="liquidity_no_of_trades" type="varchar(20)"/>
+            <column name="last_mtm_change_date" type="varchar(20)"/>
+        </createTable>
+
+        <addAutoIncrement columnDataType="bigint"
+                          columnName="id"
+                          incrementBy="1"
+                          startWith="100"
+                          tableName="daily_pricing"/>
+    </changeSet>
+
+</databaseChangeLog>

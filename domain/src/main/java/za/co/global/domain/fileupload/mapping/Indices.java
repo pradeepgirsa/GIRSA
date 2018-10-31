@@ -9,7 +9,7 @@ import java.math.BigDecimal;
 import java.util.Objects;
 
 @Entity
-@Table(name = "reg28_instr_type")
+@Table(name = "indices")
 @ExcelBean
 public class Indices implements Serializable {
 
