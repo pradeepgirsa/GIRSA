@@ -32,13 +32,13 @@ public class QStatsBean {
     private BigDecimal marketCap;
     private BigDecimal sharesInIssue;
     private String addClassification;
-    private BigDecimal ttmInc;
+    private Date ttmInc;
     private String issuerCode;
     private BigDecimal couponRate;
     private BigDecimal currentYield;
     private String issuerName;
     private Date maturityDate;
-    private String resetMaturityDate;
+    private Date resetMaturityDate;
     private BigDecimal ttmCur;
     private String instrRateST;
     private String instrRateLT;
@@ -253,11 +253,11 @@ public class QStatsBean {
         this.addClassification = addClassification;
     }
 
-    public BigDecimal getTtmInc() {
+    public Date getTtmInc() {
         return ttmInc;
     }
 
-    public void setTtmInc(BigDecimal ttmInc) {
+    public void setTtmInc(Date ttmInc) {
         this.ttmInc = ttmInc;
     }
 
@@ -293,11 +293,11 @@ public class QStatsBean {
         this.maturityDate = maturityDate;
     }
 
-    public String getResetMaturityDate() {
+    public Date getResetMaturityDate() {
         return resetMaturityDate;
     }
 
-    public void setResetMaturityDate(String resetMaturityDate) {
+    public void setResetMaturityDate(Date resetMaturityDate) {
         this.resetMaturityDate = resetMaturityDate;
     }
 

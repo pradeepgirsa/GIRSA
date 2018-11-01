@@ -6,6 +6,7 @@ import com.gizbel.excel.annotations.ExcelColumnHeader;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Date;
 
 @Entity
 @Table(name = "transaction_listing")
@@ -193,6 +194,12 @@ public class TransactionListing implements Serializable {
     @Column(name = "mod_following")
     @ExcelColumnHeader(columnHeader = "modFollowing")
     private String modFollowing;
+
+    private String clientPortfolioCode;
+
+    private String instrumentCode;
+
+    private Date tradeDate;
 
     public Long getId() {
         return id;
@@ -552,5 +559,29 @@ public class TransactionListing implements Serializable {
 
     public void setModFollowing(String modFollowing) {
         this.modFollowing = modFollowing;
+    }
+
+    public String getClientPortfolioCode() {
+        return clientPortfolioCode;
+    }
+
+    public void setClientPortfolioCode(String clientPortfolioCode) {
+        this.clientPortfolioCode = clientPortfolioCode;
+    }
+
+    public String getInstrumentCode() {
+        return instrumentCode;
+    }
+
+    public void setInstrumentCode(String instrumentCode) {
+        this.instrumentCode = instrumentCode;
+    }
+
+    public Date getTradeDate() {
+        return tradeDate;
+    }
+
+    public void setTradeDate(Date tradeDate) {
+        this.tradeDate = tradeDate;
     }
 }

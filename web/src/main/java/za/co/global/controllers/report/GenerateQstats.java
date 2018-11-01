@@ -42,10 +42,12 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 @Controller
 public class GenerateQstats {
@@ -101,7 +103,14 @@ public class GenerateQstats {
     @Autowired
     private IndicesRepository indicesRepository;
 
+    @Autowired
+    private TransactionListingRepository transactionListingRepository;
+
+    @Autowired
+    private DailyPricingRepository dailyPricingRepository;
+
     private Map<String, Date> maturityDateMap;
+
 
     private static final Logger LOGGER = LoggerFactory.getLogger("GenerateQstats");
 
@@ -236,11 +245,19 @@ public class GenerateQstats {
 
                     qStatsBean.setAddClassification(getAdditionalClassification(reg28InstrumentType));
 
-                    qStatsBean.setTtmInc(BigDecimal.ZERO); //TODO - after transaction listing table implementation
+                    List<TransactionListing> transactionListings = transactionListingRepository.findByClientPortfolioCodeAndInstrumentCode(holding.getPortfolioCode(),
+                            instrument.getInstrumentCode());
+
+                    //TODO - verify as it is date or days
+                    qStatsBean.setTtmInc(transactionListings.isEmpty() ? null : transactionListings.get(0).getTradeDate()); //TODO - after transaction listing table implementation
 
 
                     qStatsBean.setIssuerCode(issuerMapping.getIssuerCode());
 
+                    qStatsBean.setResetMaturityDate(barraAssetInfo.getPricingRedemptionDate());
+
+                    //TODO - verify as it is date or days
+                    qStatsBean.setTtmCur(new BigDecimal(TimeUnit.DAYS.convert((reportDate.getTime()-new Date().getTime()), TimeUnit.MILLISECONDS)));
 
 
 
@@ -252,28 +269,49 @@ public class GenerateQstats {
 
 
 
+                    qStatsBean.setInstrRateST(null);
+                    qStatsBean.setInstrRateLT(null);
 
-                    qStatsBean.setInstrRateST("InstraRateST"); //TODO - check
-                    qStatsBean.setInstrRateLT("InstraRateLT"); //TODO - check
-                    qStatsBean.setIssuerRateST("IssuerRateST"); //TODO - check
-                    qStatsBean.setIssuerRateLT("IssuerRateLT"); //TODO - check
+                    List<DailyPricing> dailyPricings = dailyPricingRepository.findByIssuer(issuerMapping.getBarraGIRIssuerName());
 
-                    String girIssuer = Optional.ofNullable(barraAssetInfo).map(BarraAssetInfo::getGirIssuer).orElse(null);
+                    String rating= null;
+                    String ratingAgency = null;
+                    if(!dailyPricings.isEmpty()) {
+                        DailyPricing dailyPricing = dailyPricings.get(0);
+                        if(!StringUtils.isEmpty(dailyPricing.getMoodys())) {
+                            rating = dailyPricing.getMoodys();
+                            ratingAgency = "Moody's";
+                        } else if(!StringUtils.isEmpty(dailyPricing.getFitch())) {
+                            rating = dailyPricing.getFitch();
+                            ratingAgency = "Fitch Group";
+                        } else if(!StringUtils.isEmpty(dailyPricing.getsAndP())) {
+                            rating = dailyPricing.getsAndP();
+                            ratingAgency = "Standard & Poor's";
+                        } else if(!StringUtils.isEmpty(dailyPricing.getGlobal())) {
+                            rating = dailyPricing.getGlobal();
+                            ratingAgency = "Global";
+                        }
+                    }
+                    qStatsBean.setIssuerRateST(rating);
+                    qStatsBean.setIssuerRateLT(rating);
 
-                    qStatsBean.setRateAgency(girIssuer); //TODO - check
+
+                    qStatsBean.setRateAgency(ratingAgency);
                     qStatsBean.setCompConDeb(Boolean.FALSE);
 
                    // IssuerMapping issuerMappings = issuerMappingsRepository.findByIssuerCode(issuer);
-                    BigDecimal marketCap = Optional.ofNullable(issuerMapping).map(IssuerMapping::getMarketCapitalisation).orElse(BigDecimal.ZERO);
-                    BigDecimal capReserves = Optional.ofNullable(issuerMapping).map(IssuerMapping::getCapitalReserves).orElse(BigDecimal.ZERO);
+                    BigDecimal marketCap = Optional.ofNullable(issuerMapping).map(IssuerMapping::getMarketCapitalisation).orElse(null);
+                    BigDecimal capReserves = Optional.ofNullable(issuerMapping).map(IssuerMapping::getCapitalReserves).orElse(null);
                     qStatsBean.setMarketCap(marketCap);
-                    qStatsBean.setPerIssuedCap(BigDecimal.ZERO);
+                    if(qStatsBean.getMarketValue() != null && marketCap != null && marketCap.compareTo(BigDecimal.ZERO) != 0) {
+                        qStatsBean.setPerIssuedCap(qStatsBean.getMarketValue().divide(marketCap, 3, RoundingMode.HALF_UP));
+                    }
                     qStatsBean.setCapitalReserves(capReserves);
-                    qStatsBean.setAsiSADefined1("NA");
-                    qStatsBean.setAsiSADefined2("NA");
-                    qStatsBean.setAsiSADefined3("NA");
-                    qStatsBean.setAsiSADefined4("NA");
-                    qStatsBean.setAsiSADefined5("NA");
+                    qStatsBean.setAsiSADefined1(reg28InstrType);
+                    qStatsBean.setAsiSADefined2(reg28InstrumentType.getAsisaDefined2());
+                    qStatsBean.setAsiSADefined3(null);
+                    qStatsBean.setAsiSADefined4(null);
+                    qStatsBean.setAsiSADefined5(null);
 
                     qStatsBeans.add(qStatsBean);
 
@@ -406,6 +444,8 @@ public class GenerateQstats {
         } catch (ParseException e) {
             LOGGER.error("Date parse error to format:{}, value: {}", datePattern, dateInString);
         }
+
+        //TODO - other date format
         return null;
     }
 
@@ -438,11 +478,9 @@ public class GenerateQstats {
             String maturityCell = CellReference.convertNumToColString(1)+(rowNumber+1);
             String couponCell = CellReference.convertNumToColString(2)+(rowNumber+1);
             String yieldCell = CellReference.convertNumToColString(3)+(rowNumber+1);
-            String formula=String.format("MDURATION(%s,%s,%s,%s,2)", settlementCell, maturityCell, couponCell, yieldCell);
+           // String formula=String.format("MDURATION(%s,%s,%s,%s,2)", settlementCell, maturityCell, couponCell, yieldCell);
             //String formula=String.format("SUM(%s;%s)", couponCell, yieldCell);
 
-            CellStyle percentageStyle = workbook.createCellStyle();
-            percentageStyle.setDataFormat(workbook.createDataFormat().getFormat("0.000%"));
 
             CellStyle dateCellStyle = workbook.createCellStyle();
             dateCellStyle.setDataFormat(
@@ -458,14 +496,15 @@ public class GenerateQstats {
             cell2.setCellStyle(dateCellStyle);
 
             Cell cell3 = headerRow.createCell(2);
-            cell3.setCellValue(couponRate.toString().replace(".", ","));
-            cell3.setCellStyle(percentageStyle);
+            cell3.setCellValue(couponRate.doubleValue());
             cell3.setCellType(Cell.CELL_TYPE_NUMERIC);
 
             Cell cell4 = headerRow.createCell(3);
-            cell4.setCellValue(currentYield.toString().replace(".", ","));
-            cell4.setCellStyle(percentageStyle);
+            cell4.setCellValue(currentYield.doubleValue());
             cell3.setCellType(Cell.CELL_TYPE_NUMERIC);
+
+            String formula=String.format("MDURATION(%s,%s,"+couponRate.doubleValue()+","+currentYield.doubleValue()+",2)", settlementCell, maturityCell);
+
 
             Cell cell5 = headerRow.createCell(4);
             cell5.setCellFormula(formula);

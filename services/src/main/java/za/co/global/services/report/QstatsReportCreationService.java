@@ -1,6 +1,5 @@
 package za.co.global.services.report;
 
-import org.apache.poi.hssf.util.CellReference;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.slf4j.Logger;
@@ -10,7 +9,6 @@ import za.co.global.domain.exception.GirsaException;
 import za.co.global.domain.report.QStatsBean;
 
 import java.io.FileOutputStream;
-import java.math.BigDecimal;
 import java.util.List;
 
 @Service
@@ -85,9 +83,17 @@ public class QstatsReportCreationService implements ReportCreationService {
                 quarterDateCell.setCellValue(qStatsBean.getQuarter());
                 quarterDateCell.setCellStyle(dateCellStyle);
 
-                row.createCell(5).setCellValue(qStatsBean.getMvTotal().doubleValue());
-                row.createCell(6).setCellValue(qStatsBean.getInstitutionalTotal().doubleValue());
-                row.createCell(7).setCellValue(qStatsBean.getNoOfAccounts().doubleValue());
+                Cell mvTotalCell = row.createCell(5);
+                mvTotalCell.setCellValue(qStatsBean.getMvTotal().doubleValue());
+                mvTotalCell.setCellType(Cell.CELL_TYPE_NUMERIC);
+
+                Cell institutionalTotalCell = row.createCell(6);
+                institutionalTotalCell.setCellValue(qStatsBean.getInstitutionalTotal().doubleValue());
+                institutionalTotalCell.setCellType(Cell.CELL_TYPE_NUMERIC);
+
+                Cell noOfAccountsCell = row.createCell(7);
+                noOfAccountsCell.setCellValue(qStatsBean.getNoOfAccounts().doubleValue());
+                noOfAccountsCell.setCellType(Cell.CELL_TYPE_NUMERIC);
 
                 java.sql.Date sqlQuarterDate = new java.sql.Date(qStatsBean.getQuarter().getTime());
                 java.sql.Date sqlPricingRedemptionDate = new java.sql.Date(qStatsBean.getPricingRedemptionDate().getTime());
@@ -105,11 +111,11 @@ public class QstatsReportCreationService implements ReportCreationService {
 //                String yieldCell = CellReference.convertNumToColString(myColumnNumber);
 //                String formula=String.format("MDURATION(%s;%s;%s:%s;2)*%d*365.25", ccol, row, ccol, row+1);
 
-                BigDecimal weightedAvgMaturity = null;
-                if(qStatsBean.getModifiedDuration() != null && qStatsBean.getEffWeight() != null) {
-                    weightedAvgMaturity = qStatsBean.getModifiedDuration().multiply(qStatsBean.getEffWeight()).multiply(BigDecimal.valueOf(365.25));
-                }
-                row.createCell(9).setCellValue(weightedAvgMaturity.doubleValue());
+//                BigDecimal weightedAvgMaturity = null;
+//                if(qStatsBean.getModifiedDuration() != null && qStatsBean.getEffWeight() != null) {
+//                    weightedAvgMaturity = qStatsBean.getModifiedDuration().multiply(qStatsBean.getEffWeight()).multiply(BigDecimal.valueOf(365.25));
+//                }
+             //   row.createCell(9).setCellValue(weightedAvgMaturity.doubleValue()); //TODO formula
                 row.createCell(10).setCellValue(qStatsBean.getAciAssetclass());
                 row.createCell(11).setCellValue(qStatsBean.getInstrCode());
                 row.createCell(12).setCellValue(qStatsBean.getHolding().doubleValue());
@@ -124,7 +130,7 @@ public class QstatsReportCreationService implements ReportCreationService {
                 row.createCell(21).setCellValue(qStatsBean.getMarketCap().doubleValue());
                 row.createCell(22).setCellValue(qStatsBean.getSharesInIssue().doubleValue());
                 row.createCell(23).setCellValue(qStatsBean.getAddClassification());
-                row.createCell(24).setCellValue(qStatsBean.getTtmInc().doubleValue());
+               // row.createCell(24).setCellValue(qStatsBean.getTtmInc().doubleValue());
                 row.createCell(25).setCellValue(qStatsBean.getIssuerCode());
                 row.createCell(26).setCellValue(qStatsBean.getCouponRate().doubleValue());
 
