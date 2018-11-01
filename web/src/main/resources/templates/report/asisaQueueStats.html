@@ -44,6 +44,15 @@
                                             <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
                                         </div>
                                     </div>-->
+                                    <br/>
+                                    <label> <strong>Select Client *</strong></label>
+                                    <select id="select-client" data-placeholder="Choose One..." class="form-control width100p">
+                                        <option value=""></option>
+                                        <option th:each="item : ${clients}"
+                                                th:value="${item.name}"
+                                                th:text="${item.name}">Wireframe</option>
+                                    </select>
+                                    <br/><br/>
                                 <div class="panel-footer" th:style="${cashChangePanelDisplay}">
                                     <div class="col-md-12" align="right">
                                         <button id="generate-asisa-report" type="submit" onclick="loadingScreen()">Generate Report</button>
@@ -91,6 +100,10 @@ jQuery(document).ready(function() {
         numberOfMonths: 3,
         startDate: '-50d',
         showButtonPanel: true
+    });
+
+    jQuery("#select-client").select2({
+        minimumResultsForSearch: 10
     });
  });
 </script>
