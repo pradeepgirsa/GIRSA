@@ -36,23 +36,23 @@
                                     <h4 class="panel-title">ASISA QUEUE STATS</h4>
                                 </div>
                                 <div class="panel-body">
-                                    <!--<div th:class="${#fields.hasErrors('reportDate')} ? 'form-group has-error' : 'form-group'">
+                                    <div th:class="${#fields.hasErrors('reportDate')} ? 'form-group has-error' : 'form-group'">
                                         <label> <strong>Report Date * </strong></label>
                                         <label class="error" th:if="${#fields.hasErrors('reportDate')}" th:errors="*{reportDate}">Error</label>
                                         <div class="input-group">
-                                            <input type="text" class="form-control" placeholder="DD-MM-YYYY" id="reportDate" th:field="*{reportDate}"/>
+                                            <input type="text" class="form-control" placeholder="DD-MM-YYYY" id="reportDate" name="reportDate"/>
                                             <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
                                         </div>
-                                    </div>-->
-                                    <br/>
-                                    <label> <strong>Select Client *</strong></label>
-                                    <select id="select-client" data-placeholder="Choose One..." class="form-control width100p">
-                                        <option value=""></option>
-                                        <option th:each="item : ${clients}"
-                                                th:value="${item.name}"
-                                                th:text="${item.name}">Wireframe</option>
-                                    </select>
-                                    <br/><br/>
+                                    </div>
+                                    <div th:class="|form-group|">
+                                        <label> <strong>Select Client * </strong></label>
+                                        <select required="false" id="client" data-placeholder="Choose One..."  class="form-control width100p" name="clientId" >
+                                            <option value="">Choose One...</option>
+                                            <option th:each="item : ${clients}"
+                                                    th:value="${item.id}"
+                                                    th:text="${item.clientName}">Wireframe</option>
+                                        </select>
+                                    </div>
                                 <div class="panel-footer" th:style="${cashChangePanelDisplay}">
                                     <div class="col-md-12" align="right">
                                         <button id="generate-asisa-report" type="submit" onclick="loadingScreen()">Generate Report</button>
@@ -102,7 +102,7 @@ jQuery(document).ready(function() {
         showButtonPanel: true
     });
 
-    jQuery("#select-client").select2({
+    jQuery("#client").select2({
         minimumResultsForSearch: 10
     });
  });
