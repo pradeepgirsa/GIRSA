@@ -197,6 +197,13 @@
                     </ul>
                 </li>
                 <li th:class="|parent|">
+                    <a><i  th:class="|fa fa-leaf|" /> <span th:text="|Test Report|"/> </a>
+                    <ul class="children">
+                        <li><a th:href="|/dry_run_qstats|" th:onclick="|loadingScreen()|">
+                            <i  th:class="|fa fa-leaf|" /> <span th:text="|Test ASISA QUEUE STATS|"/> </a></li>
+                    </ul>
+                </li>
+                <li th:class="|parent|">
                     <a><i  th:class="|fa fa-leaf|" /> <span th:text="|Generate Report|"/> </a>
                     <ul class="children">
                         <li><a th:href="|/generate_qstats|" th:onclick="|loadingScreen()|">
