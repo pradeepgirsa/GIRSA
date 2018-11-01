@@ -11,7 +11,7 @@ import java.math.BigDecimal;
 @Entity
 @Table(name = "issuer_mapping")
 @ExcelBean
-public class IssuerMappings implements Serializable {
+public class IssuerMapping implements Serializable {
 
     private static final long serialVersionUID = 5410446232211177632L;
 
@@ -105,7 +105,7 @@ public class IssuerMappings implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        IssuerMappings that = (IssuerMappings) o;
+        IssuerMapping that = (IssuerMapping) o;
 
         if (dailyPricingIssuerName != null ? !dailyPricingIssuerName.equals(that.dailyPricingIssuerName) : that.dailyPricingIssuerName != null)
             return false;
@@ -131,7 +131,7 @@ public class IssuerMappings implements Serializable {
 
     @Override
     public String toString() {
-        return "IssuerMappings{" +
+        return "IssuerMapping{" +
                 "id=" + id +
                 ", dailyPricingIssuerName='" + dailyPricingIssuerName + '\'' +
                 ", barraGIRIssuerName='" + barraGIRIssuerName + '\'' +

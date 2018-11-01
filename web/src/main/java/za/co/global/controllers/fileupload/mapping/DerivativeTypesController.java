@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import za.co.global.controllers.fileupload.BaseFileUploadController;
-import za.co.global.domain.fileupload.mapping.DerivativeTypes;
+import za.co.global.domain.fileupload.mapping.DerivativeType;
 import za.co.global.persistence.fileupload.mapping.DerivativeTypesRepository;
 import za.co.global.services.upload.FileAndObjectResolver;
 
@@ -58,10 +58,21 @@ public class DerivativeTypesController extends BaseFileUploadController {
 
     @Override
     protected void processObject(Object obj) {
-        if(obj instanceof DerivativeTypes) {
-            DerivativeTypes ex = (DerivativeTypes) obj;
-            derivativeTypesRepository.save(ex);
+        if(obj instanceof DerivativeType) {
+            DerivativeType derivativeType = getDerivativeType(obj);
+            derivativeTypesRepository.save(derivativeType);
         }
+    }
+
+    private DerivativeType getDerivativeType(Object obj) {
+        DerivativeType ex = (DerivativeType) obj;
+        DerivativeType existingDerivativeType = derivativeTypesRepository.findByType(ex.getType());
+        if(existingDerivativeType == null) {
+            return ex;
+        }
+        existingDerivativeType.setForeignClassification(ex.getForeignClassification());
+        existingDerivativeType.setLocalClassification(ex.getLocalClassification());
+        return existingDerivativeType;
     }
 
 }

@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import za.co.global.controllers.fileupload.BaseFileUploadController;
-import za.co.global.domain.fileupload.mapping.IssuerMappings;
+import za.co.global.domain.fileupload.mapping.IssuerMapping;
 import za.co.global.persistence.fileupload.mapping.IssuerMappingsRepository;
 import za.co.global.services.upload.FileAndObjectResolver;
 
@@ -56,8 +56,8 @@ public class IssuerMappingsController extends BaseFileUploadController {
 
     @Override
     protected void processObject(Object obj) {
-        if(obj instanceof IssuerMappings) {
-            IssuerMappings ex = (IssuerMappings) obj;
+        if(obj instanceof IssuerMapping) {
+            IssuerMapping ex = (IssuerMapping) obj;
             issuerMappingsRepository.save(ex);
         }
     }

@@ -208,8 +208,8 @@ public class HoldingUploadController  {
                  /*
                    * This used to store portfolio data
                  */
-                        if ((holding.getPortfolioCode() == null || holding.getPortfolioName() == null || holding.getCurrency() == null)) {
-                            if ((!StringUtils.isEmpty(firstCellValue) && holdingBaseValuesList.contains(firstCellValue))) {
+                       // if ((holding.getPortfolioCode() == null || holding.getPortfolioName() == null || holding.getCurrency() == null)) {
+                            if (!StringUtils.isEmpty(firstCellValue) && holdingBaseValuesList.contains(firstCellValue)) {
                                 String secondCellValue = dataFormatter.formatCellValue(row.getCell(1));
                                 switch (firstCellValue) {
                                     case "Portfolio Code:":
@@ -231,7 +231,7 @@ public class HoldingUploadController  {
                                 }
                                 continue;
                             }
-                        }
+//                        }
 
                 /*
                 This will store all actual instrument data

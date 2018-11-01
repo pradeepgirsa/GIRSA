@@ -1,5 +1,6 @@
 package za.co.global.services.report;
 
+import org.apache.poi.hssf.util.CellReference;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.slf4j.Logger;
@@ -97,6 +98,12 @@ public class QstatsReportCreationService implements ReportCreationService {
                         +qStatsBean.getCouponRate().doubleValue()+","+qStatsBean.getCurrentYield().doubleValue()+","
                         +2+")*"+qStatsBean.getEffWeight().doubleValue()+"*"+365.25;
                 weightedAvgDeuration.setCellFormula(formula);
+
+//                String settlementCell = CellReference.convertNumToColString(myColumnNumber);
+//                String maturityCell = CellReference.convertNumToColString(myColumnNumber);
+//                String couponCell = CellReference.convertNumToColString(myColumnNumber);
+//                String yieldCell = CellReference.convertNumToColString(myColumnNumber);
+//                String formula=String.format("MDURATION(%s;%s;%s:%s;2)*%d*365.25", ccol, row, ccol, row+1);
 
                 BigDecimal weightedAvgMaturity = null;
                 if(qStatsBean.getModifiedDuration() != null && qStatsBean.getEffWeight() != null) {

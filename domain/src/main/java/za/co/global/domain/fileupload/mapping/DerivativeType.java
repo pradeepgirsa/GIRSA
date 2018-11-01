@@ -2,6 +2,7 @@ package za.co.global.domain.fileupload.mapping;
 
 import com.gizbel.excel.annotations.ExcelBean;
 import com.gizbel.excel.annotations.ExcelColumnHeader;
+import org.hibernate.annotations.NaturalId;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -10,7 +11,7 @@ import java.util.Objects;
 @Entity
 @Table(name = "derivative_types")
 @ExcelBean
-public class DerivativeTypes implements Serializable {
+public class DerivativeType implements Serializable {
 
     private static final long serialVersionUID = 5511756840911787232L;
 
@@ -20,7 +21,8 @@ public class DerivativeTypes implements Serializable {
 
     @Column(name = "type_of_derivative", nullable = false)
     @ExcelColumnHeader(columnHeader = "Type of Derivative")
-    private String typeOfDerivative;
+    @NaturalId
+    private String type;
 
     @Column(name = "local_classification", nullable = false)
     @ExcelColumnHeader(columnHeader = "Local Classification")
@@ -38,12 +40,12 @@ public class DerivativeTypes implements Serializable {
         this.id = id;
     }
 
-    public String getTypeOfDerivative() {
-        return typeOfDerivative;
+    public String getType() {
+        return type;
     }
 
-    public void setTypeOfDerivative(String typeOfDerivative) {
-        this.typeOfDerivative = typeOfDerivative;
+    public void setType(String type) {
+        this.type = type;
     }
 
     public String getLocalClassification() {
@@ -66,9 +68,8 @@ public class DerivativeTypes implements Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        DerivativeTypes that = (DerivativeTypes) o;
-        return Objects.equals(id, that.id) &&
-                Objects.equals(typeOfDerivative, that.typeOfDerivative) &&
+        DerivativeType that = (DerivativeType) o;
+        return Objects.equals(type, that.type) &&
                 Objects.equals(localClassification, that.localClassification) &&
                 Objects.equals(foreignClassification, that.foreignClassification);
     }
@@ -76,6 +77,6 @@ public class DerivativeTypes implements Serializable {
     @Override
     public int hashCode() {
 
-        return Objects.hash(id, typeOfDerivative, localClassification, foreignClassification);
+        return Objects.hash(type, localClassification, foreignClassification);
     }
 }
