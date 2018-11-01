@@ -15,6 +15,8 @@ public enum FileAndObjectResolver {
     SECUTIY_LISTING_CONTROLLER("SECUTIY_LISTING_CONTROLLER", za.co.global.domain.fileupload.client.SecurityListing.class),
     REG28_INSTR_TYPE("REG28_INSTR_TYPE", za.co.global.domain.fileupload.mapping.Reg28InstrumentType.class),
     INDICES("INDICES", za.co.global.domain.fileupload.mapping.Indices.class),
+    DAILY_PRICING("DAILY_PRICING", za.co.global.domain.fileupload.mapping.DailyPricing.class),
+    TRANSACTION_LISTING("TRANSACTION_LISTING", za.co.global.domain.fileupload.mapping.TransactionListing.class),
     DERIVATIVE_TYPES("DERIVATIVE_TYPES", za.co.global.domain.fileupload.mapping.Reg28InstrumentType.class);
     //DSU5("GIR_L2", za.co.global.domain.upload.DSU5_GIRREP4.class);
 

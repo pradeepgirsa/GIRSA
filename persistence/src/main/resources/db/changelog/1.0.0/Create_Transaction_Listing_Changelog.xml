@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet id="transaction_listing_table_1" author="Sharanya" runOnChange="true">
+        <createTable tableName="transaction_listing" >
+            <column name="id" type="bigint">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="sec_code" type="varchar(20)"/>
+            <column name="manco" type="varchar(50)"/>
+            <column name="mm_class" type="varchar(100)"/>
+            <column name="instr_type" type="varchar(100)"/>
+            <column name="sub_instr_type" type="varchar(50)"/>
+            <column name="fpm_instrument_type" type="varchar(50)"/>
+            <column name="sec_name" type="varchar(50)"/>
+            <column name="currency" type="varchar(50)"/>
+            <column name="instr_id" type="varchar(20)"/>
+            <column name="isin" type="varchar(50)"/>
+            <column name="instr_trade_type" type="NUMERIC(20, 3)"/>
+            <column name="issuer_code" type="varchar(20)"/>
+            <column name="issuer_name" type="varchar(50)"/>
+            <column name="yield_type" type="varchar(20)"/>
+            <column name="interest_rate" type="NUMERIC(20, 3)"/>
+            <column name="linked_index" type="varchar(20)"/>
+            <column name="spread" type="varchar(20)"/>
+            <column name="inflation_index" type="varchar(20)"/>
+            <column name="inflation_lag" type="varchar(50)"/>
+            <column name="inflation_base_value" type="NUMERIC(20, 3)"/>
+            <column name="date_issue" type="varchar(20)"/>
+            <column name="nominal" type="NUMERIC(20, 3)"/>
+            <column name="date_maturity" type="varchar(20)"/>
+            <column name="maturity_value" type="NUMERIC(20, 3)"/>
+            <column name="interest_freq" type="varchar(20)"/>
+            <column name="dates_book_close" type="varchar(20)"/>
+            <column name="dates_coupon_payment" type="varchar(20)"/>
+            <column name="dates_reset" type="varchar(50)"/>
+            <column name="date_first_payment" type="varchar(100)"/>
+            <column name="date_verified" type="varchar(100)"/>
+            <column name="verified_by" type="varchar(50)"/>
+            <column name="date_fpm_static" type="varchar(50)"/>
+            <column name="inflation_index_id" type="varchar(50)"/>
+            <column name="linked_index_id" type="varchar(50)"/>
+            <column name="yield_type_id" type="varchar(20)"/>
+            <column name="issuer_id" type="varchar(50)"/>
+            <column name="mkt_seccode" type="varchar(50)"/>
+            <column name="fpm_instrument_type_id" type="varchar(20)"/>
+            <column name="instr_trade_type_id" type="varchar(50)"/>
+            <column name="sub_instr_type_id" type="varchar(20)"/>
+            <column name="mm_class_id" type="varchar(20)"/>
+            <column name="manco_id" type="varchar(20)"/>
+            <column name="user_name" type="varchar(20)"/>
+            <column name="mod_following" type="varchar(20)"/>
+        </createTable>
+
+        <addAutoIncrement columnDataType="bigint"
+                          columnName="id"
+                          incrementBy="1"
+                          startWith="100"
+                          tableName="transaction_listing"/>
+    </changeSet>
+
+</databaseChangeLog>

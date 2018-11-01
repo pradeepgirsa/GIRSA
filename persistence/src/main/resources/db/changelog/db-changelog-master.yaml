@@ -34,4 +34,6 @@ databaseChangeLog:
   - include:
         file: db/changelog/1.0.0/Create_Indices_Changelog.xml
   - include:
-        file: db/changelog/1.0.0/Create_DailyPricing_Changelog.xml
+        file: db/changelog/1.0.0/Create_Daily_Pricing_Changelog.xml
+  - include:
+          file: db/changelog/1.0.0/Create_Transaction_Listing_Changelog.xml

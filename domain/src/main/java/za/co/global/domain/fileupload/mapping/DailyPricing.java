@@ -35,20 +35,20 @@ public class DailyPricing implements Serializable {
     @ExcelColumnHeader(columnHeader = "Features")
     private String features;
 
-    @Column(name = "moodys")
-    @ExcelColumnHeader(columnHeader = "Moodys")
+    @Column(name = "rating_moodys")
+    @ExcelColumnHeader(columnHeader = "Moodys Rating")
     private String moodys;
 
-    @Column(name = "fitch")
-    @ExcelColumnHeader(columnHeader = "Fitch")
+    @Column(name = "rating_fitch")
+    @ExcelColumnHeader(columnHeader = "Fitch Rating")
     private String fitch;
 
-    @Column(name = "s_and_p")
-    @ExcelColumnHeader(columnHeader = "SAndP")
+    @Column(name = "rating_s_and_p")
+    @ExcelColumnHeader(columnHeader = "SAndP Rating")
     private String sAndP;
 
-    @Column(name = "global")
-    @ExcelColumnHeader(columnHeader = "Global")
+    @Column(name = "rating_global")
+    @ExcelColumnHeader(columnHeader = "Global Rating")
     private String global;
 
     @Column(name = "summary_rating")
@@ -337,5 +337,44 @@ public class DailyPricing implements Serializable {
 
     public void setLastMTMChangeDate(String lastMTMChangeDate) {
         this.lastMTMChangeDate = lastMTMChangeDate;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        DailyPricing that = (DailyPricing) o;
+        return Objects.equals(issuer, that.issuer) &&
+                Objects.equals(bondCode, that.bondCode) &&
+                Objects.equals(type, that.type) &&
+                Objects.equals(features, that.features) &&
+                Objects.equals(moodys, that.moodys) &&
+                Objects.equals(fitch, that.fitch) &&
+                Objects.equals(sAndP, that.sAndP) &&
+                Objects.equals(global, that.global) &&
+                Objects.equals(summaryRating, that.summaryRating) &&
+                Objects.equals(issueSize, that.issueSize) &&
+                Objects.equals(coupon, that.coupon) &&
+                Objects.equals(issueDate, that.issueDate) &&
+                Objects.equals(maturityOrCallDate, that.maturityOrCallDate) &&
+                Objects.equals(goviBenchmark, that.goviBenchmark) &&
+                Objects.equals(spreadAtIssue, that.spreadAtIssue) &&
+                Objects.equals(spreadToGoviCurrentDay, that.spreadToGoviCurrentDay) &&
+                Objects.equals(spreadToGoviNextDay, that.spreadToGoviNextDay) &&
+                Objects.equals(spreadToGoviOneDayChange, that.spreadToGoviOneDayChange) &&
+                Objects.equals(spreadToJibarOrASWCurrentDay, that.spreadToJibarOrASWCurrentDay) &&
+                Objects.equals(spreadToJibarOrASWNextDay, that.spreadToJibarOrASWNextDay) &&
+                Objects.equals(spreadToJibarOrASWOneDayChange, that.spreadToJibarOrASWOneDayChange) &&
+                Objects.equals(liquidityNoOfTrades, that.liquidityNoOfTrades) &&
+                Objects.equals(liquidityNominalTraded, that.liquidityNominalTraded) &&
+                Objects.equals(lastTradedDate, that.lastTradedDate) &&
+                Objects.equals(liquidityNoOfTrade, that.liquidityNoOfTrade) &&
+                Objects.equals(lastMTMChangeDate, that.lastMTMChangeDate);
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(issuer, bondCode, type, features, moodys, fitch, sAndP, global, summaryRating, issueSize, coupon, issueDate, maturityOrCallDate, goviBenchmark, spreadAtIssue, spreadToGoviCurrentDay, spreadToGoviNextDay, spreadToGoviOneDayChange, spreadToJibarOrASWCurrentDay, spreadToJibarOrASWNextDay, spreadToJibarOrASWOneDayChange, liquidityNoOfTrades, liquidityNominalTraded, lastTradedDate, liquidityNoOfTrade, lastMTMChangeDate);
     }
 }

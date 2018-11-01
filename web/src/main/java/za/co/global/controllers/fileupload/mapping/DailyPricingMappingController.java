@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
+import za.co.global.controllers.fileupload.BaseFileUploadController;
 import za.co.global.domain.fileupload.mapping.DailyPricing;
 import za.co.global.persistence.fileupload.mapping.DailyPricingRepository;
 import za.co.global.services.upload.FileAndObjectResolver;
@@ -21,18 +22,18 @@ import java.util.Map;
 import java.util.Set;
 
 @Controller
-public class DailyPricingMappingController {
+public class DailyPricingMappingController extends BaseFileUploadController {
 
 
-    private static final String FILE_TYPE = FileAndObjectResolver.INDICES.getFileType();
+    private static final String FILE_TYPE = FileAndObjectResolver.DAILY_PRICING.getFileType();
 
     @Autowired
     private DailyPricingRepository dailyPricingRepository;
 
 
-    @GetMapping("/upload_indices")
+    @GetMapping("/upload_daily_pricing")
     public ModelAndView showUpload() {
-        ModelAndView modelAndView = new ModelAndView("fileupload/mapping/indices");
+        ModelAndView modelAndView = new ModelAndView("fileupload/mapping/dailyPricing");
         return modelAndView;
     }
 
@@ -40,7 +41,7 @@ public class DailyPricingMappingController {
     @PostMapping("/upload_daily_pricing")
     public ModelAndView fileUpload(@RequestParam("file") MultipartFile file) {
         if (file.isEmpty()) {
-            return new ModelAndView("fileupload/mapping/indices", "saveError", "Please select a file and try again");
+            return new ModelAndView("fileupload/mapping/dailyPricing", "saveError", "Please select a file and try again");
         }
         try {
             //processFile(file, FILE_TYPE, null, null);
@@ -69,12 +70,46 @@ public class DailyPricingMappingController {
             List<Object> value = map.getValue();
             for (Object obj : value) {
                 if (obj instanceof DailyPricing) {
-                    DailyPricing dailyPricing = null;
+                    DailyPricing dailyPricing = getDailyPricing(obj, sheetName);
                     dailyPricing.setType(sheetName);
                     dailyPricingRepository.save(dailyPricing);
                 }
             }
         }
+    }
+
+    private DailyPricing getDailyPricing(Object object, String type) {
+        DailyPricing dailyPricing = (DailyPricing) object;
+        /*DailyPricing existingDailyPricing = dailyPricingRepository.findBySecurityAndType(indices.getSecurity(), type);
+        if(existingDailyPricing == null) {
+            return dailyPricing;
+        }
+        existingDailyPricing.setAsk(indices.getAsk());
+        existingDailyPricing.setBid(indices.getBid());
+        existingDailyPricing.setDescription(indices.getDescription());
+        existingDailyPricing.setExch(indices.getExch());
+        existingDailyPricing.setGicsCode(indices.getGicsCode());
+        existingDailyPricing.setIndex(indices.getIndex());
+        existingDailyPricing.setIndexPoints(indices.getIndexPoints());
+        existingDailyPricing.setIndexPrice(indices.getIndexPrice());
+        existingDailyPricing.setIssue(indices.getIssue());
+        existingDailyPricing.setIwf(indices.getIwf());
+        existingDailyPricing.setLast(indices.getLast());
+        existingDailyPricing.setMarketCap(indices.getMarketCap());
+        existingDailyPricing.setMarketCapLive(indices.getMarketCapLive());
+        existingDailyPricing.setPeRatio(indices.getPeRatio());
+        existingDailyPricing.setPositiveOrNegative(indices.getPositiveOrNegative());
+        existingDailyPricing.setR(indices.getR());
+        existingDailyPricing.setSecurity(indices.getSecurity());
+        existingDailyPricing.setSubIndustry(indices.getSubIndustry());
+        existingDailyPricing.setYldHist(indices.getYldHist());
+*/
+        return null;
+    }
+
+    @Override
+    protected void processObject(Object obj) {
+
     }
 
     /*private static void readAndStoreFundManagerHoldingSheetData(File uploadedFile) throws IOException, InvalidFormatException {
