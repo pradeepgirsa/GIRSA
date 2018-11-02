@@ -41,18 +41,17 @@ public class Holding implements Serializable {
     @Column(name = "net_percent_of_market_value")
     private BigDecimal netPercentOfMarketValue;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
     @JoinColumn(name = "holding_id", referencedColumnName = "ID", nullable = false)
     private List<HoldingCategory> holdingCategories = new ArrayList<>();
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "client_id", nullable = true, insertable = false, updatable = false)
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "client_id", nullable = true)
     private Client client;
 
-//    @Column
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "report_data_id", nullable = true, insertable = false, updatable = false)
-//    private ReportData reportData;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "report_data_id", nullable = true, insertable = false, updatable = false)
+    private ReportData reportData;
 
     @Column(name = "updated_date")
     private Date updatedDate;
@@ -143,6 +142,14 @@ public class Holding implements Serializable {
 
     public void setUpdatedDate(Date updatedDate) {
         this.updatedDate = updatedDate;
+    }
+
+    public ReportData getReportData() {
+        return reportData;
+    }
+
+    public void setReportData(ReportData reportData) {
+        this.reportData = reportData;
     }
 
     @Override

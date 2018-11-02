@@ -2,7 +2,6 @@ package za.co.global.controllers.fileupload;
 
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.DataFormatter;
 import org.apache.poi.ss.usermodel.Row;
@@ -26,6 +25,7 @@ import za.co.global.domain.fileupload.client.fpm.Holding;
 import za.co.global.domain.fileupload.client.fpm.HoldingCategory;
 import za.co.global.domain.fileupload.client.fpm.Instrument;
 import za.co.global.domain.product.Product;
+import za.co.global.domain.report.ReportStatus;
 import za.co.global.persistence.client.ClientRepository;
 import za.co.global.persistence.fileupload.FileDetailsRepository;
 import za.co.global.persistence.fileupload.HoldingRepository;
@@ -144,7 +144,8 @@ public class HoldingUploadController  {
         if(holding == null){
             throw new IllegalStateException("Something wrong with data");
         }
-        List<Holding> holdings = holdingRepository.findByPortfolioCodeAndClientAndReportDataIsNullOrRegisteredReportData(holding.getPortfolioCode(), client);
+        List<Holding> holdings = holdingRepository.findByPortfolioCodeAndClientAndReportDataIsNullOrPortfolioCodeAndClientAndReportData_ReportStatus(holding.getPortfolioCode(), client,
+                holding.getPortfolioCode(), client, ReportStatus.REGISTERED);
         if(holdings.size() > 1) {
             throw new IllegalStateException("Found duplicate holdings with same Portfolio:"+holding.getPortfolioCode()+", client:"+client.getClientName());
         }

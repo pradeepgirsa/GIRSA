@@ -6,4 +6,7 @@ import za.co.global.domain.fileupload.mapping.AdditionalClassification;
 
 @Repository
 public interface AdditionalClassificationRepository  extends JpaRepository<AdditionalClassification, Long> {
+
+    AdditionalClassification findByAlphaCode(String alphaCode);
+
 }

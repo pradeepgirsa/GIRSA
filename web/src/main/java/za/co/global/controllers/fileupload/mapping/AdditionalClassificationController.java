@@ -57,9 +57,22 @@ public class AdditionalClassificationController extends BaseFileUploadController
     @Override
     protected void processObject(Object obj) {
         if(obj instanceof AdditionalClassification) {
-            AdditionalClassification ex = (AdditionalClassification) obj;
+            AdditionalClassification ex = getAdditionalClassification(obj);
             additionalClassificationRepository.save(ex);
         }
+    }
+
+    private AdditionalClassification getAdditionalClassification(Object obj) {
+        AdditionalClassification ex = (AdditionalClassification) obj;
+        AdditionalClassification existing = additionalClassificationRepository.findByAlphaCode(ex.getAlphaCode());
+        if(existing == null) {
+            return ex;
+        }
+        existing.setIndustry(ex.getIndustry());
+        existing.setSector(ex.getSector());
+        existing.setSubsector(ex.getSubsector());
+        existing.setSupersector(ex.getSupersector());
+        return existing;
     }
 
 }

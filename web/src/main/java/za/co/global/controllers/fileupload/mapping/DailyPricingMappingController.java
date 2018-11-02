@@ -66,19 +66,19 @@ public class DailyPricingMappingController extends BaseFileUploadController {
         Map<String, List<Object>> result = parser.parse(file, fileType); //Whatever excel file you want
         Set<Map.Entry<String, List<Object>>> entries = result.entrySet();
         for (Map.Entry<String, List<Object>> map : entries) {
-            String sheetName = map.getKey();
+          //  String sheetName = map.getKey();
             List<Object> value = map.getValue();
             for (Object obj : value) {
                 if (obj instanceof DailyPricing) {
-                    DailyPricing dailyPricing = getDailyPricing(obj, sheetName);
-                    dailyPricing.setType(sheetName);
+                    DailyPricing dailyPricing = getDailyPricing(obj);
+//                    dailyPricing.setType(sheetName);
                     dailyPricingRepository.save(dailyPricing);
                 }
             }
         }
     }
 
-    private DailyPricing getDailyPricing(Object object, String type) {
+    private DailyPricing getDailyPricing(Object object) {
         DailyPricing dailyPricing = (DailyPricing) object;
         /*DailyPricing existingDailyPricing = dailyPricingRepository.findBySecurityAndType(indices.getSecurity(), type);
         if(existingDailyPricing == null) {

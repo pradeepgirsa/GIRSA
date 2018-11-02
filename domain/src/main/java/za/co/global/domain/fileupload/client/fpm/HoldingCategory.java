@@ -35,7 +35,7 @@ public class HoldingCategory implements Serializable {
     @Column(name = "t_percent_of_market_value")
     private BigDecimal totalPercentOfMarketValue;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
     @JoinColumn(name = "holding_category_id", referencedColumnName = "ID", nullable = false)
     private List<Instrument> instruments = new ArrayList<>();
 
