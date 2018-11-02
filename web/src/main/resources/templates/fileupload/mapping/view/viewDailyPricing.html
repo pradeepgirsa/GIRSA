@@ -59,10 +59,11 @@
                                 <th>Spread to Jibar/ASW Current Day</th>
                                 <th>Spread to Jibar/ASW Next Day</th>
                                 <th>Spread to Jibar/ASW 1-day change</th>
+                                <th>Current yield (%)</th>
                                 <th>Liquidity No. of trades</th>
                                 <th>Liquidity Nominal traded (Rm)</th>
+                                <th>SBR's Fair value spread to Jibar</th>
                                 <th>Last traded date</th>
-                                <th>Liquidity No. of trades</th>
                                 <th>Last MTM Change Date</th>
 
                             </tr>
@@ -91,10 +92,11 @@
                                 <td><span th:text="|${dailyPrice.spreadToJibarOrASWCurrentDay}|"/></td>
                                 <td><span th:text="|${dailyPrice.spreadToJibarOrASWNextDay}|"/></td>
                                 <td><span th:text="|${dailyPrice.spreadToJibarOrASWOneDayChange}|"/></td>
+                                <td><span th:text="|${dailyPrice.currentYield}|"/></td>
                                 <td><span th:text="|${dailyPrice.liquidityNoOfTrades}|"/></td>
                                 <td><span th:text="|${dailyPrice.liquidityNominalTraded}|"/></td>
+                                <td><span th:text="|${dailyPrice.sbrFairValue}|"/></td>
                                 <td><span th:text="|${dailyPrice.lastTradedDate}|"/></td>
-                                <td><span th:text="|${dailyPrice.liquidityNoOfTrade}|"/></td>
                                 <td><span th:text="|${dailyPrice.lastMTMChangeDate}|"/></td>
                             </tr>
                             </tbody>

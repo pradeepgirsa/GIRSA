@@ -74,7 +74,7 @@
                           columnName="id"
                           incrementBy="1"
                           startWith="100"
-                          tableName="dsu5_girrep4"/>
+                          tableName="barra_asset_info"/>
     </changeSet>
 
 </databaseChangeLog>

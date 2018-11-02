@@ -6,6 +6,7 @@ import com.gizbel.excel.annotations.ExcelColumnHeader;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.Objects;
 
 @Entity
@@ -65,11 +66,11 @@ public class DailyPricing implements Serializable {
 
     @Column(name = "issue_date")
     @ExcelColumnHeader(columnHeader = "Issue date")
-    private String issueDate;
+    private Date issueDate;
 
     @Column(name = "maturity_or_call_date")
     @ExcelColumnHeader(columnHeader = "Maturity/ call date")
-    private String maturityOrCallDate;
+    private Date maturityOrCallDate;
 
     @Column(name = "govi_benchmark")
     @ExcelColumnHeader(columnHeader = "Govi benchmark")
@@ -103,25 +104,29 @@ public class DailyPricing implements Serializable {
     @ExcelColumnHeader(columnHeader = "Spread to Jibar/ASW 1-day change")
     private String spreadToJibarOrASWOneDayChange;
 
-    @Column(name = "liquidity_no_of_trades")
-    @ExcelColumnHeader(columnHeader = "Liquidity No. of trades")
-    private String liquidityNoOfTrades;
-
-    @Column(name = "liquidity_nominal_traded")
-    @ExcelColumnHeader(columnHeader = "Liquidity Nominal traded (Rm)")
-    private String liquidityNominalTraded;
-
-    @Column(name = "last_traded_date")
-    @ExcelColumnHeader(columnHeader = "Last traded date")
-    private String lastTradedDate;
+    @Column(name = "current_yield")
+    @ExcelColumnHeader(columnHeader = "Current yield (%)")
+    private BigDecimal currentYield;
 
     @Column(name = "liquidity_no_of_trades")
     @ExcelColumnHeader(columnHeader = "Liquidity No. of trades")
     private String liquidityNoOfTrade;
 
+    @Column(name = "liquidity_nominal_traded")
+    @ExcelColumnHeader(columnHeader = "Liquidity Nominal traded (Rm)")
+    private String liquidityNominalTraded;
+
+    @Column(name = "sbr_fair_value")
+    @ExcelColumnHeader(columnHeader = "SBR's Fair value spread to Jibar")
+    private BigDecimal sbrFairValue;
+
+    @Column(name = "last_traded_date")
+    @ExcelColumnHeader(columnHeader = "Last traded date")
+    private Date lastTradedDate;
+
     @Column(name = "last_mtm_change_date")
     @ExcelColumnHeader(columnHeader = "Last MTM Change Date")
-    private String lastMTMChangeDate;
+    private Date lastMTMChangeDate;
 
     public Long getId() {
         return id;
@@ -219,19 +224,19 @@ public class DailyPricing implements Serializable {
         this.coupon = coupon;
     }
 
-    public String getIssueDate() {
+    public Date getIssueDate() {
         return issueDate;
     }
 
-    public void setIssueDate(String issueDate) {
+    public void setIssueDate(Date issueDate) {
         this.issueDate = issueDate;
     }
 
-    public String getMaturityOrCallDate() {
+    public Date getMaturityOrCallDate() {
         return maturityOrCallDate;
     }
 
-    public void setMaturityOrCallDate(String maturityOrCallDate) {
+    public void setMaturityOrCallDate(Date maturityOrCallDate) {
         this.maturityOrCallDate = maturityOrCallDate;
     }
 
@@ -299,14 +304,6 @@ public class DailyPricing implements Serializable {
         this.spreadToJibarOrASWOneDayChange = spreadToJibarOrASWOneDayChange;
     }
 
-    public String getLiquidityNoOfTrades() {
-        return liquidityNoOfTrades;
-    }
-
-    public void setLiquidityNoOfTrades(String liquidityNoOfTrades) {
-        this.liquidityNoOfTrades = liquidityNoOfTrades;
-    }
-
     public String getLiquidityNominalTraded() {
         return liquidityNominalTraded;
     }
@@ -315,11 +312,11 @@ public class DailyPricing implements Serializable {
         this.liquidityNominalTraded = liquidityNominalTraded;
     }
 
-    public String getLastTradedDate() {
+    public Date getLastTradedDate() {
         return lastTradedDate;
     }
 
-    public void setLastTradedDate(String lastTradedDate) {
+    public void setLastTradedDate(Date lastTradedDate) {
         this.lastTradedDate = lastTradedDate;
     }
 
@@ -331,12 +328,28 @@ public class DailyPricing implements Serializable {
         this.liquidityNoOfTrade = liquidityNoOfTrade;
     }
 
-    public String getLastMTMChangeDate() {
+    public Date getLastMTMChangeDate() {
         return lastMTMChangeDate;
     }
 
-    public void setLastMTMChangeDate(String lastMTMChangeDate) {
+    public void setLastMTMChangeDate(Date lastMTMChangeDate) {
         this.lastMTMChangeDate = lastMTMChangeDate;
+    }
+
+    public BigDecimal getCurrentYield() {
+        return currentYield;
+    }
+
+    public void setCurrentYield(BigDecimal currentYield) {
+        this.currentYield = currentYield;
+    }
+
+    public BigDecimal getSbrFairValue() {
+        return sbrFairValue;
+    }
+
+    public void setSbrFairValue(BigDecimal sbrFairValue) {
+        this.sbrFairValue = sbrFairValue;
     }
 
     @Override
@@ -365,16 +378,17 @@ public class DailyPricing implements Serializable {
                 Objects.equals(spreadToJibarOrASWCurrentDay, that.spreadToJibarOrASWCurrentDay) &&
                 Objects.equals(spreadToJibarOrASWNextDay, that.spreadToJibarOrASWNextDay) &&
                 Objects.equals(spreadToJibarOrASWOneDayChange, that.spreadToJibarOrASWOneDayChange) &&
-                Objects.equals(liquidityNoOfTrades, that.liquidityNoOfTrades) &&
-                Objects.equals(liquidityNominalTraded, that.liquidityNominalTraded) &&
-                Objects.equals(lastTradedDate, that.lastTradedDate) &&
+                Objects.equals(currentYield, that.currentYield) &&
                 Objects.equals(liquidityNoOfTrade, that.liquidityNoOfTrade) &&
+                Objects.equals(liquidityNominalTraded, that.liquidityNominalTraded) &&
+                Objects.equals(sbrFairValue, that.sbrFairValue) &&
+                Objects.equals(lastTradedDate, that.lastTradedDate) &&
                 Objects.equals(lastMTMChangeDate, that.lastMTMChangeDate);
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash(issuer, bondCode, type, features, moodys, fitch, sAndP, global, summaryRating, issueSize, coupon, issueDate, maturityOrCallDate, goviBenchmark, spreadAtIssue, spreadToGoviCurrentDay, spreadToGoviNextDay, spreadToGoviOneDayChange, spreadToJibarOrASWCurrentDay, spreadToJibarOrASWNextDay, spreadToJibarOrASWOneDayChange, liquidityNoOfTrades, liquidityNominalTraded, lastTradedDate, liquidityNoOfTrade, lastMTMChangeDate);
+        return Objects.hash(issuer, bondCode, type, features, moodys, fitch, sAndP, global, summaryRating, issueSize, coupon, issueDate, maturityOrCallDate, goviBenchmark, spreadAtIssue, spreadToGoviCurrentDay, spreadToGoviNextDay, spreadToGoviOneDayChange, spreadToJibarOrASWCurrentDay, spreadToJibarOrASWNextDay, spreadToJibarOrASWOneDayChange, currentYield, liquidityNoOfTrade, liquidityNominalTraded, sbrFairValue, lastTradedDate, lastMTMChangeDate);
     }
 }
