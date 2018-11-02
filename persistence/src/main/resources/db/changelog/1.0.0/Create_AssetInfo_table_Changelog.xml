@@ -45,7 +45,7 @@
             <column name="MATURITY_DATE" type="date"/>
             <column name="TIME_TO_MATURITY" type="varchar(255)"/>
             <column name="WEIGHTED_AVG_LIFE" type="varchar(255)"/>
-            <column name="PRICING_REDEMPTION_DATE" type="varchar(255)"/>
+            <column name="PRICING_REDEMPTION_DATE" type="date"/>
             <column name="CURRENT_YIELD_IN_PERCENT" type="NUMERIC(20, 3)"/>
             <column name="COUPON_IN_PERCENTAGE" type="NUMERIC(20, 3)"/>
             <column name="FIRST_COUPON_DATE" type="varchar(255)"/>
@@ -66,7 +66,7 @@
             <column name="PARENT_ISSUER_NAME" type="varchar(255)"/>
             <column name="ULTIMATE_ISSUER_ID" type="varchar(255)"/>
             <column name="ULTIMATE_ISSUER_NAME" type="varchar(255)"/>
-            <column name="NET_INDICATOR" type="bit)"/>
+            <column name="NET_INDICATOR" type="bit"/>
 
         </createTable>
 
