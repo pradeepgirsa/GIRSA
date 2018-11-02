@@ -7,6 +7,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.Objects;
 
 @Entity
 @Table(name = "transaction_listing")
@@ -19,7 +20,7 @@ public class TransactionListing implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "sec_code", unique = true, nullable = false)
+    /*@Column(name = "sec_code", unique = true, nullable = false)
     @ExcelColumnHeader(columnHeader = "sec_code")
     private String secCode;
 
@@ -193,12 +194,18 @@ public class TransactionListing implements Serializable {
 
     @Column(name = "mod_following")
     @ExcelColumnHeader(columnHeader = "modFollowing")
-    private String modFollowing;
+    private String modFollowing;*/
 
+    @Column(name = "client_portfolio_code")
+    @ExcelColumnHeader(columnHeader = "ClientPortfolioCode")
     private String clientPortfolioCode;
 
+    @Column(name = "instrument_code")
+    @ExcelColumnHeader(columnHeader = "InstrumentCode")
     private String instrumentCode;
 
+    @Column(name = "trade_date")
+    @ExcelColumnHeader(columnHeader = "TradeDate")
     private Date tradeDate;
 
     public Long getId() {
@@ -207,358 +214,6 @@ public class TransactionListing implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public String getSecCode() {
-        return secCode;
-    }
-
-    public void setSecCode(String secCode) {
-        this.secCode = secCode;
-    }
-
-    public String getManco() {
-        return manco;
-    }
-
-    public void setManco(String manco) {
-        this.manco = manco;
-    }
-
-    public String getMmClass() {
-        return mmClass;
-    }
-
-    public void setMmClass(String mmClass) {
-        this.mmClass = mmClass;
-    }
-
-    public String getInstrType() {
-        return instrType;
-    }
-
-    public void setInstrType(String instrType) {
-        this.instrType = instrType;
-    }
-
-    public String getSubInstrType() {
-        return subInstrType;
-    }
-
-    public void setSubInstrType(String subInstrType) {
-        this.subInstrType = subInstrType;
-    }
-
-    public String getFpmInstrumentType() {
-        return fpmInstrumentType;
-    }
-
-    public void setFpmInstrumentType(String fpmInstrumentType) {
-        this.fpmInstrumentType = fpmInstrumentType;
-    }
-
-    public String getSecName() {
-        return secName;
-    }
-
-    public void setSecName(String secName) {
-        this.secName = secName;
-    }
-
-    public String getCurrency() {
-        return currency;
-    }
-
-    public void setCurrency(String currency) {
-        this.currency = currency;
-    }
-
-    public String getInstrId() {
-        return instrId;
-    }
-
-    public void setInstrId(String instrId) {
-        this.instrId = instrId;
-    }
-
-    public String getIsin() {
-        return isin;
-    }
-
-    public void setIsin(String isin) {
-        this.isin = isin;
-    }
-
-    public BigDecimal getInstrTradeType() {
-        return instrTradeType;
-    }
-
-    public void setInstrTradeType(BigDecimal instrTradeType) {
-        this.instrTradeType = instrTradeType;
-    }
-
-    public String getIssueCode() {
-        return issueCode;
-    }
-
-    public void setIssueCode(String issueCode) {
-        this.issueCode = issueCode;
-    }
-
-    public String getIssuerName() {
-        return issuerName;
-    }
-
-    public void setIssuerName(String issuerName) {
-        this.issuerName = issuerName;
-    }
-
-    public String getYieldType() {
-        return yieldType;
-    }
-
-    public void setYieldType(String yieldType) {
-        this.yieldType = yieldType;
-    }
-
-    public BigDecimal getInterestRate() {
-        return interestRate;
-    }
-
-    public void setInterestRate(BigDecimal interestRate) {
-        this.interestRate = interestRate;
-    }
-
-    public String getLinkedIndex() {
-        return linkedIndex;
-    }
-
-    public void setLinkedIndex(String linkedIndex) {
-        this.linkedIndex = linkedIndex;
-    }
-
-    public String getSpread() {
-        return spread;
-    }
-
-    public void setSpread(String spread) {
-        this.spread = spread;
-    }
-
-    public String getInflationIndex() {
-        return inflationIndex;
-    }
-
-    public void setInflationIndex(String inflationIndex) {
-        this.inflationIndex = inflationIndex;
-    }
-
-    public String getInflationLag() {
-        return inflationLag;
-    }
-
-    public void setInflationLag(String inflationLag) {
-        this.inflationLag = inflationLag;
-    }
-
-    public BigDecimal getInflationBaseValue() {
-        return inflationBaseValue;
-    }
-
-    public void setInflationBaseValue(BigDecimal inflationBaseValue) {
-        this.inflationBaseValue = inflationBaseValue;
-    }
-
-    public String getDateIssue() {
-        return dateIssue;
-    }
-
-    public void setDateIssue(String dateIssue) {
-        this.dateIssue = dateIssue;
-    }
-
-    public BigDecimal getNominal() {
-        return nominal;
-    }
-
-    public void setNominal(BigDecimal nominal) {
-        this.nominal = nominal;
-    }
-
-    public String getDateMaturity() {
-        return dateMaturity;
-    }
-
-    public void setDateMaturity(String dateMaturity) {
-        this.dateMaturity = dateMaturity;
-    }
-
-    public BigDecimal getMaturityValue() {
-        return maturityValue;
-    }
-
-    public void setMaturityValue(BigDecimal maturityValue) {
-        this.maturityValue = maturityValue;
-    }
-
-    public String getInterestFreq() {
-        return interestFreq;
-    }
-
-    public void setInterestFreq(String interestFreq) {
-        this.interestFreq = interestFreq;
-    }
-
-    public String getDatesBookClose() {
-        return datesBookClose;
-    }
-
-    public void setDatesBookClose(String datesBookClose) {
-        this.datesBookClose = datesBookClose;
-    }
-
-    public String getDatesCouponPayment() {
-        return datesCouponPayment;
-    }
-
-    public void setDatesCouponPayment(String datesCouponPayment) {
-        this.datesCouponPayment = datesCouponPayment;
-    }
-
-    public String getDatesReset() {
-        return datesReset;
-    }
-
-    public void setDatesReset(String datesReset) {
-        this.datesReset = datesReset;
-    }
-
-    public String getDateFirstPayment() {
-        return dateFirstPayment;
-    }
-
-    public void setDateFirstPayment(String dateFirstPayment) {
-        this.dateFirstPayment = dateFirstPayment;
-    }
-
-    public String getDateVerified() {
-        return dateVerified;
-    }
-
-    public void setDateVerified(String dateVerified) {
-        this.dateVerified = dateVerified;
-    }
-
-    public String getVerifiedBy() {
-        return verifiedBy;
-    }
-
-    public void setVerifiedBy(String verifiedBy) {
-        this.verifiedBy = verifiedBy;
-    }
-
-    public String getDateFPMStatic() {
-        return dateFPMStatic;
-    }
-
-    public void setDateFPMStatic(String dateFPMStatic) {
-        this.dateFPMStatic = dateFPMStatic;
-    }
-
-    public String getInflationIndexID() {
-        return inflationIndexID;
-    }
-
-    public void setInflationIndexID(String inflationIndexID) {
-        this.inflationIndexID = inflationIndexID;
-    }
-
-    public String getLinkedIndexID() {
-        return linkedIndexID;
-    }
-
-    public void setLinkedIndexID(String linkedIndexID) {
-        this.linkedIndexID = linkedIndexID;
-    }
-
-    public String getYieldTypeID() {
-        return yieldTypeID;
-    }
-
-    public void setYieldTypeID(String yieldTypeID) {
-        this.yieldTypeID = yieldTypeID;
-    }
-
-    public String getIssuerID() {
-        return issuerID;
-    }
-
-    public void setIssuerID(String issuerID) {
-        this.issuerID = issuerID;
-    }
-
-    public String getMktSeccode() {
-        return mktSeccode;
-    }
-
-    public void setMktSeccode(String mktSeccode) {
-        this.mktSeccode = mktSeccode;
-    }
-
-    public String getFpmInstrumentTypeID() {
-        return fpmInstrumentTypeID;
-    }
-
-    public void setFpmInstrumentTypeID(String fpmInstrumentTypeID) {
-        this.fpmInstrumentTypeID = fpmInstrumentTypeID;
-    }
-
-    public String getInstrTradeTypeID() {
-        return instrTradeTypeID;
-    }
-
-    public void setInstrTradeTypeID(String instrTradeTypeID) {
-        this.instrTradeTypeID = instrTradeTypeID;
-    }
-
-    public String getSubInstrTypeID() {
-        return subInstrTypeID;
-    }
-
-    public void setSubInstrTypeID(String subInstrTypeID) {
-        this.subInstrTypeID = subInstrTypeID;
-    }
-
-    public String getmMClassID() {
-        return mMClassID;
-    }
-
-    public void setmMClassID(String mMClassID) {
-        this.mMClassID = mMClassID;
-    }
-
-    public String getMancoID() {
-        return mancoID;
-    }
-
-    public void setMancoID(String mancoID) {
-        this.mancoID = mancoID;
-    }
-
-    public String getUserName() {
-        return userName;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
-
-    public String getModFollowing() {
-        return modFollowing;
-    }
-
-    public void setModFollowing(String modFollowing) {
-        this.modFollowing = modFollowing;
     }
 
     public String getClientPortfolioCode() {
@@ -583,5 +238,21 @@ public class TransactionListing implements Serializable {
 
     public void setTradeDate(Date tradeDate) {
         this.tradeDate = tradeDate;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        TransactionListing that = (TransactionListing) o;
+        return Objects.equals(clientPortfolioCode, that.clientPortfolioCode) &&
+                Objects.equals(instrumentCode, that.instrumentCode) &&
+                Objects.equals(tradeDate, that.tradeDate);
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(clientPortfolioCode, instrumentCode, tradeDate);
     }
 }

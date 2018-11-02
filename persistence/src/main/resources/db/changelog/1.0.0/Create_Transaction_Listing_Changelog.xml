@@ -11,7 +11,10 @@
             <column name="id" type="bigint">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="sec_code" type="varchar(20)"/>
+            <column name="client_portfolio_code" type="varchar(50)"/>
+            <column name="instrument_code" type="varchar(50)"/>
+            <column name="trade_date" type="date"/>
+            <!--<column name="sec_code" type="varchar(20)"/>
             <column name="manco" type="varchar(50)"/>
             <column name="mm_class" type="varchar(100)"/>
             <column name="instr_type" type="varchar(100)"/>
@@ -54,7 +57,7 @@
             <column name="mm_class_id" type="varchar(20)"/>
             <column name="manco_id" type="varchar(20)"/>
             <column name="user_name" type="varchar(20)"/>
-            <column name="mod_following" type="varchar(20)"/>
+            <column name="mod_following" type="varchar(20)"/>-->
         </createTable>
 
         <addAutoIncrement columnDataType="bigint"

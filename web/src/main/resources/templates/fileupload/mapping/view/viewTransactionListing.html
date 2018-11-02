@@ -38,7 +38,10 @@
                             <thead class="">
                             <tr>
                                 <th>Id</th>
-                                <th>Sec Code</th>
+                                <th>Client Portfolio Code</th>
+                                <th>Instrument Code</th>
+                                <th>Trade Date</th>
+                                <!--<th>Sec Code</th>
                                 <th>Manco</th>
                                 <th>MMClass</th>
                                 <th>InstrType</th>
@@ -81,14 +84,17 @@
                                 <th>MMClass ID</th>
                                 <th>Manco ID</th>
                                 <th>UserName</th>
-                                <th>ModFollowing</th>
+                                <th>ModFollowing</th>-->
 
                             </tr>
                             </thead>
                             <tbody>
                             <tr th:each="transactionListing : ${transactionListings}">
                                 <td><span th:text="|${transactionListing.id}|"/></td>
-                                <td><span th:text="|${transactionListing.secCode}|"/></td>
+                                <td><span th:text="|${transactionListing.clientPortfolioCode}|"/></td>
+                                <td><span th:text="|${transactionListing.instrumentCode}|"/></td>
+                                <td><span th:text="|${transactionListing.tradeDate}|"/></td>
+                                <!--<td><span th:text="|${transactionListing.secCode}|"/></td>
                                 <td><span th:text="|${transactionListing.manco}|"/></td>
                                 <td><span th:text="|${transactionListing.mmClass}|"/></td>
                                 <td><span th:text="|${transactionListing.instrType}|"/></td>
@@ -131,7 +137,7 @@
                                 <td><span th:text="|${transactionListing.mMClassID}|"/></td>
                                 <td><span th:text="|${transactionListing.mancoID}|"/></td>
                                 <td><span th:text="|${transactionListing.userName}|"/></td>
-                                <td><span th:text="|${transactionListing.modFollowing}|"/></td>
+                                <td><span th:text="|${transactionListing.modFollowing}|"/></td>-->
                             </tr>
                             </tbody>
                         </table>
