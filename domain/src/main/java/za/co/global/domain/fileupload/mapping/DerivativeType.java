@@ -9,7 +9,7 @@ import java.io.Serializable;
 import java.util.Objects;
 
 @Entity
-@Table(name = "derivative_types")
+@Table(name = "derivative_type")
 @ExcelBean
 public class DerivativeType implements Serializable {
 

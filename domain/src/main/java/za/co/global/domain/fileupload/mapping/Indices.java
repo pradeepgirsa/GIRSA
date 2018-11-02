@@ -53,7 +53,7 @@ public class Indices implements Serializable {
 
     @Column(name = "index_points")
     @ExcelColumnHeader(columnHeader = "IndexPts")
-    private String indexPoints;
+    private BigDecimal indexPoints;
 
     @Column(name = "yld_hist")
     @ExcelColumnHeader(columnHeader = "YldHist%")
@@ -65,23 +65,23 @@ public class Indices implements Serializable {
 
     @Column(name = "issue")
     @ExcelColumnHeader(columnHeader = "#Issue")
-    private String issue;
+    private BigDecimal issue;
 
     @Column(name = "bid")
     @ExcelColumnHeader(columnHeader = "Bid")
-    private String bid;
+    private BigDecimal bid;
 
     @Column(name = "ask")
     @ExcelColumnHeader(columnHeader = "Ask")
-    private String ask;
+    private BigDecimal ask;
 
     @Column(name = "last")
     @ExcelColumnHeader(columnHeader = "Last")
-    private String last;
+    private BigDecimal last;
 
     @Column(name = "positive_or_negative")
     @ExcelColumnHeader(columnHeader = "+/-")
-    private String positiveOrNegative;
+    private BigDecimal positiveOrNegative;
 
     @Column(name = "sub_industry")
     @ExcelColumnHeader(columnHeader = "SubIndustry")
@@ -138,11 +138,11 @@ public class Indices implements Serializable {
         this.r = r;
     }
 
-    public String getIndexPoints() {
+    public BigDecimal getIndexPoints() {
         return indexPoints;
     }
 
-    public void setIndexPoints(String indexPoints) {
+    public void setIndexPoints(BigDecimal indexPoints) {
         this.indexPoints = indexPoints;
     }
 
@@ -202,43 +202,43 @@ public class Indices implements Serializable {
         return peRatio;
     }
 
-    public String getIssue() {
+    public BigDecimal getIssue() {
         return issue;
     }
 
-    public void setIssue(String issue) {
+    public void setIssue(BigDecimal issue) {
         this.issue = issue;
     }
 
-    public String getBid() {
+    public BigDecimal getBid() {
         return bid;
     }
 
-    public void setBid(String bid) {
+    public void setBid(BigDecimal bid) {
         this.bid = bid;
     }
 
-    public String getAsk() {
+    public BigDecimal getAsk() {
         return ask;
     }
 
-    public void setAsk(String ask) {
+    public void setAsk(BigDecimal ask) {
         this.ask = ask;
     }
 
-    public String getLast() {
+    public BigDecimal getLast() {
         return last;
     }
 
-    public void setLast(String last) {
+    public void setLast(BigDecimal last) {
         this.last = last;
     }
 
-    public String getPositiveOrNegative() {
+    public BigDecimal getPositiveOrNegative() {
         return positiveOrNegative;
     }
 
-    public void setPositiveOrNegative(String positiveOrNegative) {
+    public void setPositiveOrNegative(BigDecimal positiveOrNegative) {
         this.positiveOrNegative = positiveOrNegative;
     }
 

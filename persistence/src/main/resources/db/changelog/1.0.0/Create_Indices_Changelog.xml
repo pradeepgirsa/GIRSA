@@ -12,22 +12,22 @@
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="security" type="varchar(20)"/>
-            <column name="description" type="varchar(50)"/>
-            <column name="exch" type="varchar(100)"/>
-            <column name="r" type="varchar(100)"/>
+            <column name="description" type="varchar(100)"/>
+            <column name="exch" type="varchar(20)"/>
+            <column name="r" type="varchar(20)"/>
             <column name="market_cap" type="NUMERIC(20, 3)"/>
             <column name="market_cap_live" type="NUMERIC(20, 3)"/>
             <column name="index" type="NUMERIC(20, 3)"/>
             <column name="index_price" type="NUMERIC(20, 3)"/>
-            <column name="index_points" type="varchar(20)"/>
+            <column name="index_points" type="NUMERIC(20, 3)"/>
             <column name="yld_hist" type="NUMERIC(20, 3)"/>
             <column name="iwf" type="NUMERIC(20, 3)"/>
-            <column name="issue" type="varchar(20)"/>
-            <column name="bid" type="varchar(50)"/>
-            <column name="ask" type="varchar(20)"/>
-            <column name="last" type="varchar(20)"/>
-            <column name="positive_or_negative" type="varchar(20)"/>
-            <column name="sub_industry" type="varchar(20)"/>
+            <column name="issue" type="NUMERIC(20, 3)"/>
+            <column name="bid" type="NUMERIC(20, 3)"/>
+            <column name="ask" type="NUMERIC(20, 3)"/>
+            <column name="last" type="NUMERIC(20, 3)"/>
+            <column name="positive_or_negative" type="NUMERIC(20, 3)"/>
+            <column name="sub_industry" type="varchar(200)"/>
             <column name="gics_code" type="varchar(20)"/>
             <column name="pe_ratio" type="NUMERIC(20, 3)"/>
             <column name="type" type="varchar(50)"/>
