@@ -46,6 +46,7 @@ import java.math.RoundingMode;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.Year;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
@@ -259,16 +260,6 @@ public class GenerateQstats {
                     //TODO - verify as it is date or days
                     qStatsBean.setTtmCur(new BigDecimal(TimeUnit.DAYS.convert((reportDate.getTime()-new Date().getTime()), TimeUnit.MILLISECONDS)));
 
-
-
-
-
-
-
-
-
-
-
                     qStatsBean.setInstrRateST(null);
                     qStatsBean.setInstrRateLT(null);
 
@@ -320,7 +311,7 @@ public class GenerateQstats {
             }
 
             holding.setUpdatedDate(new Date());
-            holding.setReportData(reportData);
+           // holding.setReportData(reportData);
 
 
         }
@@ -439,6 +430,9 @@ public class GenerateQstats {
     private Date parseDate(String dateInString) {
         String datePattern = "ddMMMyyyy";
         try {
+            if(dateInString.trim().length() == 5) {
+              dateInString = datePattern+Year.now().getValue();
+            }
             DateFormat dateFormat = new SimpleDateFormat(datePattern);
             return dateFormat.parse(dateInString);
         } catch (ParseException e) {
@@ -450,6 +444,16 @@ public class GenerateQstats {
     }
 
     public static void main(String[] args) {
+
+//        DateFormat dateFormat = new SimpleDateFormat("ddMMM");
+//        try {
+//
+//            System.out.println();
+//            System.out.println(dateFormat.parse("28Sep"));
+//        } catch (ParseException e) {
+//            e.printStackTrace();
+//        }
+
         try (Workbook workbook = new XSSFWorkbook();
              FileOutputStream fileOut = new FileOutputStream("C:\\Users\\SHARANYAREDDY\\Desktop\\TSR\\GIRSA\\abc.xlsx")) {
             // new HSSFWorkbook() for generating `.xls` file
@@ -475,7 +479,7 @@ public class GenerateQstats {
             BigDecimal effWeight = new BigDecimal(5.3d);
 
             String settlementCell = CellReference.convertNumToColString(0)+(rowNumber+1);
-            String maturityCell = CellReference.convertNumToColString(1)+(rowNumber+1);
+            String maturityCell = CellReference.convertNumToColString(6)+(rowNumber+1);
             String couponCell = CellReference.convertNumToColString(2)+(rowNumber+1);
             String yieldCell = CellReference.convertNumToColString(3)+(rowNumber+1);
            // String formula=String.format("MDURATION(%s,%s,%s,%s,2)", settlementCell, maturityCell, couponCell, yieldCell);
@@ -491,7 +495,7 @@ public class GenerateQstats {
             cell1.setCellValue(quarterDate);
             cell1.setCellStyle(dateCellStyle);
 
-            Cell cell2 = headerRow.createCell(1);
+            Cell cell2 = headerRow.createCell(6);
             cell2.setCellValue(sqlPricingRedemptionDate);
             cell2.setCellStyle(dateCellStyle);
 
@@ -503,7 +507,7 @@ public class GenerateQstats {
             cell4.setCellValue(currentYield.doubleValue());
             cell3.setCellType(Cell.CELL_TYPE_NUMERIC);
 
-            String formula=String.format("MDURATION(%s,%s,"+couponRate.doubleValue()+","+currentYield.doubleValue()+",2)", settlementCell, maturityCell);
+            String formula=String.format("MDURATION(%s,%s,"+couponRate.doubleValue()+","+currentYield.doubleValue()+",2)*"+effWeight.doubleValue()+"*"+365.25, settlementCell, maturityCell);
 
 
             Cell cell5 = headerRow.createCell(4);

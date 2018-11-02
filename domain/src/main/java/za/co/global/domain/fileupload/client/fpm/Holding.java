@@ -49,10 +49,10 @@ public class Holding implements Serializable {
     @JoinColumn(name = "client_id", nullable = true, insertable = false, updatable = false)
     private Client client;
 
-    @Column
-    @ManyToOne
-    @JoinColumn(name = "report_data_id", nullable = true, insertable = false, updatable = false)
-    private ReportData reportData;
+//    @Column
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "report_data_id", nullable = true, insertable = false, updatable = false)
+//    private ReportData reportData;
 
     @Column(name = "updated_date")
     private Date updatedDate;
@@ -145,14 +145,6 @@ public class Holding implements Serializable {
         this.updatedDate = updatedDate;
     }
 
-    public ReportData getReportData() {
-        return reportData;
-    }
-
-    public void setReportData(ReportData reportData) {
-        this.reportData = reportData;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -176,7 +168,7 @@ public class Holding implements Serializable {
         if (holdingCategories != null ? !holdingCategories.equals(holding.holdingCategories) : holding.holdingCategories != null)
             return false;
         if (client != null ? !client.equals(holding.client) : holding.client != null) return false;
-        return reportData != null ? reportData.equals(holding.reportData) : holding.reportData == null;
+        return updatedDate != null ? updatedDate.equals(holding.updatedDate) : holding.updatedDate == null;
     }
 
     @Override
@@ -190,7 +182,7 @@ public class Holding implements Serializable {
         result = 31 * result + (netPercentOfMarketValue != null ? netPercentOfMarketValue.hashCode() : 0);
         result = 31 * result + (holdingCategories != null ? holdingCategories.hashCode() : 0);
         result = 31 * result + (client != null ? client.hashCode() : 0);
-        result = 31 * result + (reportData != null ? reportData.hashCode() : 0);
+        result = 31 * result + (updatedDate != null ? updatedDate.hashCode() : 0);
         return result;
     }
 }
