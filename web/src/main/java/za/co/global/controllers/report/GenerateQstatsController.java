@@ -51,52 +51,17 @@ import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 @Controller
-public class GenerateQstats {
+public class GenerateQstatsController extends AbstractQstatsReportController {
 
-    public static final String VIEW_FILE = "report/asisaQueueStats";
+    private static final String VIEW_FILE = "report/asisaQueueStats";
+
     @Value("${file.upload.folder}")
     protected String fileUploadFolder;
 
 
 
     @Autowired
-    private HoldingRepository holdingRepository;
-
-    @Autowired
-    private PSGFundMappingRepository psgFundMappingRepository;
-
-    @Autowired
-    private InstitutionalDetailsRepository institutionalDetailsRepository;
-
-    @Autowired
-    private NumberOfAccountsRepository numberOfAccountsRepository;
-
-    @Autowired
-    private InstrumentCodeRepository instrumentCodeRepository;
-
-    @Autowired
-    private BarraAssetInfoRepository barraAssetInfoRepository;
-
-    @Autowired
-    private IssuerMappingsRepository issuerMappingsRepository;
-
-    @Autowired
-    private ClientRepository clientRepository;
-
-    @Autowired
-    private ReportDataRepository reportDataRepository;
-
-    @Autowired
-    private SecurityListingRepository securityListingRepository;
-
-    @Autowired
-    private Validator<HoldingValidationBean> validator;
-
-    @Autowired
     private ReportCreationService reportCreationService;
-
-    @Autowired
-    private Reg28InstrumentTypeRepository reg28InstrumentTypeRepository;
 
     @Autowired
     private DerivativeTypesRepository derivativeTypesRepository;
@@ -112,8 +77,7 @@ public class GenerateQstats {
 
     private Map<String, Date> maturityDateMap;
 
-
-    private static final Logger LOGGER = LoggerFactory.getLogger("GenerateQstats");
+    private static final Logger LOGGER = LoggerFactory.getLogger(GenerateQstatsController.class);
 
     @GetMapping("/generate_qstats")
     public ModelAndView displayScreen() {
@@ -129,15 +93,7 @@ public class GenerateQstats {
 
         Client client = clientRepository.findOne(Long.parseLong(clientId));
         ReportData reportData = reportDataRepository.findByReportStatusAndClient(ReportStatus.REGISTERED, client);
-        List<Holding> holdings;
-        if(reportData != null) {
-            holdings = holdingRepository.findByClientAndReportDataIsNullOrReportData(client, reportData);
-        } else {
-            reportData = new ReportData();
-            reportData.setCreatedDate(new Date());
-            reportData.setClient(client);
-            holdings = holdingRepository.findByClientAndReportDataIsNull(client);
-        }
+        List<Holding> holdings = getHoldings(client, reportData);
 
         List<QStatsBean> qStatsBeans = new ArrayList<>();
 //        BarraAssetInfo netAsset = assetInfoRepository.findByAssetId("897"); //TODO - verify
@@ -174,6 +130,7 @@ public class GenerateQstats {
                             .setPsgFundMapping(psgFundMapping)
                             .setNumberOfAccounts(numberofAccounts)
                             .setReg28InstrumentType(reg28InstrumentType)
+                            .setIssuerMapping(issuerMapping)
                             .build();
 
 
@@ -204,7 +161,6 @@ public class GenerateQstats {
 
                     qStatsBean.setMaturityDate(maturityDate);
 
-                    //  qStatsBean.setWeightedAvgDuration(null); //TODO - do calculation at cell creation and remove this field
                     qStatsBean.setModifiedDuration(barraAssetInfo.getModifiedDuration());
                     qStatsBean.setEffWeight(barraAssetInfo.getEffWeight());
                     qStatsBean.setPricingRedemptionDate(barraAssetInfo.getPricingRedemptionDate());
@@ -216,15 +172,6 @@ public class GenerateQstats {
                     qStatsBean.setCurrencyCode(instrument.getIssueCurrency());
                     qStatsBean.setSecurityName(instrument.getInstrumentDescription());
                     qStatsBean.setMarketValue(instrument.getBaseCurrentMarketValue());
-
-
-
-
-                    // qStatsBean.setWeightedAvgMaturity(weightedAvgMaturity); //TODO - do calculation at cell creation and remove this field
-
-
-
-
 
                     BigDecimal perOfPort = qStatsBean.getMarketValue().divide(qStatsBean.getMvTotal(), 3, BigDecimal.ROUND_FLOOR);
                     qStatsBean.setPerOfPort(perOfPort);
@@ -391,57 +338,6 @@ public class GenerateQstats {
         return aciAssetClass;
     }
 
-    private Date getMaturityDate(BarraAssetInfo barraAssetInfo) {
-        Date maturityDate = null;
-        if(barraAssetInfo != null) {
-            if (maturityDateMap.get(barraAssetInfo.getAssetId()) != null) {
-                maturityDate = maturityDateMap.get(barraAssetInfo.getAssetId());
-            } else {
-                maturityDate = getMaturityDateFromSecurityListing(barraAssetInfo.getMaturityDate(), barraAssetInfo.getAssetId());
-                maturityDateMap.put(barraAssetInfo.getAssetId(), maturityDate);
-            }
-        }
-        return maturityDate;
-    }
-
-    private Date getMaturityDateFromSecurityListing(Date barraMaturityDate, String instrumentCode) {
-        if(barraMaturityDate != null) {
-            return barraMaturityDate;
-        }
-        SecurityListing securityListing = securityListingRepository.findBySecurityCode(instrumentCode);
-        String couponPaymentDates = securityListing.getCouponPaymentDates() != null ?
-                securityListing.getCouponPaymentDates().replace(" ", "") : null;
-        String[] dates = couponPaymentDates.split(",");
-        for(String dateInString : dates) {
-            Date date = parseDate(dateInString);
-            if(date != null && date.after(new Date())) {
-                return date;
-            }
-        }
-        if(securityListing.getMaturityDate() != null && securityListing.getMaturityDate().after(new Date())) {
-            return securityListing.getMaturityDate();
-        }
-        return null;
-    }
-
-
-
-
-    private Date parseDate(String dateInString) {
-        String datePattern = "ddMMMyyyy";
-        try {
-            if(dateInString.trim().length() == 5) {
-              dateInString = datePattern+Year.now().getValue();
-            }
-            DateFormat dateFormat = new SimpleDateFormat(datePattern);
-            return dateFormat.parse(dateInString);
-        } catch (ParseException e) {
-            LOGGER.error("Date parse error to format:{}, value: {}", datePattern, dateInString);
-        }
-
-        //TODO - other date format
-        return null;
-    }
 
     public static void main(String[] args) {
 
@@ -525,6 +421,10 @@ public class GenerateQstats {
     }
 
 
+    @Override
+    protected Logger getLogger() {
+        return LOGGER;
+    }
 }
 
 
