@@ -36,19 +36,19 @@ public class DailyPricing implements Serializable {
     @ExcelColumnHeader(columnHeader = "Features")
     private String features;
 
-    @Column(name = "rating_moodys")
+    @Column(name = "moodys_rating")
     @ExcelColumnHeader(columnHeader = "Moodys Rating")
     private String moodys;
 
-    @Column(name = "rating_fitch")
+    @Column(name = "fitch_rating")
     @ExcelColumnHeader(columnHeader = "Fitch Rating")
     private String fitch;
 
-    @Column(name = "rating_s_and_p")
-    @ExcelColumnHeader(columnHeader = "SAndP Rating")
-    private String sAndP;
+    @Column(name = "standard_and_poor_rating")
+    @ExcelColumnHeader(columnHeader = "Standard And Poor's Rating")
+    private String standardAndPoor;
 
-    @Column(name = "rating_global")
+    @Column(name = "global_rating")
     @ExcelColumnHeader(columnHeader = "Global Rating")
     private String global;
 
@@ -80,29 +80,13 @@ public class DailyPricing implements Serializable {
     @ExcelColumnHeader(columnHeader = "Spread at issue")
     private String spreadAtIssue;
 
-    @Column(name = "spread_to_govi_current_day")
-    @ExcelColumnHeader(columnHeader = "Spread To Govi Current Day")
-    private String spreadToGoviCurrentDay;
+    @Column(name = "spread_to_govi")
+    @ExcelColumnHeader(columnHeader = "Spread To Govi")
+    private String spreadToGovi;
 
-    @Column(name = "spread_to_govi_next_day")
-    @ExcelColumnHeader(columnHeader = "Spread To Govi Next Day")
-    private String spreadToGoviNextDay;
-
-    @Column(name = "spread_to_govi_one_day_change")
-    @ExcelColumnHeader(columnHeader = "Spread To Govi 1-day change")
-    private String spreadToGoviOneDayChange;
-
-    @Column(name = "spread_to_jibar_or_asw_current_day")
-    @ExcelColumnHeader(columnHeader = "Spread to Jibar/ASW Current Day")
-    private String spreadToJibarOrASWCurrentDay;
-
-    @Column(name = "spread_to_jibar_or_asw_next_day")
-    @ExcelColumnHeader(columnHeader = "Spread to Jibar/ASW Next Day")
-    private String spreadToJibarOrASWNextDay;
-
-    @Column(name = "spread_to_jibar_or_asw_one_day_change")
-    @ExcelColumnHeader(columnHeader = "Spread to Jibar/ASW 1-day change")
-    private String spreadToJibarOrASWOneDayChange;
+    @Column(name = "spread_to_jibar_or_asw")
+    @ExcelColumnHeader(columnHeader = "Spread to Jibar/ASW")
+    private String spreadToJibarOrASW;
 
     @Column(name = "current_yield")
     @ExcelColumnHeader(columnHeader = "Current yield (%)")
@@ -184,14 +168,6 @@ public class DailyPricing implements Serializable {
         this.fitch = fitch;
     }
 
-    public String getsAndP() {
-        return sAndP;
-    }
-
-    public void setsAndP(String sAndP) {
-        this.sAndP = sAndP;
-    }
-
     public String getGlobal() {
         return global;
     }
@@ -256,60 +232,36 @@ public class DailyPricing implements Serializable {
         this.spreadAtIssue = spreadAtIssue;
     }
 
-    public String getSpreadToGoviCurrentDay() {
-        return spreadToGoviCurrentDay;
-    }
-
-    public void setSpreadToGoviCurrentDay(String spreadToGoviCurrentDay) {
-        this.spreadToGoviCurrentDay = spreadToGoviCurrentDay;
-    }
-
-    public String getSpreadToGoviNextDay() {
-        return spreadToGoviNextDay;
-    }
-
-    public void setSpreadToGoviNextDay(String spreadToGoviNextDay) {
-        this.spreadToGoviNextDay = spreadToGoviNextDay;
-    }
-
-    public String getSpreadToGoviOneDayChange() {
-        return spreadToGoviOneDayChange;
-    }
-
-    public void setSpreadToGoviOneDayChange(String spreadToGoviOneDayChange) {
-        this.spreadToGoviOneDayChange = spreadToGoviOneDayChange;
-    }
-
-    public String getSpreadToJibarOrASWCurrentDay() {
-        return spreadToJibarOrASWCurrentDay;
-    }
-
-    public void setSpreadToJibarOrASWCurrentDay(String spreadToJibarOrASWCurrentDay) {
-        this.spreadToJibarOrASWCurrentDay = spreadToJibarOrASWCurrentDay;
-    }
-
-    public String getSpreadToJibarOrASWNextDay() {
-        return spreadToJibarOrASWNextDay;
-    }
-
-    public void setSpreadToJibarOrASWNextDay(String spreadToJibarOrASWNextDay) {
-        this.spreadToJibarOrASWNextDay = spreadToJibarOrASWNextDay;
-    }
-
-    public String getSpreadToJibarOrASWOneDayChange() {
-        return spreadToJibarOrASWOneDayChange;
-    }
-
-    public void setSpreadToJibarOrASWOneDayChange(String spreadToJibarOrASWOneDayChange) {
-        this.spreadToJibarOrASWOneDayChange = spreadToJibarOrASWOneDayChange;
-    }
-
     public String getLiquidityNominalTraded() {
         return liquidityNominalTraded;
     }
 
     public void setLiquidityNominalTraded(String liquidityNominalTraded) {
         this.liquidityNominalTraded = liquidityNominalTraded;
+    }
+
+    public String getStandardAndPoor() {
+        return standardAndPoor;
+    }
+
+    public void setStandardAndPoor(String standardAndPoor) {
+        this.standardAndPoor = standardAndPoor;
+    }
+
+    public String getSpreadToGovi() {
+        return spreadToGovi;
+    }
+
+    public void setSpreadToGovi(String spreadToGovi) {
+        this.spreadToGovi = spreadToGovi;
+    }
+
+    public String getSpreadToJibarOrASW() {
+        return spreadToJibarOrASW;
+    }
+
+    public void setSpreadToJibarOrASW(String spreadToJibarOrASW) {
+        this.spreadToJibarOrASW = spreadToJibarOrASW;
     }
 
     public Date getLastTradedDate() {
@@ -363,7 +315,7 @@ public class DailyPricing implements Serializable {
                 Objects.equals(features, that.features) &&
                 Objects.equals(moodys, that.moodys) &&
                 Objects.equals(fitch, that.fitch) &&
-                Objects.equals(sAndP, that.sAndP) &&
+                Objects.equals(standardAndPoor, that.standardAndPoor) &&
                 Objects.equals(global, that.global) &&
                 Objects.equals(summaryRating, that.summaryRating) &&
                 Objects.equals(issueSize, that.issueSize) &&
@@ -372,12 +324,6 @@ public class DailyPricing implements Serializable {
                 Objects.equals(maturityOrCallDate, that.maturityOrCallDate) &&
                 Objects.equals(goviBenchmark, that.goviBenchmark) &&
                 Objects.equals(spreadAtIssue, that.spreadAtIssue) &&
-                Objects.equals(spreadToGoviCurrentDay, that.spreadToGoviCurrentDay) &&
-                Objects.equals(spreadToGoviNextDay, that.spreadToGoviNextDay) &&
-                Objects.equals(spreadToGoviOneDayChange, that.spreadToGoviOneDayChange) &&
-                Objects.equals(spreadToJibarOrASWCurrentDay, that.spreadToJibarOrASWCurrentDay) &&
-                Objects.equals(spreadToJibarOrASWNextDay, that.spreadToJibarOrASWNextDay) &&
-                Objects.equals(spreadToJibarOrASWOneDayChange, that.spreadToJibarOrASWOneDayChange) &&
                 Objects.equals(currentYield, that.currentYield) &&
                 Objects.equals(liquidityNoOfTrade, that.liquidityNoOfTrade) &&
                 Objects.equals(liquidityNominalTraded, that.liquidityNominalTraded) &&
@@ -389,6 +335,7 @@ public class DailyPricing implements Serializable {
     @Override
     public int hashCode() {
 
-        return Objects.hash(issuer, bondCode, type, features, moodys, fitch, sAndP, global, summaryRating, issueSize, coupon, issueDate, maturityOrCallDate, goviBenchmark, spreadAtIssue, spreadToGoviCurrentDay, spreadToGoviNextDay, spreadToGoviOneDayChange, spreadToJibarOrASWCurrentDay, spreadToJibarOrASWNextDay, spreadToJibarOrASWOneDayChange, currentYield, liquidityNoOfTrade, liquidityNominalTraded, sbrFairValue, lastTradedDate, lastMTMChangeDate);
+        return Objects.hash(issuer, bondCode, type, features, moodys, fitch, standardAndPoor, global, summaryRating, issueSize, coupon, issueDate, maturityOrCallDate, goviBenchmark, spreadAtIssue,
+                currentYield, liquidityNoOfTrade, liquidityNominalTraded, sbrFairValue, lastTradedDate, lastMTMChangeDate);
     }
 }

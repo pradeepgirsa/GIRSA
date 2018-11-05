@@ -15,10 +15,10 @@
             <column name="bond_code" type="varchar(20)"/>
             <column name="type" type="varchar(100)"/>
             <column name="features" type="varchar(100)"/>
-            <column name="rating_moodys" type="varchar(10)"/>
-            <column name="rating_fitch" type="varchar(10)"/>
-            <column name="rating_s_and_p" type="varchar(10)"/>
-            <column name="rating_global" type="varchar(10)"/>
+            <column name="moodys_rating" type="varchar(10)"/>
+            <column name="fitch_rating" type="varchar(10)"/>
+            <column name="s_and_p_rating" type="varchar(10)"/>
+            <column name="global_rating" type="varchar(10)"/>
             <column name="summary_rating" type="varchar(20)"/>
             <column name="issue_size" type="varchar(10)"/>
             <column name="coupon" type="NUMERIC(20,3)"/>
@@ -26,12 +26,8 @@
             <column name="maturity_or_call_date" type="date"/>
             <column name="govi_benchmark" type="varchar(20)"/>
             <column name="spread_at_issue" type="varchar(20)"/>
-            <column name="spread_to_govi_current_day" type="varchar(20)"/>
-            <column name="spread_to_govi_next_day" type="varchar(20)"/>
-            <column name="spread_to_govi_one_day_change" type="varchar(20)"/>
-            <column name="spread_to_jibar_or_asw_current_day" type="varchar(20)"/>
-            <column name="spread_to_jibar_or_asw_next_day" type="varchar(20)"/>
-            <column name="spread_to_jibar_or_asw_one_day_change" type="varchar(20)"/>
+            <column name="spread_to_govi" type="varchar(20)"/>
+            <column name="spread_to_jibar_or_asw" type="varchar(20)"/>
             <column name="current_yield" type="NUMERIC(20,3)"/>
             <column name="liquidity_no_of_trades" type="varchar(10)"/>
             <column name="liquidity_nominal_traded" type="varchar(10)"/>
