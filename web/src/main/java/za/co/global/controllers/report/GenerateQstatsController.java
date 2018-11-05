@@ -222,8 +222,8 @@ public class GenerateQstatsController extends AbstractQstatsReportController {
                         } else if(!StringUtils.isEmpty(dailyPricing.getFitch())) {
                             rating = dailyPricing.getFitch();
                             ratingAgency = "Fitch Group";
-                        } else if(!StringUtils.isEmpty(dailyPricing.getsAndP())) {
-                            rating = dailyPricing.getsAndP();
+                        } else if(!StringUtils.isEmpty(dailyPricing.getStandardAndPoor())) {
+                            rating = dailyPricing.getStandardAndPoor();
                             ratingAgency = "Standard & Poor's";
                         } else if(!StringUtils.isEmpty(dailyPricing.getGlobal())) {
                             rating = dailyPricing.getGlobal();
