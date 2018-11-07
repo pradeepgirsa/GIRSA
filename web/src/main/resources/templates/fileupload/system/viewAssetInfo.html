@@ -30,22 +30,21 @@
                     <div class="col-md-12">
                         <div class="panel panel-girsa">
                             <div class="panel-heading">
-                                <h4 class="panel-title">View Barra File</h4>
+                                <h4 class="panel-title">View Barra Asset</h4>
                             </div><!-- panel-heading -->
 
                     <div class="panel-body">
                         <table id="TableBarraFile" th:class="|table table-striped table-bordered responsive|">
                             <thead class="">
                             <tr>
-                                <th>Id</th>
-                                <th>Asset ID</th>
+                                <th>Asset ID</a></th>
                                 <th>Asset ID Type</th>
-                                <th>"Asset Name</th>
+                                <th>Asset Name</th>
                                 <th>Holdings</th>
                                 <th>Price</th>
                                 <th>Eff Exposure</th>
                                 <th>Mkt Value</th>
-                                <th>"Inst. Type</th>
+                                <th>Inst. Type</th>
                                 <th>Inst. Sub-type</th>
                                 <th>Eff Weight (%)</th>
                                 <th>GIR Issuer</th>
@@ -98,8 +97,7 @@
                             </thead>
                             <tbody>
                             <tr th:each="barraAssetInfo : ${assetInfoList}">
-                                <td><span th:text="|${barraAssetInfo.id}|"/></td>
-                                <td><span th:text="|${barraAssetInfo.assetId}|"/></td>
+                                <td><a th:href="|/view_asset?assetId=${barraAssetInfo.assetId}|" th:onclick="|loadingScreen()|"><span th:text="|${barraAssetInfo.assetId}|"/></a></td>
                                 <td><span th:text="|${barraAssetInfo.assetIdType}|"/></td>
                                 <td><span th:text="|${barraAssetInfo.assetName}|"/></td>
                                 <td><span th:text="|${barraAssetInfo.holdings}|"/></td>

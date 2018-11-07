@@ -29,15 +29,15 @@
                 <div class="row">
 
                     <div class="col-md-6 col-md-offset-3">
-                        <form method="POST" th:action="@{/upload_assetInfo}" enctype="multipart/form-data">
+                        <form method="POST" th:action="@{/upload_assetInfo}" th:object="" enctype="multipart/form-data">
                             <div class="panel panel-girsa">
                                 <div class="panel-heading">
-                                    <h4 class="panel-title">Barra File</h4>
+                                    <h4 class="panel-title">Barra Asset File</h4>
                                 </div>
                                 <div class="panel-body">
 
                                     <div th:class="|form-group|">
-                                        <label> <strong>Upload File * </strong></label>
+                                        <label> <strong>Upload File : </strong></label>
                                         <input required="true" type="file" class="form-control" name="file" id="uploadfile" placeholder="Upload File"/>
                                     </div>
 

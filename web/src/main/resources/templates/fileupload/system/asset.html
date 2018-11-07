@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org" xmlns="https://www.w3.org/1999/xhtml" lang="en">
+<head th:replace="layout :: site-head">
+</head>
+
+<body>
+<div id="stage" class="loading">
+    <div id="loading-image"></div>
+</div>
+
+<header th:replace="layout :: site-header">
+</header>
+
+<section>
+    <div class="mainwrapper">
+        <div class="leftpanel" th:replace="layout :: site-leftPanel">
+        </div><!-- leftpanel -->
+
+        <div class="mainpanel">
+            <div class="contentpanel">
+
+                <div class="row">
+
+                    <div class="col-md-6 col-md-offset-3">
+                        <form method="POST" th:object="${barraAssetInfo}">
+                            <div class="panel panel-girsa">
+                                <div class="panel-heading">
+                                    <h4 class="panel-title">Barra File</h4>
+                                </div>
+                                <div class="panel-body">
+
+                                    <div th:class="|form-group|">
+                                        <label> <strong>Asset ID: </strong></label>
+                                        <span th:text="${assetId}" />
+                                    </div>
+                                    <div th:class="|form-group|">
+                                        <label> <strong>Asset ID Type: </strong></label>
+                                        <span th:text="${assetIdType}" />
+                                    </div>
+                                    <div th:class="|form-group|">
+                                        <label> <strong>Asset Name: </strong></label>
+                                        <span th:text="${}" />
+                                    </div>
+                                    <div th:class="|form-group|">
+                                        <label> <strong>Holdings: </strong></label>
+                                        <span th:text="${}" />
+                                    </div>
+                                    <div th:class="|form-group|">
+                                        <label> <strong>Price: </strong></label>
+                                        <span th:text="${}" />
+                                    </div>
+                                    <div th:class="|form-group|">
+                                        <label> <strong>Eff Exposure: </strong></label>
+                                        <span th:text="${}" />
+                                    </div>
+                                    <div th:class="|form-group|">
+                                        <label> <strong>Mkt Value: </strong></label>
+                                        <span th:text="${}" />
+                                    </div>
+                                    <div th:class="|form-group|">
+                                        <label> <strong>Inst. Type: </strong></label>
+                                        <span th:text="${}" />
+                                    </div>
+                                    <div th:class="|form-group|">
+                                        <label> <strong>: </strong></label>
+                                        <span th:text="${}" />
+                                    </div>
+                                    <div th:class="|form-group|">
+                                        <label> <strong>: </strong></label>
+                                        <span th:text="${}" />
+                                    </div>
+                                    <div th:class="|form-group|">
+                                        <label> <strong>: </strong></label>
+                                        <span th:text="${}" />
+                                    </div>
+                                    <div th:class="|form-group|">
+                                        <label> <strong>: </strong></label>
+                                        <span th:text="${}" />
+                                    </div>
+                                    <div th:class="|form-group|">
+                                        <label> <strong>: </strong></label>
+                                        <span th:text="${}" />
+                                    </div>
+                                    <div th:class="|form-group|">
+                                        <label> <strong>: </strong></label>
+                                        <span th:text="${}" />
+                                    </div>
+                                    <div th:class="|form-group|">
+                                        <label> <strong>: </strong></label>
+                                        <span th:text="${}" />
+                                    </div>
+                                    <div th:class="|form-group|">
+                                        <label> <strong>: </strong></label>
+                                        <span th:text="${}" />
+                                    </div>
+                                    <div th:class="|form-group|">
+                                        <label> <strong>: </strong></label>
+                                        <span th:text="${}" />
+                                    </div>
+                                    <div th:class="|form-group|">
+                                        <label> <strong>: </strong></label>
+                                        <span th:text="${}" />
+                                    </div>
+                                    <div th:class="|form-group|">
+                                        <label> <strong>: </strong></label>
+                                        <span th:text="${}" />
+                                    </div>
+                                    <div th:class="|form-group|">
+                                        <label> <strong>: </strong></label>
+                                        <span th:text="${}" />
+                                    </div>
+                                    <div th:class="|form-group|">
+                                        <label> <strong>: </strong></label>
+                                        <span th:text="${}" />
+                                    </div>
+                                    <div th:class="|form-group|">
+                                        <label> <strong>: </strong></label>
+                                        <span th:text="${}" />
+                                    </div>
+                                    <div th:class="|form-group|">
+                                        <label> <strong>: </strong></label>
+                                        <span th:text="${}" />
+                                    </div>
+                                    <div th:class="|form-group|">
+                                        <label> <strong>: </strong></label>
+                                        <span th:text="${}" />
+                                    </div>
+                                    <div th:class="|form-group|">
+                                        <label> <strong>: </strong></label>
+                                        <span th:text="${}" />
+                                    </div>
+                                    <div th:class="|form-group|">
+                                        <label> <strong>: </strong></label>
+                                        <span th:text="${}" />
+                                    </div>
+                                    <div th:class="|form-group|">
+                                        <label> <strong>: </strong></label>
+                                        <span th:text="${}" />
+                                    </div>
+                                    <div th:class="|form-group|">
+                                        <label> <strong>: </strong></label>
+                                        <span th:text="${}" />
+                                    </div>
+                                    <div th:class="|form-group|">
+                                        <label> <strong>: </strong></label>
+                                        <span th:text="${}" />
+                                    </div>
+                                    <div th:class="|form-group|">
+                                        <label> <strong>: </strong></label>
+                                        <span th:text="${}" />
+                                    </div>
+                                    <div th:class="|form-group|">
+                                        <label> <strong>: </strong></label>
+                                        <span th:text="${}" />
+                                    </div>
+                                    <div th:class="|form-group|">
+                                        <label> <strong>: </strong></label>
+                                        <span th:text="${}" />
+                                    </div>
+                                    <div th:class="|form-group|">
+                                        <label> <strong>: </strong></label>
+                                        <span th:text="${}" />
+                                    </div>
+                                    <div th:class="|form-group|">
+                                        <label> <strong>: </strong></label>
+                                        <span th:text="${}" />
+                                    </div>
+                                    <div th:class="|form-group|">
+                                        <label> <strong>: </strong></label>
+                                        <span th:text="${}" />
+                                    </div>
+                                    <div th:class="|form-group|">
+                                        <label> <strong>: </strong></label>
+                                        <span th:text="${}" />
+                                    </div>
+
+
+
+
+
+
+                                    <div class="panel-footer" >
+                                        <div class="col-md-12" align="right">
+                                            <!--<button id="generate-cash-change-report" type="submit" class="btn btn-girsa mr5" onclick="loadingScreen()">Submit</button>-->
+
+                                            <button type="submit" value="Submit">Submit</button>
+                                            <!--<button type="reset" class="btn btn-dark">Reset</button>-->
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </form>
+
+                    </div><!-- col-md-6 -->
+
+                </div><!-- row -->
+            </div><!-- contentpanel -->
+        </div><!-- mainpanel -->
+    </div><!-- mainwrapper -->
+</section>
+<form th:action="@{/logout}" method="POST" id="logoutForm" />
+
+<script th:src="@{js/jquery-1.11.1.min.js}"></script>
+<script th:src="@{js/jquery-migrate-1.2.1.min.js}"></script>
+<script th:src="@{js/jquery-ui-1.10.3.min.js}"></script>
+<script th:src="@{js/bootstrap.min.js}"></script>
+<script th:src="@{js/modernizr.min.js}"></script>
+<script th:src="@{js/pace.min.js}"></script>
+<script th:src="@{js/retina.min.js}"></script>
+<script th:src="@{js/jquery.cookies.js}"></script>
+
+<script th:src="@{js/select2.min.js}"></script>
+<script th:src="@{js/custom.js}"></script>
+
+<script th:replace="layout :: site-screen-loader"/>
+<script th:replace="layout :: logout-form"/>
+
+</body>
+</html>

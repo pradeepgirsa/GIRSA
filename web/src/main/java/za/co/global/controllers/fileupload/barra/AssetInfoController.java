@@ -61,6 +61,14 @@ public class AssetInfoController extends BaseFileUploadController {
 
     }
 
+    @GetMapping(value = "/view_asset")
+    public ModelAndView viewAssetData(@RequestParam(value = "assetId", required = false) String assetId){
+        BarraAssetInfo barraAssetInfo = barraAssetInfoRepository.findByAssetId(assetId);
+        ModelAndView modelAndView = new ModelAndView("fileupload/system/asset");
+        modelAndView.addObject("barraAssetInfo", barraAssetInfo);
+        return modelAndView;
+    }
+
     @Override //TODO - check asset info stored correctly or not
     protected void readFileAndStoreInDB(File file, String fileType) throws Exception {
         GirsaExcelParser parser = new GirsaExcelParser(ExcelFactoryType.COLUMN_NAME_BASED_EXTRACTION);

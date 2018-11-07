@@ -1,6 +1,13 @@
 package za.co.global.controllers.fileupload.mapping;
 
 import com.gizbel.excel.enums.ExcelFactoryType;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+import org.apache.poi.ss.usermodel.DataFormatter;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,16 +20,17 @@ import org.springframework.web.servlet.ModelAndView;
 import za.co.global.controllers.fileupload.BaseFileUploadController;
 import za.co.global.domain.fileupload.mapping.DailyPricing;
 import za.co.global.persistence.fileupload.mapping.DailyPricingRepository;
+import za.co.global.services.helper.FileUtil;
 import za.co.global.services.upload.FileAndObjectResolver;
 import za.co.global.services.upload.GirsaExcelParser;
 
 import java.io.File;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.*;
 
 @Controller
-public class DailyPricingMappingController extends BaseFileUploadController {
+public class DailyPricingMappingController {
 
 
     private static final String FILE_TYPE = FileAndObjectResolver.DAILY_PRICING.getFileType();
@@ -61,18 +69,35 @@ public class DailyPricingMappingController extends BaseFileUploadController {
     }
 
     //@Override //TODO - check asset info stored correctly or not
-    protected void readFileAndStoreInDB(File file, String fileType) throws Exception {
+//    protected void readFileAndStoreInDB(File file, String fileType) throws Exception {
+//        GirsaExcelParser parser = new GirsaExcelParser(ExcelFactoryType.COLUMN_NAME_BASED_EXTRACTION);
+//        Map<String, List<Object>> result = parser.parse(file, fileType); //Whatever excel file you want
+//        Set<Map.Entry<String, List<Object>>> entries = result.entrySet();
+//        for (Map.Entry<String, List<Object>> map : entries) {
+//          //  String sheetName = map.getKey();
+//            List<Object> value = map.getValue();
+//            for (Object obj : value) {
+//                if (obj instanceof DailyPricing) {
+//                    DailyPricing dailyPricing = getDailyPricing(obj);
+////                    dailyPricing.setType(sheetName);
+//                    dailyPricingRepository.save(dailyPricing);
+//                }
+//            }
+//        }
+//    }
+
+    private static void readFileAndStoreInDB(File file, String fileType) throws Exception {
         GirsaExcelParser parser = new GirsaExcelParser(ExcelFactoryType.COLUMN_NAME_BASED_EXTRACTION);
         Map<String, List<Object>> result = parser.parse(file, fileType); //Whatever excel file you want
         Set<Map.Entry<String, List<Object>>> entries = result.entrySet();
         for (Map.Entry<String, List<Object>> map : entries) {
-          //  String sheetName = map.getKey();
+            //  String sheetName = map.getKey();
             List<Object> value = map.getValue();
             for (Object obj : value) {
                 if (obj instanceof DailyPricing) {
-                    DailyPricing dailyPricing = getDailyPricing(obj);
+//                    DailyPricing dailyPricing = getDailyPricing(obj);
 //                    dailyPricing.setType(sheetName);
-                    dailyPricingRepository.save(dailyPricing);
+//                    dailyPricingRepository.save(dailyPricing);
                 }
             }
         }
@@ -107,15 +132,15 @@ public class DailyPricingMappingController extends BaseFileUploadController {
         return null;
     }
 
-    @Override
-    protected void processObject(Object obj) {
+//    @Override
+//    protected void processObject(Object obj) {
+//
+//    }
 
-    }
-
-    /*private static void readAndStoreFundManagerHoldingSheetData(File uploadedFile) throws IOException, InvalidFormatException {
+    private static void readAndStoreFundManagerHoldingSheetData(File uploadedFile) throws IOException, InvalidFormatException {
 
         try(FileInputStream fis = new FileInputStream(uploadedFile);
-                XSSFWorkbook workbook = new XSSFWorkbook(fis);) {
+            XSSFWorkbook workbook = new XSSFWorkbook(fis);) {
             DataFormatter dataFormatter = new DataFormatter();
 
             Map<String, Integer> headersMap = new HashMap<>();
@@ -141,18 +166,18 @@ public class DailyPricingMappingController extends BaseFileUploadController {
                 } //if - emty sheet checking
             } //for - Sheet iterator
         }
-    }*/
+    }
 
-//    public static void main(String[] args) {
-//        File file = new File("C:\\Users\\SHARANYAREDDY\\Desktop\\TSR\\GIRSA\\Updated\\c. DailyPricingSpreadsheet 26 June 2018.xlsx");
-//        try {
-//            readAndStoreFundManagerHoldingSheetData(file);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        } catch (InvalidFormatException e) {
-//            e.printStackTrace();
-//        }
-//    }
+    public static void main(String[] args) {
+        File file = new File("C:\\Users\\SHARANYAREDDY\\Desktop\\TSR\\GIRSA\\Updated\\c. DailyPricingSpreadsheet 26 June 2018.xlsx");
+        try {
+            readFileAndStoreInDB(file, FILE_TYPE);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
 
 
