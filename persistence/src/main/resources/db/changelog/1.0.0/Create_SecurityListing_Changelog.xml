@@ -15,7 +15,7 @@
                 <constraints nullable="false"/>
             </column>
             <column name="first_payment_date" type="DATE"/>
-            <column name="coupon_payment_dates" type="varchar2(200)"/>  <!--TODO - byte-->
+            <column name="coupon_payment_dates" type="varchar2(4000 CHAR)"/>  <!--TODO - byte-->
             <column name="maturity_date" type="DATE"/>
         </createTable>
 

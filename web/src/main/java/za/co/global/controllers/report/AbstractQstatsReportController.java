@@ -67,7 +67,7 @@ public abstract class AbstractQstatsReportController {
     @Autowired
     protected HoldingRepository holdingRepository;
 
-    protected Map<String, Date> maturityDateMap;
+    protected Map<String, Date> maturityDateMap = new HashMap<>();
 
     @Autowired
     private DailyPricingRepository dailyPricingRepository;
@@ -90,24 +90,26 @@ public abstract class AbstractQstatsReportController {
             return barraMaturityDate;
         }
         SecurityListing securityListing = securityListingRepository.findBySecurityCode(instrumentCode);
-        String couponPaymentDates = securityListing.getCouponPaymentDates() != null ?
-                securityListing.getCouponPaymentDates().replace(" ", "") : null;
-        String[] dates = couponPaymentDates.split(",");
-        for(String dateInString : dates) {
-            Date date = parseDate(dateInString);
-            if(date != null && date.after(new Date())) {
-                return date;
+        if(securityListing != null) {
+            String couponPaymentDates = securityListing.getCouponPaymentDates() != null ?
+                    securityListing.getCouponPaymentDates().replace(" ", "") : null;
+            String[] dates = couponPaymentDates.split(",");
+            for (String dateInString : dates) {
+                Date date = parseDate(dateInString);
+                if (date != null && date.after(new Date())) {
+                    return date;
+                }
             }
-        }
-        Date maturityDate = securityListing.getMaturityDate();
-        if(maturityDate != null) {
-            while(maturityDate.before(new Date())) {
-                Calendar cal = Calendar.getInstance();
-                cal.setTime(maturityDate);
-                cal.add(Calendar.YEAR, 1);
-                maturityDate = cal.getTime();
+            Date maturityDate = securityListing.getMaturityDate();
+            if (maturityDate != null) {
+                while (maturityDate.before(new Date())) {
+                    Calendar cal = Calendar.getInstance();
+                    cal.setTime(maturityDate);
+                    cal.add(Calendar.YEAR, 1);
+                    maturityDate = cal.getTime();
+                }
+                return maturityDate;
             }
-            return maturityDate;
         }
         return null;
     }

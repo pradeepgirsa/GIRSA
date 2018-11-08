@@ -36,9 +36,8 @@
                                     <h4 class="panel-title">ASISA QUEUE STATS</h4>
                                 </div>
                                 <div class="panel-body">
-                                    <div th:class="${#fields.hasErrors('reportDate')} ? 'form-group has-error' : 'form-group'">
+                                    <div th:class="|form-group|">
                                         <label> <strong>Report Date * </strong></label>
-                                        <label class="error" th:if="${#fields.hasErrors('reportDate')}" th:errors="*{reportDate}">Error</label>
                                         <div class="input-group">
                                             <input type="text" class="form-control" placeholder="DD-MM-YYYY" id="reportDate" name="reportDate"/>
                                             <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>

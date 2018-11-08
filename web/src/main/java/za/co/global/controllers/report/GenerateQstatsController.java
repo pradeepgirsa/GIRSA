@@ -43,6 +43,8 @@ public class GenerateQstatsController extends AbstractQstatsReportController {
     @Value("${file.upload.folder}")
     protected String fileUploadFolder;
 
+    @Value("${report.generation.error}")
+    protected String reportError;
 
     @Autowired
     private ReportCreationService reportCreationService;
@@ -90,7 +92,8 @@ public class GenerateQstatsController extends AbstractQstatsReportController {
 
             List<QStatsBean> qStatsBeans = new ArrayList<>();
 //        BarraAssetInfo netAsset = assetInfoRepository.findByAssetId("897"); //TODO - verify
-            BarraAssetInfo netAsset = barraAssetInfoRepository.findByNetIndicatorIsTrue(); //TODO - verify
+            List<BarraAssetInfo> netAssets = barraAssetInfoRepository.findByNetIndicatorIsTrue(); //TODO - verify
+            BarraAssetInfo netAsset = netAssets.isEmpty() ? null : netAssets.get(0);
             for (Holding holding : holdings) {
                 PSGFundMapping psgFundMapping = psgFundMappingRepository.findByManagerFundCode(holding.getPortfolioCode());
                 NumberOfAccounts numberofAccounts = numberOfAccountsRepository.findByFundCode(psgFundMapping.getPsgFundCode());
@@ -126,7 +129,7 @@ public class GenerateQstatsController extends AbstractQstatsReportController {
     private void validate(ReportDataCollectionBean reportDataCollectionBean) throws GirsaException {
         String error = validator.validate(reportDataCollectionBean);
         if (error != null)
-            throw new GirsaException("report.generation.error");
+            throw new GirsaException(reportError);
     }
 
     private String createExcelFile(List<QStatsBean> qStatsBeans, Client client) throws GirsaException {

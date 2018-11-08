@@ -23,7 +23,7 @@ import java.util.List;
 @Controller
 public class QstatsDryRunController extends AbstractQstatsReportController {
 
-    private static final String VIEW_FILE = "report/asisaQueueStats";
+    private static final String VIEW_FILE = "report/dryRun/asisaQueueStatsDryRun";
 
     private static final Logger LOGGER = LoggerFactory.getLogger(QstatsDryRunController.class);
 
@@ -45,7 +45,8 @@ public class QstatsDryRunController extends AbstractQstatsReportController {
         List<Holding> holdings = getHoldings(client, reportData);
 
 //        BarraAssetInfo netAsset = assetInfoRepository.findByAssetId("897"); //TODO - verify
-        BarraAssetInfo netAsset = barraAssetInfoRepository.findByNetIndicatorIsTrue(); //TODO - verify
+        List<BarraAssetInfo> netAssets = barraAssetInfoRepository.findByNetIndicatorIsTrue(); //TODO - verify
+        BarraAssetInfo netAsset = netAssets.isEmpty() ? null : netAssets.get(0);
         for(Holding holding: holdings) {
             PSGFundMapping psgFundMapping = psgFundMappingRepository.findByManagerFundCode(holding.getPortfolioCode());
             NumberOfAccounts numberofAccounts = numberOfAccountsRepository.findByFundCode(psgFundMapping.getPsgFundCode());
