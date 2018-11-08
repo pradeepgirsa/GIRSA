@@ -4,23 +4,25 @@ import org.springframework.stereotype.Service;
 import za.co.global.domain.fileupload.client.InstitutionalDetails;
 import za.co.global.domain.fileupload.client.NumberOfAccounts;
 import za.co.global.domain.fileupload.client.fpm.Holding;
+import za.co.global.domain.fileupload.mapping.DailyPricing;
 import za.co.global.domain.fileupload.system.BarraAssetInfo;
-import za.co.global.domain.report.HoldingValidationBean;
+import za.co.global.domain.report.ReportDataCollectionBean;
 import za.co.global.services.Validator;
 
 @Service
-public class QstatsReportValidator implements Validator<HoldingValidationBean> {
+public class QstatsReportValidator implements Validator<ReportDataCollectionBean> {
 
     @Override
-    public String validate(HoldingValidationBean holdingValidationBean) {
-        BarraAssetInfo barraAssetInfo = holdingValidationBean.getBarraAssetInfo();
-        BarraAssetInfo netAsset = holdingValidationBean.getNetAsset();
-        Holding holding = holdingValidationBean.getHolding();
-        InstitutionalDetails institutionalDetails = holdingValidationBean.getInstitutionalDetails();
-        NumberOfAccounts numberOfAccounts = holdingValidationBean.getNumberOfAccounts();
+    public String validate(ReportDataCollectionBean reportDataCollectionBean) {
+        BarraAssetInfo barraAssetInfo = reportDataCollectionBean.getBarraAssetInfo();
+        BarraAssetInfo netAsset = reportDataCollectionBean.getNetAsset();
+        Holding holding = reportDataCollectionBean.getInstrument().getHoldingCategory().getHolding();
+        InstitutionalDetails institutionalDetails = reportDataCollectionBean.getInstitutionalDetails();
+        NumberOfAccounts numberOfAccounts = reportDataCollectionBean.getNumberOfAccounts();
+        DailyPricing dailyPricing = reportDataCollectionBean.getDailyPricing();
 
         if(barraAssetInfo == null) {
-            return "There is no mapping to barra asset to the instrument code: " + holdingValidationBean.getInstrumentCode().getBarraCode();
+            return "There is no mapping to barra asset to the instrument code: " + reportDataCollectionBean.getInstrumentCode().getBarraCode();
         }
         if(netAsset == null || netAsset.getEffExposure() == null) {
             return "There is no value for net eff exposure in barra";
@@ -36,23 +38,27 @@ public class QstatsReportValidator implements Validator<HoldingValidationBean> {
 
         if(institutionalDetails == null || institutionalDetails.getSplit() == null) {
             return "There is no institutional split matching to fund code:"+ holding.getPortfolioCode()
-                    + ", FPM fund code:"+ holdingValidationBean.getPsgFundMapping().getPsgFundCode();
+                    + ", FPM fund code:"+ reportDataCollectionBean.getPsgFundMapping().getPsgFundCode();
         }
         if(numberOfAccounts == null || numberOfAccounts.getTotal() == null) {
             return "Number of accounts are not mapped for fund code:"+ holding.getPortfolioCode()
-                    + ", FPM fund code:"+ holdingValidationBean.getPsgFundMapping().getPsgFundCode();
+                    + ", FPM fund code:"+ reportDataCollectionBean.getPsgFundMapping().getPsgFundCode();
         }
 
-        if(holdingValidationBean.getReg28InstrumentType() == null) {
+        if(reportDataCollectionBean.getReg28InstrumentType() == null) {
             return "There is no Reg28 mapping to asset id:"+ barraAssetInfo.getAssetId()+", Reg28_InstrType:"+barraAssetInfo.getReg28InstrType();
         }
 
-        if(holdingValidationBean.getIssuerMapping() == null || holdingValidationBean.getIssuerMapping().getIssuerCode() == null) {
+        if(reportDataCollectionBean.getIssuerMapping() == null || reportDataCollectionBean.getIssuerMapping().getIssuerCode() == null) {
             return "There is no issuer code mapped to GIR issuer:"+ barraAssetInfo.getGirIssuer();
         }
 
-        if(holdingValidationBean.getMaturityDate() == null) { //TODO - check maturity date with asset id or instrument code.
+        if(reportDataCollectionBean.getMaturityDate() == null) { //TODO - check maturity date with asset id or instrument code.
             return "There is no Maturity date mapping to asset id:"+ barraAssetInfo.getAssetId();
+        }
+
+        if(dailyPricing == null) {
+            return "There is no daily pricing entry to the issuer: "+ barraAssetInfo.getGirIssuer() + ", bond code: "+barraAssetInfo.getAssetId();
         }
         return null;
     }

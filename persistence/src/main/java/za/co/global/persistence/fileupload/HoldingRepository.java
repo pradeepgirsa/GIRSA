@@ -24,8 +24,10 @@ public interface HoldingRepository extends JpaRepository<Holding, Long> {
                                                                                                               ReportStatus reportStatus);
 
 
-    @Query("SELECT h FROM Holding h WHERE h.client =:client AND (h.reportData IS NULL OR h.reportData =:reportData)")
-    List<Holding> findByClientAndReportDataIsNullOrReportData(@Param("client") Client client, @Param("reportData") ReportData reportData);
+//    @Query("SELECT h FROM Holding h WHERE h.client =:client AND (h.reportData IS NULL OR h.reportData =:reportData)")
+//    List<Holding> findByClientAndReportDataIsNullOrReportData(@Param("client") Client client, @Param("reportData") ReportData reportData);
+
+    List<Holding> findByClientAndReportData(Client client, ReportData reportData);
 
     List<Holding> findByClientAndReportDataIsNull(Client client);
 

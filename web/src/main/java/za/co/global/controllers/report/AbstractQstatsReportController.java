@@ -3,20 +3,21 @@ package za.co.global.controllers.report;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import za.co.global.domain.client.Client;
+import za.co.global.domain.fileupload.client.InstitutionalDetails;
+import za.co.global.domain.fileupload.client.NumberOfAccounts;
 import za.co.global.domain.fileupload.client.SecurityListing;
 import za.co.global.domain.fileupload.client.fpm.Holding;
+import za.co.global.domain.fileupload.client.fpm.Instrument;
+import za.co.global.domain.fileupload.mapping.*;
 import za.co.global.domain.fileupload.system.BarraAssetInfo;
-import za.co.global.domain.report.HoldingValidationBean;
+import za.co.global.domain.report.ReportDataCollectionBean;
 import za.co.global.domain.report.ReportData;
 import za.co.global.persistence.client.ClientRepository;
 import za.co.global.persistence.fileupload.HoldingRepository;
 import za.co.global.persistence.fileupload.client.InstitutionalDetailsRepository;
 import za.co.global.persistence.fileupload.client.NumberOfAccountsRepository;
 import za.co.global.persistence.fileupload.client.SecurityListingRepository;
-import za.co.global.persistence.fileupload.mapping.InstrumentCodeRepository;
-import za.co.global.persistence.fileupload.mapping.IssuerMappingsRepository;
-import za.co.global.persistence.fileupload.mapping.PSGFundMappingRepository;
-import za.co.global.persistence.fileupload.mapping.Reg28InstrumentTypeRepository;
+import za.co.global.persistence.fileupload.mapping.*;
 import za.co.global.persistence.fileupload.system.BarraAssetInfoRepository;
 import za.co.global.persistence.report.ReportDataRepository;
 import za.co.global.services.Validator;
@@ -25,10 +26,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Year;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public abstract class AbstractQstatsReportController {
 
@@ -57,7 +55,7 @@ public abstract class AbstractQstatsReportController {
     protected SecurityListingRepository securityListingRepository;
 
     @Autowired
-    protected Validator<HoldingValidationBean> validator;
+    protected Validator<ReportDataCollectionBean> validator;
 
 
     @Autowired
@@ -71,6 +69,8 @@ public abstract class AbstractQstatsReportController {
 
     protected Map<String, Date> maturityDateMap;
 
+    @Autowired
+    private DailyPricingRepository dailyPricingRepository;
 
     protected Date getMaturityDate(BarraAssetInfo barraAssetInfo) {
         Date maturityDate = null;
@@ -112,9 +112,6 @@ public abstract class AbstractQstatsReportController {
         return null;
     }
 
-
-
-
     private Date parseDate(String dateInString) {
         String datePattern = "ddMMMyyyy";
         try {
@@ -132,16 +129,70 @@ public abstract class AbstractQstatsReportController {
     }
 
     protected List<Holding> getHoldings(Client client, ReportData reportData) {
-        List<Holding> holdings;
+        List<Holding> holdings = holdingRepository.findByClientAndReportDataIsNull(client);
         if(reportData != null) {
-            holdings = holdingRepository.findByClientAndReportDataIsNullOrReportData(client, reportData);
-        } else {
-            reportData = new ReportData();
-            reportData.setCreatedDate(new Date());
-            reportData.setClient(client);
-            holdings = holdingRepository.findByClientAndReportDataIsNull(client);
+            List<Holding> existingHoldings = holdingRepository.findByClientAndReportData(client, reportData);
+            existingHoldings.forEach(holding -> holdings.add(holding));
         }
         return holdings;
+    }
+
+    protected IssuerMapping getIssuerMapping(BarraAssetInfo barraAssetInfo) {
+        String girIssuer = Optional.ofNullable(barraAssetInfo).map(BarraAssetInfo::getGirIssuer).orElse(null);
+        IssuerMapping issuerMapping = null;
+        if(girIssuer != null) {
+            List<IssuerMapping> issuerMappings =issuerMappingsRepository.findByBarraGIRIssuerName(girIssuer); //TODO - verify from which field of issuer mapping
+            if(!issuerMappings.isEmpty()) {
+                issuerMapping = issuerMappings.get(0);
+            }
+        }
+        return issuerMapping;
+    }
+
+    protected BarraAssetInfo getBarraAssetInfo(InstrumentCode instrumentCode) {
+        BarraAssetInfo barraAssetInfo = null;
+        if(instrumentCode != null && instrumentCode.getBarraCode() != null) {
+            barraAssetInfo = barraAssetInfoRepository.findByAssetId(instrumentCode.getBarraCode());
+        }
+        return barraAssetInfo;
+    }
+
+    protected DailyPricing getDailyPricing(String assetId, String issuerName) {
+        List<DailyPricing> dailyPricings = dailyPricingRepository.findByIssuerAndBondCode(issuerName, assetId);
+        return dailyPricings.isEmpty() ? null : dailyPricings.get(0);
+    }
+
+    protected ReportDataCollectionBean getReportCollectionBean(Instrument instrument, InstitutionalDetails institutionalDetails, BarraAssetInfo netAsset,
+                                                               PSGFundMapping psgFundMapping, NumberOfAccounts numberOfAccounts) {
+
+        InstrumentCode instrumentCode = instrumentCodeRepository.findByManagerCode(instrument.getInstrumentCode());
+
+        BarraAssetInfo barraAssetInfo = getBarraAssetInfo(instrumentCode);
+
+        String reg28InstrType = barraAssetInfo.getReg28InstrType();
+        Reg28InstrumentType reg28InstrumentType = reg28InstrumentTypeRepository.findByReg28InstrType(reg28InstrType);
+
+        IssuerMapping issuerMapping = getIssuerMapping(barraAssetInfo);
+
+        DailyPricing dailyPricing = getDailyPricing(barraAssetInfo.getAssetId(), issuerMapping.getDailyPricingIssuerName());
+
+        Date maturityDate = getMaturityDate(barraAssetInfo);
+
+        ReportDataCollectionBean reportDataCollectionBean = new ReportDataCollectionBean.Builder()
+                .setInstrument(instrument)
+                .setBarraAssetInfo(barraAssetInfo)
+                .setInstitutionalDetails(institutionalDetails)
+                .setInstrumentCode(instrumentCode)
+                .setNetAsset(netAsset)
+                .setMaturityDate(maturityDate)
+                .setPsgFundMapping(psgFundMapping)
+                .setNumberOfAccounts(numberOfAccounts)
+                .setReg28InstrumentType(reg28InstrumentType)
+                .setIssuerMapping(issuerMapping)
+                .setDailyPricing(dailyPricing)
+                .build();
+
+        return reportDataCollectionBean;
     }
 
     protected abstract Logger getLogger();

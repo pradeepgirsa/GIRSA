@@ -3,18 +3,15 @@ package za.co.global.domain.report;
 import za.co.global.domain.fileupload.client.InstitutionalDetails;
 import za.co.global.domain.fileupload.client.NumberOfAccounts;
 import za.co.global.domain.fileupload.client.fpm.Holding;
-import za.co.global.domain.fileupload.mapping.InstrumentCode;
-import za.co.global.domain.fileupload.mapping.IssuerMapping;
-import za.co.global.domain.fileupload.mapping.PSGFundMapping;
-import za.co.global.domain.fileupload.mapping.Reg28InstrumentType;
+import za.co.global.domain.fileupload.client.fpm.Instrument;
+import za.co.global.domain.fileupload.mapping.*;
 import za.co.global.domain.fileupload.system.BarraAssetInfo;
 
 import java.util.Date;
 
-public class HoldingValidationBean {
+public class ReportDataCollectionBean {
 
     private BarraAssetInfo netAsset;
-    private Holding holding;
     private InstitutionalDetails institutionalDetails;
     private BarraAssetInfo barraAssetInfo;
     private InstrumentCode instrumentCode;
@@ -23,10 +20,12 @@ public class HoldingValidationBean {
     private Date maturityDate;
     private Reg28InstrumentType reg28InstrumentType;
     private IssuerMapping issuerMapping;
+    private DailyPricing dailyPricing;
+    private Instrument instrument;
 
     public static class Builder {
         private BarraAssetInfo netAsset;
-        private Holding holding;
+        private Instrument instrument;
         private InstitutionalDetails institutionalDetails;
         private BarraAssetInfo barraAssetInfo;
         private InstrumentCode instrumentCode;
@@ -35,14 +34,15 @@ public class HoldingValidationBean {
         private Date maturityDate;
         private Reg28InstrumentType reg28InstrumentType;
         private IssuerMapping issuerMapping;
+        private DailyPricing dailyPricing;
 
         public Builder setNetAsset(BarraAssetInfo netAsset) {
             this.netAsset = netAsset;
             return this;
         }
 
-        public Builder setHolding(Holding holding) {
-            this.holding = holding;
+        public Builder setInstrument(Instrument instrument) {
+            this.instrument = instrument;
             return this;
         }
 
@@ -86,33 +86,39 @@ public class HoldingValidationBean {
             return this;
         }
 
-        public HoldingValidationBean build() {
-            return new HoldingValidationBean(this);
+        public Builder setDailyPricing(DailyPricing dailyPricing) {
+            this.dailyPricing = dailyPricing;
+            return this;
+        }
+
+        public ReportDataCollectionBean build() {
+            return new ReportDataCollectionBean(this);
         }
     }
 
 
-    HoldingValidationBean() {};
+    ReportDataCollectionBean() {};
 
-    HoldingValidationBean(Builder builder) {
+    ReportDataCollectionBean(Builder builder) {
         this.netAsset = builder.netAsset;
         this.barraAssetInfo = builder.barraAssetInfo;
         this.maturityDate = builder.maturityDate;
         this.institutionalDetails = builder.institutionalDetails;
-        this.holding = builder.holding;
+        this.instrument = builder.instrument;
         this.psgFundMapping = builder.psgFundMapping;
         this.numberOfAccounts = builder.numberOfAccounts;
         this.instrumentCode = builder.instrumentCode;
         this.reg28InstrumentType = builder.reg28InstrumentType;
         this.issuerMapping = builder.issuerMapping;
+        this.dailyPricing = builder.dailyPricing;
     }
 
     public BarraAssetInfo getNetAsset() {
         return netAsset;
     }
 
-    public Holding getHolding() {
-        return holding;
+    public Instrument getInstrument() {
+        return instrument;
     }
 
     public InstitutionalDetails getInstitutionalDetails() {
@@ -145,5 +151,9 @@ public class HoldingValidationBean {
 
     public IssuerMapping getIssuerMapping() {
         return issuerMapping;
+    }
+
+    public DailyPricing getDailyPricing() {
+        return dailyPricing;
     }
 }
