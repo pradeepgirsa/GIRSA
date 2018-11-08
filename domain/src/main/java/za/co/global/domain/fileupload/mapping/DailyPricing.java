@@ -85,7 +85,7 @@ public class DailyPricing implements Serializable {
     @GIRSAExCelColumnHeader(columnHeader = "Spread To Govi", isContain = true)
     private String spreadToGovi;
 
-    @Column(name = "spread_to_govi")
+    @Column(name = "spread_to_govi_one_day_change")
     @ExcelColumnHeader(columnHeader = "Spread To Govi 1-day change")
     private String spreadToGovi1DayChange;
 
@@ -93,7 +93,7 @@ public class DailyPricing implements Serializable {
     @GIRSAExCelColumnHeader(columnHeader = "Spread to Jibar/ASW", isContain = true)
     private String spreadToJibarOrASW;
 
-    @Column(name = "spread_to_govi")
+    @Column(name = "spread_to_jibar_or_asw_one_day_change")
     @ExcelColumnHeader(columnHeader = "Spread to Jibar/ASW 1-day change")
     private String spreadToJibarOrASW1DayChange;
 

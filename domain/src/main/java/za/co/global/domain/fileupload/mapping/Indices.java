@@ -36,51 +36,51 @@ public class Indices implements Serializable {
     private String r;
 
     @Column(name = "market_cap")
-    @ExcelColumnHeader(columnHeader = "MktCap")
+    @ExcelColumnHeader(columnHeader = "MktCap", dataType = "big_decimal")
     private BigDecimal marketCap;
 
     @Column(name = "market_cap_live")
-    @ExcelColumnHeader(columnHeader = "MktCapLive")
+    @ExcelColumnHeader(columnHeader = "MktCapLive", dataType = "big_decimal")
     private BigDecimal marketCapLive;
 
-    @Column(name = "index")
-    @ExcelColumnHeader(columnHeader = "Index%")
-    private BigDecimal index;
+    @Column(name = "index_percentage")
+    @ExcelColumnHeader(columnHeader = "Index%", dataType = "big_decimal")
+    private BigDecimal indexPercentage;
 
     @Column(name = "index_price")
-    @ExcelColumnHeader(columnHeader = "IndexPrice")
+    @ExcelColumnHeader(columnHeader = "IndexPrice", dataType = "big_decimal")
     private BigDecimal indexPrice;
 
     @Column(name = "index_points")
-    @ExcelColumnHeader(columnHeader = "IndexPts")
+    @ExcelColumnHeader(columnHeader = "IndexPts", dataType = "big_decimal")
     private BigDecimal indexPoints;
 
     @Column(name = "yld_hist")
-    @ExcelColumnHeader(columnHeader = "YldHist%")
+    @ExcelColumnHeader(columnHeader = "YldHist%", dataType = "big_decimal")
     private BigDecimal yldHist;
 
     @Column(name = "iwf")
-    @ExcelColumnHeader(columnHeader = "IWF")
+    @ExcelColumnHeader(columnHeader = "IWF", dataType = "big_decimal")
     private BigDecimal iwf;
 
     @Column(name = "issue")
-    @ExcelColumnHeader(columnHeader = "#Issue")
+    @ExcelColumnHeader(columnHeader = "#Issue", dataType = "big_decimal")
     private BigDecimal issue;
 
     @Column(name = "bid")
-    @ExcelColumnHeader(columnHeader = "Bid")
+    @ExcelColumnHeader(columnHeader = "Bid", dataType = "big_decimal")
     private BigDecimal bid;
 
     @Column(name = "ask")
-    @ExcelColumnHeader(columnHeader = "Ask")
+    @ExcelColumnHeader(columnHeader = "Ask", dataType = "big_decimal")
     private BigDecimal ask;
 
     @Column(name = "last")
-    @ExcelColumnHeader(columnHeader = "Last")
+    @ExcelColumnHeader(columnHeader = "Last", dataType = "big_decimal")
     private BigDecimal last;
 
     @Column(name = "positive_or_negative")
-    @ExcelColumnHeader(columnHeader = "+/-")
+    @ExcelColumnHeader(columnHeader = "+/-", dataType = "big_decimal")
     private BigDecimal positiveOrNegative;
 
     @Column(name = "sub_industry")
@@ -92,7 +92,7 @@ public class Indices implements Serializable {
     private String gicsCode;
 
     @Column(name = "pe_ratio")
-    @ExcelColumnHeader(columnHeader = "PERatio")
+    @ExcelColumnHeader(columnHeader = "PERatio", dataType = "big_decimal")
     private BigDecimal peRatio;
 
     @Column(name = "type")
@@ -162,12 +162,12 @@ public class Indices implements Serializable {
         this.marketCapLive = marketCapLive;
     }
 
-    public BigDecimal getIndex() {
-        return index;
+    public BigDecimal getIndexPercentage() {
+        return indexPercentage;
     }
 
-    public void setIndex(BigDecimal index) {
-        this.index = index;
+    public void setIndexPercentage(BigDecimal indexPercentage) {
+        this.indexPercentage = indexPercentage;
     }
 
     public BigDecimal getIndexPrice() {
@@ -270,7 +270,7 @@ public class Indices implements Serializable {
                 Objects.equals(r, indices.r) &&
                 Objects.equals(marketCap, indices.marketCap) &&
                 Objects.equals(marketCapLive, indices.marketCapLive) &&
-                Objects.equals(index, indices.index) &&
+                Objects.equals(indexPercentage, indices.indexPercentage) &&
                 Objects.equals(indexPrice, indices.indexPrice) &&
                 Objects.equals(indexPoints, indices.indexPoints) &&
                 Objects.equals(yldHist, indices.yldHist) &&
@@ -288,7 +288,7 @@ public class Indices implements Serializable {
     @Override
     public int hashCode() {
 
-        return Objects.hash(id, security, description, exch, r, marketCap, marketCapLive, index, indexPrice, indexPoints, yldHist, iwf, issue, bid, ask, last, positiveOrNegative, subIndustry, gicsCode, peRatio);
+        return Objects.hash(id, security, description, exch, r, marketCap, marketCapLive, indexPercentage, indexPrice, indexPoints, yldHist, iwf, issue, bid, ask, last, positiveOrNegative, subIndustry, gicsCode, peRatio);
     }
 
     public String getType() {
