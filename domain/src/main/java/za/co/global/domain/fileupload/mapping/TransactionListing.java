@@ -5,7 +5,6 @@ import com.gizbel.excel.annotations.ExcelColumnHeader;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.util.Date;
 import java.util.Objects;
 
@@ -205,7 +204,7 @@ public class TransactionListing implements Serializable {
     private String instrumentCode;
 
     @Column(name = "trade_date")
-    @ExcelColumnHeader(columnHeader = "TradeDate")
+    @ExcelColumnHeader(columnHeader = "TradeDate", dataType = "date")
     private Date tradeDate;
 
     public Long getId() {

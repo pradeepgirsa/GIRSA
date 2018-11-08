@@ -11,17 +11,17 @@
             <column name="id" type="bigint">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="reg28_instr_type" type="varchar(20)"/>
+            <column name="reg28_instr_type" type="varchar(50)"/>
             <column name="rsa_or_foreign" type="varchar(50)"/>
             <column name="security_type" type="varchar(100)"/>
             <column name="institution_type" type="varchar(100)"/>
             <column name="market_cap" type="varchar(255)"/>
-            <column name="bn_categories" type="varchar(20)"/>
+            <column name="bn_categories" type="varchar(50)"/>
             <column name="asisa_defined2" type="varchar(50)"/>
-            <column name="aci_asset_Class" type="varchar(20)"/>
-            <column name="add_classification1" type="varchar(20)"/>
-            <column name="add_classification2" type="varchar(20)"/>
-            <column name="add_classification3" type="varchar(20)"/>
+            <column name="aci_asset_Class" type="varchar(50)"/>
+            <column name="add_classification1" type="varchar(50)"/>
+            <column name="add_classification2" type="varchar(50)"/>
+            <column name="add_classification3" type="varchar(50)"/>
         </createTable>
 
         <addAutoIncrement columnDataType="bigint"

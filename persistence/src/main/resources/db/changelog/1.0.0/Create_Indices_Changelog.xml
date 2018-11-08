@@ -17,7 +17,7 @@
             <column name="r" type="varchar(20)"/>
             <column name="market_cap" type="NUMERIC(20, 3)"/>
             <column name="market_cap_live" type="NUMERIC(20, 3)"/>
-            <column name="index" type="NUMERIC(20, 3)"/>
+            <column name="index_percentage" type="NUMERIC(20, 3)"/>
             <column name="index_price" type="NUMERIC(20, 3)"/>
             <column name="index_points" type="NUMERIC(20, 3)"/>
             <column name="yld_hist" type="NUMERIC(20, 3)"/>

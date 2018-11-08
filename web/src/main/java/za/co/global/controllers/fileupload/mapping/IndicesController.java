@@ -89,7 +89,7 @@ public class IndicesController extends BaseFileUploadController {
         existingIndice.setDescription(indices.getDescription());
         existingIndice.setExch(indices.getExch());
         existingIndice.setGicsCode(indices.getGicsCode());
-        existingIndice.setIndex(indices.getIndex());
+        existingIndice.setIndexPercentage(indices.getIndexPercentage());
         existingIndice.setIndexPoints(indices.getIndexPoints());
         existingIndice.setIndexPrice(indices.getIndexPrice());
         existingIndice.setIssue(indices.getIssue());
