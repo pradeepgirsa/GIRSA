@@ -25,6 +25,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Year;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -98,8 +99,15 @@ public abstract class AbstractQstatsReportController {
                 return date;
             }
         }
-        if(securityListing.getMaturityDate() != null && securityListing.getMaturityDate().after(new Date())) {
-            return securityListing.getMaturityDate();
+        Date maturityDate = securityListing.getMaturityDate();
+        if(maturityDate != null) {
+            while(maturityDate.before(new Date())) {
+                Calendar cal = Calendar.getInstance();
+                cal.setTime(maturityDate);
+                cal.add(Calendar.YEAR, 1);
+                maturityDate = cal.getTime();
+            }
+            return maturityDate;
         }
         return null;
     }

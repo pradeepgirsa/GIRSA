@@ -153,7 +153,6 @@ public class GirsaExcelParser {
                                 String cellValue = column.getStringCellValue();
                                 Field field = (Field) fieldsMap.get(cellValue);
 
-                                //TODO column
                                 if (field != null) {
                                     fieldsMap.remove(cellValue);
                                     fieldsMap.put(String.valueOf(column.getColumnIndex()), field);

@@ -65,8 +65,6 @@ public class GenerateQstatsController extends AbstractQstatsReportController {
     @Autowired
     private DailyPricingRepository dailyPricingRepository;
 
-    private Map<String, Date> maturityDateMap;
-
     private static final Logger LOGGER = LoggerFactory.getLogger(GenerateQstatsController.class);
 
     @GetMapping("/generate_qstats")
@@ -104,8 +102,14 @@ public class GenerateQstatsController extends AbstractQstatsReportController {
                     String reg28InstrType = barraAssetInfo.getReg28InstrType();
                     Reg28InstrumentType reg28InstrumentType = reg28InstrumentTypeRepository.findByReg28InstrType(reg28InstrType);
 
-                    String issuerCode = Optional.ofNullable(barraAssetInfo).map(BarraAssetInfo::getGirIssuer).orElse(null);
-                    IssuerMapping issuerMapping = issuerMappingsRepository.findByBarraCode(issuerCode); //TODO - verify from which field of issuer mapping
+                    String girIssuer = Optional.ofNullable(barraAssetInfo).map(BarraAssetInfo::getGirIssuer).orElse(null);
+                    IssuerMapping issuerMapping = null;
+                    if(girIssuer != null) {
+                           List<IssuerMapping> issuerMappings =issuerMappingsRepository.findByBarraGIRIssuerName(girIssuer);
+                           if(!issuerMappings.isEmpty()) {
+                               issuerMapping = issuerMappings.get(0);
+                           }
+                    }
 
 
                     Date maturityDate = getMaturityDate(barraAssetInfo);
@@ -227,7 +231,6 @@ public class GenerateQstatsController extends AbstractQstatsReportController {
                     qStatsBean.setRateAgency(ratingAgency);
                     qStatsBean.setCompConDeb(Boolean.FALSE);
 
-                   // IssuerMapping issuerMappings = issuerMappingsRepository.findByIssuerCode(issuer);
                     BigDecimal marketCap = Optional.ofNullable(issuerMapping).map(IssuerMapping::getMarketCapitalisation).orElse(null);
                     BigDecimal capReserves = Optional.ofNullable(issuerMapping).map(IssuerMapping::getCapitalReserves).orElse(null);
                     qStatsBean.setMarketCap(marketCap);
@@ -264,7 +267,7 @@ public class GenerateQstatsController extends AbstractQstatsReportController {
             reportCreationService.createExcelFile(qStatsBeans, filePath);
             modelAndView.addObject("saveMessage", "Qstats file created successfully, file: "+filePath);
         } catch (GirsaException e) {
-            e.printStackTrace();
+            LOGGER.error("Error while generating..", e);
            modelAndView.addObject("saveError", e.getMessage());
         }
         return modelAndView;
@@ -329,86 +332,86 @@ public class GenerateQstatsController extends AbstractQstatsReportController {
     }
 
 
-    public static void main(String[] args) {
-
-//        DateFormat dateFormat = new SimpleDateFormat("ddMMM");
-//        try {
+//    public static void main(String[] args) {
 //
-//            System.out.println();
-//            System.out.println(dateFormat.parse("28Sep"));
-//        } catch (ParseException e) {
+////        DateFormat dateFormat = new SimpleDateFormat("ddMMM");
+////        try {
+////
+////            System.out.println();
+////            System.out.println(dateFormat.parse("28Sep"));
+////        } catch (ParseException e) {
+////            e.printStackTrace();
+////        }
+//
+//        try (Workbook workbook = new XSSFWorkbook();
+//             FileOutputStream fileOut = new FileOutputStream("C:\\Users\\SHARANYAREDDY\\Desktop\\TSR\\GIRSA\\abc.xlsx")) {
+//            // new HSSFWorkbook() for generating `.xls` file
+//
+//        /* CreationHelper helps us create instances of various things like DataFormat,
+//           Hyperlink, RichTextString etc, in a format (HSSF, XSSF) independent way */
+//            CreationHelper createHelper = workbook.getCreationHelper();
+//
+//            // Create a Sheet
+//            Sheet sheet = workbook.createSheet("Qstats");
+//
+//            int rowNumber=0;
+//            Row headerRow = sheet.createRow(rowNumber);
+//
+//
+//
+//            Date quarterDate = new Date(118, 0, 1);
+//            Date sqlPricingRedemptionDate = new Date(118, 2, 1);
+//          Date sqlResetMaturityDate = new java.sql.Date(118, 3, 1);
+//
+//            BigDecimal couponRate = new BigDecimal(2.1);
+//            BigDecimal currentYield = new BigDecimal(1.1);
+//            BigDecimal effWeight = new BigDecimal(5.3d);
+//
+//            String settlementCell = CellReference.convertNumToColString(0)+(rowNumber+1);
+//            String maturityCell = CellReference.convertNumToColString(6)+(rowNumber+1);
+//            String couponCell = CellReference.convertNumToColString(2)+(rowNumber+1);
+//            String yieldCell = CellReference.convertNumToColString(3)+(rowNumber+1);
+//           // String formula=String.format("MDURATION(%s,%s,%s,%s,2)", settlementCell, maturityCell, couponCell, yieldCell);
+//            //String formula=String.format("SUM(%s;%s)", couponCell, yieldCell);
+//
+//
+//            CellStyle dateCellStyle = workbook.createCellStyle();
+//            dateCellStyle.setDataFormat(
+//                    createHelper.createDataFormat().getFormat("yyyy/mm/dd"));
+//
+//
+//            Cell cell1 = headerRow.createCell(0);
+//            cell1.setCellValue(quarterDate);
+//            cell1.setCellStyle(dateCellStyle);
+//
+//            Cell cell2 = headerRow.createCell(6);
+//            cell2.setCellValue(sqlPricingRedemptionDate);
+//            cell2.setCellStyle(dateCellStyle);
+//
+//            Cell cell3 = headerRow.createCell(2);
+//            cell3.setCellValue(couponRate.doubleValue());
+//            cell3.setCellType(Cell.CELL_TYPE_NUMERIC);
+//
+//            Cell cell4 = headerRow.createCell(3);
+//            cell4.setCellValue(currentYield.doubleValue());
+//            cell3.setCellType(Cell.CELL_TYPE_NUMERIC);
+//
+//            String formula=String.format("MDURATION(%s,%s,"+couponRate.doubleValue()+","+currentYield.doubleValue()+",2)*"+effWeight.doubleValue()+"*"+365.25, settlementCell, maturityCell);
+//
+//
+//            Cell cell5 = headerRow.createCell(4);
+//            cell5.setCellFormula(formula);
+//            cell5.setCellType(Cell.CELL_TYPE_FORMULA);
+//
+//
+//            workbook.write(fileOut);
+//
+//        } catch (IOException ie) {
+//            ie.printStackTrace();
+//        } catch (Exception e) {
 //            e.printStackTrace();
 //        }
-
-        try (Workbook workbook = new XSSFWorkbook();
-             FileOutputStream fileOut = new FileOutputStream("C:\\Users\\SHARANYAREDDY\\Desktop\\TSR\\GIRSA\\abc.xlsx")) {
-            // new HSSFWorkbook() for generating `.xls` file
-
-        /* CreationHelper helps us create instances of various things like DataFormat,
-           Hyperlink, RichTextString etc, in a format (HSSF, XSSF) independent way */
-            CreationHelper createHelper = workbook.getCreationHelper();
-
-            // Create a Sheet
-            Sheet sheet = workbook.createSheet("Qstats");
-
-            int rowNumber=0;
-            Row headerRow = sheet.createRow(rowNumber);
-
-
-
-            Date quarterDate = new Date(118, 0, 1);
-            Date sqlPricingRedemptionDate = new Date(118, 2, 1);
-          Date sqlResetMaturityDate = new java.sql.Date(118, 3, 1);
-
-            BigDecimal couponRate = new BigDecimal(2.1);
-            BigDecimal currentYield = new BigDecimal(1.1);
-            BigDecimal effWeight = new BigDecimal(5.3d);
-
-            String settlementCell = CellReference.convertNumToColString(0)+(rowNumber+1);
-            String maturityCell = CellReference.convertNumToColString(6)+(rowNumber+1);
-            String couponCell = CellReference.convertNumToColString(2)+(rowNumber+1);
-            String yieldCell = CellReference.convertNumToColString(3)+(rowNumber+1);
-           // String formula=String.format("MDURATION(%s,%s,%s,%s,2)", settlementCell, maturityCell, couponCell, yieldCell);
-            //String formula=String.format("SUM(%s;%s)", couponCell, yieldCell);
-
-
-            CellStyle dateCellStyle = workbook.createCellStyle();
-            dateCellStyle.setDataFormat(
-                    createHelper.createDataFormat().getFormat("yyyy/mm/dd"));
-
-
-            Cell cell1 = headerRow.createCell(0);
-            cell1.setCellValue(quarterDate);
-            cell1.setCellStyle(dateCellStyle);
-
-            Cell cell2 = headerRow.createCell(6);
-            cell2.setCellValue(sqlPricingRedemptionDate);
-            cell2.setCellStyle(dateCellStyle);
-
-            Cell cell3 = headerRow.createCell(2);
-            cell3.setCellValue(couponRate.doubleValue());
-            cell3.setCellType(Cell.CELL_TYPE_NUMERIC);
-
-            Cell cell4 = headerRow.createCell(3);
-            cell4.setCellValue(currentYield.doubleValue());
-            cell3.setCellType(Cell.CELL_TYPE_NUMERIC);
-
-            String formula=String.format("MDURATION(%s,%s,"+couponRate.doubleValue()+","+currentYield.doubleValue()+",2)*"+effWeight.doubleValue()+"*"+365.25, settlementCell, maturityCell);
-
-
-            Cell cell5 = headerRow.createCell(4);
-            cell5.setCellFormula(formula);
-            cell5.setCellType(Cell.CELL_TYPE_FORMULA);
-
-
-            workbook.write(fileOut);
-
-        } catch (IOException ie) {
-            ie.printStackTrace();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+//    }
 
 
     @Override

@@ -21,6 +21,7 @@ public class IssuerMapping implements Serializable {
 
     @Column(name = "daily_pricing_issuer_name", unique = true, nullable = false)
     @ExcelColumnHeader(columnHeader = "Daily Pricing Issuer Name")
+    @NaturalId
     private String dailyPricingIssuerName;
 
     @Column(name = "barra_gir_Issuer_name")
