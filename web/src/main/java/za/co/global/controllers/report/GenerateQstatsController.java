@@ -23,6 +23,7 @@ import za.co.global.domain.report.ReportDataCollectionBean;
 import za.co.global.domain.report.QStatsBean;
 import za.co.global.domain.report.ReportData;
 import za.co.global.domain.report.ReportStatus;
+import za.co.global.persistence.fileupload.mapping.AdditionalClassificationRepository;
 import za.co.global.persistence.fileupload.mapping.DerivativeTypesRepository;
 import za.co.global.persistence.fileupload.mapping.IndicesRepository;
 import za.co.global.persistence.fileupload.mapping.TransactionListingRepository;
@@ -54,6 +55,9 @@ public class GenerateQstatsController extends AbstractQstatsReportController {
 
     @Autowired
     private TransactionListingRepository transactionListingRepository;
+
+    @Autowired
+    private AdditionalClassificationRepository additionalClassificationRepository;
 
 
     private static final Logger LOGGER = LoggerFactory.getLogger(GenerateQstatsController.class);
@@ -206,7 +210,7 @@ public class GenerateQstatsController extends AbstractQstatsReportController {
         qStatsBean.setMarketCap(getMarketCapitalisation(barraAssetInfo));
         qStatsBean.setSharesInIssue(getSharesOutStanding(barraAssetInfo));
 
-        qStatsBean.setAddClassification(getAdditionalClassification(reg28InstrumentType));
+        qStatsBean.setAddClassification(getAdditionalClassification(barraAssetInfo, reg28InstrumentType, qStatsBean.getAciAssetclass()));
 
         //TODO - verify as it is date or days
         Date tradeDate = getTradeDate(holding, instrument);
@@ -277,16 +281,26 @@ public class GenerateQstatsController extends AbstractQstatsReportController {
         return Optional.ofNullable(barraAssetInfo).map(BarraAssetInfo::getCoupon).orElse(null);
     }
 
-    private String getAdditionalClassification(Reg28InstrumentType reg28InstrumentType) {
-        String additionalClssification;
-        if (StringUtils.isEmpty(reg28InstrumentType.getAddClassificationThree())) {
-            additionalClssification = reg28InstrumentType.getAddClassificationThree();
-        } else if (StringUtils.isEmpty(reg28InstrumentType.getAddClassificationTwo())) {
-            additionalClssification = reg28InstrumentType.getAddClassificationTwo();
-        } else {
-            additionalClssification = reg28InstrumentType.getAddClassificationOne();
+    private String getAdditionalClassification(BarraAssetInfo barraAssetInfo, Reg28InstrumentType reg28InstrumentType, String aciAssetClass) {
+
+        String addClassification = null;
+        if("DE".equals(aciAssetClass)) {
+            List<AdditionalClassification> additionalClassifications = additionalClassificationRepository.findByIndustryAndSectorAndSuperSectorAndSubSector(barraAssetInfo.getGirIndustryICB(),
+                    barraAssetInfo.getGirSectorICB(), barraAssetInfo.getGirSupersectorICB(), barraAssetInfo.getGirSubsectorICB());
+            if(!additionalClassifications.isEmpty()) {
+                addClassification = additionalClassifications.get(0).getAlphaCode();
+            }
         }
-        return additionalClssification;
+        if(!StringUtils.isEmpty(addClassification)) {
+            if (StringUtils.isEmpty(reg28InstrumentType.getAddClassificationThree())) {
+                addClassification = reg28InstrumentType.getAddClassificationThree();
+            } else if (StringUtils.isEmpty(reg28InstrumentType.getAddClassificationTwo())) {
+                addClassification = reg28InstrumentType.getAddClassificationTwo();
+            } else {
+                addClassification = reg28InstrumentType.getAddClassificationOne();
+            }
+        }
+        return addClassification;
     }
 
     private BigDecimal getSharesOutStanding(BarraAssetInfo barraAssetInfo) {

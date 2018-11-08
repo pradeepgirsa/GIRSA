@@ -21,13 +21,13 @@ public class AdditionalClassification implements Serializable {
     @ExcelColumnHeader(columnHeader = "Industry")
     private String industry;
 
-    @Column(name = "supersector", nullable = false)
+    @Column(name = "super_sector", nullable = false)
     @ExcelColumnHeader(columnHeader = "Supersector")
-    private String supersector;
+    private String superSector;
 
-    @Column(name = "subsector", nullable = false)
+    @Column(name = "sub_sector", nullable = false)
     @ExcelColumnHeader(columnHeader = "Subsector")
-    private String subsector;
+    private String subSector;
 
     @Column(name = "sector", nullable = false)
     @ExcelColumnHeader(columnHeader = "Sector")
@@ -53,20 +53,20 @@ public class AdditionalClassification implements Serializable {
         this.industry = industry;
     }
 
-    public String getSupersector() {
-        return supersector;
+    public String getSuperSector() {
+        return superSector;
     }
 
-    public void setSupersector(String supersector) {
-        this.supersector = supersector;
+    public void setSuperSector(String superSector) {
+        this.superSector = superSector;
     }
 
-    public String getSubsector() {
-        return subsector;
+    public String getSubSector() {
+        return subSector;
     }
 
-    public void setSubsector(String subsector) {
-        this.subsector = subsector;
+    public void setSubSector(String subSector) {
+        this.subSector = subSector;
     }
 
     public String getSector() {
@@ -93,8 +93,8 @@ public class AdditionalClassification implements Serializable {
         AdditionalClassification that = (AdditionalClassification) o;
 
         if (industry != null ? !industry.equals(that.industry) : that.industry != null) return false;
-        if (supersector != null ? !supersector.equals(that.supersector) : that.supersector != null) return false;
-        if (subsector != null ? !subsector.equals(that.subsector) : that.subsector != null) return false;
+        if (superSector != null ? !superSector.equals(that.superSector) : that.superSector != null) return false;
+        if (subSector != null ? !subSector.equals(that.subSector) : that.subSector != null) return false;
         if (sector != null ? !sector.equals(that.sector) : that.sector != null) return false;
         return alphaCode != null ? alphaCode.equals(that.alphaCode) : that.alphaCode == null;
     }
@@ -102,8 +102,8 @@ public class AdditionalClassification implements Serializable {
     @Override
     public int hashCode() {
         int result = industry != null ? industry.hashCode() : 0;
-        result = 31 * result + (supersector != null ? supersector.hashCode() : 0);
-        result = 31 * result + (subsector != null ? subsector.hashCode() : 0);
+        result = 31 * result + (superSector != null ? superSector.hashCode() : 0);
+        result = 31 * result + (subSector != null ? subSector.hashCode() : 0);
         result = 31 * result + (sector != null ? sector.hashCode() : 0);
         result = 31 * result + (alphaCode != null ? alphaCode.hashCode() : 0);
         return result;
