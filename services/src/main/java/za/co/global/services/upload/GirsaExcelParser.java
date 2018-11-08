@@ -8,6 +8,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.*;
+import za.co.global.domain.excel.GIRSAExCelColumnHeader;
 
 import java.io.File;
 import java.io.IOException;
@@ -49,6 +50,18 @@ public class GirsaExcelParser {
 
     }
 
+    private void prepareColumnHeaderMatchingBasedFieldMap(Field field, Map<String, Field> fieldsMap) {
+        if (field.isAnnotationPresent(GIRSAExCelColumnHeader.class)) {
+            field.setAccessible(true);
+            GIRSAExCelColumnHeader column = (GIRSAExCelColumnHeader) field.getAnnotation(GIRSAExCelColumnHeader.class);
+            if (column.isContain()) {
+                String key = column.columnHeader();
+                fieldsMap.put(key, field);
+            }
+        }
+
+    }
+
     private String getDataTypeFor(Field field) {
         String dataType = null;
         switch (this.excelFactoryType) {
@@ -58,7 +71,13 @@ public class GirsaExcelParser {
                 break;
             case COLUMN_NAME_BASED_EXTRACTION:
                 ExcelColumnHeader headerColumn = (ExcelColumnHeader) field.getAnnotation(ExcelColumnHeader.class);
-                dataType = headerColumn.dataType();
+                if (headerColumn == null) {
+                    GIRSAExCelColumnHeader h = field.getAnnotation(GIRSAExCelColumnHeader.class);
+                    dataType = h.dataType();
+                } else {
+                    dataType = headerColumn.dataType();
+                }
+
         }
 
         return dataType;
@@ -73,7 +92,13 @@ public class GirsaExcelParser {
                 break;
             case COLUMN_NAME_BASED_EXTRACTION:
                 ExcelColumnHeader headerColumn = (ExcelColumnHeader) field.getAnnotation(ExcelColumnHeader.class);
-                defaultValue = headerColumn.defaultValue();
+                if (headerColumn == null) {
+                    GIRSAExCelColumnHeader h = field.getAnnotation(GIRSAExCelColumnHeader.class);
+                    defaultValue = h.defaultValue();
+                } else {
+                    defaultValue = headerColumn.defaultValue();
+                }
+
         }
 
         return defaultValue;
@@ -82,79 +107,94 @@ public class GirsaExcelParser {
     public Map<String, List<Object>> parse(File file, String fileType) throws InvalidFormatException, IOException, InstantiationException, IllegalAccessException, IllegalArgumentException, ParseException {
 
         Map<String, List<Object>> r = new HashMap<>();
-       try ( Workbook invoiceWorkbook = WorkbookFactory.create(file);) {
-           for (int i = 0; i < invoiceWorkbook.getNumberOfSheets(); i++) {
-               Sheet sheet = invoiceWorkbook.getSheetAt(i);
-               if (sheet.getPhysicalNumberOfRows() > 0) {
+        try (Workbook invoiceWorkbook = WorkbookFactory.create(file);) {
+            for (int i = 0; i < invoiceWorkbook.getNumberOfSheets(); i++) {
+                Sheet sheet = invoiceWorkbook.getSheetAt(i);
+                if (sheet.getPhysicalNumberOfRows() > 0) {
 
             /* Getting the bean based on sheet name */
-                   //TODO - sheet name can be null in future
-                   Class clazz = FileAndObjectResolver.getClazzFromFileType(fileType);
+                    //TODO - sheet name can be null in future
+                    Class clazz = FileAndObjectResolver.getClazzFromFileType(fileType);
 
-                   Map<String, Field> fieldsMap = new HashMap();
+                    Map<String, Field> fieldsMap = new HashMap();
+                    Map<String, Field> matchedFieldsMap = new HashMap();
 
-                   if (clazz != null) {
-                       if (clazz.isAnnotationPresent(ExcelBean.class)) {
-                           Field[] fields = clazz.getDeclaredFields();
-                           Field[] var4 = fields;
-                           int var5 = fields.length;
+                    if (clazz != null) {
+                        if (clazz.isAnnotationPresent(ExcelBean.class)) {
+                            Field[] fields = clazz.getDeclaredFields();
+                            Field[] var4 = fields;
+                            int var5 = fields.length;
 
-                           for (int var6 = 0; var6 < var5; ++var6) {
-                               Field field = var4[var6];
-                               switch (this.excelFactoryType) {
-                                   case COLUMN_INDEX_BASED_EXTRACTION:
-                                       this.prepareColumnIndexBasedFieldMap(field, fieldsMap);
-                                       break;
-                                   case COLUMN_NAME_BASED_EXTRACTION:
-                                       this.prepareColumnHeaderBasedFieldMap(field, fieldsMap);
-                               }
-                           }
+                            for (int var6 = 0; var6 < var5; ++var6) {
+                                Field field = var4[var6];
+                                switch (this.excelFactoryType) {
+                                    case COLUMN_INDEX_BASED_EXTRACTION:
+                                        this.prepareColumnIndexBasedFieldMap(field, fieldsMap);
+                                        break;
+                                    case COLUMN_NAME_BASED_EXTRACTION:
+                                        this.prepareColumnHeaderBasedFieldMap(field, fieldsMap);
+                                        this.prepareColumnHeaderMatchingBasedFieldMap(field, matchedFieldsMap);
+                                }
+                            }
 
-                       } else {
-                           //throw new Exception("Provided class is not annotated with ExcelBean");
-                       }
+                        } else {
+                            //throw new Exception("Provided class is not annotated with ExcelBean");
+                        }
 
-                       List<Object> result = new ArrayList();
-                       if (this.excelFactoryType == ExcelFactoryType.COLUMN_NAME_BASED_EXTRACTION) {
-                           Row firstRow = sheet.getRow(0);
-                           Iterator var6 = firstRow.iterator();
+                        List<Object> result = new ArrayList();
+                        if (this.excelFactoryType == ExcelFactoryType.COLUMN_NAME_BASED_EXTRACTION) {
+                            Row firstRow = sheet.getRow(0);
+                            Iterator var6 = firstRow.iterator();
 
-                           while (var6.hasNext()) {
-                               Cell column = (Cell) var6.next();
-                               Field field = (Field) fieldsMap.get(column.getStringCellValue());
-                               if (field != null) {
-                                   fieldsMap.remove(column.getStringCellValue());
-                                   fieldsMap.put(String.valueOf(column.getColumnIndex()), field);
-                               }
-                           }
-                       }
+                            while (var6.hasNext()) {
+                                Cell column = (Cell) var6.next();
 
-                       Iterator var9 = sheet.iterator();
 
-                       while (var9.hasNext()) {
-                           Row row = (Row) var9.next();
-                           if (this.excelFactoryType == ExcelFactoryType.COLUMN_INDEX_BASED_EXTRACTION) {
-                               if (row.getRowNum() == 0 && this.skipHeader) {
-                                   continue;
-                               }
-                           } else if (this.excelFactoryType == ExcelFactoryType.COLUMN_NAME_BASED_EXTRACTION && row.getRowNum() == 0) {
-                               continue;
-                           }
+                                String cellValue = column.getStringCellValue();
+                                Field field = (Field) fieldsMap.get(cellValue);
 
-                           if (!this.isEmptyRow(row)) {
-                               Object beanObj = this.getBeanForARow(clazz, row, fieldsMap);
-                               result.add(beanObj);
-                           } else if (this.breakAfterEmptyRow) {
-                               break;
-                           }
-                       }
+                                //TODO column
+                                if (field != null) {
+                                    fieldsMap.remove(cellValue);
+                                    fieldsMap.put(String.valueOf(column.getColumnIndex()), field);
+                                } else if (!StringUtils.isEmpty(cellValue)) {
+                                    matchedFieldsMap.forEach((String key, Field value) -> {
+                                        if (cellValue.trim().indexOf(key) != -1) {
+                                            fieldsMap.remove(cellValue);
+                                            fieldsMap.put(String.valueOf(column.getColumnIndex()), value);
+                                        }
+                                    });
 
-                       r.put(sheet.getSheetName(), result);
-                   } //if close to check null on clazz
-               }//If check for sheet with 0 rows.
-           } //for close
+                                }
+                            }
+                        }
 
-       }
+                        Iterator var9 = sheet.iterator();
+
+                        while (var9.hasNext()) {
+                            Row row = (Row) var9.next();
+                            if (this.excelFactoryType == ExcelFactoryType.COLUMN_INDEX_BASED_EXTRACTION) {
+                                if (row.getRowNum() == 0 && this.skipHeader) {
+                                    continue;
+                                }
+                            } else if (this.excelFactoryType == ExcelFactoryType.COLUMN_NAME_BASED_EXTRACTION && row.getRowNum() == 0) {
+                                continue;
+                            }
+
+                            if (!this.isEmptyRow(row)) {
+                                Object beanObj = this.getBeanForARow(clazz, row, fieldsMap);
+                                result.add(beanObj);
+                            } else if (this.breakAfterEmptyRow) {
+                                break;
+                            }
+                        }
+
+                        r.put(sheet.getSheetName(), result);
+                    } //if close to check null on clazz
+                }//If check for sheet with 0 rows.
+            } //for close
+
+        }
         return r;
     }
 
@@ -189,7 +229,7 @@ public class GirsaExcelParser {
     private void setCellValueBasedOnDesiredExcelFactoryType(Object classObj, Map<String, Field> fieldsMap, String columnValue, int columnIndex) throws IllegalArgumentException, IllegalAccessException, ParseException {
         Field field = (Field) fieldsMap.get(String.valueOf(columnIndex));
         if (field != null) {
-            if(columnValue != null && (columnValue.equalsIgnoreCase("N/A") || columnValue.equalsIgnoreCase("NA"))) {
+            if (columnValue != null && (columnValue.equalsIgnoreCase("N/A") || columnValue.equalsIgnoreCase("NA"))) {
                 columnValue = null;
             }
             if (columnValue == null || columnValue.trim().isEmpty()) {

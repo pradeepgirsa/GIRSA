@@ -2,6 +2,7 @@ package za.co.global.domain.fileupload.mapping;
 
 import com.gizbel.excel.annotations.ExcelBean;
 import com.gizbel.excel.annotations.ExcelColumnHeader;
+import za.co.global.domain.excel.GIRSAExCelColumnHeader;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -57,19 +58,19 @@ public class DailyPricing implements Serializable {
     private String summaryRating;
 
     @Column(name = "issue_size")
-    @ExcelColumnHeader(columnHeader = "Issue size (Rbn)")
-    private String issueSize;
+    @ExcelColumnHeader(columnHeader = "Issue size (Rbn)", dataType = "big_decimal")
+    private BigDecimal issueSize;
 
     @Column(name = "coupon")
-    @ExcelColumnHeader(columnHeader = "Coupon (%)")
+    @ExcelColumnHeader(columnHeader = "Coupon (%)", dataType = "big_decimal")
     private BigDecimal coupon;
 
     @Column(name = "issue_date")
-    @ExcelColumnHeader(columnHeader = "Issue date")
+    @ExcelColumnHeader(columnHeader = "Issue date", dataType = "date")
     private Date issueDate;
 
     @Column(name = "maturity_or_call_date")
-    @ExcelColumnHeader(columnHeader = "Maturity/ call date")
+    @ExcelColumnHeader(columnHeader = "Maturity/ call date", dataType = "date")
     private Date maturityOrCallDate;
 
     @Column(name = "govi_benchmark")
@@ -81,15 +82,23 @@ public class DailyPricing implements Serializable {
     private String spreadAtIssue;
 
     @Column(name = "spread_to_govi")
-    @ExcelColumnHeader(columnHeader = "Spread To Govi")
+    @GIRSAExCelColumnHeader(columnHeader = "Spread To Govi", isContain = true)
     private String spreadToGovi;
 
+    @Column(name = "spread_to_govi")
+    @ExcelColumnHeader(columnHeader = "Spread To Govi 1-day change")
+    private String spreadToGovi1DayChange;
+
     @Column(name = "spread_to_jibar_or_asw")
-    @ExcelColumnHeader(columnHeader = "Spread to Jibar/ASW")
+    @GIRSAExCelColumnHeader(columnHeader = "Spread to Jibar/ASW", isContain = true)
     private String spreadToJibarOrASW;
 
+    @Column(name = "spread_to_govi")
+    @ExcelColumnHeader(columnHeader = "Spread to Jibar/ASW 1-day change")
+    private String spreadToJibarOrASW1DayChange;
+
     @Column(name = "current_yield")
-    @ExcelColumnHeader(columnHeader = "Current yield (%)")
+    @ExcelColumnHeader(columnHeader = "Current yield (%)", dataType = "big_decimal")
     private BigDecimal currentYield;
 
     @Column(name = "liquidity_no_of_trades")
@@ -101,15 +110,15 @@ public class DailyPricing implements Serializable {
     private String liquidityNominalTraded;
 
     @Column(name = "sbr_fair_value")
-    @ExcelColumnHeader(columnHeader = "SBR's Fair value spread to Jibar")
+    @ExcelColumnHeader(columnHeader = "SBR's Fair value spread to Jibar", dataType = "big_decimal")
     private BigDecimal sbrFairValue;
 
     @Column(name = "last_traded_date")
-    @ExcelColumnHeader(columnHeader = "Last traded date")
+    @ExcelColumnHeader(columnHeader = "Last traded date", dataType = "date")
     private Date lastTradedDate;
 
     @Column(name = "last_mtm_change_date")
-    @ExcelColumnHeader(columnHeader = "Last MTM Change Date")
+    @ExcelColumnHeader(columnHeader = "Last MTM Change Date", dataType = "date")
     private Date lastMTMChangeDate;
 
     public Long getId() {
@@ -184,11 +193,11 @@ public class DailyPricing implements Serializable {
         this.summaryRating = summaryRating;
     }
 
-    public String getIssueSize() {
+    public BigDecimal getIssueSize() {
         return issueSize;
     }
 
-    public void setIssueSize(String issueSize) {
+    public void setIssueSize(BigDecimal issueSize) {
         this.issueSize = issueSize;
     }
 
@@ -302,6 +311,22 @@ public class DailyPricing implements Serializable {
 
     public void setSbrFairValue(BigDecimal sbrFairValue) {
         this.sbrFairValue = sbrFairValue;
+    }
+
+    public String getSpreadToGovi1DayChange() {
+        return spreadToGovi1DayChange;
+    }
+
+    public void setSpreadToGovi1DayChange(String spreadToGovi1DayChange) {
+        this.spreadToGovi1DayChange = spreadToGovi1DayChange;
+    }
+
+    public String getSpreadToJibarOrASW1DayChange() {
+        return spreadToJibarOrASW1DayChange;
+    }
+
+    public void setSpreadToJibarOrASW1DayChange(String spreadToJibarOrASW1DayChange) {
+        this.spreadToJibarOrASW1DayChange = spreadToJibarOrASW1DayChange;
     }
 
     @Override
