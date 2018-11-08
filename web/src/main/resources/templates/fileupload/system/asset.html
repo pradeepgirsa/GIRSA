@@ -22,6 +22,7 @@
                 <div class="row">
 
                     <div class="col-md-6 col-md-offset-3">
+                        <a type="button" class="close" id="close-asset" aria-hidden="true" onclick="exitAsset()">×</a>
                         <form method="POST" th:object="${barraAssetInfo}">
                             <div class="panel panel-girsa">
                                 <div class="panel-heading">
@@ -215,6 +216,11 @@
 
 <script th:replace="layout :: site-screen-loader"/>
 <script th:replace="layout :: logout-form"/>
-
+<script>
+    function exitAsset() {
+        location.href = '/upload_assetInfo';
+        document.getElementById("loading").style.display = "";
+    }
+</script>
 </body>
 </html>
