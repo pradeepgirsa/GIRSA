@@ -19,9 +19,9 @@ import za.co.global.domain.fileupload.client.fpm.HoldingCategory;
 import za.co.global.domain.fileupload.client.fpm.Instrument;
 import za.co.global.domain.fileupload.mapping.*;
 import za.co.global.domain.fileupload.system.BarraAssetInfo;
-import za.co.global.domain.report.ReportDataCollectionBean;
 import za.co.global.domain.report.QStatsBean;
 import za.co.global.domain.report.ReportData;
+import za.co.global.domain.report.ReportDataCollectionBean;
 import za.co.global.domain.report.ReportStatus;
 import za.co.global.persistence.fileupload.mapping.AdditionalClassificationRepository;
 import za.co.global.persistence.fileupload.mapping.DerivativeTypesRepository;
@@ -32,7 +32,13 @@ import za.co.global.services.report.ReportCreationService;
 import java.io.File;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.*;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
 @Controller
@@ -73,10 +79,13 @@ public class GenerateQstatsController extends AbstractQstatsReportController {
     }
 
     @PostMapping("/generate_qstats")
-    public ModelAndView generateReport(@RequestParam("reportDate") Date reportDate, String clientId) {
+    public ModelAndView generateReport(@RequestParam("reportDate") String reportDateInString, String clientId) {
 
         ModelAndView modelAndView = new ModelAndView(VIEW_FILE);
         try {
+
+            DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+            Date reportDate = dateFormat.parse(reportDateInString);
 
             Client client = clientRepository.findOne(Long.parseLong(clientId));
             ReportData reportData = reportDataRepository.findByReportStatusAndClient(ReportStatus.REGISTERED, client);
@@ -102,7 +111,7 @@ public class GenerateQstatsController extends AbstractQstatsReportController {
                     for (Instrument instrument : holdingCategory.getInstruments()) {
 
                         ReportDataCollectionBean reportDataCollectionBean = getReportCollectionBean(instrument, institutionalDetails, netAsset, psgFundMapping,
-                                numberofAccounts);
+                                numberofAccounts, reportDate);
 
                         validate(reportDataCollectionBean);
 
@@ -122,6 +131,9 @@ public class GenerateQstatsController extends AbstractQstatsReportController {
         } catch (GirsaException e) {
             LOGGER.error("Error while generating QStats report", e);
             modelAndView.addObject("saveError", e.getMessage());
+        } catch (ParseException pe) {
+            LOGGER.error("Error while generating QStats report", pe);
+            modelAndView.addObject("saveError", pe.getMessage());
         }
         return modelAndView;
     }
@@ -134,7 +146,8 @@ public class GenerateQstatsController extends AbstractQstatsReportController {
 
     private String createExcelFile(List<QStatsBean> qStatsBeans, Client client) throws GirsaException {
         try {
-            String filePath = fileUploadFolder + File.separator + "Reports" +client.getClientName() +"result.xlsx";
+//            String filePath = fileUploadFolder + File.separator + "Reports" + File.separator + client.getClientName() +"result.xlsx";
+            String filePath = fileUploadFolder + File.separator + "QStats_" + new Date() + ".xlsx";
             reportCreationService.createExcelFile(qStatsBeans, filePath);
 
             //TODO - store it in file detials
@@ -202,7 +215,7 @@ public class GenerateQstatsController extends AbstractQstatsReportController {
         //TODO - verify the indices type(sheet name ) based on portofoli code or psg fund code
         Indices indices = indicesRepository.findBySecurityAndType(instrument.getInstrumentCode(), psgFundMapping.getPsgFundCode());
 
-        if ("DE".equalsIgnoreCase(qStatsBean.getAciAssetclass())) {
+        if ("DE".equalsIgnoreCase(qStatsBean.getAciAssetclass()) && indices != null)  {
             qStatsBean.setWeighting(indices.getMarketCap()); //TODO - verify the correct field
         }
 
@@ -359,7 +372,7 @@ public class GenerateQstatsController extends AbstractQstatsReportController {
 ////        }
 //
 //        try (Workbook workbook = new XSSFWorkbook();
-//             FileOutputStream fileOut = new FileOutputStream("C:\\Users\\SHARANYAREDDY\\Desktop\\TSR\\GIRSA\\abc.xlsx")) {
+//             FileOutputStream fileOut = new FileOutputStream("/home/pradeep/tmp/girsa/abc.xlsx")) {
 //            // new HSSFWorkbook() for generating `.xls` file
 //
 //        /* CreationHelper helps us create instances of various things like DataFormat,

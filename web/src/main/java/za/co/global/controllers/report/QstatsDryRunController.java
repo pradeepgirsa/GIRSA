@@ -54,7 +54,7 @@ public class QstatsDryRunController extends AbstractQstatsReportController {
             for (HoldingCategory holdingCategory : holding.getHoldingCategories()) {
                 for (Instrument instrument : holdingCategory.getInstruments()) {
                     ReportDataCollectionBean reportDataCollectionBean = getReportCollectionBean(instrument, institutionalDetails, netAsset, psgFundMapping,
-                            numberofAccounts);
+                            numberofAccounts, null);
 
                     String error = validator.validate(reportDataCollectionBean);
                     if (error != null)

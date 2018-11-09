@@ -72,13 +72,13 @@ public abstract class AbstractQstatsReportController {
     @Autowired
     private DailyPricingRepository dailyPricingRepository;
 
-    protected Date getMaturityDate(BarraAssetInfo barraAssetInfo) {
+    protected Date getMaturityDate(BarraAssetInfo barraAssetInfo, String instrumentCode) {
         Date maturityDate = null;
         if(barraAssetInfo != null) {
             if (maturityDateMap.get(barraAssetInfo.getAssetId()) != null) {
                 maturityDate = maturityDateMap.get(barraAssetInfo.getAssetId());
             } else {
-                maturityDate = getMaturityDateFromSecurityListing(barraAssetInfo.getMaturityDate(), barraAssetInfo.getAssetId());
+                maturityDate = getMaturityDateFromSecurityListing(barraAssetInfo.getMaturityDate(), instrumentCode);
                 maturityDateMap.put(barraAssetInfo.getAssetId(), maturityDate);
             }
         }
@@ -93,11 +93,13 @@ public abstract class AbstractQstatsReportController {
         if(securityListing != null) {
             String couponPaymentDates = securityListing.getCouponPaymentDates() != null ?
                     securityListing.getCouponPaymentDates().replace(" ", "") : null;
-            String[] dates = couponPaymentDates.split(",");
-            for (String dateInString : dates) {
-                Date date = parseDate(dateInString);
-                if (date != null && date.after(new Date())) {
-                    return date;
+            if(couponPaymentDates != null) {
+                String[] dates = couponPaymentDates.split(",");
+                for (String dateInString : dates) {
+                    Date date = parseDate(dateInString);
+                    if (date != null && date.after(new Date())) {
+                        return date;
+                    }
                 }
             }
             Date maturityDate = securityListing.getMaturityDate();
@@ -165,20 +167,23 @@ public abstract class AbstractQstatsReportController {
     }
 
     protected ReportDataCollectionBean getReportCollectionBean(Instrument instrument, InstitutionalDetails institutionalDetails, BarraAssetInfo netAsset,
-                                                               PSGFundMapping psgFundMapping, NumberOfAccounts numberOfAccounts) {
+                                                               PSGFundMapping psgFundMapping, NumberOfAccounts numberOfAccounts, Date reportDate) {
 
         InstrumentCode instrumentCode = instrumentCodeRepository.findByManagerCode(instrument.getInstrumentCode());
 
         BarraAssetInfo barraAssetInfo = getBarraAssetInfo(instrumentCode);
 
         String reg28InstrType = barraAssetInfo.getReg28InstrType();
-        Reg28InstrumentType reg28InstrumentType = reg28InstrumentTypeRepository.findByReg28InstrType(reg28InstrType);
+        Reg28InstrumentType reg28InstrumentType = null;
+        if(reg28InstrType != null) {
+            reg28InstrumentType = reg28InstrumentTypeRepository.findByReg28InstrType(reg28InstrType);
+        }
 
         IssuerMapping issuerMapping = getIssuerMapping(barraAssetInfo);
 
         DailyPricing dailyPricing = getDailyPricing(barraAssetInfo.getAssetId(), issuerMapping.getDailyPricingIssuerName());
 
-        Date maturityDate = getMaturityDate(barraAssetInfo);
+        Date maturityDate = getMaturityDate(barraAssetInfo, instrumentCode.getManagerCode());
 
         ReportDataCollectionBean reportDataCollectionBean = new ReportDataCollectionBean.Builder()
                 .setInstrument(instrument)
@@ -192,6 +197,7 @@ public abstract class AbstractQstatsReportController {
                 .setReg28InstrumentType(reg28InstrumentType)
                 .setIssuerMapping(issuerMapping)
                 .setDailyPricing(dailyPricing)
+                .setSettlementDate(reportDate)
                 .build();
 
         return reportDataCollectionBean;

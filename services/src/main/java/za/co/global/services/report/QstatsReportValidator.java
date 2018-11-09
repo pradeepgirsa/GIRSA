@@ -5,6 +5,7 @@ import za.co.global.domain.fileupload.client.InstitutionalDetails;
 import za.co.global.domain.fileupload.client.NumberOfAccounts;
 import za.co.global.domain.fileupload.client.fpm.Holding;
 import za.co.global.domain.fileupload.mapping.DailyPricing;
+import za.co.global.domain.fileupload.mapping.InstrumentCode;
 import za.co.global.domain.fileupload.system.BarraAssetInfo;
 import za.co.global.domain.report.ReportDataCollectionBean;
 import za.co.global.services.Validator;
@@ -21,8 +22,10 @@ public class QstatsReportValidator implements Validator<ReportDataCollectionBean
         NumberOfAccounts numberOfAccounts = reportDataCollectionBean.getNumberOfAccounts();
         DailyPricing dailyPricing = reportDataCollectionBean.getDailyPricing();
 
+        InstrumentCode instrumentCode = reportDataCollectionBean.getInstrumentCode();
+
         if(barraAssetInfo == null) {
-            return "There is no mapping to barra asset to the instrument code: " + reportDataCollectionBean.getInstrumentCode().getBarraCode();
+            return "There is no mapping to barra asset to the instrument code: " + instrumentCode.getBarraCode();
         }
         if(netAsset == null || netAsset.getEffExposure() == null) {
             return "There is no value for net eff exposure in barra";
@@ -54,7 +57,7 @@ public class QstatsReportValidator implements Validator<ReportDataCollectionBean
         }
 
         if(reportDataCollectionBean.getMaturityDate() == null) { //TODO - check maturity date with asset id or instrument code.
-            return "There is no Maturity date mapping to asset id:"+ barraAssetInfo.getAssetId();
+            return "There is no Maturity date mapping to asset id:'"+ barraAssetInfo.getAssetId()+"', Instrument code:"+ instrumentCode.getManagerCode();
         }
 
         if(dailyPricing == null) {
