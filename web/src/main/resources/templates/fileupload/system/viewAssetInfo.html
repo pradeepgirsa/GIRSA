@@ -38,121 +38,44 @@
                             <thead class="">
                             <tr>
                                 <th>Asset ID</th>
-                                <th>Asset ID Type</th>
                                 <th>Asset Name</th>
-                                <th>Holdings</th>
-                                <th>Price</th>
-                                <th>Eff Exposure</th>
-                                <th>Mkt Value</th>
-                                <th>Inst. Type</th>
-                                <th>Inst. Sub-type</th>
                                 <th>Eff Weight (%)</th>
-                                <th>GIR Issuer</th>
                                 <th>Reg28 InstrType</th>
-                                <th>"Reg30 InstrType</th>
-                                <th>SARB Classification</th>
+                                <th>Inst. Type</th>
+                                <th>GIR Issuer</th>
                                 <th>Africa Values</th>
                                 <th>Market Capitalization</th>
                                 <th>Shares Outstanding</th>
-                                <th>"Amount Issued</th>
-                                <th>ICB Industry</th>
-                                <th>ICB Supersector</th>
+                                <th>Current Yield (%)</th>
                                 <th>GIR Industry ICB</th>
                                 <th>GIR Sector ICB</th>
-                                <th>"GIR Subsector ICB</th>
+                                <th>GIR Subsector ICB</th>
                                 <th>GIR Supersector ICB</th>
-                                <th>Sector</th>
-                                <th>Subsector</th>
-                                <th>GICS Industry</th>
-                                <th>"GICS Industry Group</th>
-                                <th>GICS Sector</th>
-                                <th>GICS Sub-Industry</th>
-                                <th>Maturity Date</th>
-                                <th>Time to Maturity</th>
-                                <th>Weighted Average Life</th>
-                                <th>Pricing Redemption Date</th>
-                                <th>Current Yield (%)</th>
                                 <th>Coupon (%)</th>
-                                <th>First Coupon Date</th>
-                                <th>Effective Duration</th>
-                                <th>Macaulay Duration</th>
                                 <th>Modified Duration</th>
-                                <th>Price Currency</th>
-                                <th>Local Market</th>
-                                <th>Country Of Exposure</th>
-                                <th>Country Of Incorporation</th>
-                                <th>Country Of Quotation</th>
-                                <th>Issuer</th>
-                                <th>Moody Rating</th>
-                                <th>Moody Long-Term Issuer Rating D</th>
-                                <th>Moody Long-Term Issuer Rating F</th>
-                                <th>SAndP Long-Term Issuer Rating D</th>
-                                <th>SAndP Long-Term Issuer Rating F</th>
-                                <th>Parent IssuerID</th>
-                                <th>Parent Issuer Name</th>
-                                <th>Ultimate IssuerID</th>
-                                <th>Ultimate Issuer Name</th>
+                                <th>Pricing Redemption Date</th>
 
                             </tr>
                             </thead>
                             <tbody>
                             <tr th:each="barraAssetInfo : ${assetInfoList}">
                                 <td><a th:href="|/view_asset?assetId=${barraAssetInfo.assetId}|" th:onclick="|loadingScreen()|"><span th:text="|${barraAssetInfo.assetId}|"/></a></td>
-                                <td><span th:text="|${barraAssetInfo.assetIdType}|"/></td>
                                 <td><span th:text="|${barraAssetInfo.assetName}|"/></td>
-                                <td><span th:text="|${barraAssetInfo.holdings}|"/></td>
-                                <td><span th:text="|${barraAssetInfo.price}|"/></td>
-                                <td><span th:text="|${barraAssetInfo.effExposure}|"/></td>
-                                <td><span th:text="|${barraAssetInfo.marketValue}|"/></td>
-                                <td><span th:text="|${barraAssetInfo.instType}|"/></td>
-                                <td><span th:text="|${barraAssetInfo.instSubType}|"/></td>
                                 <td><span th:text="|${barraAssetInfo.effWeight}|"/></td>
-                                <td><span th:text="|${barraAssetInfo.girIssuer}|"/></td>
                                 <td><span th:text="|${barraAssetInfo.reg28InstrType}|"/></td>
-                                <td><span th:text="|${barraAssetInfo.reg30InstrType}|"/></td>
-                                <td><span th:text="|${barraAssetInfo.sarbClassification}|"/></td>
+                                <td><span th:text="|${barraAssetInfo.instType}|"/></td>
+                                <td><span th:text="|${barraAssetInfo.girIssuer}|"/></td>
                                 <td><span th:text="|${barraAssetInfo.africaValues}|"/></td>
                                 <td><span th:text="|${barraAssetInfo.marketCapitalization}|"/></td>
                                 <td><span th:text="|${barraAssetInfo.sharesOutstanding}|"/></td>
-                                <td><span th:text="|${barraAssetInfo.amountIssued}|"/></td>
-                                <td><span th:text="|${barraAssetInfo.icbIndustry}|"/></td>
-                                <td><span th:text="|${barraAssetInfo.icbSuperSector}|"/></td>
+                                <td><span th:text="|${barraAssetInfo.currentYield}|"/></td>
                                 <td><span th:text="|${barraAssetInfo.girIndustryICB}|"/></td>
                                 <td><span th:text="|${barraAssetInfo.girSectorICB}|"/></td>
                                 <td><span th:text="|${barraAssetInfo.girSubsectorICB}|"/></td>
                                 <td><span th:text="|${barraAssetInfo.girSupersectorICB}|"/></td>
-                                <td><span th:text="|${barraAssetInfo.sector}|"/></td>
-                                <td><span th:text="|${barraAssetInfo.subsector}|"/></td>
-                                <td><span th:text="|${barraAssetInfo.gicsIndustry}|"/></td>
-                                <td><span th:text="|${barraAssetInfo.gicsIndustryGroup}|"/></td>
-                                <td><span th:text="|${barraAssetInfo.gicsSector}|"/></td>
-                                <td><span th:text="|${barraAssetInfo.gicsSubIndustry}|"/></td>
-                                <td><span th:text="|${barraAssetInfo.maturityDate}|"/></td>
-                                <td><span th:text="|${barraAssetInfo.timeToMaturity}|"/></td>
-                                <td><span th:text="|${barraAssetInfo.weightedAverageLife}|"/></td>
-                                <td><span th:text="|${barraAssetInfo.pricingRedemptionDate}|"/></td>
-                                <td><span th:text="|${barraAssetInfo.currentYield}|"/></td>
                                 <td><span th:text="|${barraAssetInfo.coupon}|"/></td>
-                                <td><span th:text="|${barraAssetInfo.firstCouponDate}|"/></td>
-                                <td><span th:text="|${barraAssetInfo.effectiveDuration}|"/></td>
-                                <td><span th:text="|${barraAssetInfo.macaulayDuration}|"/></td>
                                 <td><span th:text="|${barraAssetInfo.modifiedDuration}|"/></td>
-                                <td><span th:text="|${barraAssetInfo.priceCurrency}|"/></td>
-                                <!--<td><span th:text="|${barraAssetInfo.percentage}|"/></td>-->
-                                <td><span th:text="|${barraAssetInfo.localMarket}|"/></td>
-                                <td><span th:text="|${barraAssetInfo.countryOfExposure}|"/></td>
-                                <td><span th:text="|${barraAssetInfo.countryOfIncorporation}|"/></td>
-                                <td><span th:text="|${barraAssetInfo.countryOfQuotation}|"/></td>
-                                <td><span th:text="|${barraAssetInfo.issuer}|"/></td>
-                                <td><span th:text="|${barraAssetInfo.moodyRating}|"/></td>
-                                <td><span th:text="|${barraAssetInfo.moodyLongTermIssuerRatingD}|"/></td>
-                                <td><span th:text="|${barraAssetInfo.moodyLongTermIssuerRatingF}|"/></td>
-                                <td><span th:text="|${barraAssetInfo.sAndPLongTermIssuerRatingD}|"/></td>
-                                <td><span th:text="|${barraAssetInfo.sAndPLongTermIssuerRatingF}|"/></td>
-                                <td><span th:text="|${barraAssetInfo.parentIssuerID}|"/></td>
-                                <td><span th:text="|${barraAssetInfo.ultimateIssuerID}|"/></td>
-                                <td><span th:text="|${barraAssetInfo.ultimateIssuerName}|"/></td>
-
+                                <td><span th:text="|${barraAssetInfo.pricingRedemptionDate}|"/></td>
                             </tr>
                             </tbody>
                         </table>
