@@ -32,7 +32,7 @@ public class QStatsBean {
     private BigDecimal marketCap;
     private BigDecimal sharesInIssue;
     private String addClassification;
-    private Date ttmInc;
+    private BigDecimal ttmInc;
     private String issuerCode;
     private BigDecimal couponRate;
     private BigDecimal currentYield;
@@ -253,11 +253,11 @@ public class QStatsBean {
         this.addClassification = addClassification;
     }
 
-    public Date getTtmInc() {
+    public BigDecimal getTtmInc() {
         return ttmInc;
     }
 
-    public void setTtmInc(Date ttmInc) {
+    public void setTtmInc(BigDecimal ttmInc) {
         this.ttmInc = ttmInc;
     }
 

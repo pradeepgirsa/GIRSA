@@ -13,7 +13,7 @@ public interface DailyPricingRepository extends JpaRepository<DailyPricing, Long
 
     //DailyPricing findBySecurityAndType(String security, String type);
 
-    List<DailyPricing> findByIssuerAndBondCode(String issuer, String bondCode);
+    DailyPricing findByBondCode(String bondCode);
 
     DailyPricing findByIssuerAndBondCodeAndIssueDate(String issuer, String bondCode, Date issueDate);
 }

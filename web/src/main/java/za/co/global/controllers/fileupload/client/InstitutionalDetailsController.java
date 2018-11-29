@@ -63,14 +63,14 @@ public class InstitutionalDetailsController extends BaseFileUploadController {
 
     private InstitutionalDetails getInstitutionalDetails(Object object) {
         InstitutionalDetails institutionalDetails = (InstitutionalDetails) object;
-        InstitutionalDetails existingInstitutionalDetails = institutionalDetailsRepository.findByFundCode(institutionalDetails.getFundCode());
+        InstitutionalDetails existingInstitutionalDetails = institutionalDetailsRepository.findByFundCode(institutionalDetails.getClientFundCode());
         if (existingInstitutionalDetails == null) {
             return institutionalDetails;
         }
-        existingInstitutionalDetails.setAssetMktValue(institutionalDetails.getAssetMktValue());
+        existingInstitutionalDetails.setInstitutionalTotal(institutionalDetails.getInstitutionalTotal());
         existingInstitutionalDetails.setFundName(institutionalDetails.getFundName());
         existingInstitutionalDetails.setPercentage(institutionalDetails.getPercentage());
-        existingInstitutionalDetails.setSplit(institutionalDetails.getSplit());
+        existingInstitutionalDetails.setTotal(institutionalDetails.getTotal());
         return existingInstitutionalDetails;
     }
 

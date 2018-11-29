@@ -50,9 +50,9 @@
                             <tr th:each="institutionalDetail : ${institutionalDetails}">
                                 <td><span th:text="|${institutionalDetail.id}|"/></td>
                                 <td><span th:text="|${institutionalDetail.fundName}|"/></td>
-                                <td><span th:text="|${institutionalDetail.fundCode}|"/></td>
-                                <td><span th:text="|${institutionalDetail.assetMktValue}|"/></td>
-                                <td><span th:text="|${institutionalDetail.split}|"/></td>
+                                <td><span th:text="|${institutionalDetail.clientFundCode}|"/></td>
+                                <td><span th:text="|${institutionalDetail.institutionalTotal}|"/></td>
+                                <td><span th:text="|${institutionalDetail.total}|"/></td>
                                 <td><span th:text="|${institutionalDetail.percentage}|"/></td>
                             </tr>
                             </tbody>

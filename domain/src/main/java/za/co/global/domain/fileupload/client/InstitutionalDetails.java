@@ -7,6 +7,7 @@ import org.hibernate.annotations.NaturalId;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Date;
 
 @Entity
 @Table(name = "institutional_details")
@@ -24,21 +25,25 @@ public class InstitutionalDetails implements Serializable {
     private String fundName;
 
     @Column(name = "fund_code", unique = true, nullable = false)
-    @ExcelColumnHeader(columnHeader = "JSE Code")
+    @ExcelColumnHeader(columnHeader = "ACIFundCode")
     @NaturalId
-    private String fundCode;
+    private String clientFundCode;
 
-    @Column(name = "asset_Market_value")
-    @ExcelColumnHeader(columnHeader = "AssetMV", dataType = "big_decimal")
-    private BigDecimal assetMktValue;
+    @Column(name = "institutional_total")
+    @ExcelColumnHeader(columnHeader = "InstitutionalTotal", dataType = "big_decimal")
+    private BigDecimal institutionalTotal;
 
-    @Column(name = "split")
-    @ExcelColumnHeader(columnHeader = "InstSplit", dataType = "big_decimal")
-    private BigDecimal split;
+    @Column(name = "total")
+    @ExcelColumnHeader(columnHeader = "Total", dataType = "big_decimal")
+    private BigDecimal total;
 
     @Column(name = "percentage")
     @ExcelColumnHeader(columnHeader = "Institutional %", dataType = "big_decimal")
     private BigDecimal percentage;
+
+    @Column(name = "date")
+    @ExcelColumnHeader(columnHeader = "Date", dataType = "date")
+    private Date date;
 
     public Long getId() {
         return id;
@@ -56,28 +61,28 @@ public class InstitutionalDetails implements Serializable {
         this.fundName = fundName;
     }
 
-    public String getFundCode() {
-        return fundCode;
+    public String getClientFundCode() {
+        return clientFundCode;
     }
 
-    public void setFundCode(String fundCode) {
-        this.fundCode = fundCode;
+    public void setClientFundCode(String clientFundCode) {
+        this.clientFundCode = clientFundCode;
     }
 
-    public BigDecimal getAssetMktValue() {
-        return assetMktValue;
+    public BigDecimal getInstitutionalTotal() {
+        return institutionalTotal;
     }
 
-    public void setAssetMktValue(BigDecimal assetMktValue) {
-        this.assetMktValue = assetMktValue;
+    public void setInstitutionalTotal(BigDecimal institutionalTotal) {
+        this.institutionalTotal = institutionalTotal;
     }
 
-    public BigDecimal getSplit() {
-        return split;
+    public BigDecimal getTotal() {
+        return total;
     }
 
-    public void setSplit(BigDecimal split) {
-        this.split = split;
+    public void setTotal(BigDecimal total) {
+        this.total = total;
     }
 
     public BigDecimal getPercentage() {
@@ -96,19 +101,19 @@ public class InstitutionalDetails implements Serializable {
         InstitutionalDetails that = (InstitutionalDetails) o;
 
         if (fundName != null ? !fundName.equals(that.fundName) : that.fundName != null) return false;
-        if (fundCode != null ? !fundCode.equals(that.fundCode) : that.fundCode != null) return false;
-        if (assetMktValue != null ? !assetMktValue.equals(that.assetMktValue) : that.assetMktValue != null)
+        if (clientFundCode != null ? !clientFundCode.equals(that.clientFundCode) : that.clientFundCode != null) return false;
+        if (institutionalTotal != null ? !institutionalTotal.equals(that.institutionalTotal) : that.institutionalTotal != null)
             return false;
-        if (split != null ? !split.equals(that.split) : that.split != null) return false;
+        if (total != null ? !total.equals(that.total) : that.total != null) return false;
         return percentage != null ? percentage.equals(that.percentage) : that.percentage == null;
     }
 
     @Override
     public int hashCode() {
         int result = fundName != null ? fundName.hashCode() : 0;
-        result = 31 * result + (fundCode != null ? fundCode.hashCode() : 0);
-        result = 31 * result + (assetMktValue != null ? assetMktValue.hashCode() : 0);
-        result = 31 * result + (split != null ? split.hashCode() : 0);
+        result = 31 * result + (clientFundCode != null ? clientFundCode.hashCode() : 0);
+        result = 31 * result + (institutionalTotal != null ? institutionalTotal.hashCode() : 0);
+        result = 31 * result + (total != null ? total.hashCode() : 0);
         result = 31 * result + (percentage != null ? percentage.hashCode() : 0);
         return result;
     }
@@ -118,10 +123,11 @@ public class InstitutionalDetails implements Serializable {
         return "InstitutionalDetails{" +
                 "id=" + id +
                 ", fundName='" + fundName + '\'' +
-                ", fundCode='" + fundCode + '\'' +
-                ", assetMktValue=" + assetMktValue +
-                ", split=" + split +
+                ", clientFundCode='" + clientFundCode + '\'' +
+                ", institutionalTotal=" + institutionalTotal +
+                ", total=" + total +
                 ", percentage=" + percentage +
+                ", date=" + date +
                 '}';
     }
 }

@@ -36,7 +36,7 @@ public class QstatsReportValidator implements Validator<ReportDataCollectionBean
                     + holding.getPortfolioCode() +", instrument code:" + barraAssetInfo.getAssetId();
         }
 
-        if(institutionalDetails == null || institutionalDetails.getSplit() == null) {
+        if(institutionalDetails == null || institutionalDetails.getTotal() == null) {
             return "There is no institutional split matching to fund code:"+ holding.getPortfolioCode()
                     + ", FPM fund code:"+ reportDataCollectionBean.getPsgFundMapping().getPsgFundCode();
         }

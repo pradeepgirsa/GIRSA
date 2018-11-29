@@ -89,8 +89,7 @@ public class GenerateQstatsController extends AbstractQstatsReportController {
 
 
             List<QStatsBean> qStatsBeans = new ArrayList<>();
-//        BarraAssetInfo netAsset = assetInfoRepository.findByAssetId("897"); //TODO - verify
-            BarraAssetInfo netAsset = barraAssetInfoRepository.findByNetIndicatorIsTrue(); //TODO - verify
+            BarraAssetInfo netAsset = barraAssetInfoRepository.findByNetIndicatorIsTrue();
             for (Holding holding : holdings) {
                 PSGFundMapping psgFundMapping = psgFundMappingRepository.findByManagerFundCode(holding.getPortfolioCode());
                 NumberOfAccounts numberofAccounts = numberOfAccountsRepository.findByFundCode(psgFundMapping.getPsgFundCode());
@@ -169,7 +168,7 @@ public class GenerateQstatsController extends AbstractQstatsReportController {
         qStatsBean.setMvTotal(netAsset.getEffExposure()); //Validated this with total current market base value for equality
 
 
-        qStatsBean.setInstitutionalTotal(institutionalDetails.getSplit());
+        qStatsBean.setInstitutionalTotal(institutionalDetails.getTotal());
         qStatsBean.setNoOfAccounts(numberOfAccounts.getTotal());
 
         String aciAssetClass = getACIAssetClass(barraAssetInfo, reg28InstrType, reg28InstrumentType);
@@ -200,7 +199,7 @@ public class GenerateQstatsController extends AbstractQstatsReportController {
         Indices indices = indicesRepository.findBySecurityAndType(instrument.getInstrumentCode(), psgFundMapping.getPsgFundCode());
 
         if ("DE".equalsIgnoreCase(qStatsBean.getAciAssetclass())) {
-            qStatsBean.setWeighting(indices.getMarketCap()); //TODO - verify the correct field
+            qStatsBean.setWeighting(indices.getIndexPercentage());
         }
 
         qStatsBean.setEqtIndexLink(Boolean.FALSE); //TODO - create EqtIndexLink tables
@@ -214,7 +213,7 @@ public class GenerateQstatsController extends AbstractQstatsReportController {
 
         //TODO - verify as it is date or days
         Date tradeDate = getTradeDate(holding, instrument);
-        qStatsBean.setTtmInc(tradeDate);
+        qStatsBean.setTtmInc(BigDecimal.valueOf(TimeUnit.DAYS.convert((tradeDate.getTime() - new Date().getTime()), TimeUnit.MILLISECONDS)));
 
 
         qStatsBean.setIssuerCode(issuerMapping.getIssuerCode());
@@ -231,7 +230,6 @@ public class GenerateQstatsController extends AbstractQstatsReportController {
         String rating = null;
         String ratingAgency = null;
         if (dailyPricing != null) {
-
             if (!StringUtils.isEmpty(dailyPricing.getMoodys())) {
                 rating = dailyPricing.getMoodys();
                 ratingAgency = "Moody's";

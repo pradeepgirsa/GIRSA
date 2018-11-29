@@ -101,7 +101,7 @@ public class DailyPricingMappingController extends BaseFileUploadController {
 
     private DailyPricing getDailyPricing(Object obj) {
         DailyPricing dailyPricing = (DailyPricing) obj;
-        DailyPricing existingDailyPricing = dailyPricingRepository.findByIssuerAndBondCodeAndIssueDate(dailyPricing.getIssuer(), dailyPricing.getBondCode(), dailyPricing.getIssueDate());
+        DailyPricing existingDailyPricing = dailyPricingRepository.findByBondCode(dailyPricing.getBondCode());
         if(existingDailyPricing == null) {
             return dailyPricing;
         }
