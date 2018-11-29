@@ -70,8 +70,8 @@ public class AdditionalClassificationController extends BaseFileUploadController
         }
         existing.setIndustry(ex.getIndustry());
         existing.setSector(ex.getSector());
-        existing.setSubsector(ex.getSubsector());
-        existing.setSupersector(ex.getSupersector());
+        existing.setSubSector(ex.getSubSector());
+        existing.setSuperSector(ex.getSuperSector());
         return existing;
     }
 

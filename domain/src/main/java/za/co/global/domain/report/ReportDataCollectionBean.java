@@ -2,7 +2,6 @@ package za.co.global.domain.report;
 
 import za.co.global.domain.fileupload.client.InstitutionalDetails;
 import za.co.global.domain.fileupload.client.NumberOfAccounts;
-import za.co.global.domain.fileupload.client.fpm.Holding;
 import za.co.global.domain.fileupload.client.fpm.Instrument;
 import za.co.global.domain.fileupload.mapping.*;
 import za.co.global.domain.fileupload.system.BarraAssetInfo;
@@ -22,6 +21,7 @@ public class ReportDataCollectionBean {
     private IssuerMapping issuerMapping;
     private DailyPricing dailyPricing;
     private Instrument instrument;
+    private Date settlementDate;
 
     public static class Builder {
         private BarraAssetInfo netAsset;
@@ -35,6 +35,7 @@ public class ReportDataCollectionBean {
         private Reg28InstrumentType reg28InstrumentType;
         private IssuerMapping issuerMapping;
         private DailyPricing dailyPricing;
+        private Date settlementDate;
 
         public Builder setNetAsset(BarraAssetInfo netAsset) {
             this.netAsset = netAsset;
@@ -91,6 +92,11 @@ public class ReportDataCollectionBean {
             return this;
         }
 
+        public Builder setSettlementDate(Date settlementDate) {
+            this.settlementDate = settlementDate;
+            return this;
+        }
+
         public ReportDataCollectionBean build() {
             return new ReportDataCollectionBean(this);
         }
@@ -111,6 +117,7 @@ public class ReportDataCollectionBean {
         this.reg28InstrumentType = builder.reg28InstrumentType;
         this.issuerMapping = builder.issuerMapping;
         this.dailyPricing = builder.dailyPricing;
+        this.settlementDate = builder.settlementDate;
     }
 
     public BarraAssetInfo getNetAsset() {
@@ -155,5 +162,9 @@ public class ReportDataCollectionBean {
 
     public DailyPricing getDailyPricing() {
         return dailyPricing;
+    }
+
+    public Date getSettlementDate() {
+        return settlementDate;
     }
 }

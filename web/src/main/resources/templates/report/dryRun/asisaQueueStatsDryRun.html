@@ -83,21 +83,5 @@
 <script th:replace="layout :: site-screen-loader">
 </script>
 
-<script>
-
-jQuery(document).ready(function() {
- // Date Pickers
-    jQuery('#reportDate').datepicker({
-        dateFormat: 'dd/mm/yy',
-        numberOfMonths: 3,
-        startDate: '-50d',
-        showButtonPanel: true
-    });
-
-    jQuery("#client").select2({
-        minimumResultsForSearch: 10
-    });
- });
-</script>
 </body>
 </html>
