@@ -100,8 +100,8 @@ public class GenerateQstatsController extends AbstractQstatsReportController {
 
 
             List<QStatsBean> qStatsBeans = new ArrayList<>();
-//        BarraAssetInfo netAsset = assetInfoRepository.findByAssetId("897"); //TODO - verify
-            BarraAssetInfo netAsset = barraAssetInfoRepository.findByNetIndicatorIsTrue(); //TODO - verify
+            List<BarraAssetInfo> netAssets = barraAssetInfoRepository.findByNetIndicatorIsTrue();
+            BarraAssetInfo netAsset = netAssets.isEmpty() ? null : netAssets.get(0);
             for (Holding holding : holdings) {
                 PSGFundMapping psgFundMapping = psgFundMappingRepository.findByManagerFundCode(holding.getPortfolioCode());
                 NumberOfAccounts numberofAccounts = numberOfAccountsRepository.findByFundCode(psgFundMapping.getPsgFundCode());
