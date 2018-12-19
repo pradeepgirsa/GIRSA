@@ -63,7 +63,7 @@ public class InstitutionalDetailsController extends BaseFileUploadController {
 
     private InstitutionalDetails getInstitutionalDetails(Object object) {
         InstitutionalDetails institutionalDetails = (InstitutionalDetails) object;
-        InstitutionalDetails existingInstitutionalDetails = institutionalDetailsRepository.findByFundCode(institutionalDetails.getClientFundCode());
+        InstitutionalDetails existingInstitutionalDetails = institutionalDetailsRepository.findByClientFundCode(institutionalDetails.getClientFundCode());
         if (existingInstitutionalDetails == null) {
             return institutionalDetails;
         }

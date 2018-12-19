@@ -105,7 +105,7 @@ public class GenerateQstatsController extends AbstractQstatsReportController {
             for (Holding holding : holdings) {
                 PSGFundMapping psgFundMapping = psgFundMappingRepository.findByManagerFundCode(holding.getPortfolioCode());
                 NumberOfAccounts numberofAccounts = numberOfAccountsRepository.findByFundCode(psgFundMapping.getPsgFundCode());
-                InstitutionalDetails institutionalDetails = institutionalDetailsRepository.findByFundCode(psgFundMapping.getPsgFundCode());
+                InstitutionalDetails institutionalDetails = institutionalDetailsRepository.findByClientFundCode(psgFundMapping.getPsgFundCode());
                 for (HoldingCategory holdingCategory : holding.getHoldingCategories()) {
                     for (Instrument instrument : holdingCategory.getInstruments()) {
 

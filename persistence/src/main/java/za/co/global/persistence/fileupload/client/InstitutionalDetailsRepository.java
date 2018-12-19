@@ -7,5 +7,5 @@ import za.co.global.domain.fileupload.client.InstitutionalDetails;
 @Repository
 public interface InstitutionalDetailsRepository extends JpaRepository<InstitutionalDetails, Long> {
 
-    InstitutionalDetails findByFundCode(String fundCode);
+    InstitutionalDetails findByClientFundCode(String clientFundCode);
 }
