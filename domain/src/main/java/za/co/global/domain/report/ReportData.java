@@ -34,7 +34,7 @@ public class ReportData implements Serializable {
     private ReportStatus reportStatus = ReportStatus.REGISTERED;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "client_id", insertable = false, updatable = false)
+    @JoinColumn(name = "client_id", referencedColumnName = "ID", nullable = false)
     private Client client;
 
     public Long getId() {

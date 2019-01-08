@@ -211,11 +211,16 @@ public class GenerateQstatsController extends AbstractQstatsReportController {
         qStatsBean.setPerOfPort(perOfPort);
 
 
-        //TODO - verify the indices type(sheet name ) based on portofoli code or psg fund code
-        Indices indices = indicesRepository.findBySecurityAndType(instrument.getInstrumentCode(), psgFundMapping.getPsgFundCode());
 
-        if ("DE".equalsIgnoreCase(qStatsBean.getAciAssetclass()) && indices != null)  {
-            qStatsBean.setWeighting(indices.getIndexPercentage());
+
+        if ("DE".equalsIgnoreCase(qStatsBean.getAciAssetclass())) {
+
+            //TODO - verify the indices type(sheet name ) based on portofoli code or psg fund code
+            Indices indices = indicesRepository.findBySecurityAndType(instrument.getInstrumentCode(), psgFundMapping.getPsgFundCode());
+
+            if (indices != null) {
+                qStatsBean.setWeighting(indices.getIndexPercentage());
+            }
         }
 
         qStatsBean.setEqtIndexLink(Boolean.FALSE); //TODO - create EqtIndexLink tables
@@ -228,8 +233,8 @@ public class GenerateQstatsController extends AbstractQstatsReportController {
         qStatsBean.setAddClassification(getAdditionalClassification(barraAssetInfo, reg28InstrumentType, qStatsBean.getAciAssetclass()));
 
         //TODO - verify as it is date or days
-        Date tradeDate = getTradeDate(holding, instrument);
-        qStatsBean.setTtmInc(BigDecimal.valueOf(TimeUnit.DAYS.convert((tradeDate.getTime() - new Date().getTime()), TimeUnit.MILLISECONDS)));
+
+        qStatsBean.setTtmInc(new BigDecimal(TimeUnit.DAYS.convert((reportDate.getTime() - new Date().getTime()), TimeUnit.MILLISECONDS)));
 
 
         qStatsBean.setIssuerCode(issuerMapping.getIssuerCode());
@@ -237,7 +242,10 @@ public class GenerateQstatsController extends AbstractQstatsReportController {
         qStatsBean.setResetMaturityDate(barraAssetInfo.getPricingRedemptionDate());
 
         //TODO - verify as it is date or days
-        qStatsBean.setTtmCur(new BigDecimal(TimeUnit.DAYS.convert((reportDate.getTime() - new Date().getTime()), TimeUnit.MILLISECONDS)));
+        Date tradeDate = getTradeDate(holding, instrument);
+        BigDecimal ttmCur = tradeDate != null ? BigDecimal.valueOf(TimeUnit.DAYS.convert((tradeDate.getTime() - new Date().getTime()), TimeUnit.MILLISECONDS)) :
+                BigDecimal.ZERO;
+        qStatsBean.setTtmCur(ttmCur);
 
         qStatsBean.setInstrRateST(null);
         qStatsBean.setInstrRateLT(null);
@@ -284,7 +292,7 @@ public class GenerateQstatsController extends AbstractQstatsReportController {
 
 
     private Date getTradeDate(Holding holding, Instrument instrument) {
-        List<TransactionListing> transactionListings = transactionListingRepository.findByClientPortfolioCodeAndInstrumentCode(holding.getPortfolioCode(),
+        List<TransactionListing> transactionListings = transactionListingRepository.findByClientPortfolioCodeAndInstrumentCodeOrderByTradeDateAsc(holding.getPortfolioCode(),
                 instrument.getInstrumentCode());
 
         return transactionListings.isEmpty() ? null : transactionListings.get(0).getTradeDate();

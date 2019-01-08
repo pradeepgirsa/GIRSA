@@ -67,7 +67,7 @@ public class TransactionListingController extends BaseFileUploadController {
 
     private TransactionListing getTransactionListing(Object object) {
         TransactionListing transactionListing = (TransactionListing) object;
-        List<TransactionListing> transactionListings = transactionListingRepository.findByClientPortfolioCodeAndInstrumentCode(transactionListing.getClientPortfolioCode(),
+        List<TransactionListing> transactionListings = transactionListingRepository.findByClientPortfolioCodeAndInstrumentCodeOrderByTradeDateAsc(transactionListing.getClientPortfolioCode(),
                 transactionListing.getInstrumentCode());
         if(transactionListings.isEmpty()) {
             return transactionListing;
