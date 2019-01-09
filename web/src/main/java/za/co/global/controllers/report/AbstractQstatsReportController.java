@@ -145,7 +145,7 @@ public abstract class AbstractQstatsReportController {
         String girIssuer = Optional.ofNullable(barraAssetInfo).map(BarraAssetInfo::getGirIssuer).orElse(null);
         IssuerMapping issuerMapping = null;
         if(girIssuer != null) {
-            List<IssuerMapping> issuerMappings =issuerMappingsRepository.findByBarraGIRIssuerName(girIssuer);
+            List<IssuerMapping> issuerMappings =issuerMappingsRepository.findByBarraGIRIssuerNameIgnoreCase(girIssuer);
             if(!issuerMappings.isEmpty()) {
                 issuerMapping = issuerMappings.get(0);
             }

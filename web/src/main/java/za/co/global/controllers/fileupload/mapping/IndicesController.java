@@ -1,6 +1,7 @@
 package za.co.global.controllers.fileupload.mapping;
 
 import com.gizbel.excel.enums.ExcelFactoryType;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -80,6 +81,9 @@ public class IndicesController extends BaseFileUploadController {
 
     private Indices getIndices(Object object, String type) {
         Indices indices = (Indices) object;
+        if(!StringUtils.isEmpty(type)) {
+            type = StringUtils.EMPTY;
+        }
         Indices existingIndice = indicesRepository.findBySecurityAndType(indices.getSecurity(), type);
         if(existingIndice == null) {
             return indices;

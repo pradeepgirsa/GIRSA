@@ -210,14 +210,9 @@ public class GenerateQstatsController extends AbstractQstatsReportController {
         BigDecimal perOfPort = qStatsBean.getMarketValue().divide(qStatsBean.getMvTotal(), 3, BigDecimal.ROUND_FLOOR);
         qStatsBean.setPerOfPort(perOfPort);
 
-
-
-
         if ("DE".equalsIgnoreCase(qStatsBean.getAciAssetclass())) {
-
-            //TODO - verify the indices type(sheet name ) based on portofoli code or psg fund code
-            Indices indices = indicesRepository.findBySecurityAndType(instrument.getInstrumentCode(), psgFundMapping.getPsgFundCode());
-
+            String type = StringUtils.isEmpty(psgFundMapping.getComments()) ? StringUtils.EMPTY : psgFundMapping.getComments();
+            Indices indices = indicesRepository.findBySecurityAndType(instrument.getInstrumentCode(), type);
             if (indices != null) {
                 qStatsBean.setWeighting(indices.getIndexPercentage());
             }
