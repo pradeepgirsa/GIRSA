@@ -91,6 +91,19 @@
 				<artifactId>liquibase-core</artifactId>
 				<version>3.6.2</version>
 			</dependency>
+
+		<dependency>
+			<groupId>org.primefaces</groupId>
+			<artifactId>primefaces</artifactId>
+			<version>6.2</version>
+		</dependency>
+
+		<dependency>
+			<groupId>javax.inject</groupId>
+			<artifactId>javax.inject</artifactId>
+			<version>1</version>
+		</dependency>
+
 		</dependencies>
 
 	</dependencyManagement>

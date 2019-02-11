@@ -197,7 +197,7 @@ public class QstatsReportCreationService implements ReportCreationService {
                 row.createCell(31).setCellValue(qStatsBean.getInstrRateLT());
                 row.createCell(32).setCellValue(qStatsBean.getIssuerRateST());
                 row.createCell(33).setCellValue(qStatsBean.getIssuerRateLT());
-                row.createCell(34).setCellValue(qStatsBean.getIssuerName());
+                row.createCell(34).setCellValue(qStatsBean.getIssuerName()); //Not mapped
                 row.createCell(35).setCellValue(qStatsBean.getRateAgency());
                 row.createCell(36).setCellValue(qStatsBean.isCompConDeb());
 

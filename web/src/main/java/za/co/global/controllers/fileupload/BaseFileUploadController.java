@@ -69,7 +69,7 @@ public abstract class BaseFileUploadController {
         return fileDetailsRepository.save(subFileDetails);
     }
 
-    private File storeFileDetails(MultipartFile file, String fileType, byte[] bytes) throws IOException {
+    protected File storeFileDetails(MultipartFile file, String fileType, byte[] bytes) throws IOException {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy_MM_dd");
         String folderWithDate = dateFormat.format(new Date());
 

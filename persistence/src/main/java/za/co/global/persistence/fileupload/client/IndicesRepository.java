@@ -1,9 +1,8 @@
-package za.co.global.persistence.fileupload.mapping;
+package za.co.global.persistence.fileupload.client;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import za.co.global.domain.fileupload.mapping.Indices;
-import za.co.global.domain.fileupload.mapping.Reg28InstrumentType;
+import za.co.global.domain.fileupload.client.Indices;
 
 @Repository
 public interface IndicesRepository extends JpaRepository<Indices, Long> {

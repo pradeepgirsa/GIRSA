@@ -3,25 +3,27 @@ package za.co.global.controllers.report;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import za.co.global.domain.client.Client;
-import za.co.global.domain.fileupload.client.InstitutionalDetails;
-import za.co.global.domain.fileupload.client.NumberOfAccounts;
-import za.co.global.domain.fileupload.client.SecurityListing;
-import za.co.global.domain.fileupload.client.fpm.Holding;
-import za.co.global.domain.fileupload.client.fpm.Instrument;
-import za.co.global.domain.fileupload.mapping.*;
+import za.co.global.domain.fileupload.client.DailyPricing;
+import za.co.global.domain.fileupload.client.InstrumentData;
+import za.co.global.domain.fileupload.mapping.ClientFundMapping;
+import za.co.global.domain.fileupload.mapping.InstrumentCode;
+import za.co.global.domain.fileupload.mapping.IssuerMapping;
+import za.co.global.domain.fileupload.mapping.Reg28InstrumentType;
 import za.co.global.domain.fileupload.system.BarraAssetInfo;
-import za.co.global.domain.report.ReportDataCollectionBean;
 import za.co.global.domain.report.ReportData;
+import za.co.global.domain.report.ReportDataCollectionBean;
 import za.co.global.persistence.client.ClientRepository;
-import za.co.global.persistence.fileupload.HoldingRepository;
-import za.co.global.persistence.fileupload.client.InstitutionalDetailsRepository;
-import za.co.global.persistence.fileupload.client.NumberOfAccountsRepository;
-import za.co.global.persistence.fileupload.client.SecurityListingRepository;
-import za.co.global.persistence.fileupload.mapping.*;
+import za.co.global.persistence.fileupload.client.DailyPricingRepository;
+import za.co.global.persistence.fileupload.client.InstrumentDataRepository;
+import za.co.global.persistence.fileupload.mapping.ClientFundMappingRepository;
+import za.co.global.persistence.fileupload.mapping.InstrumentCodeRepository;
+import za.co.global.persistence.fileupload.mapping.IssuerMappingsRepository;
+import za.co.global.persistence.fileupload.mapping.Reg28InstrumentTypeRepository;
 import za.co.global.persistence.fileupload.system.BarraAssetInfoRepository;
 import za.co.global.persistence.report.ReportDataRepository;
 import za.co.global.services.Validator;
 
+import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -31,13 +33,16 @@ import java.util.*;
 public abstract class AbstractQstatsReportController {
 
     @Autowired
-    protected PSGFundMappingRepository psgFundMappingRepository;
+    protected ClientFundMappingRepository clientFundMappingRepository;
 
     @Autowired
-    protected InstitutionalDetailsRepository institutionalDetailsRepository;
-
-    @Autowired
-    protected NumberOfAccountsRepository numberOfAccountsRepository;
+    protected InstrumentDataRepository instrumentDataRepository;
+//
+//    @Autowired
+//    protected InstitutionalDetailsRepository institutionalDetailsRepository;
+//
+//    @Autowired
+//    protected NumberOfAccountsRepository numberOfAccountsRepository;
 
     @Autowired
     protected InstrumentCodeRepository instrumentCodeRepository;
@@ -50,9 +55,9 @@ public abstract class AbstractQstatsReportController {
 
     @Autowired
     protected ReportDataRepository reportDataRepository;
-
-    @Autowired
-    protected SecurityListingRepository securityListingRepository;
+//
+//    @Autowired
+//    protected SecurityListingRepository securityListingRepository;
 
     @Autowired
     protected Validator<ReportDataCollectionBean> validator;
@@ -63,58 +68,66 @@ public abstract class AbstractQstatsReportController {
 
     @Autowired
     protected IssuerMappingsRepository issuerMappingsRepository;
-
-    @Autowired
-    protected HoldingRepository holdingRepository;
+//
+//    @Autowired
+//    protected HoldingRepository holdingRepository;
 
     protected Map<String, Date> maturityDateMap = new HashMap<>();
 
     @Autowired
     private DailyPricingRepository dailyPricingRepository;
 
-    protected Date getMaturityDate(BarraAssetInfo barraAssetInfo, String instrumentCode) {
+    protected Date getMaturityDate(BarraAssetInfo barraAssetInfo) {
         Date maturityDate = null;
         if(barraAssetInfo != null) {
-            if (maturityDateMap.get(barraAssetInfo.getAssetId()) != null) {
-                maturityDate = maturityDateMap.get(barraAssetInfo.getAssetId());
-            } else {
-                maturityDate = getMaturityDateFromSecurityListing(barraAssetInfo.getMaturityDate(), instrumentCode);
-                maturityDateMap.put(barraAssetInfo.getAssetId(), maturityDate);
-            }
+            return barraAssetInfo.getMaturityDate();
         }
         return maturityDate;
     }
 
-    private Date getMaturityDateFromSecurityListing(Date barraMaturityDate, String instrumentCode) {
-        if(barraMaturityDate != null) {
-            return barraMaturityDate;
-        }
-        SecurityListing securityListing = securityListingRepository.findBySecurityCode(instrumentCode);
-        if(securityListing != null) {
-            String couponPaymentDates = securityListing.getCouponPaymentDates() != null ?
-                    securityListing.getCouponPaymentDates().replace(" ", "") : null;
-            if(couponPaymentDates != null) {
-                String[] dates = couponPaymentDates.split(",");
-                for (String dateInString : dates) {
-                    Date date = parseDate(dateInString);
-                    if (date != null && date.after(new Date())) {
-                        return date;
-                    }
-                }
-            }
-            Date maturityDate = securityListing.getMaturityDate();
-            if (maturityDate != null) {
-                while (maturityDate.before(new Date())) {
-                    Calendar cal = Calendar.getInstance();
-                    cal.setTime(maturityDate);
-                    cal.add(Calendar.YEAR, 1);
-                    maturityDate = cal.getTime();
-                }
-                return maturityDate;
-            }
-        }
-        return null;
-    }
+//    protected Date getMaturityDate(BarraAssetInfo barraAssetInfo, String instrumentCode) {
+//        Date maturityDate = null;
+//        if(barraAssetInfo != null) {
+//            if (maturityDateMap.get(barraAssetInfo.getAssetId()) != null) {
+//                maturityDate = maturityDateMap.get(barraAssetInfo.getAssetId());
+//            } else {
+//                maturityDate = getMaturityDateFromSecurityListing(barraAssetInfo.getMaturityDate(), instrumentCode);
+//                maturityDateMap.put(barraAssetInfo.getAssetId(), maturityDate);
+//            }
+//        }
+//        return maturityDate;
+//    }
+//
+//    private Date getMaturityDateFromSecurityListing(Date barraMaturityDate, String instrumentCode) {
+//        if(barraMaturityDate != null) {
+//            return barraMaturityDate;
+//        }
+//        SecurityListing securityListing = securityListingRepository.findBySecurityCode(instrumentCode);
+//        if(securityListing != null) {
+//            String couponPaymentDates = securityListing.getCouponPaymentDates() != null ?
+//                    securityListing.getCouponPaymentDates().replace(" ", "") : null;
+//            if(couponPaymentDates != null) {
+//                String[] dates = couponPaymentDates.split(",");
+//                for (String dateInString : dates) {
+//                    Date date = parseDate(dateInString);
+//                    if (date != null && date.after(new Date())) {
+//                        return date;
+//                    }
+//                }
+//            }
+//            Date maturityDate = securityListing.getMaturityDate();
+//            if (maturityDate != null) {
+//                while (maturityDate.before(new Date())) {
+//                    Calendar cal = Calendar.getInstance();
+//                    cal.setTime(maturityDate);
+//                    cal.add(Calendar.YEAR, 1);
+//                    maturityDate = cal.getTime();
+//                }
+//                return maturityDate;
+//            }
+//        }
+//        return null;
+//    }
 
     private Date parseDate(String dateInString) {
         String datePattern = "ddMMMyyyy";
@@ -132,13 +145,13 @@ public abstract class AbstractQstatsReportController {
         return null;
     }
 
-    protected List<Holding> getHoldings(Client client, ReportData reportData) {
-        List<Holding> holdings = holdingRepository.findByClientAndReportDataIsNull(client);
+    protected List<InstrumentData> getInstrumentData(Client client, ReportData reportData) {
+        List<InstrumentData> instrumentDataList = instrumentDataRepository.findByClientAndReportDataIsNull(client);
         if(reportData != null) {
-            List<Holding> existingHoldings = holdingRepository.findByClientAndReportData(client, reportData);
-            existingHoldings.forEach(holding -> holdings.add(holding));
+            List<InstrumentData> existingInstruments = instrumentDataRepository.findByClientAndReportData(client, reportData);
+            existingInstruments.forEach(instrumentData -> instrumentDataList.add(instrumentData));
         }
-        return holdings;
+        return instrumentDataList;
     }
 
     protected IssuerMapping getIssuerMapping(BarraAssetInfo barraAssetInfo) {
@@ -165,10 +178,10 @@ public abstract class AbstractQstatsReportController {
         return dailyPricingRepository.findByBondCode(assetId);
     }
 
-    protected ReportDataCollectionBean getReportCollectionBean(Instrument instrument, InstitutionalDetails institutionalDetails, BarraAssetInfo netAsset,
-                                                               PSGFundMapping psgFundMapping, NumberOfAccounts numberOfAccounts, Date reportDate) {
+    protected ReportDataCollectionBean getReportCollectionBean(InstrumentData instrumentData, BarraAssetInfo netAsset,
+                                                               ClientFundMapping clientFundMapping, Date reportDate, BigDecimal netCurrentMarketValue) {
 
-        InstrumentCode instrumentCode = instrumentCodeRepository.findByManagerCode(instrument.getInstrumentCode());
+        InstrumentCode instrumentCode = instrumentCodeRepository.findByManagerCode(instrumentData.getInstrumentCode());
 
         BarraAssetInfo barraAssetInfo = getBarraAssetInfo(instrumentCode);
 
@@ -180,19 +193,18 @@ public abstract class AbstractQstatsReportController {
 
         IssuerMapping issuerMapping = getIssuerMapping(barraAssetInfo);
 
-        DailyPricing dailyPricing = getDailyPricing(instrument.getInstrumentCode());
+        DailyPricing dailyPricing = getDailyPricing(instrumentData.getInstrumentCode());
 
-        Date maturityDate = getMaturityDate(barraAssetInfo, instrumentCode.getManagerCode());
+        Date maturityDate = getMaturityDate(barraAssetInfo);
 
         ReportDataCollectionBean reportDataCollectionBean = new ReportDataCollectionBean.Builder()
-                .setInstrument(instrument)
+                .setInstrumentData(instrumentData)
                 .setBarraAssetInfo(barraAssetInfo)
-                .setInstitutionalDetails(institutionalDetails)
+                .setNetCurrentMarketValue(netCurrentMarketValue)
                 .setInstrumentCode(instrumentCode)
                 .setNetAsset(netAsset)
                 .setMaturityDate(maturityDate)
-                .setPsgFundMapping(psgFundMapping)
-                .setNumberOfAccounts(numberOfAccounts)
+                .setClientFundMapping(clientFundMapping)
                 .setReg28InstrumentType(reg28InstrumentType)
                 .setIssuerMapping(issuerMapping)
                 .setDailyPricing(dailyPricing)

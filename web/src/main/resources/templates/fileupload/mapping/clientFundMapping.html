@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html  xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity4" xmlns:th="https://www.thymeleaf.org" xmlns="https://www.w3.org/1999/xhtml" lang="en">
+<html xmlns:th="https://www.thymeleaf.org" xmlns="https://www.w3.org/1999/xhtml" lang="en">
 <head th:replace="layout :: site-head">
 </head>
 
@@ -29,10 +29,10 @@
                 <div class="row">
 
                     <div class="col-md-6 col-md-offset-3">
-                        <form method="POST" th:action="@{/upload_psgFundMapping}" enctype="multipart/form-data">
+                        <form method="POST" th:action="@{/upload_clientFundMapping}" enctype="multipart/form-data">
                             <div class="panel panel-girsa">
                                 <div class="panel-heading">
-                                    <h4 class="panel-title">PSG Fund Mapping</h4>
+                                    <h4 class="panel-title">Client Fund Mapping</h4>
                                 </div>
                                 <div class="panel-body">
 

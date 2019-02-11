@@ -1,7 +1,7 @@
 package za.co.global.domain.report;
 
 import za.co.global.domain.client.Client;
-import za.co.global.domain.fileupload.client.fpm.Holding;
+import za.co.global.domain.fileupload.client.InstrumentData;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -26,8 +26,8 @@ public class ReportData implements Serializable {
     private Date createdDate;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name = "report_data_id", referencedColumnName = "ID", nullable = false)
-    private List<Holding> holdings = new ArrayList<>();
+    @JoinColumn(name = "report_data_id", referencedColumnName = "ID", nullable = false, updatable = true)
+    private List<InstrumentData> instrumentDataList = new ArrayList<>();
 
     @Enumerated(EnumType.STRING)
     @Column(name = "report_status", nullable = false)
@@ -61,12 +61,12 @@ public class ReportData implements Serializable {
         this.createdDate = createdDate;
     }
 
-    public List<Holding> getHoldings() {
-        return holdings;
+    public List<InstrumentData> getInstrumentDataList() {
+        return instrumentDataList;
     }
 
-    public void setHoldings(List<Holding> holdings) {
-        this.holdings = holdings;
+    public void setInstrumentDataList(List<InstrumentData> instrumentDataList) {
+        this.instrumentDataList = instrumentDataList;
     }
 
     public ReportStatus getReportStatus() {
@@ -94,7 +94,7 @@ public class ReportData implements Serializable {
 
         if (reportDate != null ? !reportDate.equals(that.reportDate) : that.reportDate != null) return false;
         if (createdDate != null ? !createdDate.equals(that.createdDate) : that.createdDate != null) return false;
-        if (holdings != null ? !holdings.equals(that.holdings) : that.holdings != null) return false;
+        if (instrumentDataList != null ? !instrumentDataList.equals(that.instrumentDataList) : that.instrumentDataList != null) return false;
         if (reportStatus != that.reportStatus) return false;
         return client != null ? client.equals(that.client) : that.client == null;
     }
@@ -103,7 +103,7 @@ public class ReportData implements Serializable {
     public int hashCode() {
         int result = reportDate != null ? reportDate.hashCode() : 0;
         result = 31 * result + (createdDate != null ? createdDate.hashCode() : 0);
-        result = 31 * result + (holdings != null ? holdings.hashCode() : 0);
+        result = 31 * result + (instrumentDataList != null ? instrumentDataList.hashCode() : 0);
         result = 31 * result + (reportStatus != null ? reportStatus.hashCode() : 0);
         result = 31 * result + (client != null ? client.hashCode() : 0);
         return result;
@@ -115,7 +115,7 @@ public class ReportData implements Serializable {
                 "id=" + id +
                 ", reportDate=" + reportDate +
                 ", createdDate=" + createdDate +
-                ", holdings=" + holdings +
+                ", instrumentDataList=" + instrumentDataList +
                 ", reportStatus=" + reportStatus +
                 ", client=" + client +
                 '}';

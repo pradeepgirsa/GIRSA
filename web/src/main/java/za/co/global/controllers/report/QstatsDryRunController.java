@@ -9,10 +9,10 @@ import org.springframework.web.servlet.ModelAndView;
 import za.co.global.domain.client.Client;
 import za.co.global.domain.fileupload.client.InstitutionalDetails;
 import za.co.global.domain.fileupload.client.NumberOfAccounts;
-import za.co.global.domain.fileupload.client.fpm.Holding;
-import za.co.global.domain.fileupload.client.fpm.HoldingCategory;
-import za.co.global.domain.fileupload.client.fpm.Instrument;
-import za.co.global.domain.fileupload.mapping.PSGFundMapping;
+import za.co.global.domain.fileupload.client.notused.Holding;
+import za.co.global.domain.fileupload.client.notused.HoldingCategory;
+import za.co.global.domain.fileupload.client.notused.Instrument;
+import za.co.global.domain.fileupload.mapping.ClientFundMapping;
 import za.co.global.domain.fileupload.system.BarraAssetInfo;
 import za.co.global.domain.report.ReportData;
 import za.co.global.domain.report.ReportDataCollectionBean;
@@ -42,18 +42,18 @@ public class QstatsDryRunController extends AbstractQstatsReportController {
 
         Client client = clientRepository.findOne(Long.parseLong(clientId));
         ReportData reportData = reportDataRepository.findByReportStatusAndClient(ReportStatus.REGISTERED, client);
-        List<Holding> holdings = getHoldings(client, reportData);
+        List<Holding> holdings = getInstrumentData(client, reportData);
 
 //        BarraAssetInfo netAsset = assetInfoRepository.findByAssetId("897"); //TODO - verify
         List<BarraAssetInfo> netAssets = barraAssetInfoRepository.findByNetIndicatorIsTrue(); //TODO - verify
         BarraAssetInfo netAsset = netAssets.isEmpty() ? null : netAssets.get(0);
         for(Holding holding: holdings) {
-            PSGFundMapping psgFundMapping = psgFundMappingRepository.findByManagerFundCode(holding.getPortfolioCode());
-            NumberOfAccounts numberofAccounts = numberOfAccountsRepository.findByFundCode(psgFundMapping.getPsgFundCode());
-            InstitutionalDetails institutionalDetails = institutionalDetailsRepository.findByClientFundCode(psgFundMapping.getPsgFundCode());
+            ClientFundMapping clientFundMapping = clientFundMappingRepository.findByManagerFundCode(holding.getPortfolioCode());
+            NumberOfAccounts numberofAccounts = numberOfAccountsRepository.findByFundCode(clientFundMapping.getClientFundCode());
+            InstitutionalDetails institutionalDetails = institutionalDetailsRepository.findByClientFundCode(clientFundMapping.getClientFundCode());
             for (HoldingCategory holdingCategory : holding.getHoldingCategories()) {
                 for (Instrument instrument : holdingCategory.getInstruments()) {
-                    ReportDataCollectionBean reportDataCollectionBean = getReportCollectionBean(instrument, institutionalDetails, netAsset, psgFundMapping,
+                    ReportDataCollectionBean reportDataCollectionBean = getReportCollectionBean(instrument, institutionalDetails, netAsset, clientFundMapping,
                             numberofAccounts, null);
 
                     String error = validator.validate(reportDataCollectionBean);

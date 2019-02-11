@@ -1,12 +1,10 @@
-package za.co.global.persistence.fileupload.mapping;
+package za.co.global.persistence.fileupload.client;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import za.co.global.domain.fileupload.mapping.DailyPricing;
-import za.co.global.domain.fileupload.mapping.Indices;
+import za.co.global.domain.fileupload.client.DailyPricing;
 
 import java.util.Date;
-import java.util.List;
 
 @Repository
 public interface DailyPricingRepository extends JpaRepository<DailyPricing, Long> {

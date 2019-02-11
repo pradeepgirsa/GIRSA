@@ -12,21 +12,19 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import za.co.global.domain.client.Client;
 import za.co.global.domain.exception.GirsaException;
-import za.co.global.domain.fileupload.client.InstitutionalDetails;
-import za.co.global.domain.fileupload.client.NumberOfAccounts;
-import za.co.global.domain.fileupload.client.fpm.Holding;
-import za.co.global.domain.fileupload.client.fpm.HoldingCategory;
-import za.co.global.domain.fileupload.client.fpm.Instrument;
+import za.co.global.domain.fileupload.client.DailyPricing;
+import za.co.global.domain.fileupload.client.Indices;
+import za.co.global.domain.fileupload.client.InstrumentData;
 import za.co.global.domain.fileupload.mapping.*;
 import za.co.global.domain.fileupload.system.BarraAssetInfo;
 import za.co.global.domain.report.QStatsBean;
 import za.co.global.domain.report.ReportData;
 import za.co.global.domain.report.ReportDataCollectionBean;
 import za.co.global.domain.report.ReportStatus;
+import za.co.global.persistence.fileupload.client.IndicesRepository;
+import za.co.global.persistence.fileupload.client.TransactionListingRepository;
 import za.co.global.persistence.fileupload.mapping.AdditionalClassificationRepository;
 import za.co.global.persistence.fileupload.mapping.DerivativeTypesRepository;
-import za.co.global.persistence.fileupload.mapping.IndicesRepository;
-import za.co.global.persistence.fileupload.mapping.TransactionListingRepository;
 import za.co.global.services.report.ReportCreationService;
 
 import java.io.File;
@@ -89,9 +87,9 @@ public class GenerateQstatsController extends AbstractQstatsReportController {
 
             Client client = clientRepository.findOne(Long.parseLong(clientId));
             ReportData reportData = reportDataRepository.findByReportStatusAndClient(ReportStatus.REGISTERED, client);
-            List<Holding> holdings = getHoldings(client, reportData);
+            List<InstrumentData> instrumentDataList = getInstrumentData(client, reportData);
 
-            if(reportData == null) {
+            if (reportData == null) {
                 reportData = new ReportData();
                 reportData.setClient(client);
                 reportData.setCreatedDate(new Date());
@@ -102,37 +100,39 @@ public class GenerateQstatsController extends AbstractQstatsReportController {
             List<QStatsBean> qStatsBeans = new ArrayList<>();
             List<BarraAssetInfo> netAssets = barraAssetInfoRepository.findByNetIndicatorIsTrue();
             BarraAssetInfo netAsset = netAssets.isEmpty() ? null : netAssets.get(0);
-            for (Holding holding : holdings) {
-                PSGFundMapping psgFundMapping = psgFundMappingRepository.findByManagerFundCode(holding.getPortfolioCode());
-                NumberOfAccounts numberofAccounts = numberOfAccountsRepository.findByFundCode(psgFundMapping.getPsgFundCode());
-                InstitutionalDetails institutionalDetails = institutionalDetailsRepository.findByClientFundCode(psgFundMapping.getPsgFundCode());
-                for (HoldingCategory holdingCategory : holding.getHoldingCategories()) {
-                    for (Instrument instrument : holdingCategory.getInstruments()) {
 
-                        ReportDataCollectionBean reportDataCollectionBean = getReportCollectionBean(instrument, institutionalDetails, netAsset, psgFundMapping,
-                                numberofAccounts, reportDate);
+            BigDecimal netCurrentMarketValue = BigDecimal.ZERO;
+            if (instrumentDataList.size() > 0) {
+                netCurrentMarketValue = instrumentDataList.stream().map(InstrumentData::getCurrentMarketValue)
+                        .reduce(BigDecimal::add).get();
+            }
 
-                        validate(reportDataCollectionBean);
+            for (InstrumentData instrumentData : instrumentDataList) {
+                ClientFundMapping clientFundMapping = clientFundMappingRepository.findByManagerFundCode(instrumentData.getPortfolioCode());
+                //   NumberOfAccounts numberofAccounts = numberOfAccountsRepository.findByFundCode(clientFundMapping.getClientFundCode());
+                //   InstitutionalDetails institutionalDetails = institutionalDetailsRepository.findByClientFundCode(clientFundMapping.getClientFundCode());
+//                for (HoldingCategory holdingCategory : holding.getHoldingCategories()) {
+//                    for (Instrument instrument : holdingCategory.getInstruments()) {
 
-                        qStatsBeans.add(getQStatsBean(reportDate, client, reportDataCollectionBean));
-                    }
+                ReportDataCollectionBean reportDataCollectionBean = getReportCollectionBean(instrumentData, netAsset, clientFundMapping, reportDate, netCurrentMarketValue);
+
+                validate(reportDataCollectionBean);
+
+                qStatsBeans.add(getQStatsBean(reportDate, client, reportDataCollectionBean));
+//                    }
+//                }
+                if (instrumentData.getReportData() == null) {
+                    reportData.getInstrumentDataList().add(instrumentData);
+                    instrumentData.setReportData(reportData);
                 }
-                if (holding.getReportData() != null) {
-                    reportData.getHoldings().add(holding);
-                }
-                holding.setReportData(reportData);
-
             }
             reportDataRepository.save(reportData);
 
             String filePath = createExcelFile(qStatsBeans, client);
             modelAndView.addObject("saveMessage", "Qstats file created successfully, file: " + filePath);
-        } catch (GirsaException e) {
+        } catch (GirsaException | ParseException e) {
             LOGGER.error("Error while generating QStats report", e);
             modelAndView.addObject("saveError", e.getMessage());
-        } catch (ParseException pe) {
-            LOGGER.error("Error while generating QStats report", pe);
-            modelAndView.addObject("saveError", pe.getMessage());
         }
         return modelAndView;
     }
@@ -157,7 +157,7 @@ public class GenerateQstatsController extends AbstractQstatsReportController {
         }
     }
 
-    private QStatsBean getQStatsBean(@RequestParam("reportDate") Date reportDate, Client client, ReportDataCollectionBean reportDataCollectionBean) {
+    private QStatsBean getQStatsBean(Date reportDate, Client client, ReportDataCollectionBean reportDataCollectionBean) {
         BarraAssetInfo barraAssetInfo = reportDataCollectionBean.getBarraAssetInfo();
         String reg28InstrType = barraAssetInfo.getReg28InstrType();
         Reg28InstrumentType reg28InstrumentType = reportDataCollectionBean.getReg28InstrumentType();
@@ -165,18 +165,18 @@ public class GenerateQstatsController extends AbstractQstatsReportController {
         Date maturityDate = reportDataCollectionBean.getMaturityDate();
         //TODO - check correct fields to map
         DailyPricing dailyPricing = reportDataCollectionBean.getDailyPricing();
-        PSGFundMapping psgFundMapping = reportDataCollectionBean.getPsgFundMapping();
+        ClientFundMapping clientFundMapping = reportDataCollectionBean.getClientFundMapping();
         BarraAssetInfo netAsset = reportDataCollectionBean.getNetAsset();
-        Instrument instrument = reportDataCollectionBean.getInstrument();
-        Holding holding = instrument.getHoldingCategory().getHolding();
-        InstitutionalDetails institutionalDetails = reportDataCollectionBean.getInstitutionalDetails();
-        NumberOfAccounts numberOfAccounts = reportDataCollectionBean.getNumberOfAccounts();
+        InstrumentData instrument = reportDataCollectionBean.getInstrumentData();
+        //  Holding holding = instrument.getHoldingCategory().getHolding();
+        //  InstitutionalDetails institutionalDetails = reportDataCollectionBean.getInstitutionalDetails();
+        //   NumberOfAccounts numberOfAccounts = reportDataCollectionBean.getNumberOfAccounts();
 
 
         QStatsBean qStatsBean = new QStatsBean();
-        qStatsBean.setAciFundCode(psgFundMapping.getPsgFundCode());
-        String fundName = !StringUtils.isEmpty(psgFundMapping.getManagerFundName()) ?
-                psgFundMapping.getManagerFundName() : holding.getPortfolioName();
+        qStatsBean.setAciFundCode(clientFundMapping.getClientFundCode());
+        String fundName = !StringUtils.isEmpty(clientFundMapping.getManagerFundName()) ?
+                clientFundMapping.getManagerFundName() : instrument.getPortfolioName();
         qStatsBean.setFundName(fundName);
         qStatsBean.setMancoCode(client.getMancoCode());
         qStatsBean.setCreatedDate(new Date()); //report generated date
@@ -184,8 +184,8 @@ public class GenerateQstatsController extends AbstractQstatsReportController {
         qStatsBean.setMvTotal(netAsset.getEffExposure()); //Validated this with total current market base value for equality
 
 
-        qStatsBean.setInstitutionalTotal(institutionalDetails.getTotal());
-        qStatsBean.setNoOfAccounts(numberOfAccounts.getTotal());
+        qStatsBean.setInstitutionalTotal(instrument.getInstitutionTotal());
+        qStatsBean.setNoOfAccounts(instrument.getNoOfAccounts());
 
         String aciAssetClass = getACIAssetClass(barraAssetInfo, reg28InstrType, reg28InstrumentType);
         qStatsBean.setAciAssetclass(aciAssetClass);
@@ -201,17 +201,17 @@ public class GenerateQstatsController extends AbstractQstatsReportController {
         qStatsBean.setCurrentYield(barraAssetInfo.getCurrentYield());
 
         qStatsBean.setCouponRate(getCouponRate(barraAssetInfo));
-        qStatsBean.setHolding(instrument.getNominalValue());
-        qStatsBean.setBookValue(instrument.getBaseCurrentBookValue());
-        qStatsBean.setCurrencyCode(instrument.getIssueCurrency());
+        qStatsBean.setHolding(instrument.getNominalUnits());
+        qStatsBean.setBookValue(instrument.getCurrentBookValue());
+        qStatsBean.setCurrencyCode(instrument.getInstrumentCurrency());
         qStatsBean.setSecurityName(instrument.getInstrumentDescription());
-        qStatsBean.setMarketValue(instrument.getBaseCurrentMarketValue());
+        qStatsBean.setMarketValue(instrument.getCurrentMarketValue());
 
         BigDecimal perOfPort = qStatsBean.getMarketValue().divide(qStatsBean.getMvTotal(), 3, BigDecimal.ROUND_FLOOR);
         qStatsBean.setPerOfPort(perOfPort);
 
         if ("DE".equalsIgnoreCase(qStatsBean.getAciAssetclass())) {
-            String type = StringUtils.isEmpty(psgFundMapping.getComments()) ? StringUtils.EMPTY : psgFundMapping.getComments();
+            String type = StringUtils.isEmpty(clientFundMapping.getComments()) ? StringUtils.EMPTY : clientFundMapping.getComments();
             Indices indices = indicesRepository.findBySecurityAndType(instrument.getInstrumentCode(), type);
             if (indices != null) {
                 qStatsBean.setWeighting(indices.getIndexPercentage());
@@ -237,7 +237,7 @@ public class GenerateQstatsController extends AbstractQstatsReportController {
         qStatsBean.setResetMaturityDate(barraAssetInfo.getPricingRedemptionDate());
 
         //TODO - verify as it is date or days
-        Date tradeDate = getTradeDate(holding, instrument);
+        Date tradeDate = instrument.getTradeDate();
         BigDecimal ttmCur = tradeDate != null ? BigDecimal.valueOf(TimeUnit.DAYS.convert((tradeDate.getTime() - new Date().getTime()), TimeUnit.MILLISECONDS)) :
                 BigDecimal.ZERO;
         qStatsBean.setTtmCur(ttmCur);
@@ -286,14 +286,6 @@ public class GenerateQstatsController extends AbstractQstatsReportController {
     }
 
 
-    private Date getTradeDate(Holding holding, Instrument instrument) {
-        List<TransactionListing> transactionListings = transactionListingRepository.findByClientPortfolioCodeAndInstrumentCodeOrderByTradeDateAsc(holding.getPortfolioCode(),
-                instrument.getInstrumentCode());
-
-        return transactionListings.isEmpty() ? null : transactionListings.get(0).getTradeDate();
-    }
-
-
     private BigDecimal getCouponRate(BarraAssetInfo barraAssetInfo) {
         return Optional.ofNullable(barraAssetInfo).map(BarraAssetInfo::getCoupon).orElse(null);
     }
@@ -301,14 +293,14 @@ public class GenerateQstatsController extends AbstractQstatsReportController {
     private String getAdditionalClassification(BarraAssetInfo barraAssetInfo, Reg28InstrumentType reg28InstrumentType, String aciAssetClass) {
 
         String addClassification = null;
-        if("DE".equals(aciAssetClass)) {
+        if ("DE".equals(aciAssetClass)) {
             List<AdditionalClassification> additionalClassifications = additionalClassificationRepository.findByIndustryAndSectorAndSuperSectorAndSubSector(barraAssetInfo.getGirIndustryICB(),
                     barraAssetInfo.getGirSectorICB(), barraAssetInfo.getGirSupersectorICB(), barraAssetInfo.getGirSubsectorICB());
-            if(!additionalClassifications.isEmpty()) {
+            if (!additionalClassifications.isEmpty()) {
                 addClassification = additionalClassifications.get(0).getAlphaCode();
             }
         }
-        if(!StringUtils.isEmpty(addClassification)) {
+        if (!StringUtils.isEmpty(addClassification)) {
             if (StringUtils.isEmpty(reg28InstrumentType.getAddClassificationThree())) {
                 addClassification = reg28InstrumentType.getAddClassificationThree();
             } else if (StringUtils.isEmpty(reg28InstrumentType.getAddClassificationTwo())) {

@@ -1,8 +1,8 @@
-package za.co.global.persistence.fileupload.mapping;
+package za.co.global.persistence.fileupload.client;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import za.co.global.domain.fileupload.mapping.TransactionListing;
+import za.co.global.domain.fileupload.client.TransactionListing;
 
 import java.util.List;
 

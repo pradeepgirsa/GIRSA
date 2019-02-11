@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet id="instrument_data_table_1" author="Sharanya">
+        <createTable tableName="instrument_data">
+            <column name="id" type="bigint">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="portfolio_code" type="varchar(20)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="portfolio_name" type="varchar(100)"/>
+            <column name="instrument_code" type="varchar(20)"/>
+            <column name="instrument_description" type="varchar(100)"/>
+            <column name="instrument_currency" type="varchar(3)"/>
+            <column name="market_value_total" type="NUMERIC(20, 3)"/>
+            <column name="institutional_total" type="NUMERIC(20, 3)"/>
+            <column name="no_of_accounts" type="NUMERIC(20, 3)"/>
+            <column name="nominal_units" type="NUMERIC(20, 3)"/>
+            <column name="current_book_value" type="NUMERIC(20, 3)"/>
+            <column name="current_market_value" type="NUMERIC(20, 3)"/>
+            <column name="client_id" type="bigint"/>
+            <column name="report_data_id" type="bigint">
+                <constraints nullable="true"/>
+            </column>
+            <column name="updated_date" type="datetime"/>
+        </createTable>
+        <addAutoIncrement columnDataType="bigint"
+                          columnName="id"
+                          incrementBy="1"
+                          startWith="100"
+                          tableName="instrument_data"/>
+    </changeSet>
+
+    <changeSet id="instrument_data_fk_constraints_1" author="Sharanya">
+        <addForeignKeyConstraint baseColumnNames="client_id"
+                                 baseTableName="instrument_data"
+                                 constraintName="instrument_client_id_fk"
+                                 onDelete="CASCADE"
+                                 onUpdate="RESTRICT"
+                                 referencedColumnNames="id"
+                                 referencedTableName="client"/>
+        <addForeignKeyConstraint baseColumnNames="report_data_id"
+                                 baseTableName="instrument_data"
+                                 constraintName="instrument_report_data_id_fk"
+                                 onDelete="CASCADE"
+                                 onUpdate="RESTRICT"
+                                 referencedColumnNames="id"
+                                 referencedTableName="report_data"/>
+    </changeSet>
+
+
+
+
+
+
+</databaseChangeLog>

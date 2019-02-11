@@ -1,14 +1,14 @@
 package za.co.global.services.report;
 
 import org.springframework.stereotype.Service;
-import za.co.global.domain.fileupload.client.InstitutionalDetails;
-import za.co.global.domain.fileupload.client.NumberOfAccounts;
-import za.co.global.domain.fileupload.client.fpm.Holding;
-import za.co.global.domain.fileupload.mapping.DailyPricing;
+import za.co.global.domain.fileupload.client.DailyPricing;
+import za.co.global.domain.fileupload.client.InstrumentData;
 import za.co.global.domain.fileupload.mapping.InstrumentCode;
 import za.co.global.domain.fileupload.system.BarraAssetInfo;
 import za.co.global.domain.report.ReportDataCollectionBean;
 import za.co.global.services.Validator;
+
+import java.math.BigDecimal;
 
 @Service
 public class QstatsReportValidator implements Validator<ReportDataCollectionBean> {
@@ -17,12 +17,10 @@ public class QstatsReportValidator implements Validator<ReportDataCollectionBean
     public String validate(ReportDataCollectionBean reportDataCollectionBean) {
         BarraAssetInfo barraAssetInfo = reportDataCollectionBean.getBarraAssetInfo();
         BarraAssetInfo netAsset = reportDataCollectionBean.getNetAsset();
-        Holding holding = reportDataCollectionBean.getInstrument().getHoldingCategory().getHolding();
-        InstitutionalDetails institutionalDetails = reportDataCollectionBean.getInstitutionalDetails();
-        NumberOfAccounts numberOfAccounts = reportDataCollectionBean.getNumberOfAccounts();
         DailyPricing dailyPricing = reportDataCollectionBean.getDailyPricing();
-
         InstrumentCode instrumentCode = reportDataCollectionBean.getInstrumentCode();
+        InstrumentData instrumentData = reportDataCollectionBean.getInstrumentData();
+        BigDecimal netCurrentMarketValue = reportDataCollectionBean.getNetCurrentMarketValue();
 
         if(barraAssetInfo == null) {
             return "There is no mapping to barra asset to the instrument code: " + instrumentCode.getBarraCode();
@@ -30,22 +28,22 @@ public class QstatsReportValidator implements Validator<ReportDataCollectionBean
         if(netAsset == null || netAsset.getEffExposure() == null) {
             return "There is no value for net eff exposure in barra";
         }
-        if(holding.getNetBaseCurrentMarketValue() == null) {
-            return "There is no net value for current market base value, portfolio code:"+ holding.getPortfolioCode()
+        if(netCurrentMarketValue == null) {
+            return "There is no net value for current market base value, portfolio code:"+ instrumentData.getPortfolioCode()
                     +", instrument code:" + barraAssetInfo.getAssetId();
         }
-        if(netAsset.getEffExposure().compareTo(holding.getNetBaseCurrentMarketValue()) != 0) {
+        if(netAsset.getEffExposure().compareTo(netCurrentMarketValue) != 0) {
             return "Net eff exposure from barra and net base current market values are not equal- portfolio code:"
-                    + holding.getPortfolioCode() +", instrument code:" + barraAssetInfo.getAssetId();
+                    + instrumentData.getPortfolioCode() +", instrument code:" + barraAssetInfo.getAssetId();
         }
 
-        if(institutionalDetails == null || institutionalDetails.getTotal() == null) {
-            return "There is no institutional split matching to fund code:"+ holding.getPortfolioCode()
-                    + ", FPM fund code:"+ reportDataCollectionBean.getPsgFundMapping().getPsgFundCode();
+        if(instrumentData.getInstitutionTotal() == null) {
+            return "There is no institutional split matching to fund code:"+ instrumentData.getPortfolioCode()
+                    + ", FPM fund code:"+ reportDataCollectionBean.getClientFundMapping().getClientFundCode();
         }
-        if(numberOfAccounts == null || numberOfAccounts.getTotal() == null) {
-            return "Number of accounts are not mapped for fund code:"+ holding.getPortfolioCode()
-                    + ", FPM fund code:"+ reportDataCollectionBean.getPsgFundMapping().getPsgFundCode();
+        if(instrumentData.getNoOfAccounts() == null) {
+            return "Number of accounts are not mapped for fund code:"+ instrumentData.getPortfolioCode()
+                    + ", FPM fund code:"+ reportDataCollectionBean.getClientFundMapping().getClientFundCode();
         }
 
         if(reportDataCollectionBean.getReg28InstrumentType() == null) {

@@ -1,141 +1,141 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<!--<?xml version="1.0" encoding="UTF-8"?>-->
 
-<databaseChangeLog
-        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
-         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+<!--<databaseChangeLog-->
+        <!--xmlns="http://www.liquibase.org/xml/ns/dbchangelog"-->
+        <!--xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"-->
+        <!--xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-->
+         <!--http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">-->
 
-    <changeSet id="holding_table_1" author="Sharanya">
-        <createTable tableName="holding" >
-            <column name="id" type="bigint">
-                <constraints primaryKey="true" nullable="false"/>
-            </column>
-            <column name="portfolio_code" type="varchar(20)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="portfolio_name" type="varchar(50)"/>
-            <column name="currency" type="varchar(3)"/>
-            <column name="net_base_current_book_value" type="NUMERIC(20, 3)"/>
-            <column name="net_base_prior_market_value" type="NUMERIC(20, 3)"/>
-            <column name="net_base_current_market_value" type="NUMERIC(20, 3)"/>
-            <column name="net_percent_of_market_value" type="NUMERIC(20, 3)"/>
-            <column name="client_id" type="bigint" />
-            <column name="report_data_id" type="bigint">
-                <constraints nullable="true"/>
-            </column>
-            <column name="updated_date" type="datetime" />
-        </createTable>
-        <addAutoIncrement columnDataType="bigint"
-                          columnName="id"
-                          incrementBy="1"
-                          startWith="100"
-                          tableName="holding"/>
-    </changeSet>
+    <!--<changeSet id="holding_table_1" author="Sharanya">-->
+        <!--<createTable tableName="holding" >-->
+            <!--<column name="id" type="bigint">-->
+                <!--<constraints primaryKey="true" nullable="false"/>-->
+            <!--</column>-->
+            <!--<column name="portfolio_code" type="varchar(20)">-->
+                <!--<constraints nullable="false"/>-->
+            <!--</column>-->
+            <!--<column name="portfolio_name" type="varchar(50)"/>-->
+            <!--<column name="currency" type="varchar(3)"/>-->
+            <!--<column name="net_base_current_book_value" type="NUMERIC(20, 3)"/>-->
+            <!--<column name="net_base_prior_market_value" type="NUMERIC(20, 3)"/>-->
+            <!--<column name="net_base_current_market_value" type="NUMERIC(20, 3)"/>-->
+            <!--<column name="net_percent_of_market_value" type="NUMERIC(20, 3)"/>-->
+            <!--<column name="client_id" type="bigint" />-->
+            <!--<column name="report_data_id" type="bigint">-->
+                <!--<constraints nullable="true"/>-->
+            <!--</column>-->
+            <!--<column name="updated_date" type="datetime" />-->
+        <!--</createTable>-->
+        <!--<addAutoIncrement columnDataType="bigint"-->
+                          <!--columnName="id"-->
+                          <!--incrementBy="1"-->
+                          <!--startWith="100"-->
+                          <!--tableName="holding"/>-->
+    <!--</changeSet>-->
 
-    <changeSet id="holding_fk_constraints_1" author="Sharanya">
-        <addForeignKeyConstraint baseColumnNames="client_id"
-                             baseTableName="holding"
-                             constraintName="holding_client_id_fk"
-                             onDelete="CASCADE"
-                             onUpdate="RESTRICT"
-                             referencedColumnNames="id"
-                             referencedTableName="client"/>
-        <addForeignKeyConstraint baseColumnNames="report_data_id"
-                                 baseTableName="holding"
-                                 constraintName="holding_report_data_id_fk"
-                                 onDelete="CASCADE"
-                                 onUpdate="RESTRICT"
-                                 referencedColumnNames="id"
-                                 referencedTableName="report_data"/>
-    </changeSet>
+    <!--<changeSet id="holding_fk_constraints_1" author="Sharanya">-->
+        <!--<addForeignKeyConstraint baseColumnNames="client_id"-->
+                             <!--baseTableName="holding"-->
+                             <!--constraintName="holding_client_id_fk"-->
+                             <!--onDelete="CASCADE"-->
+                             <!--onUpdate="RESTRICT"-->
+                             <!--referencedColumnNames="id"-->
+                             <!--referencedTableName="client"/>-->
+        <!--<addForeignKeyConstraint baseColumnNames="report_data_id"-->
+                                 <!--baseTableName="holding"-->
+                                 <!--constraintName="holding_report_data_id_fk"-->
+                                 <!--onDelete="CASCADE"-->
+                                 <!--onUpdate="RESTRICT"-->
+                                 <!--referencedColumnNames="id"-->
+                                 <!--referencedTableName="report_data"/>-->
+    <!--</changeSet>-->
 
-    <changeSet id="holding_category_table_1" author="Sharanya">
-        <createTable tableName="holding_category" >
-            <column name="id" type="bigint">
-                <constraints primaryKey="true" nullable="false"/>
-            </column>
-            <column name="holding_id" type="bigint">
-                <constraints nullable="false"/>
-            </column>
-            <column name="category" type="varchar(50)"/>
-            <column name="t_base_current_book_value" type="NUMERIC(20, 3)"/>
-            <column name="t_base_prior_market_value" type="NUMERIC(20, 3)"/>
-            <column name="t_percent_of_market_value" type="NUMERIC(20, 3)"/>
-            <column name="t_base_current_market_value" type="NUMERIC(20, 3)"/>
-        </createTable>
+    <!--<changeSet id="holding_category_table_1" author="Sharanya">-->
+        <!--<createTable tableName="holding_category" >-->
+            <!--<column name="id" type="bigint">-->
+                <!--<constraints primaryKey="true" nullable="false"/>-->
+            <!--</column>-->
+            <!--<column name="holding_id" type="bigint">-->
+                <!--<constraints nullable="false"/>-->
+            <!--</column>-->
+            <!--<column name="category" type="varchar(50)"/>-->
+            <!--<column name="t_base_current_book_value" type="NUMERIC(20, 3)"/>-->
+            <!--<column name="t_base_prior_market_value" type="NUMERIC(20, 3)"/>-->
+            <!--<column name="t_percent_of_market_value" type="NUMERIC(20, 3)"/>-->
+            <!--<column name="t_base_current_market_value" type="NUMERIC(20, 3)"/>-->
+        <!--</createTable>-->
 
-        <addAutoIncrement columnDataType="bigint"
-                          columnName="id"
-                          incrementBy="1"
-                          startWith="100"
-                          tableName="holding_category"/>
-    </changeSet>
+        <!--<addAutoIncrement columnDataType="bigint"-->
+                          <!--columnName="id"-->
+                          <!--incrementBy="1"-->
+                          <!--startWith="100"-->
+                          <!--tableName="holding_category"/>-->
+    <!--</changeSet>-->
 
-    <changeSet id="holding_category_constraints_1" author="Sharanya">
+    <!--<changeSet id="holding_category_constraints_1" author="Sharanya">-->
 
-    <addForeignKeyConstraint baseColumnNames="holding_id"
-                             baseTableName="holding_category"
-                             constraintName="holding_category_holdingId_fk"
-                             onDelete="CASCADE"
-                             onUpdate="RESTRICT"
-                             referencedColumnNames="id"
-                             referencedTableName="holding"/>
-    </changeSet>
+    <!--<addForeignKeyConstraint baseColumnNames="holding_id"-->
+                             <!--baseTableName="holding_category"-->
+                             <!--constraintName="holding_category_holdingId_fk"-->
+                             <!--onDelete="CASCADE"-->
+                             <!--onUpdate="RESTRICT"-->
+                             <!--referencedColumnNames="id"-->
+                             <!--referencedTableName="holding"/>-->
+    <!--</changeSet>-->
 
-    <changeSet id="instrument_table_1" author="Sharanya">
-        <createTable tableName="instrument" >
-            <column name="id" type="bigint">
-                <constraints primaryKey="true" nullable="false"/>
-            </column>
-            <column name="holding_category_id" type="bigint">
-                <constraints nullable="false"/>
-            </column>
-            <column name="instrument_code" type="varchar(20)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="instrument_description" type="varchar(100)"/>
-            <column name="issue_currency" type="varchar(3)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="nominal_value" type="NUMERIC(20, 3)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="base_price" type="NUMERIC(20, 3)"/>
-            <column name="holding_price" type="NUMERIC(20, 3)"/>
-            <column name="percent_of_change_base_price" type="NUMERIC(20, 3)"/>
-            <column name="current_book_value" type="NUMERIC(20, 3)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="base_current_book_value" type="NUMERIC(20, 3)"/>
-            <column name="base_prior_market_value" type="NUMERIC(20, 3)"/>
-            <column name="base_current_market_value" type="NUMERIC(20, 3)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="base_change_market_value" type="NUMERIC(20, 3)"/>
-            <column name="percent_of_change_mkt_value" type="NUMERIC(20, 3)"/>
-            <column name="percent_of_market_value" type="NUMERIC(20, 3)"/>
-        </createTable>
+    <!--<changeSet id="instrument_table_1" author="Sharanya">-->
+        <!--<createTable tableName="instrument" >-->
+            <!--<column name="id" type="bigint">-->
+                <!--<constraints primaryKey="true" nullable="false"/>-->
+            <!--</column>-->
+            <!--<column name="holding_category_id" type="bigint">-->
+                <!--<constraints nullable="false"/>-->
+            <!--</column>-->
+            <!--<column name="instrument_code" type="varchar(20)">-->
+                <!--<constraints nullable="false"/>-->
+            <!--</column>-->
+            <!--<column name="instrument_description" type="varchar(100)"/>-->
+            <!--<column name="issue_currency" type="varchar(3)">-->
+                <!--<constraints nullable="false"/>-->
+            <!--</column>-->
+            <!--<column name="nominal_value" type="NUMERIC(20, 3)">-->
+                <!--<constraints nullable="false"/>-->
+            <!--</column>-->
+            <!--<column name="base_price" type="NUMERIC(20, 3)"/>-->
+            <!--<column name="holding_price" type="NUMERIC(20, 3)"/>-->
+            <!--<column name="percent_of_change_base_price" type="NUMERIC(20, 3)"/>-->
+            <!--<column name="current_book_value" type="NUMERIC(20, 3)">-->
+                <!--<constraints nullable="false"/>-->
+            <!--</column>-->
+            <!--<column name="base_current_book_value" type="NUMERIC(20, 3)"/>-->
+            <!--<column name="base_prior_market_value" type="NUMERIC(20, 3)"/>-->
+            <!--<column name="base_current_market_value" type="NUMERIC(20, 3)">-->
+                <!--<constraints nullable="false"/>-->
+            <!--</column>-->
+            <!--<column name="base_change_market_value" type="NUMERIC(20, 3)"/>-->
+            <!--<column name="percent_of_change_mkt_value" type="NUMERIC(20, 3)"/>-->
+            <!--<column name="percent_of_market_value" type="NUMERIC(20, 3)"/>-->
+        <!--</createTable>-->
 
-        <addAutoIncrement columnDataType="bigint"
-                          columnName="id"
-                          incrementBy="1"
-                          startWith="100"
-                          tableName="instrument"/>
-    </changeSet>
+        <!--<addAutoIncrement columnDataType="bigint"-->
+                          <!--columnName="id"-->
+                          <!--incrementBy="1"-->
+                          <!--startWith="100"-->
+                          <!--tableName="instrument"/>-->
+    <!--</changeSet>-->
 
-    <changeSet id="instrument_constraints_1" author="Sharanya">
+    <!--<changeSet id="instrument_constraints_1" author="Sharanya">-->
 
-        <addForeignKeyConstraint baseColumnNames="holding_category_id"
-                                 baseTableName="instrument"
-                                 constraintName="instrument_holdingCatId_fk"
-                                 onDelete="CASCADE"
-                                 onUpdate="RESTRICT"
-                                 referencedColumnNames="id"
-                                 referencedTableName="holding_category"/>
-    </changeSet>
-
-
+        <!--<addForeignKeyConstraint baseColumnNames="holding_category_id"-->
+                                 <!--baseTableName="instrument"-->
+                                 <!--constraintName="instrument_holdingCatId_fk"-->
+                                 <!--onDelete="CASCADE"-->
+                                 <!--onUpdate="RESTRICT"-->
+                                 <!--referencedColumnNames="id"-->
+                                 <!--referencedTableName="holding_category"/>-->
+    <!--</changeSet>-->
 
 
-</databaseChangeLog>
+
+
+<!--</databaseChangeLog>-->

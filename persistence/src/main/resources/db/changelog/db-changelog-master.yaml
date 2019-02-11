@@ -11,20 +11,20 @@ databaseChangeLog:
         file: db/changelog/1.0.0/Create_AssetInfo_table_Changelog.xml
   - include:
         file: db/changelog/1.0.0/Create_ReportData_Changelog.xml
+#  - include:
+#        file: db/changelog/1.0.0/Create_Holding_And_Instrument_Changelog.xml
+#  - include:
+#        file: db/changelog/1.0.0/Create_InstitutionalDetails_Changelog.xml
+#  - include:
+#        file: db/changelog/1.0.0/Create_NumberOfAccounts_Changelog.xml
   - include:
-        file: db/changelog/1.0.0/Create_Holding_And_Instrument_Changelog.xml
-  - include:
-        file: db/changelog/1.0.0/Create_InstitutionalDetails_Changelog.xml
-  - include:
-        file: db/changelog/1.0.0/Create_NumberOfAccounts_Changelog.xml
-  - include:
-        file: db/changelog/1.0.0/Create_PSGFundMapping_Changelog.xml
+        file: db/changelog/1.0.0/Create_ClientFundMapping_Changelog.xml
   - include:
         file: db/changelog/1.0.0/Create_AdditionalClassification_Changelog.xml
   - include:
         file: db/changelog/1.0.0/Create_IssuerMappings_Changelog.xml
-  - include:
-        file: db/changelog/1.0.0/Create_SecurityListing_Changelog.xml
+#  - include:
+#        file: db/changelog/1.0.0/Create_SecurityListing_Changelog.xml
   - include:
         file: db/changelog/1.0.0/Create_InstrumentCode_Changelog.xml
   - include:
@@ -35,5 +35,7 @@ databaseChangeLog:
         file: db/changelog/1.0.0/Create_Indices_Changelog.xml
   - include:
         file: db/changelog/1.0.0/Create_Daily_Pricing_Changelog.xml
+#  - include:
+#          file: db/changelog/1.0.0/Create_Transaction_Listing_Changelog.xml
   - include:
-          file: db/changelog/1.0.0/Create_Transaction_Listing_Changelog.xml
+          file: db/changelog/1.0.0/Create_InstrumentData_Changelog.xml

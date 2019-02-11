@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import za.co.global.controllers.fileupload.BaseFileUploadController;
-import za.co.global.domain.fileupload.mapping.Indices;
-import za.co.global.persistence.fileupload.mapping.IndicesRepository;
+import za.co.global.domain.fileupload.client.Indices;
+import za.co.global.persistence.fileupload.client.IndicesRepository;
 import za.co.global.services.upload.FileAndObjectResolver;
 import za.co.global.services.upload.GirsaExcelParser;
 

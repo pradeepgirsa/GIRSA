@@ -114,16 +114,18 @@
 
 
             <ul class="nav nav-pills nav-stacked" id="nav-pills-stacked">
-                <li>
-                    <a th:href="|/holding_upload|" th:onclick="|loadingScreen()|">
-                        <i th:class="|fa fa-home|" /> <span th:text="|FPM Upload|"/>
-                    </a>
+                <li th:class="|parent|">
+                    <a><i  th:class="|fa fa-leaf|" /> <span th:text="|Client Instrument Data|"/> </a>
+                    <ul class="children">
+                        <li><a th:href="|/upload_instrumentData|" th:onclick="|loadingScreen()|"><i  th:class="|fa fa-leaf|" /> <span th:text="|Upload Instrument Data|"/> </a></li>
+                        <li><a th:href="|/view_instrumentData|" th:onclick="|loadingScreen()|"><i  th:class="|fa fa-leaf|" /> <span th:text="|View Instrument Data|"/> </a></li>
+                    </ul>
                 </li>
                 <li th:class="|parent|">
-                    <a><i  th:class="|fa fa-leaf|" /> <span th:text="|Barra File|"/> </a>
+                    <a><i  th:class="|fa fa-leaf|" /> <span th:text="|Barra Asset Data|"/> </a>
                     <ul class="children">
-                        <li><a th:href="|/upload_assetInfo|" th:onclick="|loadingScreen()|"><i  th:class="|fa fa-leaf|" /> <span th:text="|Barra File|"/> </a></li>
-                        <li><a th:href="|/view_assetInfo|" th:onclick="|loadingScreen()|"><i  th:class="|fa fa-leaf|" /> <span th:text="|View Barra File|"/> </a></li>
+                        <li><a th:href="|/upload_assetInfo|" th:onclick="|loadingScreen()|"><i  th:class="|fa fa-leaf|" /> <span th:text="|Upload Barra Asset|"/> </a></li>
+                        <li><a th:href="|/view_assetInfo|" th:onclick="|loadingScreen()|"><i  th:class="|fa fa-leaf|" /> <span th:text="|View Barra Asset|"/> </a></li>
                     </ul>
                 </li>
                 <li th:class="|parent|">
@@ -147,14 +149,11 @@
                         <li><a th:href="|/upload_indices|" th:onclick="|loadingScreen()|"><i  th:class="|fa fa-leaf|" /> <span th:text="|Indices|"/> </a></li>
                         <li><a th:href="|/view_indices|" th:onclick="|loadingScreen()|"><i  th:class="|fa fa-leaf|" /> <span th:text="|View Indices|"/> </a></li>
 
-                        <li><a th:href="|/upload_psgFundMapping|" th:onclick="|loadingScreen()|"><i  th:class="|fa fa-leaf|" /> <span th:text="|PSG Fund Mapping|"/> </a></li>
-                        <li><a th:href="|/view_psg_fund_mapping|" th:onclick="|loadingScreen()|"><i  th:class="|fa fa-leaf|" /> <span th:text="|View PSG Fund Mapping|"/> </a></li>
+                        <li><a th:href="|/upload_clientFundMapping|" th:onclick="|loadingScreen()|"><i  th:class="|fa fa-leaf|" /> <span th:text="|PSG Fund Mapping|"/> </a></li>
+                        <li><a th:href="|/view_client_fund_mapping|" th:onclick="|loadingScreen()|"><i  th:class="|fa fa-leaf|" /> <span th:text="|View PSG Fund Mapping|"/> </a></li>
 
                         <li><a th:href="|/upload_reg28InstrumentType|" th:onclick="|loadingScreen()|"><i  th:class="|fa fa-leaf|" /> <span th:text="|Reg28 Instrument Type|"/> </a></li>
                         <li><a th:href="|/view_reg28_instrument_type|" th:onclick="|loadingScreen()|"><i  th:class="|fa fa-leaf|" /> <span th:text="|View Reg28 Instrument Type|"/> </a></li>
-
-                        <li><a th:href="|/upload_transaction_listing|" th:onclick="|loadingScreen()|"><i  th:class="|fa fa-leaf|" /> <span th:text="|Transaction Listing|"/> </a></li>
-                        <li><a th:href="|/view_transaction_listing|" th:onclick="|loadingScreen()|"><i  th:class="|fa fa-leaf|" /> <span th:text="|View Transaction Listing|"/> </a></li>
                     </ul>
                 </li>
                 <!--<li th:class="|parent|">
@@ -167,14 +166,17 @@
                 <li th:class="|parent|">
                     <a><i  th:class="|fa fa-leaf|" /> <span th:text="|Client Mapping|"/> </a>
                     <ul class="children">
-                        <li><a th:href="|/upload_institutionalDetails|" th:onclick="|loadingScreen()|"><i  th:class="|fa fa-leaf|" /> <span th:text="|Institutional Details|"/></a></li>
-                        <li><a th:href="|/view_institutional_details|" th:onclick="|loadingScreen()|"><i  th:class="|fa fa-leaf|" /> <span th:text="|View Institutional Details|"/> </a></li>
+                        <li><a th:href="|/upload_instrumentData|" th:onclick="|loadingScreen()|"><i  th:class="|fa fa-leaf|" /> <span th:text="|Instrument Data|"/></a></li>
+                        <li><a th:href="|/view_instrument_data|" th:onclick="|loadingScreen()|"><i  th:class="|fa fa-leaf|" /> <span th:text="|View Instruments Data|"/> </a></li>
 
-                        <li><a th:href="|/upload_numberOfAccounts|" th:onclick="|loadingScreen()|"><i  th:class="|fa fa-leaf|" /> <span th:text="|Number Of Accounts|"/></a></li>
-                        <li><a th:href="|/view_number_of_Accounts|" th:onclick="|loadingScreen()|"><i  th:class="|fa fa-leaf|" /> <span th:text="|View Number Of Accounts|"/> </a></li>
+                        <!--<li><a th:href="|/upload_numberOfAccounts|" th:onclick="|loadingScreen()|"><i  th:class="|fa fa-leaf|" /> <span th:text="|Number Of Accounts|"/></a></li>-->
+                        <!--<li><a th:href="|/view_number_of_Accounts|" th:onclick="|loadingScreen()|"><i  th:class="|fa fa-leaf|" /> <span th:text="|View Number Of Accounts|"/> </a></li>-->
 
-                        <li><a th:href="|/upload_securityListing|" th:onclick="|loadingScreen()|"><i  th:class="|fa fa-leaf|" /> <span th:text="|Security Listing|"/></a></li>
-                        <li><a th:href="|/view_security_listing|" th:onclick="|loadingScreen()|"><i  th:class="|fa fa-leaf|" /> <span th:text="|View Security Listing|"/> </a></li>
+                        <!--<li><a th:href="|/upload_securityListing|" th:onclick="|loadingScreen()|"><i  th:class="|fa fa-leaf|" /> <span th:text="|Security Listing|"/></a></li>-->
+                        <!--<li><a th:href="|/view_security_listing|" th:onclick="|loadingScreen()|"><i  th:class="|fa fa-leaf|" /> <span th:text="|View Security Listing|"/> </a></li>-->
+
+                        <!--<li><a th:href="|/upload_transaction_listing|" th:onclick="|loadingScreen()|"><i  th:class="|fa fa-leaf|" /> <span th:text="|Transaction Listing|"/> </a></li>-->
+                        <!--<li><a th:href="|/view_transaction_listing|" th:onclick="|loadingScreen()|"><i  th:class="|fa fa-leaf|" /> <span th:text="|View Transaction Listing|"/> </a></li>-->
                     </ul>
                 </li>
                 <li th:class="|parent|">

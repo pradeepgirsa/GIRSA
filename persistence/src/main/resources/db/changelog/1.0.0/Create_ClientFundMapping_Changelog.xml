@@ -6,8 +6,8 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
          http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
 
-    <changeSet id="psgFundMapping_table_1" author="Sharanya" runOnChange="true">
-        <createTable tableName="psg_fund_mapping" >
+    <changeSet id="clientFundMapping_table_1" author="Sharanya" runOnChange="true">
+        <createTable tableName="client_fund_mapping" >
             <column name="id" type="bigint">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
@@ -25,7 +25,7 @@
                           columnName="id"
                           incrementBy="1"
                           startWith="100"
-                          tableName="psg_fund_mapping"/>
+                          tableName="client_fund_mapping"/>
     </changeSet>
 
 </databaseChangeLog>

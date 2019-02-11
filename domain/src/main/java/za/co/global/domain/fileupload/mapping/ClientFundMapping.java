@@ -8,9 +8,9 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
-@Table(name = "psg_fund_mapping")
+@Table(name = "client_fund_mapping")
 @ExcelBean
-public class PSGFundMapping implements Serializable {
+public class ClientFundMapping implements Serializable {
 
     private static final long serialVersionUID = 5410446842211177632L;
 
@@ -23,9 +23,9 @@ public class PSGFundMapping implements Serializable {
     @NaturalId
     private String managerFundCode;
 
-    @Column(name = "psg_fund_code")
-    @ExcelColumnHeader(columnHeader = "PSG Fund Code")
-    private String psgFundCode;
+    @Column(name = "client_fund_code")
+    @ExcelColumnHeader(columnHeader = "Client Fund Code")
+    private String clientFundCode;
 
     @Column(name = "mgr_fund_name")
     @ExcelColumnHeader(columnHeader = "Manager Fund Name")
@@ -60,12 +60,12 @@ public class PSGFundMapping implements Serializable {
         this.managerFundCode = managerFundCode;
     }
 
-    public String getPsgFundCode() {
-        return psgFundCode;
+    public String getClientFundCode() {
+        return clientFundCode;
     }
 
-    public void setPsgFundCode(String psgFundCode) {
-        this.psgFundCode = psgFundCode;
+    public void setClientFundCode(String clientFundCode) {
+        this.clientFundCode = clientFundCode;
     }
 
     public String getManagerFundName() {
@@ -106,11 +106,11 @@ public class PSGFundMapping implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        PSGFundMapping that = (PSGFundMapping) o;
+        ClientFundMapping that = (ClientFundMapping) o;
 
         if (managerFundCode != null ? !managerFundCode.equals(that.managerFundCode) : that.managerFundCode != null)
             return false;
-        if (psgFundCode != null ? !psgFundCode.equals(that.psgFundCode) : that.psgFundCode != null) return false;
+        if (clientFundCode != null ? !clientFundCode.equals(that.clientFundCode) : that.clientFundCode != null) return false;
         if (managerFundName != null ? !managerFundName.equals(that.managerFundName) : that.managerFundName != null)
             return false;
         if (barraFundName != null ? !barraFundName.equals(that.barraFundName) : that.barraFundName != null)
@@ -122,7 +122,7 @@ public class PSGFundMapping implements Serializable {
     @Override
     public int hashCode() {
         int result = managerFundCode != null ? managerFundCode.hashCode() : 0;
-        result = 31 * result + (psgFundCode != null ? psgFundCode.hashCode() : 0);
+        result = 31 * result + (clientFundCode != null ? clientFundCode.hashCode() : 0);
         result = 31 * result + (managerFundName != null ? managerFundName.hashCode() : 0);
         result = 31 * result + (barraFundName != null ? barraFundName.hashCode() : 0);
         result = 31 * result + (fundCurrency != null ? fundCurrency.hashCode() : 0);
