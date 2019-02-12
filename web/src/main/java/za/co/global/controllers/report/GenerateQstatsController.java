@@ -22,7 +22,7 @@ import za.co.global.domain.report.ReportData;
 import za.co.global.domain.report.ReportDataCollectionBean;
 import za.co.global.domain.report.ReportStatus;
 import za.co.global.persistence.fileupload.client.IndicesRepository;
-import za.co.global.persistence.fileupload.client.TransactionListingRepository;
+//import za.co.global.persistence.fileupload.client.TransactionListingRepository;
 import za.co.global.persistence.fileupload.mapping.AdditionalClassificationRepository;
 import za.co.global.persistence.fileupload.mapping.DerivativeTypesRepository;
 import za.co.global.services.report.ReportCreationService;
@@ -59,8 +59,8 @@ public class GenerateQstatsController extends AbstractQstatsReportController {
     @Autowired
     private IndicesRepository indicesRepository;
 
-    @Autowired
-    private TransactionListingRepository transactionListingRepository;
+    //@Autowired
+    //private TransactionListingRepository transactionListingRepository;
 
     @Autowired
     private AdditionalClassificationRepository additionalClassificationRepository;

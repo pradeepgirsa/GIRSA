@@ -1,3 +1,4 @@
+/*
 package za.co.global.persistence.fileupload.client;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -12,3 +13,4 @@ public interface TransactionListingRepository extends JpaRepository<TransactionL
     List<TransactionListing> findByClientPortfolioCodeAndInstrumentCodeOrderByTradeDateAsc(String clientPortfolioCode, String instrumentCode);
 
 }
+*/

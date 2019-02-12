@@ -74,7 +74,7 @@ public class InstrumentData implements Serializable {
     private Client client;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "report_data_id", nullable = true, insertable = true, updatable = true)
+    @JoinColumn(name = "report_data_id", nullable = true, insertable = false, updatable = false)
     private ReportData reportData;
 
     @Column(name = "updated_date")

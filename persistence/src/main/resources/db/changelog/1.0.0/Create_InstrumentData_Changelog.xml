@@ -29,6 +29,7 @@ http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
                 <constraints nullable="true"/>
             </column>
             <column name="updated_date" type="datetime"/>
+            <column name="trade_date" type="date"/>
         </createTable>
         <addAutoIncrement columnDataType="bigint"
                           columnName="id"
