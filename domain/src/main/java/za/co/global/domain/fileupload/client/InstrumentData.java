@@ -54,27 +54,27 @@ public class InstrumentData implements Serializable {
     private BigDecimal nominalUnits;
 
     @Column(name = "current_book_value", nullable = false)
-    @ExcelColumnHeader(columnHeader = "Current Book Value", dataType = "big_decimal")
+    @ExcelColumnHeader(columnHeader = "Book Value Base Current", dataType = "big_decimal")
     private BigDecimal currentBookValue;
 
     @Column(name = "instrument_currency", nullable = false)
-    @ExcelColumnHeader(columnHeader = "Instrument Currency")
+    @ExcelColumnHeader(columnHeader = "Issue Currency")
     private String instrumentCurrency;
 
     @Column(name = "current_market_value", nullable = false)
-    @ExcelColumnHeader(columnHeader = "Current Market Value", dataType = "big_decimal")
+    @ExcelColumnHeader(columnHeader = "Current Market Value (Base)", dataType = "big_decimal")
     private BigDecimal currentMarketValue;
 
-    @Column(name = "trade_date", nullable = false)
+    @Column(name = "trade_date")
     @ExcelColumnHeader(columnHeader = "Trade Date", dataType = "date")
     private Date tradeDate;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "client_id", nullable = true)
+    @JoinColumn(name = "client_id")
     private Client client;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "report_data_id", nullable = true, insertable = false, updatable = false)
+    @JoinColumn(name = "report_data_id", insertable = false, updatable = false)
     private ReportData reportData;
 
     @Column(name = "updated_date")
