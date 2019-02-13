@@ -63,7 +63,8 @@ public class ClientFundMappingController extends BaseFileUploadController {
 
     private ClientFundMapping getClientFundMapping(Object object) {
         ClientFundMapping clientFundMapping = (ClientFundMapping) object;
-        ClientFundMapping existingClientFundMapping = clientFundMappingRepository.findByManagerFundCode(clientFundMapping.getManagerFundCode());
+        //TODO - check with manager fundcode
+        ClientFundMapping existingClientFundMapping = clientFundMappingRepository.findByClientFundCode(clientFundMapping.getManagerFundCode());
         if(existingClientFundMapping == null) {
             return clientFundMapping;
         }

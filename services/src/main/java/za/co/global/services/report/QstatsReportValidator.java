@@ -37,14 +37,14 @@ public class QstatsReportValidator implements Validator<ReportDataCollectionBean
                     + instrumentData.getPortfolioCode() +", instrument code:" + barraAssetInfo.getAssetId();
         }
 
-        if(instrumentData.getInstitutionTotal() == null) {
+        /*if(instrumentData.getInstitutionTotal() == null) {
             return "There is no institutional split matching to fund code:"+ instrumentData.getPortfolioCode()
                     + ", FPM fund code:"+ reportDataCollectionBean.getClientFundMapping().getClientFundCode();
-        }
-        if(instrumentData.getNoOfAccounts() == null) {
+        }*/
+        /*if(instrumentData.getNoOfAccounts() == null) {
             return "Number of accounts are not mapped for fund code:"+ instrumentData.getPortfolioCode()
                     + ", FPM fund code:"+ reportDataCollectionBean.getClientFundMapping().getClientFundCode();
-        }
+        }*/
 
         if(reportDataCollectionBean.getReg28InstrumentType() == null) {
             return "There is no Reg28 mapping to asset id:"+ barraAssetInfo.getAssetId()+", Reg28_InstrType:"+barraAssetInfo.getReg28InstrType();

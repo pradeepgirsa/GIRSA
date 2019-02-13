@@ -7,5 +7,5 @@ import za.co.global.domain.fileupload.mapping.ClientFundMapping;
 @Repository
 public interface ClientFundMappingRepository extends JpaRepository<ClientFundMapping, Long> {
 
-    ClientFundMapping findByManagerFundCode(String managerFundCode);
+    ClientFundMapping findByClientFundCode(String clientFundCode);
 }

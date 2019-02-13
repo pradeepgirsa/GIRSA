@@ -108,7 +108,7 @@ public class GenerateQstatsController extends AbstractQstatsReportController {
             }
 
             for (InstrumentData instrumentData : instrumentDataList) {
-                ClientFundMapping clientFundMapping = clientFundMappingRepository.findByManagerFundCode(instrumentData.getPortfolioCode());
+                ClientFundMapping clientFundMapping = clientFundMappingRepository.findByClientFundCode(instrumentData.getPortfolioCode());
                 //   NumberOfAccounts numberofAccounts = numberOfAccountsRepository.findByFundCode(clientFundMapping.getClientFundCode());
                 //   InstitutionalDetails institutionalDetails = institutionalDetailsRepository.findByClientFundCode(clientFundMapping.getClientFundCode());
 //                for (HoldingCategory holdingCategory : holding.getHoldingCategories()) {
