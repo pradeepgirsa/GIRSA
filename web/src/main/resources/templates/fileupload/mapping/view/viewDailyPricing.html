@@ -53,11 +53,11 @@
                                 <th>Maturity/ call date</th>
                                 <th>Govi benchmark</th>
                                 <th>Spread at issue</th>
-                                <th>Spread To Govi Current Day</th>
-                                <th>Spread To Govi Next Day</th>
+                                <th>Spread To Govi</th>
+                                <!--<th>Spread To Govi Next Day</th>-->
                                 <th>Spread To Govi 1-day change</th>
-                                <th>Spread to Jibar/ASW Current Day</th>
-                                <th>Spread to Jibar/ASW Next Day</th>
+                                <th>Spread to Jibar/ASW</th>
+                                <!--<th>Spread to Jibar/ASW Next Day</th>-->
                                 <th>Spread to Jibar/ASW 1-day change</th>
                                 <th>Current yield (%)</th>
                                 <th>Liquidity No. of trades</th>
@@ -77,7 +77,7 @@
                                 <td><span th:text="|${dailyPrice.features}|"/></td>
                                 <td><span th:text="|${dailyPrice.moodys}|"/></td>
                                 <td><span th:text="|${dailyPrice.fitch}|"/></td>
-                                <td><span th:text="|${dailyPrice.sAndP}|"/></td>
+                                <td><span th:text="|${dailyPrice.standardAndPoor}|"/></td>
                                 <td><span th:text="|${dailyPrice.global}|"/></td>
                                 <td><span th:text="|${dailyPrice.summaryRating}|"/></td>
                                 <td><span th:text="|${dailyPrice.issueSize}|"/></td>
@@ -86,14 +86,13 @@
                                 <td><span th:text="|${dailyPrice.maturityOrCallDate}|"/></td>
                                 <td><span th:text="|${dailyPrice.goviBenchmark}|"/></td>
                                 <td><span th:text="|${dailyPrice.spreadAtIssue}|"/></td>
-                                <td><span th:text="|${dailyPrice.spreadToGoviCurrentDay}|"/></td>
-                                <td><span th:text="|${dailyPrice.spreadToGoviNextDay}|"/></td>
-                                <td><span th:text="|${dailyPrice.spreadToGoviOneDayChange}|"/></td>
-                                <td><span th:text="|${dailyPrice.spreadToJibarOrASWCurrentDay}|"/></td>
-                                <td><span th:text="|${dailyPrice.spreadToJibarOrASWNextDay}|"/></td>
-                                <td><span th:text="|${dailyPrice.spreadToJibarOrASWOneDayChange}|"/></td>
+                                <td><span th:text="|${dailyPrice.spreadToGovi}|"/></td>
+                                <td><span th:text="|${dailyPrice.spreadToGovi1DayChange}|"/></td>
+                                <td><span th:text="|${dailyPrice.spreadToJibarOrASW}|"/></td>
+                                <!--<td><span th:text="|${dailyPrice.spreadToJibarOrASWNextDay}|"/></td>-->
+                                <td><span th:text="|${dailyPrice.spreadToJibarOrASW1DayChange}|"/></td>
                                 <td><span th:text="|${dailyPrice.currentYield}|"/></td>
-                                <td><span th:text="|${dailyPrice.liquidityNoOfTrades}|"/></td>
+                                <td><span th:text="|${dailyPrice.liquidityNoOfTrade}|"/></td>
                                 <td><span th:text="|${dailyPrice.liquidityNominalTraded}|"/></td>
                                 <td><span th:text="|${dailyPrice.sbrFairValue}|"/></td>
                                 <td><span th:text="|${dailyPrice.lastTradedDate}|"/></td>

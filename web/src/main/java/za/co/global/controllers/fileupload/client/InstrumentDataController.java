@@ -109,7 +109,7 @@ public class InstrumentDataController extends BaseFileUploadController {
         }
     }
 
-    @GetMapping(value = {"/view_instrument_data"})
+    @GetMapping(value = {"/view_instrumentData"})
     public String viewInstrumentCode(Model model) {
         model.addAttribute("instrumentsData", instrumentDataRepository.findAll());
         return "fileupload/client/view/viewInstrumentData";

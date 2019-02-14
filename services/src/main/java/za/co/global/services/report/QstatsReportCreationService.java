@@ -78,23 +78,33 @@ public class QstatsReportCreationService implements ReportCreationService {
                 row.createCell(2).setCellValue(qStatsBean.getMancoCode());
 
                 Cell createdDateCell = row.createCell(3);
-                createdDateCell.setCellValue(qStatsBean.getCreatedDate());
+                if(qStatsBean.getCreatedDate() != null) {
+                    createdDateCell.setCellValue(qStatsBean.getCreatedDate());
+                }
                 createdDateCell.setCellStyle(dateCellStyle);
 
                 Cell quarterDateCell = row.createCell(4);
-                quarterDateCell.setCellValue(qStatsBean.getQuarter());
+                if(qStatsBean.getQuarter() != null) {
+                    quarterDateCell.setCellValue(qStatsBean.getQuarter());
+                }
                 quarterDateCell.setCellStyle(dateCellStyle);
 
                 Cell mvTotalCell = row.createCell(5);
-                mvTotalCell.setCellValue(qStatsBean.getMvTotal() != null ? qStatsBean.getMvTotal().doubleValue() : null);
+                if(qStatsBean.getMvTotal() != null) {
+                    mvTotalCell.setCellValue(qStatsBean.getMvTotal().doubleValue());
+                }
                 mvTotalCell.setCellType(Cell.CELL_TYPE_NUMERIC);
 
                 Cell institutionalTotalCell = row.createCell(6);
-                institutionalTotalCell.setCellValue(qStatsBean.getInstitutionalTotal() != null ? qStatsBean.getInstitutionalTotal().doubleValue() : null);
+                if(qStatsBean.getInstitutionalTotal() != null) {
+                    institutionalTotalCell.setCellValue(qStatsBean.getInstitutionalTotal().doubleValue());
+                }
                 institutionalTotalCell.setCellType(Cell.CELL_TYPE_NUMERIC);
 
                 Cell noOfAccountsCell = row.createCell(7);
-                noOfAccountsCell.setCellValue(qStatsBean.getNoOfAccounts() != null ? qStatsBean.getNoOfAccounts().doubleValue(): null);
+                if(qStatsBean.getNoOfAccounts() != null) {
+                    noOfAccountsCell.setCellValue(qStatsBean.getNoOfAccounts().doubleValue());
+                }
                 noOfAccountsCell.setCellType(Cell.CELL_TYPE_NUMERIC);
 
                 Cell weightedAvgDuration = row.createCell(8);
@@ -119,30 +129,40 @@ public class QstatsReportCreationService implements ReportCreationService {
                     weightedAvgMaturity = qStatsBean.getModifiedDuration().multiply(effWeight).multiply(BigDecimal.valueOf(365.25));
                 }
                 Cell weightedAvgMaturityCell = row.createCell(9);
-                weightedAvgMaturityCell.setCellValue(weightedAvgMaturity != null ? weightedAvgMaturity.doubleValue() :  null);
+                if(weightedAvgMaturity != null) {
+                    weightedAvgMaturityCell.setCellValue(weightedAvgMaturity.doubleValue());
+                }
                 weightedAvgMaturityCell.setCellType(Cell.CELL_TYPE_NUMERIC);
 
                 row.createCell(10).setCellValue(qStatsBean.getAciAssetclass());
                 row.createCell(11).setCellValue(qStatsBean.getInstrCode());
 
                 Cell holdingCell = row.createCell(12);
-                holdingCell.setCellValue(qStatsBean.getHolding() != null ? qStatsBean.getHolding().doubleValue() : null);
+                if(qStatsBean.getHolding() != null) {
+                    holdingCell.setCellValue(qStatsBean.getHolding().doubleValue());
+                }
                 holdingCell.setCellType(Cell.CELL_TYPE_NUMERIC);
 
                 Cell bookValueCell = row.createCell(13);
-                bookValueCell.setCellValue(qStatsBean.getBookValue() != null ? qStatsBean.getBookValue().doubleValue() :  null);
+                if(qStatsBean.getBookValue() != null) {
+                    bookValueCell.setCellValue(qStatsBean.getBookValue().doubleValue());
+                }
                 bookValueCell.setCellType(Cell.CELL_TYPE_NUMERIC);
 
                 row.createCell(14).setCellValue(qStatsBean.getCurrencyCode());
                 row.createCell(15).setCellValue(qStatsBean.getSecurityName());
 
                 Cell marketValueCell = row.createCell(16);
-                marketValueCell.setCellValue(qStatsBean.getMarketValue() != null ? qStatsBean.getMarketValue().doubleValue() :  null);
+                if(qStatsBean.getMarketValue() != null) {
+                    marketValueCell.setCellValue(qStatsBean.getMarketValue().doubleValue());
+                }
                 marketValueCell.setCellType(Cell.CELL_TYPE_NUMERIC);
 
                 Cell perOdPertCell = row.createCell(17);
-                perOdPertCell.setCellValue(qStatsBean.getPerOfPort() != null ? qStatsBean.getPerOfPort().doubleValue() : null);
-                perOdPertCell.setCellType(Cell.CELL_TYPE_NUMERIC);
+                if(qStatsBean.getPerOfPort() != null) {
+                    perOdPertCell.setCellValue(qStatsBean.getPerOfPort().doubleValue());
+                    perOdPertCell.setCellType(Cell.CELL_TYPE_NUMERIC);
+                }
 
                 Cell weightingCell = row.createCell(18);
                 if(qStatsBean.getWeighting() != null) {
@@ -159,7 +179,9 @@ public class QstatsReportCreationService implements ReportCreationService {
                 isAfricanCell.setCellType(Cell.CELL_TYPE_BOOLEAN);
 
                 Cell marketCapCell = row.createCell(21);
-                marketCapCell.setCellValue(qStatsBean.getMarketCap() != null ? qStatsBean.getMarketCap().doubleValue() : null);
+                if(qStatsBean.getMarketCap() != null) {
+                    marketCapCell.setCellValue(qStatsBean.getMarketCap().doubleValue());
+                }
                 marketCapCell.setCellType(Cell.CELL_TYPE_NUMERIC);
 
                 Cell sharesInIssueCell = row.createCell(22);
@@ -178,7 +200,9 @@ public class QstatsReportCreationService implements ReportCreationService {
                 couponRateCell.setCellType(Cell.CELL_TYPE_NUMERIC);
 
                 Cell maturityDate = row.createCell(27);
-                maturityDate.setCellValue(qStatsBean.getMaturityDate());
+                if(qStatsBean.getMaturityDate() != null) {
+                    maturityDate.setCellValue(qStatsBean.getMaturityDate());
+                }
                 maturityDate.setCellStyle(dateCellStyle);
 
                 Cell resetMaturityDate = row.createCell(28);
