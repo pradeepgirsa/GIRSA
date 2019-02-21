@@ -1,11 +1,6 @@
 <!DOCTYPE html>
-<html  xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity4" xmlns:th="https://www.thymeleaf.org" xmlns="https://www.w3.org/1999/xhtml" lang="en">
+<html xmlns:th="https://www.thymeleaf.org" xmlns="https://www.w3.org/1999/xhtml" lang="en">
 <head th:fragment="site-head">
-    <meta charset="utf-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
-    <meta name="description" content=""/>
-    <meta name="author" content=""/>
-
     <title>GIRSA</title>
     <link rel="icon"  th:href="@{/images/girsa_icon.png}" type="image/x-icon"/>
 
@@ -29,52 +24,10 @@
 <header th:fragment="site-header">
     <div class="headerwrapper">
         <div class="header-left">
-            <!--<a href="index.html" class="logo" >
-                <img th:src="@{/images/girsa_small_icon.png}" alt="" />
-            </a>-->
-            <!--<p th:text="1.0" id="version"></p>
-            <p th:text="prod" id="environment"></p>-->
-            <!--<p th:text="${version}" id="version"></p>-->
-            <!--<p th:text="${environment}" id="environment"></p>-->
-            <!--<div class="pull-right">
-                <a href="#" class="menu-collapse">
-                    <i class="fa fa-bars"></i>
-                </a>
-            </div>-->
-        </div><!-- header-left -->
+            <h1 style="font-weight: 15px; text-align: center; text-color: #8ccbeb">GIRSA</h1>
+        </div>
         <div class="header-right">
-            <!--<div class="pull-right">-->
-
-                <!--<div class="btn-group btn-group-option">-->
-                    <!--<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" id="header-dropdown-toggle-right">-->
-                        <!--<img class="img-circle avatar-img" alt="" th:src="@{/images/photos/avatar.png}" />-->
-                        <!--&nbsp; <span class="user-name" sec:authentication="name" th:text="${username}"/>-->
-                        <!--<i class="fa fa-caret-down"></i>-->
-                    <!--</button>-->
-                    <!--<ul class="dropdown-menu pull-right" role="menu">-->
-                        <!--<li>-->
-
-                            <!--<a>&lt;!&ndash;<a th:href="|/profile|">&ndash;&gt;-->
-                                <!--<i class="glyphicon glyphicon-user"></i> My Profile-->
-                            <!--</a>-->
-                        <!--</li>-->
-                        <!--<li>-->
-                            <!--<a>&lt;!&ndash;<a th:href="|/profile?accountSettings|"> &ndash;&gt;-->
-                                <!--<i class="glyphicon glyphicon-cog"></i> Account Settings-->
-                            <!--</a>-->
-                        <!--</li>-->
-                        <!--<li>-->
-                            <!--<a>&lt;!&ndash;<a th:href="|/profile?help|"> &ndash;&gt;-->
-                                <!--<i class="glyphicon glyphicon-question-sign"></i> Help-->
-                            <!--</a>-->
-                        <!--</li>-->
-                        <!--<li class="divider"></li>-->
-                        <!--<li><a th:href="@{#}" th:onclick="${'javascript:formSubmit()'}" id="logout-anchor"><i class="glyphicon glyphicon-log-out"></i>Logout</a></li>-->
-                    <!--</ul>-->
-                <!--</div>&lt;!&ndash; btn-group &ndash;&gt;-->
-
-            <!--</div>&lt;!&ndash; pull-right &ndash;&gt;-->
-
+            <h1 style="font-weight: 10px; text-align: center; text-color: #fffff">GIRSA - Reporting</h1>
         </div><!-- header-right -->
 
     </div><!-- headerwrapper -->
@@ -126,29 +79,6 @@
                         <li><a th:href="|/view_reg28_instrument_type|" th:onclick="|loadingScreen()|"><i  th:class="|fa fa-leaf|" /> <span th:text="|View Reg28 Instrument Type|"/> </a></li>
                     </ul>
                 </li>
-                <!--<li th:class="|parent|">
-                    <a><i  th:class="|fa fa-leaf|" /> <span th:text="|View Mapping|"/> </a>
-                    <ul class="children">
-                        <li><a th:href="|/view_additional_classification|" th:onclick="|loadingScreen()|">
-                            <i  th:class="|fa fa-leaf|" /> <span th:text="|View Additional Classification|"/> </a></li>
-                    </ul>
-                </li>-->
-                <!--<li th:class="|parent|">
-                    <a><i  th:class="|fa fa-leaf|" /> <span th:text="|Client Mapping|"/> </a>
-                    <ul class="children">
-                        <li><a th:href="|/upload_instrumentData|" th:onclick="|loadingScreen()|"><i  th:class="|fa fa-leaf|" /> <span th:text="|Instrument Data|"/></a></li>
-                        <li><a th:href="|/view_instrument_data|" th:onclick="|loadingScreen()|"><i  th:class="|fa fa-leaf|" /> <span th:text="|View Instruments Data|"/> </a></li>
-
-                        &lt;!&ndash;<li><a th:href="|/upload_numberOfAccounts|" th:onclick="|loadingScreen()|"><i  th:class="|fa fa-leaf|" /> <span th:text="|Number Of Accounts|"/></a></li>&ndash;&gt;
-                        &lt;!&ndash;<li><a th:href="|/view_number_of_Accounts|" th:onclick="|loadingScreen()|"><i  th:class="|fa fa-leaf|" /> <span th:text="|View Number Of Accounts|"/> </a></li>&ndash;&gt;
-
-                        &lt;!&ndash;<li><a th:href="|/upload_securityListing|" th:onclick="|loadingScreen()|"><i  th:class="|fa fa-leaf|" /> <span th:text="|Security Listing|"/></a></li>&ndash;&gt;
-                        &lt;!&ndash;<li><a th:href="|/view_security_listing|" th:onclick="|loadingScreen()|"><i  th:class="|fa fa-leaf|" /> <span th:text="|View Security Listing|"/> </a></li>&ndash;&gt;
-
-                        &lt;!&ndash;<li><a th:href="|/upload_transaction_listing|" th:onclick="|loadingScreen()|"><i  th:class="|fa fa-leaf|" /> <span th:text="|Transaction Listing|"/> </a></li>&ndash;&gt;
-                        &lt;!&ndash;<li><a th:href="|/view_transaction_listing|" th:onclick="|loadingScreen()|"><i  th:class="|fa fa-leaf|" /> <span th:text="|View Transaction Listing|"/> </a></li>&ndash;&gt;
-                    </ul>
-                </li>-->
                 <li th:class="|parent|">
                     <a><i  th:class="|fa fa-leaf|" /> <span th:text="|Client|"/> </a>
                     <ul class="children">
@@ -159,15 +89,6 @@
                     </ul>
 
                 </li>
-                <!--<li th:class="|parent|">
-                    <a><i  th:class="|fa fa-leaf|" /> <span th:text="|Product|"/> </a>
-                    <ul class="children">
-                        <li><a th:href="|/view_products|" th:onclick="|loadingScreen()|">
-                            <i  th:class="|fa fa-leaf|" /> <span th:text="|View Products|"/> </a></li>
-                        <li><a th:href="|/product|" th:onclick="|loadingScreen()|">
-                            <i  th:class="|fa fa-leaf|" /> <span th:text="|Create Product|"/> </a></li>
-                    </ul>
-                </li>-->
                 <li th:class="|parent|">
                     <a><i  th:class="|fa fa-leaf|" /> <span th:text="|Generate Report|"/> </a>
                     <ul class="children">
