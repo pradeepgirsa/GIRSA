@@ -11,7 +11,7 @@
 <header th:replace="layout :: site-header" />
 
 <section>
-    <div class="mainwrapper">
+    <div class="mainContent">
         <div class="leftpanel" th:replace="layout :: site-leftPanel">
         </div><!-- leftpanel -->
 
@@ -42,7 +42,7 @@
             </div><!-- contentpanel -->
         </div><!-- mainpanel -->
 
-    </div><!-- mainwrapper -->
+    </div><!-- mainContent -->
 </section>
 
 <form th:action="@{/logout}" method="POST" id="logoutForm" />
@@ -53,9 +53,9 @@
 		}
 </script>
 
-<script th:src="@{js/jquery-1.11.1.min.js}"></script>
+<script th:src="@{js/jquery-3.2.0.min.js}"></script>
 <script th:src="@{js/jquery-migrate-1.2.1.min.js}"></script>
-<script th:src="@{js/jquery-ui-1.10.3.min.js}"></script>
+<script th:src="@{js/jquery-ui-1.12.1.min.js}"></script>
 <script th:src="@{js/bootstrap.min.js}"></script>
 <script th:src="@{js/modernizr.min.js}"></script>
 <script th:src="@{js/pace.min.js}"></script>
