@@ -12,14 +12,10 @@
     <meta name="description" content=""/>
     <meta name="author" content=""/>
 
-    <link th:if="${environment} == 'prod'" th:href="@{/css/style.default.css}" rel="stylesheet" />
+    <link th:href="@{/css/style.default.css}" rel="stylesheet" />
 
 </head>
 <body class="signin">
-
-<!--<div id="stage" class="loading">-->
-    <!--<div id="loading-image"></div>-->
-<!--</div>-->
 <section>
     <div class="panel panel-signin">
         <div class="panel-body">
@@ -29,28 +25,23 @@
             <div  th:if="${logoutMessage}" class="alert alert-info" align="center">
                 <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
                 You've been logged out successfully.</div>
-            <!-- <div  th:if="${requestMessage}" >
-                 <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-                 Your request have been logged, you should receive an email with your login details shortly!</div>-->
             <div style="width: 100%; text-align: center;">
                 <div class="logo text-center" style="display: inline-block;">
-                    <img th:if="${environment} == 'prod'" th:src="@{/images/girsa_logo.png}" th:alt="@{GIRSA Logo}" />
+                    <img th:src="@{/images/girsa_logo.png}" th:alt="@{GIRSA Logo}" />
                 </div>
-                <div style="display: inline-block;">
+                <!--<div style="display: inline-block;">
                     <p th:text="${environment}" id="loginEnvironment"></p>
-                </div>
+                </div>-->
             </div>
 
 
             <div class="mb30"></div>
 
             <form  th:action="@{/verify_login}" method="POST" name='loginForm' >
-                <div class="input-group mb15">
-                    <span class="input-group-addon"><i class="glyphicon glyphicon-user"/></span>
+                <div class="input-group mb15" style="width : 100%">
                     <input type="text" class="form-control" placeholder="Username" id="usr" name='username'/>
                 </div><!-- input-group -->
-                <div class="input-group mb15">
-                    <span class="input-group-addon"><i class="glyphicon glyphicon-lock"/></span>
+                <div class="input-group mb15" style="width : 100%">
                     <input type="password" class="form-control" placeholder="Password" id="pwd" name='password'/>
                 </div><!-- input-group -->
 
@@ -62,7 +53,7 @@
                         </div>
                     </div>
                     <div class="pull-right">
-                        <button type="submit" class="btn btn-girsa" onclick="loadingScreen()" id="login-button">Log In</button>
+                        <button type="submit" class="btn btn-girsa" id="login-button">Log In</button>
                     </div>
                 </div>
                 <input type="hidden" name="${_csrf.parameterName}"
@@ -70,9 +61,6 @@
             </form>
 
         </div><!-- panel-body -->
-        <!--<div class="panel-footer">
-            <a th:href="@{/login?request}" class="btn btn-default btn-block">Request username and password</a>
-        </div>-->
     </div><!-- panel -->
 
 </section>
@@ -87,8 +75,8 @@
 
 <script th:src="@{/js/custom.js}"></script>
 
-<script th:replace="layout :: site-screen-loader">
-</script>
+<!--<script th:replace="layout :: site-screen-loader">
+</script>-->
 
 
 </body>

@@ -4,9 +4,9 @@
 </head>
 
 <body>
-<div id="stage" class="loading">
+<!--<div id="stage" class="loading">
     <div id="loading-image"></div>
-</div>
+</div>-->
 
 <header th:replace="layout :: site-header">
 </header>
@@ -28,14 +28,11 @@
 
                 <div class="row">
 
-                    <div class="col-md-6 col-md-offset-3">
+                    <div class="col-md-8 col-md-offset-2">
                     <form method="POST" th:action="@{/upload_instrumentData}" enctype="multipart/form-data">
                         <div class="panel panel-girsa">
+                            <!--<h4>Upload Instrument Data File</h4>-->
                             <div class="panel-heading">
-                                <!--<div class="panel-btns">
-                                    <a href="#" th:class="${cashChangeTooltip}" data-toggle="tooltip" th:title="${cashChangeMinMaxPanel}"><i th:class="${cashChangeMinusPlus}"></i></a>
-                                    <a href="#" class="panel-close tooltips" data-toggle="tooltip" title="Close Panel"><i class="fa fa-times"></i></a>
-                                </div>-->
                                 <h4 class="panel-title">Upload Instrument Data File</h4>
                             </div>
                             <div class="panel-body">
@@ -52,18 +49,14 @@
 
                                 <div th:class="|form-group|">
                                     <label> <strong>Upload File * </strong></label>
-                                    <!--<label class="error" th:if="${#fields.hasErrors('financialServiceGroup')}" th:errors="*{financialServiceGroup}">Error</label>-->
-                                    <input required="true" type="file" class="form-control" name="file" id="uploadfile" placeholder="Upload File"/>
+                                    <input required="true" type="file" class="form-control" name="file" id="uploadFile" placeholder="Upload File"/>
                                 </div>
 
-                                <div class="panel-footer" th:style="${cashChangePanelDisplay}">
+
                                     <div class="col-md-12" align="right">
-                                        <!--<button id="generate-cash-change-report" type="submit" class="btn btn-girsa mr5" onclick="loadingScreen()">Submit</button>-->
-
                                         <button type="submit" value="Submit">Submit</button>
-                                        <!--<button type="reset" class="btn btn-dark">Reset</button>-->
                                     </div>
-                                </div>
+
 
                             </div>
                         </div>
@@ -76,37 +69,33 @@
         </div><!-- mainpanel -->
     </div><!-- mainwrapper -->
 </section>
-<form th:action="@{/logout}" method="POST" id="logoutForm" />
+<!--<form th:action="@{/logout}" method="POST" id="logoutForm" />-->
 
-<script th:src="@{js/jquery-1.11.1.min.js}"></script>
+<!--<script th:src="@{js/jquery-1.11.1.min.js}"></script>
 <script th:src="@{js/jquery-migrate-1.2.1.min.js}"></script>
 <script th:src="@{js/jquery-ui-1.10.3.min.js}"></script>
 <script th:src="@{js/bootstrap.min.js}"></script>
-<script th:src="@{js/modernizr.min.js}"></script>
-<script th:src="@{js/pace.min.js}"></script>
-<script th:src="@{js/retina.min.js}"></script>
-<script th:src="@{js/jquery.cookies.js}"></script>
+<script th:src="@{js/modernizr.min.js}"></script>-->
+<!--<script th:src="@{js/pace.min.js}"></script>
+<script th:src="@{js/retina.min.js}"></script>-->
+<!--<script th:src="@{js/jquery.cookies.js}"></script>
 
 <script th:src="@{js/select2.min.js}"></script>
-<script th:src="@{js/custom.js}"></script>
+<script th:src="@{js/custom.js}"></script>-->
 
-<script th:replace="layout :: site-screen-loader"/>
-<script th:replace="layout :: logout-form"/>
+<!--<script th:replace="layout :: site-screen-loader"/>
+<script th:replace="layout :: logout-form"/>-->
 
-<script>
+<!--<script>
 
-    jQuery(document).ready(function() {
+    //jQuery(document).ready(function() {
 
         // Select2
-        jQuery("#client").select2({
-            minimumResultsForSearch: 10
-        });
-
-        jQuery("#product").select2({
-            minimumResultsForSearch: 10
-        });
-    });
-</script>
+        //jQuery("#client").select2({
+           // minimumResultsForSearch: 10
+        //});
+    //});
+</script>-->
 
 </body>
 </html>

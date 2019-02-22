@@ -159,7 +159,7 @@ h1, .h1 {
 
 .headerwrapper {
     background-color: #838783;
-    min-height: 60px;
+    min-height: 30px;
     position: fixed;
     width: 100%;
     z-index: 1000;
@@ -175,7 +175,7 @@ h1, .h1 {
 
 .headerwrapper .header-left {
     width: 230px;
-    min-height: 60px;
+    min-height: 30px;
     padding: 0px 0px 10px 20px;
     float: left;
     border-right: 1px solid rgba(255,255,255,0.14);
@@ -250,13 +250,13 @@ h1, .h1 {
 
 .headerwrapper .header-right {
     margin-left: 230px;
-    min-height: 60px;
+    min-height: 30px;
     padding: 14px 15px;
 }
 
 .headerwrapper .header-right .btn-group {
     margin: 0;
-    line-height: 21px;
+    line-height: 15px;
     float: left;
 }
 
@@ -269,7 +269,7 @@ h1, .h1 {
     border-radius: 50px;
     line-height: normal;
     margin-left: 5px;
-    height: 33px;
+    height: 23px;
 }
 
 .headerwrapper .header-right .btn-group > .btn:hover {
@@ -850,7 +850,7 @@ h1, .h1 {
 }
 
 .panel-girsa .panel-heading{
-    background-color: #dff0d8;
+    background-color: #c5cfe0;
 }
 
 .btn-girsa {

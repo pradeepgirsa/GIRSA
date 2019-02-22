@@ -38,64 +38,64 @@
         <div class="leftpanel" th:fragment="site-leftPanel">
             <ul class="nav nav-pills nav-stacked" id="nav-pills-stacked">
                 <li th:class="|parent|">
-                    <a><i  th:class="|fa fa-leaf|" /> <span th:text="|Client Instrument Data|"/> </a>
+                    <a> <span th:text="|Client Instrument Data|"/> </a>
                     <ul class="children">
-                        <li><a th:href="|/upload_instrumentData|" th:onclick="|loadingScreen()|"><i  th:class="|fa fa-leaf|" /> <span th:text="|Upload|"/> </a></li>
-                        <li><a th:href="|/view_instrumentData|" th:onclick="|loadingScreen()|"><i  th:class="|fa fa-leaf|" /> <span th:text="|View|"/> </a></li>
+                        <li><a th:href="|/upload_instrumentData|" > <span th:text="|Upload|"/> </a></li>
+                        <li><a th:href="|/view_instrumentData|" > <span th:text="|View|"/> </a></li>
                     </ul>
                 </li>
                 <li th:class="|parent|">
-                    <a><i  th:class="|fa fa-leaf|" /> <span th:text="|Barra Asset Data|"/> </a>
+                    <a> <span th:text="|Barra Asset Data|"/> </a>
                     <ul class="children">
-                        <li><a th:href="|/upload_assetInfo|" th:onclick="|loadingScreen()|"><i  th:class="|fa fa-leaf|" /> <span th:text="|Upload Barra Asset|"/> </a></li>
-                        <li><a th:href="|/view_assetInfo|" th:onclick="|loadingScreen()|"><i  th:class="|fa fa-leaf|" /> <span th:text="|View Barra Asset|"/> </a></li>
+                        <li><a th:href="|/upload_assetInfo|" > <span th:text="|Upload Barra Asset|"/> </a></li>
+                        <li><a th:href="|/view_assetInfo|" > <span th:text="|View Barra Asset|"/> </a></li>
                     </ul>
                 </li>
                 <li th:class="|parent|">
-                    <a><i  th:class="|fa fa-leaf|" /> <span th:text="|Mapping|"/> </a>
+                    <a> <span th:text="|Mapping|"/> </a>
                     <ul class="children">
-                        <li><a th:href="|/upload_additionalClassification|" th:onclick="|loadingScreen()|"><i  th:class="|fa fa-leaf|" /> <span th:text="|Additional Classification|"/> </a></li>
-                        <li><a th:href="|/view_additional_classification|" th:onclick="|loadingScreen()|"> <i  th:class="|fa fa-leaf|" /> <span th:text="|View Additional Classification|"/> </a></li>
+                        <li><a th:href="|/upload_additionalClassification|" > <span th:text="|Additional Classification|"/> </a></li>
+                        <li><a th:href="|/view_additional_classification|" >  <span th:text="|View Additional Classification|"/> </a></li>
 
-                        <li><a th:href="|/upload_daily_pricing|" th:onclick="|loadingScreen()|"><i  th:class="|fa fa-leaf|" /> <span th:text="|Daily Pricing|"/> </a></li>
-                        <li><a th:href="|/view_daily_pricing|" th:onclick="|loadingScreen()|"><i  th:class="|fa fa-leaf|" /> <span th:text="|View Daily Pricing|"/> </a></li>
+                        <li><a th:href="|/upload_daily_pricing|" > <span th:text="|Daily Pricing|"/> </a></li>
+                        <li><a th:href="|/view_daily_pricing|" > <span th:text="|View Daily Pricing|"/> </a></li>
 
-                        <li><a th:href="|/upload_derivativeTypes|" th:onclick="|loadingScreen()|"><i  th:class="|fa fa-leaf|" /> <span th:text="|Derivative Types|"/> </a></li>
-                        <li><a th:href="|/view_derivative_types|" th:onclick="|loadingScreen()|"><i  th:class="|fa fa-leaf|" /> <span th:text="|View Derivative Types|"/> </a></li>
+                        <li><a th:href="|/upload_derivativeTypes|" > <span th:text="|Derivative Types|"/> </a></li>
+                        <li><a th:href="|/view_derivative_types|" > <span th:text="|View Derivative Types|"/> </a></li>
 
-                        <li><a th:href="|/upload_instrumentCode|" th:onclick="|loadingScreen()|"><i  th:class="|fa fa-leaf|" /> <span th:text="|Instrument Code|"/> </a></li>
-                        <li><a th:href="|/view_instrument_code|" th:onclick="|loadingScreen()|"><i  th:class="|fa fa-leaf|" /> <span th:text="|View Instrument Code|"/> </a></li>
+                        <li><a th:href="|/upload_instrumentCode|" > <span th:text="|Instrument Code|"/> </a></li>
+                        <li><a th:href="|/view_instrument_code|" > <span th:text="|View Instrument Code|"/> </a></li>
 
-                        <li><a th:href="|/upload_issuerMappings|" th:onclick="|loadingScreen()|"><i  th:class="|fa fa-leaf|" /> <span th:text="|Issuer Mappings|"/> </a></li>
-                        <li><a th:href="|/view_issuer_mappings|" th:onclick="|loadingScreen()|"><i  th:class="|fa fa-leaf|" /> <span th:text="|View Issuer Mappings|"/> </a></li>
+                        <li><a th:href="|/upload_issuerMappings|" > <span th:text="|Issuer Mappings|"/> </a></li>
+                        <li><a th:href="|/view_issuer_mappings|" > <span th:text="|View Issuer Mappings|"/> </a></li>
 
-                        <li><a th:href="|/upload_indices|" th:onclick="|loadingScreen()|"><i  th:class="|fa fa-leaf|" /> <span th:text="|Indices|"/> </a></li>
-                        <li><a th:href="|/view_indices|" th:onclick="|loadingScreen()|"><i  th:class="|fa fa-leaf|" /> <span th:text="|View Indices|"/> </a></li>
+                        <li><a th:href="|/upload_indices|" > <span th:text="|Indices|"/> </a></li>
+                        <li><a th:href="|/view_indices|" > <span th:text="|View Indices|"/> </a></li>
 
-                        <li><a th:href="|/upload_clientFundMapping|" th:onclick="|loadingScreen()|"><i  th:class="|fa fa-leaf|" /> <span th:text="|PSG Fund Mapping|"/> </a></li>
-                        <li><a th:href="|/view_client_fund_mapping|" th:onclick="|loadingScreen()|"><i  th:class="|fa fa-leaf|" /> <span th:text="|View PSG Fund Mapping|"/> </a></li>
+                        <li><a th:href="|/upload_clientFundMapping|" > <span th:text="|PSG Fund Mapping|"/> </a></li>
+                        <li><a th:href="|/view_client_fund_mapping|" > <span th:text="|View PSG Fund Mapping|"/> </a></li>
 
-                        <li><a th:href="|/upload_reg28InstrumentType|" th:onclick="|loadingScreen()|"><i  th:class="|fa fa-leaf|" /> <span th:text="|Reg28 Instrument Type|"/> </a></li>
-                        <li><a th:href="|/view_reg28_instrument_type|" th:onclick="|loadingScreen()|"><i  th:class="|fa fa-leaf|" /> <span th:text="|View Reg28 Instrument Type|"/> </a></li>
+                        <li><a th:href="|/upload_reg28InstrumentType|" > <span th:text="|Reg28 Instrument Type|"/> </a></li>
+                        <li><a th:href="|/view_reg28_instrument_type|" > <span th:text="|View Reg28 Instrument Type|"/> </a></li>
                     </ul>
                 </li>
                 <li th:class="|parent|">
-                    <a><i  th:class="|fa fa-leaf|" /> <span th:text="|Client|"/> </a>
+                    <a> <span th:text="|Client|"/> </a>
                     <ul class="children">
-                        <li><a th:href="|/view_clients|" th:onclick="|loadingScreen()|">
-                            <i  th:class="|fa fa-leaf|" /> <span th:text="|View Clients|"/> </a></li>
-                        <li><a th:href="|/client|" th:onclick="|loadingScreen()|">
-                            <i  th:class="|fa fa-leaf|" /> <span th:text="|Create Client|"/> </a></li>
+                        <li><a th:href="|/view_clients|" >
+                             <span th:text="|View Clients|"/> </a></li>
+                        <li><a th:href="|/client|" >
+                             <span th:text="|Create Client|"/> </a></li>
                     </ul>
 
                 </li>
                 <li th:class="|parent|">
-                    <a><i  th:class="|fa fa-leaf|" /> <span th:text="|Generate Report|"/> </a>
+                    <a> <span th:text="|Generate Report|"/> </a>
                     <ul class="children">
-                        <li><a th:href="|/dry_run_qstats|" th:onclick="|loadingScreen()|">
-                            <i  th:class="|fa fa-leaf|" /> <span th:text="|QSTATS Dry Run|"/> </a></li>
-                        <li><a th:href="|/generate_qstats|" th:onclick="|loadingScreen()|">
-                            <i  th:class="|fa fa-leaf|" /> <span th:text="|ASISA QSTATS|"/> </a></li>
+                        <li><a th:href="|/dry_run_qstats|" >
+                             <span th:text="|QSTATS Dry Run|"/> </a></li>
+                        <li><a th:href="|/generate_qstats|" >
+                             <span th:text="|ASISA QSTATS|"/> </a></li>
                     </ul>
                 </li>
             </ul>
@@ -105,7 +105,7 @@
     </div><!-- mainwrapper -->
 </section>
 
-<script th:fragment="site-screen-loader">
+<!--<script th:fragment="site-screen-loader">
     $(window).load(function() {
         $('#stage').removeClass('loading').addClass('loaded');
     });
@@ -113,7 +113,7 @@
     function loadingScreen() {
         $('#stage').removeClass('loaded').addClass('loading');
     }
-</script>
+</script>-->
 
 <script th:fragment="logout-form">
     function formSubmit() {
