@@ -6,17 +6,17 @@
 
     <link rel="shortcut icon"  th:href="@{/images/girsa_icon.png}" type="image/x-icon"/>
 
-    <link  th:href="@{css/style.default.css}" rel="stylesheet" />
+    <link  th:href="@{css/core.css}" rel="stylesheet" />
 
     <link th:href="@{css/select2.css}" rel="stylesheet" />
     <!--<link th:href="@{css/bootstrap.min.css}" rel="stylesheet"/>-->
-    <link th:href="@{css/toggles.css}" rel="stylesheet" />
+    <!--<link th:href="@{css/toggles.css}" rel="stylesheet" />-->
 
-    <link  th:href="@{css/style.calendar.css}" rel="stylesheet" />
+    <link  th:href="@{css/calendar.css}" rel="stylesheet" />
 
-    <link th:href="@{css/style.datatables.css}" rel="stylesheet"/>
-    <link th:href="@{https://cdn.datatables.net/responsive/1.0.1/css/dataTables.responsive.css}" rel="stylesheet"/>
-    <link th:href="@{css/magnific-popup/magnific-popup.css}" rel="stylesheet" />
+    <!--<link th:href="@{css/style.datatables.css}" rel="stylesheet"/>-->
+    <!--<link th:href="@{https://cdn.datatables.net/responsive/1.0.1/css/dataTables.responsive.css}" rel="stylesheet"/>-->
+    <!--<link th:href="@{css/magnific-popup/magnific-popup.css}" rel="stylesheet" />-->
 
 </head>
 <body>
@@ -121,48 +121,44 @@
     }
 </script>
 
-<script th:fragment="site-datatables">
-    function format(item) {
-        return item.text;
-    }
+<!--<script th:fragment="site-datatables">-->
+    <!--function format(item) {-->
+        <!--return item.text;-->
+    <!--}-->
 
-    jQuery('select option:first-child').text('');
+    <!--jQuery('select option:first-child').text('');-->
 
-    jQuery('#PublicHolidays').DataTable({
-        responsive: true
-    });
+    <!--var shTable = jQuery('#shTable').DataTable({-->
+        <!--"fnDrawCallback": function(oSettings) {-->
+            <!--jQuery('#shTable_paginate ul').addClass('pagination-active-dark');-->
+        <!--},-->
+        <!--responsive: true-->
+    <!--});-->
 
-    var shTable = jQuery('#shTable').DataTable({
-        "fnDrawCallback": function(oSettings) {
-            jQuery('#shTable_paginate ul').addClass('pagination-active-dark');
-        },
-        responsive: true
-    });
+    <!--// Show/Hide Columns Dropdown-->
+    <!--jQuery('#shCol').click(function(event){-->
+        <!--event.stopPropagation();-->
+    <!--});-->
 
-    // Show/Hide Columns Dropdown
-    jQuery('#shCol').click(function(event){
-        event.stopPropagation();
-    });
+    <!--jQuery('#shCol input').on('click', function() {-->
 
-    jQuery('#shCol input').on('click', function() {
+        <!--// Get the column API object-->
+        <!--var column = shTable.column($(this).val());-->
 
-        // Get the column API object
-        var column = shTable.column($(this).val());
+        <!--// Toggle the visibility-->
+        <!--if ($(this).is(':checked'))-->
+            <!--column.visible(true);-->
+        <!--else-->
+            <!--column.visible(false);-->
+    <!--});-->
 
-        // Toggle the visibility
-        if ($(this).is(':checked'))
-            column.visible(true);
-        else
-            column.visible(false);
-    });
-
-    // DataTables Length to Select2
-    jQuery('div.dataTables_length select').removeClass('form-control input-sm');
-    jQuery('div.dataTables_length select').css({width: '60px'});
-    jQuery('div.dataTables_length select').select2({
-        minimumResultsForSearch: -1
-    });
-</script>
+    <!--// DataTables Length to Select2-->
+    <!--jQuery('div.dataTables_length select').removeClass('form-control input-sm');-->
+    <!--jQuery('div.dataTables_length select').css({width: '60px'});-->
+    <!--jQuery('div.dataTables_length select').select2({-->
+        <!--minimumResultsForSearch: -1-->
+    <!--});-->
+<!--</script>-->
 
 
 
