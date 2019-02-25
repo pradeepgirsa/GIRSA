@@ -22,18 +22,19 @@
 <body>
 
 <header th:fragment="site-header">
-    <div class="headerClass">
+    <div class="headerwrapper">
         <div class="header-left">
             <h1 style="font-weight: 15px; text-align: center; text-color: #8ccbeb">GIRSA</h1>
         </div>
         <div class="header-right">
             <h1 style="font-weight: 10px; text-align: center; text-color: #fffff">GIRSA - Reporting</h1>
-        </div>
-    </div>
+        </div><!-- header-right -->
+
+    </div><!-- headerwrapper -->
 </header>
 
 <section>
-    <div class="mainContent">
+    <div class="mainwrapper">
         <div class="leftpanel" th:fragment="site-leftPanel">
             <ul class="nav nav-pills nav-stacked" id="nav-pills-stacked">
                 <li th:class="|parent|">
@@ -101,7 +102,7 @@
 
         </div><!-- leftpanel -->
 
-    </div><!-- mainContent -->
+    </div><!-- mainwrapper -->
 </section>
 
 <!--<script th:fragment="site-screen-loader">

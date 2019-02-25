@@ -82,10 +82,10 @@ jQuery(document).ready(function() {
    // Menu Toggle
    jQuery('.menu-collapse').click(function() {
       if (!$('body').hasClass('hidden-left')) {
-         if ($('.headerClass').hasClass('collapsed')) {
-            $('.headerClass, .mainContent').removeClass('collapsed');
+         if ($('.headerwrapper').hasClass('collapsed')) {
+            $('.headerwrapper, .mainwrapper').removeClass('collapsed');
          } else {
-            $('.headerClass, .mainContent').addClass('collapsed');
+            $('.headerwrapper, .mainwrapper').addClass('collapsed');
             $('.children').hide(); // hide sub-menu if leave open
          }
       } else {
@@ -115,7 +115,7 @@ jQuery(document).ready(function() {
 
       if($('.header-right').css('position') == 'relative') {
          $('body').addClass('hidden-left');
-         $('.headerClass, .mainContent').removeClass('collapsed');
+         $('.headerwrapper, .mainwrapper').removeClass('collapsed');
       } else {
          $('body').removeClass('hidden-left');
       }
@@ -135,9 +135,9 @@ jQuery(document).ready(function() {
    collapsedMenu(); // for loading/refreshing the page
    function collapsedMenu() {
       if($('.logo').css('position') == 'relative') {
-         $('.headerClass, .mainContent').addClass('collapsed');
+         $('.headerwrapper, .mainwrapper').addClass('collapsed');
       } else {
-         $('.headerClass, .mainContent').removeClass('collapsed');
+         $('.headerwrapper, .mainwrapper').removeClass('collapsed');
       }
    }
    	/*==Slim Scroll ==*/
