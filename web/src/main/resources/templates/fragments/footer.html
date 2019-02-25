@@ -1,0 +1,29 @@
+<!doctype html>
+<html xmlns:th="https://www.thymeleaf.org">
+<head>
+</head>
+<body>
+<footer class="main-footer" th:fragment="footer">
+<strong>GIRSA copy rights</strong>
+</footer>
+<section th:fragment="footerSection">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.5.0/js/bootstrap-datepicker.js"></script>
+<!--Bootstrap Select-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/js/bootstrap-select.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        $(function () {
+            $(".datepicker").datepicker({
+                todayBtn: "linked",
+                autoclose: true,
+                todayHighlight: true
+
+            });
+        });
+    });
+
+</script>
+</section>
+</body>
+</html>

@@ -1,0 +1,77 @@
+<!doctype html>
+<html xmlns:th="https://www.thymeleaf.org">
+<head>
+</head>
+<body>
+<aside th:fragment="aside" class="main-sidebar">
+
+    <!-- sidebar: style can be found in sidebar.less -->
+    <section class="sidebar">
+
+        <!-- Sidebar user panel (optional) -->
+        <div class="user-panel">
+        </div>
+
+        <!-- Sidebar Menu -->
+        <ul class="sidebar-menu">
+            <li class="header">Menu</li>
+
+            <li class="treeview" id="clientInstrument" >
+                <a href="#"><i class="fa fa-th"></i> <span>Client Instrument Data</span>
+                    <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i>
+                                </span>
+                </a>
+                <ul class="treeview-menu">
+                    <li><a th:href="|/upload_instrumentData|" >Upload</a></li>
+                    <li><a th:href="|/view_instrumentData|" >View</a></li>
+
+                </ul>
+            </li>
+
+
+            <!--<li class="treeview" id="datamaster" >-->
+                <!--<a href="#"><i class="fa fa-th"></i> <span>Client Instrument Data</span>-->
+                    <!--<span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i>-->
+                                <!--</span>-->
+                <!--</a>-->
+                <!--<ul class="treeview-menu">-->
+                    <!--<li><a th:href="|/upload_instrumentData|" >Upload</a></li>-->
+                    <!--<li><a th:href="|/view_instrumentData|" >View</a></li>-->
+
+                <!--</ul>-->
+            <!--</li>-->
+
+
+
+            <li class="treeview" id="kegiatandosen">
+                <a href="#"><i class="fa fa-inbox"></i> <span>Kegiatan</span>
+                    <span class="pull-right-container">
+                                    <i class="fa fa-angle-left pull-right"></i>
+                                </span>
+                </a>
+
+                <ul class="treeview-menu">
+                    <li><a href="/kegiatan/kbm/list">Halo</a></li>
+
+                </ul>
+            </li>
+
+            <li class="treeview" id="laporan">
+                <a href="#"><i class="fa fa-book"></i> <span>Laporan</span>
+                    <span class="pull-right-container">
+                                    <i class="fa fa-angle-left pull-right"></i>
+                                </span>
+                </a>
+                <ul class="treeview-menu">
+                    <li><a href="#">Laporan 1</a></li>
+                    <li><a href="#">Laporan 2</a></li>
+                </ul>
+            </li>
+
+        </ul>
+        <!-- /.sidebar-menu -->
+    </section>
+    <!-- /.sidebar -->
+</aside>
+</body>
+</html>

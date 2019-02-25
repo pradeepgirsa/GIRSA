@@ -1,80 +1,28 @@
 <!DOCTYPE html>
-<html  xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity4" xmlns:th="https://www.thymeleaf.org" xmlns="https://www.w3.org/1999/xhtml" lang="en">
-<head th:replace="layout :: site-head">
-</head>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
+<head th:replace="fragments/head :: head"/>
+<body class="hold-transition skin-blue fixed sidebar-mini fuelux">
+<div class="wrapper">
+    <!-- Main Header -->
+    <header th:replace="fragments/header :: header" />
+    <!-- Left side column. contains the logo and sidebar -->
+    <aside th:replace="fragments/side :: aside"/>
 
-<body>
-<div id="stage" class="loading">
-    <div id="loading-image"></div>
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+
+        <!-- Content Header (Page header) -->
+        <div class="content-header"><h1>Common Template</h1></div>
+"
+        <!-- Main content -->
+        <div class="content">
+            <h1>Welcome to GIRSA - Reporting</h1>
+        </div> <!-- /.content -->
+    </div>
+    <!-- Main Footer -->
+    <footer th:replace="fragments/footer :: footer"/>
+    <div class="control-sidebar-bg"></div>
 </div>
-
-<header th:replace="layout :: site-header" />
-
-<section>
-    <div class="mainwrapper">
-        <div class="leftpanel" th:replace="layout :: site-leftPanel">
-        </div><!-- leftpanel -->
-
-        <div class="mainpanel">
-            <div class="contentpanel">
-                <div  th:if="${saveError} != null" class="alert alert-danger">
-                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-                    <span th:text="${saveError}"/> </div>
-                <div  th:if="${saveMessage} != null" class="alert alert-info" align="center">
-                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-                    <span th:text="${saveMessage}"/></div>
-
-                <div class="row">
-                    <div class="col-md-6 col-md-offset-3">
-                        <form role="form" method="post" th:object="" th:action="" >
-                            <div class="panel panel-girsa">
-                                <div class="panel-heading">
-                                    <h4 class="panel-title">Cash Change Report</h4>
-                                </div>
-
-                                Write Contents here....
-
-
-                            </div>
-                        </form>
-                    </div><!-- col-md-6 -->
-                </div><!-- row -->
-            </div><!-- contentpanel -->
-        </div><!-- mainpanel -->
-
-    </div><!-- mainwrapper -->
-</section>
-
-<form th:action="@{/logout}" method="POST" id="logoutForm" />
-
-<script>
-		function formSubmit() {
-			document.getElementById("logoutForm").submit();
-		}
-</script>
-
-<script th:src="@{js/jquery-1.11.1.min.js}"></script>
-<script th:src="@{js/jquery-migrate-1.2.1.min.js}"></script>
-<script th:src="@{js/jquery-ui-1.10.3.min.js}"></script>
-<script th:src="@{js/bootstrap.min.js}"></script>
-<script th:src="@{js/modernizr.min.js}"></script>
-<script th:src="@{js/pace.min.js}"></script>
-<script th:src="@{js/retina.min.js}"></script>
-<script th:src="@{js/jquery.cookies.js}"></script>
-<script th:src="@{js/jquery.scrollTo.min.js}"></script>
-<script th:src="@{js/jquery.slimscroll.js}"></script>
-<!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>-->
-
-<script th:src="@{js/select2.min.js}"></script>
-<script th:src="@{js/custom.js}"></script>
-<script th:src="@{js/moment.min.js}"></script>
-<script th:src="@{js/fullcalendar.min.js}"></script>
-<script th:src="@{js/girsa-dashboard.js}"></script>
-
-<script th:replace="layout :: site-screen-loader">
-</script>
-
+<section th:replace="fragments/footer :: footerSection"/>
 </body>
-
 </html>

@@ -24,7 +24,6 @@ import za.co.global.services.upload.FileAndObjectResolver;
 import za.co.global.services.upload.GirsaExcelParser;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -54,18 +53,21 @@ public class InstrumentDataController extends BaseFileUploadController {
     @Transactional
     @PostMapping("/upload_instrumentData")
     public ModelAndView fileUpload(@RequestParam("file") MultipartFile file, String clientId) {
+        ModelAndView modelAndView = new ModelAndView("fileupload/client/instrumentData");
         if (file.isEmpty()) {
-            return new ModelAndView("fileupload/client/instrumentData", "saveError", "Please select a file and try again");
+            modelAndView.addObject("saveError", "Please select a file and try again");
+        } else {
+            try {
+                Client client = clientRepository.findOne(Long.parseLong(clientId));
+                processFile(file, FILE_TYPE, client, null);
+                modelAndView.addObject("saveMessage", "File Uploaded sucessfully... " + file.getOriginalFilename());
+            } catch (Exception e) {
+                modelAndView.addObject("saveError", e.getMessage());
+            }
         }
-        try {
-            Client client = clientRepository.findOne(Long.parseLong(clientId));
-            processFile(file, FILE_TYPE, client, null);
-        } catch (IOException e) {
-            return new ModelAndView("fileupload/client/instrumentData", "saveError", e.getMessage());
-        } catch (Exception e) {
-            return new ModelAndView("fileupload/client/instrumentData", "saveError", e.getMessage());
-        }
-        return new ModelAndView("fileupload/client/instrumentData", "saveMessage", "File Uploaded sucessfully... " + file.getOriginalFilename());
+        clients = clientRepository.findAll();
+        modelAndView.addObject("clients", clients);
+        return modelAndView;
     }
 
     @Override

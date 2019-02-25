@@ -1,101 +1,69 @@
 <!DOCTYPE html>
-<html  xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity4" xmlns:th="https://www.thymeleaf.org" xmlns="https://www.w3.org/1999/xhtml" lang="en">
-<head th:replace="layout :: site-head">
-</head>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
+<head th:replace="fragments/head :: head"/>
+<body class="hold-transition skin-blue fixed sidebar-mini fuelux">
+<div class="wrapper">
+    <!-- Main Header -->
+    <header th:replace="fragments/header :: header"/>
+    <!-- Left side column. contains the logo and sidebar -->
+    <aside th:replace="fragments/side :: aside"/>
 
-<body>
-<!--<div id="stage" class="loading">
-    <div id="loading-image"></div>
-</div>-->
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
 
-<header th:replace="layout :: site-header">
-</header>
+        <!-- Content Header (Page header) -->
+        <div class="content-header"><h1>Upload Instrument Data</h1></div>
 
-<section>
-    <div class="mainwrapper">
-        <div class="leftpanel" th:replace="layout :: site-leftPanel">
-        </div><!-- leftpanel -->
-
-        <div class="mainpanel">
-            <div class="contentpanel">
-
-                <div  th:if="${saveError} != null" class="alert alert-danger">
-                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-                    <span th:text="${saveError}"/> </div>
-                <div  th:if="${saveMessage} != null" class="alert alert-info" align="center">
-                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-                    <span id="success-message" th:text="${saveMessage}"/></div>
-
-                <div class="row">
-
-                    <div class="col-md-8 col-md-offset-2">
-                    <form method="POST" th:action="@{/upload_instrumentData}" enctype="multipart/form-data">
-                        <div class="panel panel-girsa">
-                            <!--<h4>Upload Instrument Data File</h4>-->
-                            <div class="panel-heading">
-                                <h4 class="panel-title">Upload Instrument Data File</h4>
-                            </div>
-                            <div class="panel-body">
-
-                                <div th:class="|form-group|">
+        <!-- Main content -->
+        <div class="content">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="box box-primary">
+                        <form method="POST" th:action="@{/upload_instrumentData}" enctype="multipart/form-data">
+                            <div class="box-body">
+                                <div class="form-group">
                                     <label> <strong>Client * </strong></label>
-                                    <select required="false" id="client" data-placeholder="Choose One..."  class="form-control width100p" name="clientId" >
+                                    <select required="false" id="client" data-placeholder="Choose One..."
+                                            class="selectpicker form-control" name="clientId">
                                         <option value="">Choose One...</option>
                                         <option th:each="item : ${clients}"
                                                 th:value="${item.id}"
-                                                th:text="${item.clientName}">Wireframe</option>
+                                                th:text="${item.clientName}">Wireframe
+                                        </option>
                                     </select>
                                 </div>
 
-                                <div th:class="|form-group|">
+                                <div th:class="form-group">
                                     <label> <strong>Upload File * </strong></label>
-                                    <input required="true" type="file" class="form-control" name="file" id="uploadFile" placeholder="Upload File"/>
+                                    <!--<input type="text" name="value" class="form-control pull-right"-->
+                                    <!--placeholder="Pencarian Berdasarkan Nama"/>-->
+                                    <input required="true" type="file" class="form-control" name="file" id="uploadFile"
+                                           placeholder="Upload File"/>
+                                </div>
+
+                                <div class="form-group">
+                                    <!--<a href="/alamat/list" class="btn btn-default" role="button" title="Back list">-->
+                                    <!--<span aria-hidden="true"></span>Batal-->
+                                    <!--</a>-->
+                                    <button type="submit" class="box-title btn btn-primary" title="Submit">Submit
+                                    </button>
                                 </div>
 
 
-                                    <div class="col-md-12" align="right">
-                                        <button type="submit" value="Submit">Submit</button>
-                                    </div>
-
-
                             </div>
-                        </div>
-                    </form>
+                        </form>
 
-                    </div><!-- col-md-6 -->
 
-                </div><!-- row -->
-            </div><!-- contentpanel -->
-        </div><!-- mainpanel -->
-    </div><!-- mainwrapper -->
-</section>
-<!--<form th:action="@{/logout}" method="POST" id="logoutForm" />-->
-
-<!--<script th:src="@{js/jquery-1.11.1.min.js}"></script>
-<script th:src="@{js/jquery-migrate-1.2.1.min.js}"></script>
-<script th:src="@{js/jquery-ui-1.10.3.min.js}"></script>
-<script th:src="@{js/bootstrap.min.js}"></script>
-<script th:src="@{js/modernizr.min.js}"></script>-->
-<!--<script th:src="@{js/pace.min.js}"></script>
-<script th:src="@{js/retina.min.js}"></script>-->
-<!--<script th:src="@{js/jquery.cookies.js}"></script>
-
-<script th:src="@{js/select2.min.js}"></script>
-<script th:src="@{js/custom.js}"></script>-->
-
-<!--<script th:replace="layout :: site-screen-loader"/>
-<script th:replace="layout :: logout-form"/>-->
-
-<!--<script>
-
-    //jQuery(document).ready(function() {
-
-        // Select2
-        //jQuery("#client").select2({
-           // minimumResultsForSearch: 10
-        //});
-    //});
-</script>-->
-
+                    </div> <!-- box box-primary -->
+                </div> <!--col-xs-12 -->
+            </div> <!--row-->
+        </div> <!--content -->
+    </div> <!--content-wrapper -->
+    <!-- Main Footer -->
+    <footer th:replace="fragments/footer :: footer"/>
+    <div class="control-sidebar-bg"></div>
+</div> <!--wrapper -->
+<section th:replace="fragments/footer :: footerSection"/>
 </body>
 </html>
+

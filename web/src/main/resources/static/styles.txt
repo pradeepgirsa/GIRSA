@@ -1,0 +1,1 @@
+#dce9ef - header-content(class) - backgorund   : applied in all-skins.min.css
