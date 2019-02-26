@@ -19,7 +19,7 @@
             <div class="row">
                 <div class="col-xs-12">
                     <div class="box box-primary">
-                        <form method="POST" th:action="@{/create_client}" >
+                        <form method="POST" th:action="@{/create_client}" th:object="${client}">
                             <div class="box-body">
 
                                 <div th:class="form-group">

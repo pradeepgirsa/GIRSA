@@ -67,8 +67,10 @@ public class QstatsDryRunController extends AbstractQstatsReportController {
             ReportDataCollectionBean reportDataCollectionBean = getReportCollectionBean(instrumentData, netAsset, clientFundMapping, null, netCurrentMarketValue);
 
             String error = validator.validate(reportDataCollectionBean);
-            if (error != null)
+            if (error != null) {
+                System.out.println("Error "+error);
                 return modelAndView.addObject("saveError", error);
+            }
         }
         //}
         return modelAndView.addObject("saveMessage", "report.generation.dryRun.success");
