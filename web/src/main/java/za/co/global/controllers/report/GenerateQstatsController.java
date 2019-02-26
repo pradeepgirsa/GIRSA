@@ -82,7 +82,7 @@ public class GenerateQstatsController extends AbstractQstatsReportController {
         ModelAndView modelAndView = new ModelAndView(VIEW_FILE);
         try {
 
-            DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+            DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
             Date reportDate = dateFormat.parse(reportDateInString);
 
             Client client = clientRepository.findOne(Long.parseLong(clientId));
