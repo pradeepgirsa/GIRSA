@@ -1,226 +1,199 @@
 <!DOCTYPE html>
-<html xmlns:th="https://www.thymeleaf.org" xmlns="https://www.w3.org/1999/xhtml" lang="en">
-<head th:replace="layout :: site-head">
-</head>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
+<head th:replace="fragments/head :: head"/>
+<body class="hold-transition skin-blue fixed sidebar-mini fuelux">
+<div class="wrapper">
+    <!-- Main Header -->
+    <header th:replace="fragments/header :: header"/>
+    <!-- Left side column. contains the logo and sidebar -->
+    <aside th:replace="fragments/side :: aside"/>
 
-<body>
-<div id="stage" class="loading">
-    <div id="loading-image"></div>
-</div>
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
 
-<header th:replace="layout :: site-header">
-</header>
+        <!--<div class="panel-heading">-->
+            <!--<a th:href="|/view_assetInfo|" type="button" class="close" id="close-asset" aria-hidden="true">×</a>-->
+            <!--<h4 class="panel-title">Asset Information</h4>-->
+        <!--</div>-->
 
-<section>
-    <div class="mainwrapper">
-        <div class="leftpanel" th:replace="layout :: site-leftPanel">
-        </div><!-- leftpanel -->
+        <!-- Content Header (Page header) -->
+        <div class="content-header"><h1>Asset Information</h1></div>
 
-        <div class="mainpanel">
-            <div class="contentpanel">
-
-                <div class="row">
-
-                    <div class="panel panel-default">
+        <!-- Main content -->
+        <div class="content">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="box box-primary">
                         <form method="POST" th:object="${barraAssetInfo}">
-                            <div class="panel panel-girsa">
-                                <div class="panel-heading">
-                                    <a th:href="|/view_assetInfo|" type="button" class="close" id="close-asset" aria-hidden="true">×</a>
-                                    <h4 class="panel-title">Asset Information</h4>
+                            <div class="box-body">
+                                <div th:class="form-group">
+                                    <label> <strong>Asset ID: </strong></label>
+                                    <span th:text="${barraAssetInfo.assetId}"/>
                                 </div>
-                                <div class="panel-body">
-
-                                    <div th:class="|form-group|">
-                                        <label> <strong>Asset ID: </strong></label>
-                                        <span th:text="${barraAssetInfo.assetId}" />
-                                    </div>
-                                    <div th:class="|form-group|">
-                                        <label> <strong>Asset ID Type: </strong></label>
-                                        <span th:text="${barraAssetInfo.assetIdType}" />
-                                    </div>
-                                    <div th:class="|form-group|">
-                                        <label> <strong>Asset Name: </strong></label>
-                                        <span th:text="${barraAssetInfo.assetName}" />
-                                    </div>
-                                    <div th:class="|form-group|">
-                                        <label> <strong>Holdings: </strong></label>
-                                        <span th:text="${barraAssetInfo.holdings}" />
-                                    </div>
-                                    <div th:class="|form-group|">
-                                        <label> <strong>Price: </strong></label>
-                                        <span th:text="${barraAssetInfo.price}" />
-                                    </div>
-                                    <div th:class="|form-group|">
-                                        <label> <strong>Eff Exposure: </strong></label>
-                                        <span th:text="${barraAssetInfo.effExposure}" />
-                                    </div>
-                                    <div th:class="|form-group|">
-                                        <label> <strong>Mkt Value: </strong></label>
-                                        <span th:text="${barraAssetInfo.marketValue}" />
-                                    </div>
-                                    <div th:class="|form-group|">
-                                        <label> <strong>Inst. Sub-type: </strong></label>
-                                        <span th:text="${barraAssetInfo.instSubType}" />
-                                    </div>
-                                    <div th:class="|form-group|">
-                                        <label> <strong>Reg30 InstrType: </strong></label>
-                                        <span th:text="${barraAssetInfo.reg30InstrType}" />
-                                    </div>
-                                    <div th:class="|form-group|">
-                                        <label> <strong>SARB Classification: </strong></label>
-                                        <span th:text="${barraAssetInfo.sarbClassification}" />
-                                    </div>
-                                    <div th:class="|form-group|">
-                                        <label> <strong>Amount Issued: </strong></label>
-                                        <span th:text="${barraAssetInfo.amountIssued}" />
-                                    </div>
-                                    <div th:class="|form-group|">
-                                        <label> <strong>ICB Industry: </strong></label>
-                                        <span th:text="${barraAssetInfo.icbIndustry}" />
-                                    </div>
-                                    <div th:class="|form-group|">
-                                        <label> <strong>ICB Supersector: </strong></label>
-                                        <span th:text="${barraAssetInfo.icbSuperSector}" />
-                                    </div>
-                                    <div th:class="|form-group|">
-                                        <label> <strong>Sector: </strong></label>
-                                        <span th:text="${barraAssetInfo.sector}" />
-                                    </div>
-                                    <div th:class="|form-group|">
-                                        <label> <strong>Subsector: </strong></label>
-                                        <span th:text="${barraAssetInfo.subsector}" />
-                                    </div>
-                                    <div th:class="|form-group|">
-                                        <label> <strong>GICS Industry: </strong></label>
-                                        <span th:text="${barraAssetInfo.gicsIndustry}" />
-                                    </div>
-                                    <div th:class="|form-group|">
-                                        <label> <strong>GICS Industry Group: </strong></label>
-                                        <span th:text="${barraAssetInfo.gicsIndustryGroup}" />
-                                    </div>
-                                    <div th:class="|form-group|">
-                                        <label> <strong>GICS Sector: </strong></label>
-                                        <span th:text="${barraAssetInfo.gicsSector}" />
-                                    </div>
-                                    <div th:class="|form-group|">
-                                        <label> <strong>GICS Sub-Industry: </strong></label>
-                                        <span th:text="${barraAssetInfo.gicsSubIndustry}" />
-                                    </div>
-                                    <div th:class="|form-group|">
-                                        <label> <strong>Maturity Date: </strong></label>
-                                        <span th:text="${barraAssetInfo.maturityDate}" />
-                                    </div>
-                                    <div th:class="|form-group|">
-                                        <label> <strong>Time to Maturity: </strong></label>
-                                        <span th:text="${barraAssetInfo.timeToMaturity}" />
-                                    </div>
-                                    <div th:class="|form-group|">
-                                        <label> <strong>Weighted Average Life: </strong></label>
-                                        <span th:text="${barraAssetInfo.weightedAverageLife}" />
-                                    </div>
-                                    <div th:class="|form-group|">
-                                        <label> <strong>First Coupon Date: </strong></label>
-                                        <span th:text="${barraAssetInfo.firstCouponDate}" />
-                                    </div>
-                                    <div th:class="|form-group|">
-                                        <label> <strong>Effective Duration: </strong></label>
-                                        <span th:text="${barraAssetInfo.effectiveDuration}" />
-                                    </div>
-                                    <div th:class="|form-group|">
-                                        <label> <strong>Macaulay Duration: </strong></label>
-                                        <span th:text="${barraAssetInfo.macaulayDuration}" />
-                                    </div>
-                                    <div th:class="|form-group|">
-                                        <label> <strong>Local Market: </strong></label>
-                                        <span th:text="${barraAssetInfo.localMarket}" />
-                                    </div>
-                                    <div th:class="|form-group|">
-                                        <label> <strong>Country Of Exposure: </strong></label>
-                                        <span th:text="${barraAssetInfo.countryOfExposure}" />
-                                    </div>
-                                    <div th:class="|form-group|">
-                                        <label> <strong>Country Of Incorporation: </strong></label>
-                                        <span th:text="${barraAssetInfo.countryOfIncorporation}" />
-                                    </div>
-                                    <div th:class="|form-group|">
-                                        <label> <strong>Country Of Quotation: </strong></label>
-                                        <span th:text="${barraAssetInfo.countryOfQuotation}" />
-                                    </div>
-                                    <div th:class="|form-group|">
-                                        <label> <strong>Issuer: </strong></label>
-                                        <span th:text="${barraAssetInfo.issuer}" />
-                                    </div>
-                                    <div th:class="|form-group|">
-                                        <label> <strong>Moody Rating: </strong></label>
-                                        <span th:text="${barraAssetInfo.moodyRating}" />
-                                    </div>
-                                    <div th:class="|form-group|">
-                                        <label> <strong>Moody Long-Term Issuer Rating D: </strong></label>
-                                        <span th:text="${barraAssetInfo.moodyLongTermIssuerRatingD}" />
-                                    </div>
-                                    <div th:class="|form-group|">
-                                        <label> <strong>Moody Long-Term Issuer Rating F: </strong></label>
-                                        <span th:text="${barraAssetInfo.moodyLongTermIssuerRatingF}" />
-                                    </div>
-                                    <div th:class="|form-group|">
-                                        <label> <strong>SAndP Long-Term Issuer Rating D: </strong></label>
-                                        <span th:text="${barraAssetInfo.sAndPLongTermIssuerRatingD}" />
-                                    </div>
-                                    <div th:class="|form-group|">
-                                        <label> <strong>SAndP Long-Term Issuer Rating F: </strong></label>
-                                        <span th:text="${barraAssetInfo.sAndPLongTermIssuerRatingF}" />
-                                    </div>
-                                    <div th:class="|form-group|">
-                                        <label> <strong>Parent IssuerID: </strong></label>
-                                        <span th:text="${barraAssetInfo.parentIssuerID}" />
-                                    </div>
-                                    <div th:class="|form-group|">
-                                        <label> <strong>Parent Issuer Name: </strong></label>
-                                        <span th:text="${barraAssetInfo.parentIssuerName}" />
-                                    </div>
-                                    <div th:class="|form-group|">
-                                        <label> <strong>Ultimate IssuerID: </strong></label>
-                                        <span th:text="${barraAssetInfo.ultimateIssuerID}" />
-                                    </div>
-                                    <div th:class="|form-group|">
-                                        <label> <strong>Ultimate Issuer Name: </strong></label>
-                                        <span th:text="${barraAssetInfo.ultimateIssuerName}" />
-                                    </div>
-
-
-
+                                <div th:class="form-group">
+                                    <label> <strong>Asset ID Type: </strong></label>
+                                    <span th:text="${barraAssetInfo.assetIdType}"/>
                                 </div>
+                                <div th:class="form-group">
+                                    <label> <strong>Asset Name: </strong></label>
+                                    <span th:text="${barraAssetInfo.assetName}"/>
+                                </div>
+                                <div th:class="form-group">
+                                    <label> <strong>Holdings: </strong></label>
+                                    <span th:text="${barraAssetInfo.holdings}"/>
+                                </div>
+                                <div th:class="form-group">
+                                    <label> <strong>Price: </strong></label>
+                                    <span th:text="${barraAssetInfo.price}"/>
+                                </div>
+                                <div th:class="form-group">
+                                    <label> <strong>Eff Exposure: </strong></label>
+                                    <span th:text="${barraAssetInfo.effExposure}"/>
+                                </div>
+                                <div th:class="form-group">
+                                    <label> <strong>Mkt Value: </strong></label>
+                                    <span th:text="${barraAssetInfo.marketValue}"/>
+                                </div>
+                                <div th:class="form-group">
+                                    <label> <strong>Inst. Sub-type: </strong></label>
+                                    <span th:text="${barraAssetInfo.instSubType}"/>
+                                </div>
+                                <div th:class="form-group">
+                                    <label> <strong>Reg30 InstrType: </strong></label>
+                                    <span th:text="${barraAssetInfo.reg30InstrType}"/>
+                                </div>
+                                <div th:class="form-group">
+                                    <label> <strong>SARB Classification: </strong></label>
+                                    <span th:text="${barraAssetInfo.sarbClassification}"/>
+                                </div>
+                                <div th:class="form-group">
+                                    <label> <strong>Amount Issued: </strong></label>
+                                    <span th:text="${barraAssetInfo.amountIssued}"/>
+                                </div>
+                                <div th:class="form-group">
+                                    <label> <strong>ICB Industry: </strong></label>
+                                    <span th:text="${barraAssetInfo.icbIndustry}"/>
+                                </div>
+                                <div th:class="form-group">
+                                    <label> <strong>ICB Supersector: </strong></label>
+                                    <span th:text="${barraAssetInfo.icbSuperSector}"/>
+                                </div>
+                                <div th:class="form-group">
+                                    <label> <strong>Sector: </strong></label>
+                                    <span th:text="${barraAssetInfo.sector}"/>
+                                </div>
+                                <div th:class="form-group">
+                                    <label> <strong>Subsector: </strong></label>
+                                    <span th:text="${barraAssetInfo.subsector}"/>
+                                </div>
+                                <div th:class="form-group">
+                                    <label> <strong>GICS Industry: </strong></label>
+                                    <span th:text="${barraAssetInfo.gicsIndustry}"/>
+                                </div>
+                                <div th:class="form-group">
+                                    <label> <strong>GICS Industry Group: </strong></label>
+                                    <span th:text="${barraAssetInfo.gicsIndustryGroup}"/>
+                                </div>
+                                <div th:class="form-group">
+                                    <label> <strong>GICS Sector: </strong></label>
+                                    <span th:text="${barraAssetInfo.gicsSector}"/>
+                                </div>
+                                <div th:class="form-group">
+                                    <label> <strong>GICS Sub-Industry: </strong></label>
+                                    <span th:text="${barraAssetInfo.gicsSubIndustry}"/>
+                                </div>
+                                <div th:class="form-group">
+                                    <label> <strong>Maturity Date: </strong></label>
+                                    <span th:text="${barraAssetInfo.maturityDate}"/>
+                                </div>
+                                <div th:class="form-group">
+                                    <label> <strong>Time to Maturity: </strong></label>
+                                    <span th:text="${barraAssetInfo.timeToMaturity}"/>
+                                </div>
+                                <div th:class="form-group">
+                                    <label> <strong>Weighted Average Life: </strong></label>
+                                    <span th:text="${barraAssetInfo.weightedAverageLife}"/>
+                                </div>
+                                <div th:class="form-group">
+                                    <label> <strong>First Coupon Date: </strong></label>
+                                    <span th:text="${barraAssetInfo.firstCouponDate}"/>
+                                </div>
+                                <div th:class="form-group">
+                                    <label> <strong>Effective Duration: </strong></label>
+                                    <span th:text="${barraAssetInfo.effectiveDuration}"/>
+                                </div>
+                                <div th:class="form-group">
+                                    <label> <strong>Macaulay Duration: </strong></label>
+                                    <span th:text="${barraAssetInfo.macaulayDuration}"/>
+                                </div>
+                                <div th:class="form-group">
+                                    <label> <strong>Local Market: </strong></label>
+                                    <span th:text="${barraAssetInfo.localMarket}"/>
+                                </div>
+                                <div th:class="form-group">
+                                    <label> <strong>Country Of Exposure: </strong></label>
+                                    <span th:text="${barraAssetInfo.countryOfExposure}"/>
+                                </div>
+                                <div th:class="form-group">
+                                    <label> <strong>Country Of Incorporation: </strong></label>
+                                    <span th:text="${barraAssetInfo.countryOfIncorporation}"/>
+                                </div>
+                                <div th:class="form-group">
+                                    <label> <strong>Country Of Quotation: </strong></label>
+                                    <span th:text="${barraAssetInfo.countryOfQuotation}"/>
+                                </div>
+                                <div th:class="form-group">
+                                    <label> <strong>Issuer: </strong></label>
+                                    <span th:text="${barraAssetInfo.issuer}"/>
+                                </div>
+                                <div th:class="form-group">
+                                    <label> <strong>Moody Rating: </strong></label>
+                                    <span th:text="${barraAssetInfo.moodyRating}"/>
+                                </div>
+                                <div th:class="form-group">
+                                    <label> <strong>Moody Long-Term Issuer Rating D: </strong></label>
+                                    <span th:text="${barraAssetInfo.moodyLongTermIssuerRatingD}"/>
+                                </div>
+                                <div th:class="form-group">
+                                    <label> <strong>Moody Long-Term Issuer Rating F: </strong></label>
+                                    <span th:text="${barraAssetInfo.moodyLongTermIssuerRatingF}"/>
+                                </div>
+                                <div th:class="form-group">
+                                    <label> <strong>SAndP Long-Term Issuer Rating D: </strong></label>
+                                    <span th:text="${barraAssetInfo.sAndPLongTermIssuerRatingD}"/>
+                                </div>
+                                <div th:class="form-group">
+                                    <label> <strong>SAndP Long-Term Issuer Rating F: </strong></label>
+                                    <span th:text="${barraAssetInfo.sAndPLongTermIssuerRatingF}"/>
+                                </div>
+                                <div th:class="form-group">
+                                    <label> <strong>Parent IssuerID: </strong></label>
+                                    <span th:text="${barraAssetInfo.parentIssuerID}"/>
+                                </div>
+                                <div th:class="form-group">
+                                    <label> <strong>Parent Issuer Name: </strong></label>
+                                    <span th:text="${barraAssetInfo.parentIssuerName}"/>
+                                </div>
+                                <div th:class="form-group">
+                                    <label> <strong>Ultimate IssuerID: </strong></label>
+                                    <span th:text="${barraAssetInfo.ultimateIssuerID}"/>
+                                </div>
+                                <div th:class="form-group">
+                                    <label> <strong>Ultimate Issuer Name: </strong></label>
+                                    <span th:text="${barraAssetInfo.ultimateIssuerName}"/>
+                                </div>
+
                             </div>
                         </form>
-
-                    </div><!-- col-md-6 -->
-
-                </div><!-- row -->
-            </div><!-- contentpanel -->
-        </div><!-- mainpanel -->
-    </div><!-- mainwrapper -->
-</section>
-<form th:action="@{/logout}" method="POST" id="logoutForm" />
-
-<script th:src="@{js/jquery-1.11.1.min.js}"></script>
-<script th:src="@{js/jquery-migrate-1.2.1.min.js}"></script>
-<script th:src="@{js/jquery-ui-1.10.3.min.js}"></script>
-<script th:src="@{js/bootstrap.min.js}"></script>
-<script th:src="@{js/modernizr.min.js}"></script>
-<script th:src="@{js/pace.min.js}"></script>
-<script th:src="@{js/retina.min.js}"></script>
-<script th:src="@{js/jquery.cookies.js}"></script>
-
-<script th:src="@{js/select2.min.js}"></script>
-<script th:src="@{js/custom.js}"></script>
-
-<script th:replace="layout :: site-screen-loader"/>
-<script th:replace="layout :: logout-form"/>
-<script>
-    function exitAsset() {
-        location.href = '/upload_assetInfo';
-        document.getElementById("loading").style.display = "";
-    }
-</script>
+                    </div> <!-- box box-primary -->
+                </div> <!--col-xs-12 -->
+            </div> <!--row-->
+        </div> <!--content -->
+    </div> <!--content-wrapper -->
+    <!-- Main Footer -->
+    <footer th:replace="fragments/footer :: footer"/>
+    <div class="control-sidebar-bg"></div>
+</div> <!--wrapper -->
+<section th:replace="fragments/footer :: footerSection"/>
 </body>
 </html>

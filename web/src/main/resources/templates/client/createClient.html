@@ -1,92 +1,57 @@
 <!DOCTYPE html>
-<html  xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity4" xmlns:th="https://www.thymeleaf.org" xmlns="https://www.w3.org/1999/xhtml" lang="en">
-<head th:replace="layout :: site-head">
-</head>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
+<head th:replace="fragments/head :: head"/>
+<body class="hold-transition skin-blue fixed sidebar-mini fuelux">
+<div class="wrapper">
+    <!-- Main Header -->
+    <header th:replace="fragments/header :: header"/>
+    <!-- Left side column. contains the logo and sidebar -->
+    <aside th:replace="fragments/side :: aside"/>
 
-<body>
-<div id="stage" class="loading">
-    <div id="loading-image"></div>
-</div>
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
 
-<header th:replace="layout :: site-header">
-</header>
+        <!-- Content Header (Page header) -->
+        <div class="content-header"><h1>Create Client</h1></div>
 
-<section>
-    <div class="mainwrapper">
-        <div class="leftpanel" th:replace="layout :: site-leftPanel">
-        </div><!-- leftpanel -->
+        <!-- Main content -->
+        <div class="content">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="box box-primary">
+                        <form method="POST" th:action="@{/create_client}" >
+                            <div class="box-body">
 
-        <div class="mainpanel">
-            <div class="contentpanel">
-
-                <div  th:if="${saveError} != null" class="alert alert-danger">
-                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-                    <span th:text="${saveError}"/> </div>
-                <div  th:if="${saveMessage} != null" class="alert alert-info" align="center">
-                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-                    <span id="success-message" th:text="${saveMessage}"/></div>
-
-                <div class="row">
-
-                    <div class="col-md-6 col-md-offset-3">
-                        <form role="form" method="POST" th:action="@{/create_client}" th:object="${client}">
-                            <div class="panel panel-girsa">
-                                <div class="panel-heading">
-                                    <!--<div class="panel-btns">
-                                        <a href="#" th:class="${cashChangeTooltip}" data-toggle="tooltip" th:title="${cashChangeMinMaxPanel}"><i th:class="${cashChangeMinusPlus}"></i></a>
-                                        <a href="#" class="panel-close tooltips" data-toggle="tooltip" title="Close Panel"><i class="fa fa-times"></i></a>
-                                    </div>-->
-                                    <h4 class="panel-title">Create Client</h4>
+                                <div th:class="form-group">
+                                    <label><strong>Name * </strong></label>
+                                    <input id="name" class="form-control" required="true" th:field="*{clientName}"/>
                                 </div>
-                                <div class="panel-body">
-                                    <div th:class="|form-group|">
-                                        <label> <strong>Name * </strong></label>
-                                               <input id="name" required="true" th:field="*{clientName}"/>
-                                    </div>
 
-                                    <div th:class="|form-group|">
-                                        <label> <strong>Manco Code * </strong></label>
-                                        <input id="mancoCode" required="true" th:field="*{mancoCode}"/>
-                                    </div>
-                                    <div th:class="|form-group|">
-                                        <label> <strong>Description * </strong></label>
-                                        <input id="description" required="true" th:field="*{description}"/>
-                                    </div>
+                                <div th:class="form-group">
+                                    <label> <strong>Manco Code * </strong></label>
+                                    <input class="form-control" id="mancoCode" required="true" th:field="*{mancoCode}"/>
+                                </div>
+                                <div th:class="form-group">
+                                    <label><strong>Description * </strong></label>
+                                    <input class="form-control" id="description" required="true"
+                                           th:field="*{description}"/>
+                                </div>
 
-                                    <div class="panel-footer">
-                                        <div class="col-md-12" align="right">
-                                           <button type="submit" value="Submit">Create Client</button>
-                                            <!--<button type="reset" class="btn btn-dark">Reset</button>-->
-                                        </div>
-                                    </div></div>
+                                <div class="form-group">
+                                    <button type="submit" class="box-title btn btn-primary" title="Submit">Submit
+                                    </button>
+                                </div>
                             </div>
                         </form>
-
-                    </div><!-- col-md-6 -->
-
-                </div><!-- row -->
-            </div><!-- contentpanel -->
-        </div><!-- mainpanel -->
-    </div><!-- mainwrapper -->
-</section>
-<form th:action="@{/logout}" method="POST" id="logoutForm" />
-
-<script th:src="@{js/jquery-1.11.1.min.js}"></script>
-<script th:src="@{js/jquery-migrate-1.2.1.min.js}"></script>
-<script th:src="@{js/jquery-ui-1.10.3.min.js}"></script>
-<script th:src="@{js/bootstrap.min.js}"></script>
-<script th:src="@{js/modernizr.min.js}"></script>
-<script th:src="@{js/pace.min.js}"></script>
-<script th:src="@{js/retina.min.js}"></script>
-<script th:src="@{js/jquery.cookies.js}"></script>
-
-<script th:src="@{js/select2.min.js}"></script>
-<script th:src="@{js/custom.js}"></script>
-
-<!--<script th:src="@{js/tax/it3bCertificate.js}"></script>-->
-
-<script th:replace="layout :: site-screen-loader"/>
-<script th:replace="layout :: logout-form"/>
-
+                    </div> <!-- box box-primary -->
+                </div> <!--col-xs-12 -->
+            </div> <!--row-->
+        </div> <!--content -->
+    </div> <!--content-wrapper -->
+    <!-- Main Footer -->
+    <footer th:replace="fragments/footer :: footer"/>
+    <div class="control-sidebar-bg"></div>
+</div> <!--wrapper -->
+<section th:replace="fragments/footer :: footerSection"/>
 </body>
 </html>
