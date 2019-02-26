@@ -18,32 +18,127 @@
 
             <li class="treeview" id="clientInstrument" >
                 <a href="#"><i class="fa fa-th"></i> <span>Client Instrument Data</span>
-                    <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i>
-                                </span>
+                    <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
                 </a>
                 <ul class="treeview-menu">
                     <li><a th:href="|/upload_instrumentData|" >Upload</a></li>
                     <li><a th:href="|/view_instrumentData|" >View</a></li>
+                </ul>
+            </li>
 
+            <li class="treeview" id="barraAssetData" >
+                <a href="#"><i class="fa fa-th"></i> <span>Barra Asset Data</span>
+                    <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
+                </a>
+                <ul class="treeview-menu">
+                    <li><a th:href="|/upload_assetInfo|" >Upload</a></li>
+                    <li><a th:href="|/view_assetInfo|" >View</a></li>
+                </ul>
+            </li>
+
+            <li class="treeview" id="additionalClassification" >
+                <a href="#"><i class="fa fa-th"></i> <span>Additional Classification</span>
+                    <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
+                </a>
+                <ul class="treeview-menu">
+                    <li><a th:href="|/upload_additionalClassification|" >Upload</a></li>
+                    <li><a th:href="|/view_additional_classification|" >View</a></li>
+                </ul>
+            </li>
+
+            <li class="treeview" id="dailyPricing" >
+                <a href="#"><i class="fa fa-th"></i> <span>Daily Pricing</span>
+                    <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
+                </a>
+                <ul class="treeview-menu">
+                    <li><a th:href="|/upload_daily_pricing|" >Upload</a></li>
+                    <li><a th:href="|/view_daily_pricing|" >View</a></li>
+                </ul>
+            </li>
+
+            <li class="treeview" id="derivativeType" >
+                <a href="#"><i class="fa fa-th"></i> <span>Derivative Types</span>
+                    <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
+                </a>
+                <ul class="treeview-menu">
+                    <li><a th:href="|/upload_derivativeTypes|" >Upload</a></li>
+                    <li><a th:href="|/view_derivative_types|" >View</a></li>
+                </ul>
+            </li>
+
+            <li class="treeview" id="instrumentCode" >
+                <a href="#"><i class="fa fa-th"></i> <span>Instrument Code</span>
+                    <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
+                </a>
+                <ul class="treeview-menu">
+                    <li><a th:href="|/upload_instrumentCode|" >Upload</a></li>
+                    <li><a th:href="|/view_instrument_code|" >View</a></li>
+                </ul>
+            </li>
+
+            <li class="treeview" id="issuerMapping" >
+                <a href="#"><i class="fa fa-th"></i> <span>Issuer Mappings</span>
+                    <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
+                </a>
+                <ul class="treeview-menu">
+                    <li><a th:href="|/upload_issuerMappings|" >Upload</a></li>
+                    <li><a th:href="|/view_issuer_mappings|" >View</a></li>
+                </ul>
+            </li>
+
+            <li class="treeview" id="Indices" >
+                <a href="#"><i class="fa fa-th"></i> <span>Indices</span>
+                    <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
+                </a>
+                <ul class="treeview-menu">
+                    <li><a th:href="|/upload_indices|" >Upload</a></li>
+                    <li><a th:href="|/view_indices|" >View</a></li>
+                </ul>
+            </li>
+
+            <li class="treeview" id="psgFundMapping" >
+                <a href="#"><i class="fa fa-th"></i> <span>PSG Fund Mapping</span>
+                    <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
+                </a>
+                <ul class="treeview-menu">
+                    <li><a th:href="|/upload_clientFundMapping|" >Upload</a></li>
+                    <li><a th:href="|/view_client_fund_mapping|" >View</a></li>
+                </ul>
+            </li>
+
+            <li class="treeview" id="reg28InstrumentType" >
+                <a href="#"><i class="fa fa-th"></i> <span>Reg28 Instrument Type</span>
+                    <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
+                </a>
+                <ul class="treeview-menu">
+                    <li><a th:href="|/upload_reg28InstrumentType|" >Upload</a></li>
+                    <li><a th:href="|/view_reg28_instrument_type|" >View</a></li>
+                </ul>
+            </li>
+
+            <li class="treeview" id="createClient" >
+                <a href="#"><i class="fa fa-book"></i> <span>Create Client</span>
+                    <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
+                </a>
+                <ul class="treeview-menu">
+                    <li><a th:href="|/client|" >Create Client</a></li>
+                    <li><a th:href="|/view_clients|" >View Client</a></li>
+                </ul>
+            </li>
+
+            <li class="treeview" id="generateReport" >
+                <a href="#"><i class="fa fa-th"></i> <span>Generate Report</span>
+                    <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
+                </a>
+                <ul class="treeview-menu">
+                    <li><a th:href="|/dry_run_qstats|" >QSTATS Dry Run</a></li>
+                    <li><a th:href="|/generate_qstats|" >Generate ASISA QSTATS</a></li>
                 </ul>
             </li>
 
 
-            <!--<li class="treeview" id="datamaster" >-->
-                <!--<a href="#"><i class="fa fa-th"></i> <span>Client Instrument Data</span>-->
-                    <!--<span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i>-->
-                                <!--</span>-->
-                <!--</a>-->
-                <!--<ul class="treeview-menu">-->
-                    <!--<li><a th:href="|/upload_instrumentData|" >Upload</a></li>-->
-                    <!--<li><a th:href="|/view_instrumentData|" >View</a></li>-->
 
-                <!--</ul>-->
-            <!--</li>-->
-
-
-
-            <li class="treeview" id="kegiatandosen">
+            <!--<li class="treeview" id="kegiatandosen">
                 <a href="#"><i class="fa fa-inbox"></i> <span>Kegiatan</span>
                     <span class="pull-right-container">
                                     <i class="fa fa-angle-left pull-right"></i>
@@ -66,7 +161,7 @@
                     <li><a href="#">Laporan 1</a></li>
                     <li><a href="#">Laporan 2</a></li>
                 </ul>
-            </li>
+            </li>-->
 
         </ul>
         <!-- /.sidebar-menu -->

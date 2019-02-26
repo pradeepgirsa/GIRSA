@@ -1,131 +1,105 @@
 <!DOCTYPE html>
-<html  xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity4" xmlns:th="https://www.thymeleaf.org" xmlns="https://www.w3.org/1999/xhtml" lang="en">
-<head th:replace="layout :: site-head">
-</head>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
+<head th:replace="fragments/head :: head"/>
+<body class="hold-transition skin-blue fixed sidebar-mini fuelux">
+<div class="wrapper">
+    <!-- Main Header -->
+    <header th:replace="fragments/header :: header"/>
+    <!-- Left side column. contains the logo and sidebar -->
+    <aside th:replace="fragments/side :: aside"/>
 
-<body>
-<div id="stage" class="loading">
-    <div id="loading-image"></div>
-</div>
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
 
-<header th:replace="layout :: site-header">
-</header>
+        <!-- Content Header (Page header) -->
+        <div class="content-header"><h1>View Daily Pricing</h1></div>
 
-<section>
-    <div class="mainwrapper">
-        <div class="leftpanel" th:replace="layout :: site-leftPanel">
-        </div><!-- leftpanel -->
+        <!-- Main content -->
+        <div class="content">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="box box-primary">
+                        <div class="box-body">
 
-        <div class="mainpanel">
-            <div class="contentpanel">
-                <div class="panel-body">
-                    <div  th:if="${saveError} != null" class="alert alert-danger">
-                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-                        <span th:text="${saveError}"/> </div>
-                    <div  th:if="${saveMessage} != null" class="alert alert-info" align="center">
-                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-                        <span id="success-message" th:text="${saveMessage}"/></div>
-
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="panel panel-girsa">
-                            <div class="panel-heading">
-                                <h4 class="panel-title">View Daily Pricing</h4>
-                            </div><!-- panel-heading -->
-
-                    <div class="panel-body">
-                        <table id="TableDailyPricing" th:class="|table table-striped table-bordered responsive|">
-                            <thead class="">
-                            <tr>
-                                <th>Id</th>
-                                <th>Issuer</th>
-                                <th>Bond code</th>
-                                <th>Type</th>
-                                <th>Features</th>
-                                <th>Moodys Rating</th>
-                                <th>Fitch Rating</th>
-                                <th>SAndP Rating</th>
-                                <th>Global Rating</th>
-                                <th>Summary Rating</th>
-                                <th>Issue size (Rbn)</th>
-                                <th>Coupon (%)</th>
-                                <th>Issue date</th>
-                                <th>Maturity/ call date</th>
-                                <th>Govi benchmark</th>
-                                <th>Spread at issue</th>
-                                <th>Spread To Govi</th>
-                                <!--<th>Spread To Govi Next Day</th>-->
-                                <th>Spread To Govi 1-day change</th>
-                                <th>Spread to Jibar/ASW</th>
-                                <!--<th>Spread to Jibar/ASW Next Day</th>-->
-                                <th>Spread to Jibar/ASW 1-day change</th>
-                                <th>Current yield (%)</th>
-                                <th>Liquidity No. of trades</th>
-                                <th>Liquidity Nominal traded (Rm)</th>
-                                <th>SBR's Fair value spread to Jibar</th>
-                                <th>Last traded date</th>
-                                <th>Last MTM Change Date</th>
-
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr th:each="dailyPrice : ${dailyPrices}">
-                                <td><span th:text="|${dailyPrice.id}|"/></td>
-                                <td><span th:text="|${dailyPrice.issuer}|"/></td>
-                                <td><span th:text="|${dailyPrice.bondCode}|"/></td>
-                                <td><span th:text="|${dailyPrice.type}|"/></td>
-                                <td><span th:text="|${dailyPrice.features}|"/></td>
-                                <td><span th:text="|${dailyPrice.moodys}|"/></td>
-                                <td><span th:text="|${dailyPrice.fitch}|"/></td>
-                                <td><span th:text="|${dailyPrice.standardAndPoor}|"/></td>
-                                <td><span th:text="|${dailyPrice.global}|"/></td>
-                                <td><span th:text="|${dailyPrice.summaryRating}|"/></td>
-                                <td><span th:text="|${dailyPrice.issueSize}|"/></td>
-                                <td><span th:text="|${dailyPrice.coupon}|"/></td>
-                                <td><span th:text="|${dailyPrice.issueDate}|"/></td>
-                                <td><span th:text="|${dailyPrice.maturityOrCallDate}|"/></td>
-                                <td><span th:text="|${dailyPrice.goviBenchmark}|"/></td>
-                                <td><span th:text="|${dailyPrice.spreadAtIssue}|"/></td>
-                                <td><span th:text="|${dailyPrice.spreadToGovi}|"/></td>
-                                <td><span th:text="|${dailyPrice.spreadToGovi1DayChange}|"/></td>
-                                <td><span th:text="|${dailyPrice.spreadToJibarOrASW}|"/></td>
-                                <!--<td><span th:text="|${dailyPrice.spreadToJibarOrASWNextDay}|"/></td>-->
-                                <td><span th:text="|${dailyPrice.spreadToJibarOrASW1DayChange}|"/></td>
-                                <td><span th:text="|${dailyPrice.currentYield}|"/></td>
-                                <td><span th:text="|${dailyPrice.liquidityNoOfTrade}|"/></td>
-                                <td><span th:text="|${dailyPrice.liquidityNominalTraded}|"/></td>
-                                <td><span th:text="|${dailyPrice.sbrFairValue}|"/></td>
-                                <td><span th:text="|${dailyPrice.lastTradedDate}|"/></td>
-                                <td><span th:text="|${dailyPrice.lastMTMChangeDate}|"/></td>
-                            </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                 </div>
-                </div>
-                </div><!-- row -->
-            </div>
-            </div><!-- contentpanel -->
-            </div><!-- mainpanel -->
-        </div><!-- mainwrapper -->
-</section>
-<form th:action="@{/logout}" method="POST" id="logoutForm" />
-
-<script th:src="@{js/jquery-1.11.1.min.js}"></script>
-<script th:src="@{js/jquery-migrate-1.2.1.min.js}"></script>
-<script th:src="@{js/jquery-ui-1.10.3.min.js}"></script>
-<script th:src="@{js/bootstrap.min.js}"></script>
-<script th:src="@{js/modernizr.min.js}"></script>
-<script th:src="@{js/pace.min.js}"></script>
-<script th:src="@{js/retina.min.js}"></script>
-<script th:src="@{js/jquery.cookies.js}"></script>
-
-<script th:src="@{js/select2.min.js}"></script>
-<script th:src="@{js/custom.js}"></script>
-
-<script th:replace="layout :: site-screen-loader"/>
-<script th:replace="layout :: logout-form"/>
+                            <div class="table-responsive">
+                                <table class="table table-bordered table-hover">
+                                    <thead>
+                                    <tr>
+                                        <th>Id</th>
+                                        <th>Issuer</th>
+                                        <th>Bond code</th>
+                                        <th>Type</th>
+                                        <th>Features</th>
+                                        <th>Moodys Rating</th>
+                                        <th>Fitch Rating</th>
+                                        <th>SAndP Rating</th>
+                                        <th>Global Rating</th>
+                                        <th>Summary Rating</th>
+                                        <th>Issue size (Rbn)</th>
+                                        <th>Coupon (%)</th>
+                                        <th>Issue date</th>
+                                        <th>Maturity/ call date</th>
+                                        <th>Govi benchmark</th>
+                                        <th>Spread at issue</th>
+                                        <th>Spread To Govi</th>
+                                        <!--<th>Spread To Govi Next Day</th>-->
+                                        <th>Spread To Govi 1-day change</th>
+                                        <th>Spread to Jibar/ASW</th>
+                                        <!--<th>Spread to Jibar/ASW Next Day</th>-->
+                                        <th>Spread to Jibar/ASW 1-day change</th>
+                                        <th>Current yield (%)</th>
+                                        <th>Liquidity No. of trades</th>
+                                        <th>Liquidity Nominal traded (Rm)</th>
+                                        <th>SBR's Fair value spread to Jibar</th>
+                                        <th>Last traded date</th>
+                                        <th>Last MTM Change Date</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr th:each="dailyPrice : ${dailyPrices}">
+                                            <td><span th:text="|${dailyPrice.id}|"/></td>
+                                            <td><span th:text="|${dailyPrice.issuer}|"/></td>
+                                            <td><span th:text="|${dailyPrice.bondCode}|"/></td>
+                                            <td><span th:text="|${dailyPrice.type}|"/></td>
+                                            <td><span th:text="|${dailyPrice.features}|"/></td>
+                                            <td><span th:text="|${dailyPrice.moodys}|"/></td>
+                                            <td><span th:text="|${dailyPrice.fitch}|"/></td>
+                                            <td><span th:text="|${dailyPrice.standardAndPoor}|"/></td>
+                                            <td><span th:text="|${dailyPrice.global}|"/></td>
+                                            <td><span th:text="|${dailyPrice.summaryRating}|"/></td>
+                                            <td><span th:text="|${dailyPrice.issueSize}|"/></td>
+                                            <td><span th:text="|${dailyPrice.coupon}|"/></td>
+                                            <td><span th:text="|${dailyPrice.issueDate}|"/></td>
+                                            <td><span th:text="|${dailyPrice.maturityOrCallDate}|"/></td>
+                                            <td><span th:text="|${dailyPrice.goviBenchmark}|"/></td>
+                                            <td><span th:text="|${dailyPrice.spreadAtIssue}|"/></td>
+                                            <td><span th:text="|${dailyPrice.spreadToGovi}|"/></td>
+                                            <td><span th:text="|${dailyPrice.spreadToGovi1DayChange}|"/></td>
+                                            <td><span th:text="|${dailyPrice.spreadToJibarOrASW}|"/></td>
+                                            <!--<td><span th:text="|${dailyPrice.spreadToJibarOrASWNextDay}|"/></td>-->
+                                            <td><span th:text="|${dailyPrice.spreadToJibarOrASW1DayChange}|"/></td>
+                                            <td><span th:text="|${dailyPrice.currentYield}|"/></td>
+                                            <td><span th:text="|${dailyPrice.liquidityNoOfTrade}|"/></td>
+                                            <td><span th:text="|${dailyPrice.liquidityNominalTraded}|"/></td>
+                                            <td><span th:text="|${dailyPrice.sbrFairValue}|"/></td>
+                                            <td><span th:text="|${dailyPrice.lastTradedDate}|"/></td>
+                                            <td><span th:text="|${dailyPrice.lastMTMChangeDate}|"/></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
 
 
+                        </div>
+                    </div> <!-- box box-primary -->
+                </div> <!--col-xs-12 -->
+            </div><!-- row-->
+        </div><!-- content-->
+    </div> <!--content-wrapper -->
+    <!-- Main Footer -->
+    <footer th:replace="fragments/footer :: footer"/>
+    <div class="control-sidebar-bg"></div>
+</div> <!--wrapper -->
+<section th:replace="fragments/footer :: footerSection"/>
 </body>
 </html>
