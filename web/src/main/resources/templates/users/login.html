@@ -1,83 +1,40 @@
 <!DOCTYPE html>
-<html xmlns:th="https://www.thymeleaf.org" xmlns="https://www.w3.org/1999/xhtml" lang="en">
-<head lang="en">
-    <title>GIRSA</title>
-    <!--<link rel="icon" th:if="${environment} == 'prod'" th:href="@{/images/gir.png}" type="image/x-icon"/>
-
-    <link rel="shortcut icon" th:if="${environment} == 'prod'" th:href="@{/images/gir.png}" type="image/x-icon"/>-->
-
-    <meta http-equiv="CONTENT-TYPE" content="text/html; charset=UTF-8" />
-    <meta charset="utf-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
-    <meta name="description" content=""/>
-    <meta name="author" content=""/>
-
-    <link th:href="@{/css/style.default.css}" rel="stylesheet" />
-
-</head>
-<body class="signin">
-<section>
-    <div class="panel panel-signin">
-        <div class="panel-body">
-            <div  th:if="${loginError}" class="alert alert-danger">
-                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-                Incorrect username and password!</div>
-            <div  th:if="${logoutMessage}" class="alert alert-info" align="center">
-                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-                You've been logged out successfully.</div>
-            <div style="width: 100%; text-align: center;">
-                <div class="logo text-center" style="display: inline-block;">
-                    <img th:src="@{/images/girsa_logo.png}" th:alt="@{GIRSA Logo}" />
-                </div>
-                <!--<div style="display: inline-block;">
-                    <p th:text="${environment}" id="loginEnvironment"></p>
-                </div>-->
-            </div>
-
-
-            <div class="mb30"></div>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
+<head th:replace="fragments/head :: head"/>
+<body class="hold-transition login-page">
+<div class="login-box">
+    <div class="login-logo"></div>
+    <!-- /.login-logo -->
+    <div class="login-box-body">
+        <p class="login-box-msg">Sign in to start your session</p>
+            <!--<div  th:if="${loginError}" class="alert alert-danger">-->
+                <!--<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>-->
+                <!--Incorrect username and password!</div>-->
+            <!--<div  th:if="${logoutMessage}" class="alert alert-info" align="center">-->
+                <!--<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>-->
+                <!--You've been logged out successfully.</div>-->
 
             <form  th:action="@{/verify_login}" method="POST" name='loginForm' >
-                <div class="input-group mb15" style="width : 100%">
+                <div class="form-group has-feedback">
+                    <span class="glyphicon glyphicon-user form-control-feedback"></span>
                     <input type="text" class="form-control" placeholder="Username" id="usr" name='username'/>
                 </div><!-- input-group -->
-                <div class="input-group mb15" style="width : 100%">
-                    <input type="password" class="form-control" placeholder="Password" id="pwd" name='password'/>
-                </div><!-- input-group -->
+                <div class="form-group has-feedback">
+                    <input type="password" class="form-control" placeholder="Password" id="pwd" name='password'
+                           data-toggle="password"/>
+                </div>
 
-                <div class="clearfix">
-                    <div class="pull-left">
-                        <div class="ckbox ckbox-primary mt10">
-                            <input type="checkbox" id="rememberMe" value="1"/>
-                            <label for="rememberMe">Remember Me</label>
-                        </div>
+                <div class="row">
+                    <div class="col-xs-4">
+                        <button type="submit" class="btn btn-primary btn-block btn-flat">Sign In</button>
                     </div>
-                    <div class="pull-right">
-                        <button type="submit" class="btn btn-girsa" id="login-button">Log In</button>
+
+                    <div class="col-xs-8 text-right">
+                        <a href="#" style="line-height:30px">Sign up</a>
                     </div>
                 </div>
-                <input type="hidden" name="${_csrf.parameterName}"
-                       value="${_csrf.token}" />
             </form>
-
-        </div><!-- panel-body -->
-    </div><!-- panel -->
-
-</section>
-
-<script th:src="@{/js/jquery-1.11.1.min.js}"></script>
-<script th:src="@{/js/jquery-migrate-1.2.1.min.js}"></script>
-<script th:src="@{/js/bootstrap.min.js}"></script>
-<script th:src="@{/js/modernizr.min.js}"></script>
-<script th:src="@{/js/pace.min.js}"></script>
-<script th:src="@{/js/retina.min.js}"></script>
-<script th:src="@{/js/jquery.cookies.js}"></script>
-
-<script th:src="@{/js/custom.js}"></script>
-
-<!--<script th:replace="layout :: site-screen-loader">
-</script>-->
-
-
+    </div>
+</div>
 </body>
 </html>
