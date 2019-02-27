@@ -21,7 +21,7 @@ public enum FileAndObjectResolver {
     INDICES("INDICES", Indices.class),
     DAILY_PRICING("DAILY_PRICING", DailyPricing.class),
 //    TRANSACTION_LISTING("TRANSACTION_LISTING", TransactionListing.class),
-    DERIVATIVE_TYPES("DERIVATIVE_TYPES", za.co.global.domain.fileupload.mapping.Reg28InstrumentType.class);
+    DERIVATIVE_TYPES("DERIVATIVE_TYPES", za.co.global.domain.fileupload.mapping.DerivativeType.class);
     //DSU5("GIR_L2", za.co.global.domain.upload.DSU5_GIRREP4.class);
 
     private String fileType;

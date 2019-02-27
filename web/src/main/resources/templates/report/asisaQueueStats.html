@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
 <head th:replace="fragments/head :: head"/>
+<script>
+    $('.datepicker').datepicker();
+</script>
 <body class="hold-transition skin-blue fixed sidebar-mini fuelux">
 <div class="wrapper">
     <!-- Main Header -->
@@ -21,15 +24,23 @@
                     <div class="box box-primary">
                         <form role="form" method="post" th:action="@{/generate_qstats}">
                             <div class="box-body">
-                                <div th:class="form-group">
-                                    <label> <strong>Report Date * </strong></label>
-                                    <div class="input-group">
-                                        <input type="text" class="form-control" placeholder="DD-MM-YYYY" id="reportDate"
-                                               name="reportDate"/>
-                                        <span class="input-group-addon"><i
-                                                class="glyphicon glyphicon-calendar"></i></span>
+                                <!--<div th:class="form-group">-->
+                                    <!--<label> <strong>Report Date * </strong></label>-->
+                                    <!--<div class="input-group">-->
+                                        <!--<input type="text" class="form-control" placeholder="DD-MM-YYYY" id="reportDate"-->
+                                               <!--name="reportDate"/>-->
+                                        <!--<span class="input-group-addon"><i-->
+                                                <!--class="glyphicon glyphicon-calendar"></i></span>-->
+                                    <!--</div>-->
+                                <!--</div>-->
+
+                                <div class="input-group date">
+                                    <input type="text" class="form-control" placeholder="MM/DD/YYYY" data-provide="datepicker" name="reportDate"/>
+                                    <div class="input-group-addon">
+                                        <span class="glyphicon glyphicon-th"></span>
                                     </div>
                                 </div>
+
                                 <div th:class="form-group">
                                     <label> <strong>Select Client * </strong></label>
                                     <select required="false" id="client" data-placeholder="Choose One..."
