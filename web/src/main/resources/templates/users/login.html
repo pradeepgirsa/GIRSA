@@ -4,9 +4,10 @@
 <body class="hold-transition login-page">
 <div class="login-box">
     <div class="login-logo"></div>
-    <!-- /.login-logo -->
+    <link rel="icon" th:href="@{/images/logo/girsaLogo.png}" type="image/x-icon"/>
     <div class="login-box-body">
         <section th:replace="fragments/message :: message"/>
+        <!--<img class="login-logo" src="/images/logo/logo.png" alt=""/>-->
         <p class="login-box-msg">GIRSA</p>
             <!--<div  th:if="${loginError}" class="alert alert-danger">-->
                 <!--<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>-->
