@@ -10,9 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import za.co.global.controllers.fileupload.BaseFileUploadController;
-import za.co.global.domain.fileupload.mapping.AdditionalClassification;
 import za.co.global.domain.fileupload.mapping.Reg28InstrumentType;
-import za.co.global.persistence.fileupload.mapping.AdditionalClassificationRepository;
 import za.co.global.persistence.fileupload.mapping.Reg28InstrumentTypeRepository;
 import za.co.global.services.upload.FileAndObjectResolver;
 
@@ -37,16 +35,16 @@ public class Reg28InstrumentTypeController extends BaseFileUploadController {
     @PostMapping("/upload_reg28InstrumentType")
     public ModelAndView fileUpload(@RequestParam("file") MultipartFile file) {
         if (file.isEmpty()) {
-            return new ModelAndView("fileupload/mapping/reg28InstrumentType", "saveError", "Please select a file and try again");
+            return new ModelAndView("fileupload/mapping/reg28InstrumentType", "errorMessage", "Please select a file and try again");
         }
         try {
             processFile(file, FILE_TYPE, null, null);
         } catch (IOException e) {
-            return new ModelAndView("fileupload/mapping/reg28InstrumentType", "saveError", e.getMessage());
+            return new ModelAndView("fileupload/mapping/reg28InstrumentType", "errorMessage", e.getMessage());
         } catch (Exception e) {
-            return new ModelAndView("fileupload/mapping/reg28InstrumentType", "saveError", e.getMessage());
+            return new ModelAndView("fileupload/mapping/reg28InstrumentType", "errorMessage", e.getMessage());
         }
-        return new ModelAndView("fileupload/mapping/reg28InstrumentType", "saveMessage", "File Uploaded sucessfully... " + file.getOriginalFilename());
+        return new ModelAndView("fileupload/mapping/reg28InstrumentType", "successMessage", "File Uploaded sucessfully... " + file.getOriginalFilename());
     }
 
     @GetMapping(value = {"/view_reg28_instrument_type"})

@@ -34,16 +34,16 @@ public class ClientFundMappingController extends BaseFileUploadController {
     @PostMapping("/upload_clientFundMapping")
     public ModelAndView fileUpload(@RequestParam("file") MultipartFile file) {
         if (file.isEmpty()) {
-            return new ModelAndView("fileupload/mapping/clientFundMapping", "saveError", "Please select a file and try again");
+            return new ModelAndView("fileupload/mapping/clientFundMapping", "errorMessage", "Please select a file and try again");
         }
         try {
             processFile(file, FILE_TYPE, null, null);
         } catch (IOException e) {
-            return new ModelAndView("fileupload/mapping/clientFundMapping", "saveError", e.getMessage());
+            return new ModelAndView("fileupload/mapping/clientFundMapping", "errorMessage", e.getMessage());
         } catch (Exception e) {
-            return new ModelAndView("fileupload/mapping/clientFundMapping", "saveError", e.getMessage());
+            return new ModelAndView("fileupload/mapping/clientFundMapping", "errorMessage", e.getMessage());
         }
-        return new ModelAndView("fileupload/mapping/clientFundMapping", "saveMessage", "File Uploaded sucessfully... " + file.getOriginalFilename());
+        return new ModelAndView("fileupload/mapping/clientFundMapping", "successMessage", "File Uploaded sucessfully... " + file.getOriginalFilename());
     }
 
     @GetMapping(value = {"/view_client_fund_mapping"})

@@ -129,10 +129,10 @@ public class GenerateQstatsController extends AbstractQstatsReportController {
             reportDataRepository.save(reportData);
 
             String filePath = createExcelFile(qStatsBeans, client);
-            modelAndView.addObject("saveMessage", "Qstats file created successfully, file: " + filePath);
+            modelAndView.addObject("successMessage", "Qstats file created successfully, file: " + filePath);
         } catch (GirsaException | ParseException e) {
             LOGGER.error("Error while generating QStats report", e);
-            modelAndView.addObject("saveError", e.getMessage());
+            modelAndView.addObject("errorMessage", e.getMessage());
         }
         return modelAndView;
     }

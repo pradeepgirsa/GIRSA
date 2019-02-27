@@ -40,18 +40,18 @@ public class AssetInfoController extends BaseFileUploadController {
     @PostMapping("/upload_assetInfo")
     public ModelAndView fileUpload(@RequestParam("file") MultipartFile file) {
         if (file.isEmpty()) {
-            return new ModelAndView("fileupload/system/assetInfo", "saveError", "Please select a file and try again");
+            return new ModelAndView("fileupload/system/assetInfo", "errorMessage", "Please select a file and try again");
         }
         try {
             processFile(file, FILE_TYPE, null, null);
         } catch (IOException e) {
             e.printStackTrace();
-            return new ModelAndView("fileupload/system/assetInfo", "saveError", e.getMessage());
+            return new ModelAndView("fileupload/system/assetInfo", "errorMessage", e.getMessage());
         } catch (Exception e) {
             e.printStackTrace();
-            return new ModelAndView("fileupload/system/assetInfo", "saveError", e.getMessage());
+            return new ModelAndView("fileupload/system/assetInfo", "errorMessage", e.getMessage());
         }
-        return new ModelAndView("fileupload/system/assetInfo", "saveMessage", "File Uploaded successfully... " + file.getOriginalFilename());
+        return new ModelAndView("fileupload/system/assetInfo", "successMessage", "File Uploaded successfully... " + file.getOriginalFilename());
     }
 
     @GetMapping(value = {"/view_assetInfo"})

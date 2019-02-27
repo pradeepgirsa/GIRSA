@@ -42,16 +42,16 @@ public class IndicesController extends BaseFileUploadController {
     @PostMapping("/upload_indices")
     public ModelAndView fileUpload(@RequestParam("file") MultipartFile file) {
         if (file.isEmpty()) {
-            return new ModelAndView("fileupload/mapping/indices", "saveError", "Please select a file and try again");
+            return new ModelAndView("fileupload/mapping/indices", "errorMessage", "Please select a file and try again");
         }
         try {
             processFile(file, FILE_TYPE, null, null);
         } catch (IOException e) {
-            return new ModelAndView("fileupload/mapping/indices", "saveError", e.getMessage());
+            return new ModelAndView("fileupload/mapping/indices", "errorMessage", e.getMessage());
         } catch (Exception e) {
-            return new ModelAndView("fileupload/mapping/indices", "saveError", e.getMessage());
+            return new ModelAndView("fileupload/mapping/indices", "errorMessage", e.getMessage());
         }
-        return new ModelAndView("fileupload/mapping/indices", "saveMessage", "File Uploaded sucessfully... " + file.getOriginalFilename());
+        return new ModelAndView("fileupload/mapping/indices", "successMessage", "File Uploaded sucessfully... " + file.getOriginalFilename());
     }
 
     @GetMapping(value = {"/view_indices"})

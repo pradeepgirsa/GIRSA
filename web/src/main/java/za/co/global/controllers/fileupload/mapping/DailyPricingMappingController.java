@@ -36,18 +36,18 @@ public class DailyPricingMappingController extends BaseFileUploadController {
     @PostMapping("/upload_daily_pricing")
     public ModelAndView fileUpload(@RequestParam("file") MultipartFile file) {
         if (file.isEmpty()) {
-            return new ModelAndView("fileupload/mapping/dailyPricing", "saveError", "Please select a file and try again");
+            return new ModelAndView("fileupload/mapping/dailyPricing", "errorMessage", "Please select a file and try again");
         }
         try {
             processFile(file, FILE_TYPE, null, null);
         } catch (IOException e) {
             e.printStackTrace();
-            return new ModelAndView("fileupload/mapping/dailyPricing", "saveError", e.getMessage());
+            return new ModelAndView("fileupload/mapping/dailyPricing", "errorMessage", e.getMessage());
         } catch (Exception e) {
             e.printStackTrace();
-            return new ModelAndView("fileupload/mapping/dailyPricing", "saveError", e.getMessage());
+            return new ModelAndView("fileupload/mapping/dailyPricing", "errorMessage", e.getMessage());
         }
-        return new ModelAndView("fileupload/mapping/dailyPricing", "saveMessage", "File Uploaded sucessfully... " + file.getOriginalFilename());
+        return new ModelAndView("fileupload/mapping/dailyPricing", "successMessage", "File Uploaded sucessfully... " + file.getOriginalFilename());
     }
 
     @GetMapping(value = {"/view_daily_pricing"})

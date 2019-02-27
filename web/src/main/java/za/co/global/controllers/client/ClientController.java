@@ -39,7 +39,7 @@ public class ClientController {
     public ModelAndView saveClient(Model model, Client client) {
         client.setStatus(EntityStatus.ACTIVE);
         clientRepository.save(client);
-        return new ModelAndView("client/createClient", "saveMessage", client.getClientName() + " Client created successfully... ");
+        return new ModelAndView("client/createClient", "successMessage", client.getClientName() + " Client created successfully... ");
     }
 
 

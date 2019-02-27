@@ -28,7 +28,7 @@ public class LoginController {
        model.addObject("version", version);
 
        if (error != null) {
-           model.addObject("loginError", true);
+           model.addObject("errorMessage", true);
        }
 
        if (logout != null) {
@@ -53,7 +53,7 @@ public class LoginController {
         model.addAttribute("version", version);
 
         if (error != null) {
-            model.addAttribute("loginError", true);
+            model.addAttribute("errorMessage", true);
         }
 
         if (logout != null) {
@@ -75,9 +75,14 @@ public class LoginController {
         if("girsa".equals(username) && "girsa123".equals(password) ){
             return "home";
         } else {
-            model.addAttribute("loginError", true);
+            model.addAttribute("errorMessage", "#Username or Password wrong");
             return "users/login";
         }
+    }
+
+    @RequestMapping(value = "/home", method = RequestMethod.GET)
+    public String home(){
+        return "home";
     }
 
     @RequestMapping(value = {"/logout"})

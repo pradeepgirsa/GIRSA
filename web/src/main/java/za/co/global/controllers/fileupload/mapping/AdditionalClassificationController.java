@@ -35,16 +35,16 @@ public class AdditionalClassificationController extends BaseFileUploadController
     @PostMapping("/upload_additionalClassification")
     public ModelAndView fileUpload(@RequestParam("file") MultipartFile file) {
         if (file.isEmpty()) {
-            return new ModelAndView("fileupload/mapping/additionalClassification", "saveError", "Please select a file and try again");
+            return new ModelAndView("fileupload/mapping/additionalClassification", "errorMessage", "Please select a file and try again");
         }
         try {
             processFile(file, FILE_TYPE, null, null);
         } catch (IOException e) {
-            return new ModelAndView("fileupload/mapping/additionalClassification", "saveError", e.getMessage());
+            return new ModelAndView("fileupload/mapping/additionalClassification", "errorMessage", e.getMessage());
         } catch (Exception e) {
-            return new ModelAndView("fileupload/mapping/additionalClassification", "saveError", e.getMessage());
+            return new ModelAndView("fileupload/mapping/additionalClassification", "errorMessage", e.getMessage());
         }
-        return new ModelAndView("fileupload/mapping/additionalClassification", "saveMessage", "File Uploaded sucessfully... " + file.getOriginalFilename());
+        return new ModelAndView("fileupload/mapping/additionalClassification", "successMessage", "File Uploaded sucessfully... " + file.getOriginalFilename());
     }
 
     @GetMapping(value = {"/view_additional_classification"})

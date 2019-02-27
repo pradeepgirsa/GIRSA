@@ -55,14 +55,14 @@ public class InstrumentDataController extends BaseFileUploadController {
     public ModelAndView fileUpload(@RequestParam("file") MultipartFile file, String clientId) {
         ModelAndView modelAndView = new ModelAndView("fileupload/client/instrumentData");
         if (file.isEmpty()) {
-            modelAndView.addObject("saveError", "Please select a file and try again");
+            modelAndView.addObject("errorMessage", "Please select a file and try again");
         } else {
             try {
                 Client client = clientRepository.findOne(Long.parseLong(clientId));
                 processFile(file, FILE_TYPE, client, null);
-                modelAndView.addObject("saveMessage", "File Uploaded sucessfully... " + file.getOriginalFilename());
+                modelAndView.addObject("successMessage", "File Uploaded sucessfully... " + file.getOriginalFilename());
             } catch (Exception e) {
-                modelAndView.addObject("saveError", e.getMessage());
+                modelAndView.addObject("errorMessage", e.getMessage());
             }
         }
         clients = clientRepository.findAll();

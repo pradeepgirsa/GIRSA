@@ -69,11 +69,11 @@ public class QstatsDryRunController extends AbstractQstatsReportController {
             String error = validator.validate(reportDataCollectionBean);
             if (error != null) {
                 System.out.println("Error "+error);
-                return modelAndView.addObject("saveError", error);
+                return modelAndView.addObject("successMessage", error);
             }
         }
         //}
-        return modelAndView.addObject("saveMessage", "report.generation.dryRun.success");
+        return modelAndView.addObject("successMessage", "report.generation.dryRun.success");
     }
 
 

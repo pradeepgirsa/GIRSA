@@ -35,16 +35,16 @@ public class IssuerMappingsController extends BaseFileUploadController {
     @PostMapping("/upload_issuerMappings")
     public ModelAndView fileUpload(@RequestParam("file") MultipartFile file) {
         if (file.isEmpty()) {
-            return new ModelAndView("fileupload/mapping/issuerMappings", "saveError", "Please select a file and try again");
+            return new ModelAndView("fileupload/mapping/issuerMappings", "errorMessage", "Please select a file and try again");
         }
         try {
             processFile(file, FILE_TYPE, null, null);
         } catch (IOException e) {
-            return new ModelAndView("fileupload/mapping/issuerMappings", "saveError", e.getMessage());
+            return new ModelAndView("fileupload/mapping/issuerMappings", "errorMessage", e.getMessage());
         } catch (Exception e) {
-            return new ModelAndView("fileupload/mapping/issuerMappings", "saveError", e.getMessage());
+            return new ModelAndView("fileupload/mapping/issuerMappings", "errorMessage", e.getMessage());
         }
-        return new ModelAndView("fileupload/mapping/issuerMappings", "saveMessage", "File Uploaded sucessfully... " + file.getOriginalFilename());
+        return new ModelAndView("fileupload/mapping/issuerMappings", "successMessage", "File Uploaded sucessfully... " + file.getOriginalFilename());
     }
 
     @GetMapping(value = {"/view_issuer_mappings"})

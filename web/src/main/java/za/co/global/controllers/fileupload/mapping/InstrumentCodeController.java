@@ -35,16 +35,16 @@ public class InstrumentCodeController extends BaseFileUploadController {
     @PostMapping("/upload_instrumentCode")
     public ModelAndView fileUpload(@RequestParam("file") MultipartFile file) {
         if (file.isEmpty()) {
-            return new ModelAndView("fileupload/mapping/instrumentCode", "saveError", "Please select a file and try again");
+            return new ModelAndView("fileupload/mapping/instrumentCode", "errorMessage", "Please select a file and try again");
         }
         try {
             processFile(file, FILE_TYPE, null, null);
         } catch (IOException e) {
-            return new ModelAndView("fileupload/mapping/instrumentCode", "saveError", e.getMessage());
+            return new ModelAndView("fileupload/mapping/instrumentCode", "errorMessage", e.getMessage());
         } catch (Exception e) {
-            return new ModelAndView("fileupload/mapping/instrumentCode", "saveError", e.getMessage());
+            return new ModelAndView("fileupload/mapping/instrumentCode", "errorMessage", e.getMessage());
         }
-        return new ModelAndView("fileupload/mapping/instrumentCode", "saveMessage", "File Uploaded sucessfully... " + file.getOriginalFilename());
+        return new ModelAndView("fileupload/mapping/instrumentCode", "successMessage", "File Uploaded sucessfully... " + file.getOriginalFilename());
     }
 
     @GetMapping(value = {"/view_instrument_code"})
