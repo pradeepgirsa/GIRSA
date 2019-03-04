@@ -185,7 +185,7 @@ public abstract class AbstractQstatsReportController {
 
         BarraAssetInfo barraAssetInfo = getBarraAssetInfo(instrumentCode);
 
-        String reg28InstrType = barraAssetInfo.getReg28InstrType();
+        String reg28InstrType = barraAssetInfo != null ?  barraAssetInfo.getReg28InstrType() : null;
         Reg28InstrumentType reg28InstrumentType = null;
         if(reg28InstrType != null) {
             reg28InstrumentType = reg28InstrumentTypeRepository.findByReg28InstrType(reg28InstrType);
