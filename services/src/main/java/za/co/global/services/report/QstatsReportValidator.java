@@ -22,6 +22,10 @@ public class QstatsReportValidator implements Validator<ReportDataCollectionBean
         InstrumentData instrumentData = reportDataCollectionBean.getInstrumentData();
         BigDecimal netCurrentMarketValue = reportDataCollectionBean.getNetCurrentMarketValue();
 
+        if(instrumentCode == null) {
+            return "There is no instrument mapping to barra asset, instrument code: " + instrumentData.getInstrumentCode();
+        }
+
         if(barraAssetInfo == null) {
             return "There is no mapping to barra asset to the instrument code: " + instrumentCode.getBarraCode();
         }
@@ -30,21 +34,12 @@ public class QstatsReportValidator implements Validator<ReportDataCollectionBean
         }
         if(netCurrentMarketValue == null) {
             return "There is no net value for current market base value, portfolio code:"+ instrumentData.getPortfolioCode()
-                    +", instrument code:" + barraAssetInfo.getAssetId();
+                    +", instrument code:" + instrumentData.getInstrumentCode();
         }
         if(netAsset.getEffExposure().compareTo(netCurrentMarketValue) != 0) {
             return "Net eff exposure from barra and net base current market values are not equal- portfolio code:"
-                    + instrumentData.getPortfolioCode() +", instrument code:" + barraAssetInfo.getAssetId();
+                    + instrumentData.getPortfolioCode() +", instrument code:" + instrumentData.getInstrumentCode();
         }
-
-        /*if(instrumentData.getInstitutionTotal() == null) {
-            return "There is no institutional split matching to fund code:"+ instrumentData.getPortfolioCode()
-                    + ", FPM fund code:"+ reportDataCollectionBean.getClientFundMapping().getClientFundCode();
-        }*/
-        /*if(instrumentData.getNoOfAccounts() == null) {
-            return "Number of accounts are not mapped for fund code:"+ instrumentData.getPortfolioCode()
-                    + ", FPM fund code:"+ reportDataCollectionBean.getClientFundMapping().getClientFundCode();
-        }*/
 
         if(reportDataCollectionBean.getReg28InstrumentType() == null) {
             return "There is no Reg28 mapping to asset id:"+ barraAssetInfo.getAssetId()+", Reg28_InstrType:"+barraAssetInfo.getReg28InstrType();
@@ -55,7 +50,7 @@ public class QstatsReportValidator implements Validator<ReportDataCollectionBean
         }
 
         if(reportDataCollectionBean.getMaturityDate() == null) { //TODO - check maturity date with asset id or instrument code.
-            return "There is no Maturity date mapping to asset id:'"+ barraAssetInfo.getAssetId()+"', Instrument code:"+ instrumentCode.getManagerCode();
+            return "There is no Maturity date mapping to barra asset id:'"+ barraAssetInfo.getAssetId()+"', Instrument code:"+ instrumentCode.getManagerCode();
         }
 
         if(dailyPricing == null) {

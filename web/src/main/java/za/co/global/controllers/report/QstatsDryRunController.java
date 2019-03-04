@@ -3,6 +3,7 @@ package za.co.global.controllers.report;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
@@ -47,37 +48,27 @@ public class QstatsDryRunController extends AbstractQstatsReportController {
         ReportData reportData = reportDataRepository.findByReportStatusAndClient(ReportStatus.REGISTERED, client);
         List<InstrumentData> instrumentDataList = getInstrumentData(client, reportData);
 
-//        BarraAssetInfo netAsset = assetInfoRepository.findByAssetId("897"); //TODO - verify
-        List<BarraAssetInfo> netAssets = barraAssetInfoRepository.findByNetIndicatorIsTrue(); //TODO - verify
+        List<BarraAssetInfo> netAssets = barraAssetInfoRepository.findByNetIndicatorIsTrue();
         BarraAssetInfo netAsset = netAssets.isEmpty() ? null : netAssets.get(0);
 
         BigDecimal netCurrentMarketValue = BigDecimal.ZERO;
-        if (instrumentDataList.size() > 0) {
+        if (!CollectionUtils.isEmpty(instrumentDataList)) {
             netCurrentMarketValue = instrumentDataList.stream().map(InstrumentData::getCurrentMarketValue)
                     .reduce(BigDecimal::add).get();
-        }
 
-        for (InstrumentData instrumentData : instrumentDataList) {
-            ClientFundMapping clientFundMapping = clientFundMappingRepository.findByClientFundCode(instrumentData.getPortfolioCode());
-            //   NumberOfAccounts numberofAccounts = numberOfAccountsRepository.findByFundCode(clientFundMapping.getClientFundCode());
-            //   InstitutionalDetails institutionalDetails = institutionalDetailsRepository.findByClientFundCode(clientFundMapping.getClientFundCode());
-//                for (HoldingCategory holdingCategory : holding.getHoldingCategories()) {
-//                    for (Instrument instrument : holdingCategory.getInstruments()) {
-
-            ReportDataCollectionBean reportDataCollectionBean = getReportCollectionBean(instrumentData, netAsset, clientFundMapping, null, netCurrentMarketValue);
-
-            String error = validator.validate(reportDataCollectionBean);
-            if (error != null) {
-                System.out.println("Error "+error);
-                return modelAndView.addObject("successMessage", error);
+            for (InstrumentData instrumentData : instrumentDataList) {
+                ClientFundMapping clientFundMapping = clientFundMappingRepository.findByClientFundCode(instrumentData.getPortfolioCode());
+                ReportDataCollectionBean reportDataCollectionBean = getReportCollectionBean(instrumentData, netAsset, clientFundMapping, null, netCurrentMarketValue);
+                String error = validator.validate(reportDataCollectionBean);
+                if (error != null) {
+                    return modelAndView.addObject("errorMessage", error);
+                }
             }
+        } else {
+            return modelAndView.addObject("errorMessage", "No instrument data to generate report");
         }
-        //}
-        return modelAndView.addObject("successMessage", "report.generation.dryRun.success");
+        return modelAndView.addObject("successMessage", "Dry run completed successfully, no errors");
     }
-
-
-
 
     @Override
     protected Logger getLogger() {

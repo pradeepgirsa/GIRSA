@@ -26,7 +26,7 @@ public class ReportData implements Serializable {
     private Date createdDate;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name = "report_data_id", referencedColumnName = "ID", nullable = false, updatable = true)
+    @JoinColumn(name = "report_data_id", referencedColumnName = "ID", updatable = true)
     private List<InstrumentData> instrumentDataList = new ArrayList<>();
 
     @Enumerated(EnumType.STRING)

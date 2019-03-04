@@ -16,9 +16,11 @@ import za.co.global.domain.client.Client;
 import za.co.global.domain.fileupload.FileDetails;
 import za.co.global.domain.fileupload.client.InstrumentData;
 import za.co.global.domain.product.Product;
+import za.co.global.domain.report.ReportData;
 import za.co.global.domain.report.ReportStatus;
 import za.co.global.persistence.client.ClientRepository;
 import za.co.global.persistence.fileupload.client.InstrumentDataRepository;
+import za.co.global.persistence.report.ReportDataRepository;
 import za.co.global.services.helper.FileUtil;
 import za.co.global.services.upload.FileAndObjectResolver;
 import za.co.global.services.upload.GirsaExcelParser;
@@ -39,6 +41,9 @@ public class InstrumentDataController extends BaseFileUploadController {
 
     @Autowired
     private InstrumentDataRepository instrumentDataRepository;
+
+    @Autowired
+    protected ReportDataRepository reportDataRepository;
 
     private List<Client> clients;
 
@@ -113,6 +118,12 @@ public class InstrumentDataController extends BaseFileUploadController {
 
     @GetMapping(value = {"/view_instrumentData"})
     public String viewInstrumentCode(Model model) {
+        model.addAttribute("dataStatus", "CURRENT");
+
+//        ReportData reportData = reportDataRepository.findByReportStatusAndClient(ReportStatus.REGISTERED, client);
+//        List<InstrumentData> instrumentDataList = getInstrumentData(client, reportData);
+//
+
         model.addAttribute("instrumentsData", instrumentDataRepository.findAll());
         return "fileupload/client/view/viewInstrumentData";
 
