@@ -24,11 +24,11 @@
 
                                     <div th:class="form-group" >
                                         <label> <strong>Status * </strong></label>
-                                        <select required="false" id="dataStatus" data-placeholder="Choose One..."  class="selectpicker form-control" name="dataStatus" onchange="" >
+                                        <select required="true" id="dataStatus" data-placeholder="Choose One..." class="selectpicker form-control" th:object="${dataStatus}" name="dataStatus" onchange="" >
                                             <option value="">Choose One...</option>
-                                            <option text="CURRENT">Wireframe</option>
-                                            <option text="COMPLETED">Wireframe</option>
-                                            <option text="ALL">Wireframe</option>
+                                            <option value="CURRENT">CURRENT</option>
+                                            <option value="COMPLETED">COMPLETED</option>
+                                            <option value="ALL">ALL</option>
                                         </select>
                                     </div>
 
@@ -58,7 +58,7 @@
                                         <td><span th:text="|${instrumentData.marketValueTotal}|"/></td>
                                         <td><span th:text="|${instrumentData.currentBookValue}|"/></td>
                                         <td><span th:text="|${instrumentData.client.clientName}|"/></td>
-                                        <td><span th:text="|${instrumentData.reportData.reportDate}|"/></td>
+                                        <td><span th:if="${reportData != null}" th:text="|${instrumentData.reportData.reportDate}|"/></td>
                                     </tr>
                                     </tbody>
                                 </table>

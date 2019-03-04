@@ -126,7 +126,6 @@ public class GenerateQstatsController extends AbstractQstatsReportController {
                 modelAndView.addObject("errorMessage", "No instrument data to generate report");
             }
         } catch (GirsaException | ParseException e) {
-            LOGGER.error("Error while generating QStats report", e);
             modelAndView.addObject("errorMessage", e.getMessage());
         }
         return modelAndView;

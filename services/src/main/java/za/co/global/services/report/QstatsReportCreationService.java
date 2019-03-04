@@ -171,12 +171,12 @@ public class QstatsReportCreationService implements ReportCreationService {
                 weightingCell.setCellType(Cell.CELL_TYPE_NUMERIC);
 
                 Cell isEquityIndexLinkCell = row.createCell(19);
-                isEquityIndexLinkCell.setCellValue(qStatsBean.isEqtIndexLink());
-                isEquityIndexLinkCell.setCellType(Cell.CELL_TYPE_BOOLEAN);
+                isEquityIndexLinkCell.setCellValue(qStatsBean.isEqtIndexLink() ? "TRUE" : "FALSE");
+//                isEquityIndexLinkCell.setCellType(Cell.CELL_TYPE_BOOLEAN);
 
                 Cell isAfricanCell = row.createCell(20);
-                isAfricanCell.setCellValue(qStatsBean.isAfrican());
-                isAfricanCell.setCellType(Cell.CELL_TYPE_BOOLEAN);
+                isAfricanCell.setCellValue(qStatsBean.isAfrican() ? "TRUE" : "FALSE");
+                //isAfricanCell.setCellType(Cell.CELL_TYPE_BOOLEAN);
 
                 Cell marketCapCell = row.createCell(21);
                 if(qStatsBean.getMarketCap() != null) {
@@ -223,7 +223,7 @@ public class QstatsReportCreationService implements ReportCreationService {
                 row.createCell(33).setCellValue(qStatsBean.getIssuerRateLT());
                 row.createCell(34).setCellValue(qStatsBean.getIssuerName()); //Not mapped
                 row.createCell(35).setCellValue(qStatsBean.getRateAgency());
-                row.createCell(36).setCellValue(qStatsBean.isCompConDeb());
+                row.createCell(36).setCellValue(qStatsBean.isCompConDeb() ? "TRUE" : "FALSE");
 
                 Cell marketCapIssuerCell = row.createCell(37);
                 if(qStatsBean.getMarketCapIssuer() != null ) {
