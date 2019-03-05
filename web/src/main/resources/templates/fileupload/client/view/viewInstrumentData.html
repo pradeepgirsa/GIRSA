@@ -21,38 +21,38 @@
                     <div class="box box-primary">
 
 
-                        <div class="box-header with-border">
-                            <!--<a class="box-title btn btn-primary" href="/karyawan/form">Tambah Karyawan</a>-->
+                        <!--<div class="box-header with-border">-->
+                            <!--&lt;!&ndash;<a class="box-title btn btn-primary" href="/karyawan/form">Tambah Karyawan</a>&ndash;&gt;-->
 
 
-                            <div class="box-tools">
-                                <form action="" method="post" th:object="">
-                                    <div class="input-group input-group-sm" style="width: 250px;">
-                                        <!--<label> <strong>Status * </strong></label>-->
+                            <!--<div class="box-tools">-->
+                                <!--<form action="" method="post" th:object="${instrumentDataSelectionBean}">-->
+                                    <!--<div class="input-group input-group-sm" style="width: 600px;">-->
+                                        <!--&lt;!&ndash;<label> <strong>Status * </strong></label>&ndash;&gt;-->
 
-                                        <!--<input type="text" name="value" class="form-control pull-right"-->
-                                               <!--placeholder="Pencarian Berdasarkan Nama" value="bi"/>-->
-                                        <select required="false" id="client" data-placeholder="Choose Client..."
-                                                class="selectpicker form-control" name="clientId">
-                                            <option value="">Choose One..</option>
-                                            <option th:each="item : ${clients}"
-                                                    th:value="${item.id}"
-                                                    th:text="${item.clientName}">Wireframe
-                                            </option>
-                                        </select>
-                                        <select required="true" id="dataStatus" data-placeholder="Choose Status..." class="selectpicker form-control pull-right" th:field="${dataStatus}" name="dataStatus" >
-                                            <option value="">Choose Status...</option>
-                                            <option value="REGISTERED">REGISTERED</option>
-                                            <option value="COMPLETED">COMPLETED</option>
-                                            <option value="ALL">ALL</option>
-                                        </select>
-                                        <div class="input-group-btn">
-                                            <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
+                                        <!--&lt;!&ndash;<input type="text" name="value" class="form-control pull-right"&ndash;&gt;-->
+                                               <!--&lt;!&ndash;placeholder="Pencarian Berdasarkan Nama" value="bi"/>&ndash;&gt;-->
+                                        <!--<select required="false" id="client" data-placeholder="Choose Client..."-->
+                                                <!--class="selectpicker form-control" th:field="*{client}" name="clientId">-->
+                                            <!--<option value="">Choose One..</option>-->
+                                            <!--<option th:each="item : ${clients}"-->
+                                                    <!--th:value="${item}"-->
+                                                    <!--th:text="${item.clientName}">Wireframe-->
+                                            <!--</option>-->
+                                        <!--</select>-->
+                                        <!--<select required="true" id="dataStatus" data-placeholder="Choose Status..." th:field="*{dataStatus}" class="selectpicker form-control pull-right" name="dataStatus" >-->
+                                            <!--<option value="">Choose Status...</option>-->
+                                            <!--<option value="REGISTERED">REGISTERED</option>-->
+                                            <!--<option value="COMPLETED">COMPLETED</option>-->
+                                            <!--<option value="ALL">ALL</option>-->
+                                        <!--</select>-->
+                                        <!--<div class="input-group-btn">-->
+                                            <!--<button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>-->
+                                        <!--</div>-->
+                                    <!--</div>-->
+                                <!--</form>-->
+                            <!--</div>-->
+                        <!--</div>-->
 
                         <div class="box-body">
                             <div class="table-responsive">
@@ -89,8 +89,8 @@
                                         <td><span th:text="|${instrumentData.institutionTotal}|"/></td>
                                         <td><span th:text="|${instrumentData.noOfAccounts}|"/></td>
                                         <td><span th:text="|${instrumentData.currentBookValue}|"/></td>
-                                        <td><span th:text="|${instrumentData.client.clientName}|"/></td>
-                                        <td><span th:if="${reportData != null}" th:text="|${instrumentData.reportData.reportDate}|"/></td>
+                                        <td><span th:if="${instrumentData.client != null}" th:text="|${instrumentData.client.clientName}|"/></td>
+                                        <td><span th:if="${instrumentData.reportData != null}" th:text="|${instrumentData.reportData.reportDate}|"/></td>
                                     </tr>
                                     </tbody>
                                 </table>

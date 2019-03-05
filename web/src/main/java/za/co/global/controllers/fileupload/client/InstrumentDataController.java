@@ -115,38 +115,38 @@ public class InstrumentDataController extends BaseFileUploadController {
 
     @GetMapping(value = {"/view_instrumentData"})
     public String viewInstrumentCode(Model model) {
-
-        List<Client> clients = clientRepository.findAll();
-       // ModelAndView modelAndView = new ModelAndView("fileupload/client/view/viewInstrumentData");
-        model.addAttribute("clients", clients);
-        model.addAttribute("instrumentDataSelectionBean", new InstrumentDataSelectionBean());
+//
+//        List<Client> clients = clientRepository.findAll();
+//       // ModelAndView modelAndView = new ModelAndView("fileupload/client/view/viewInstrumentData");
+//        model.addAttribute("clients", clients);
+//        model.addAttribute("instrumentDataSelectionBean", new InstrumentDataSelectionBean());
         model.addAttribute("instrumentsData", instrumentDataRepository.findAllByOrderByUpdatedDateDesc());
         return "fileupload/client/view/viewInstrumentData";
 
     }
 
-    @PostMapping(value = {"/view_instrumentData"})
-    public String viewInstrumentCode(Model model, InstrumentDataSelectionBean instrumentDataSelectionBean) {
-
-
-        List<InstrumentData> instrumentDataList = new ArrayList<>();
-        if(instrumentDataSelectionBean.getDataStatus() == null ) {
-
-
-        } else if("REGISTERED".equalsIgnoreCase(instrumentDataSelectionBean.getDataStatus())) {
-            instrumentDataList = getInstrumentData(instrumentDataSelectionBean.getClient());
-        } else if("COMPLETED".equalsIgnoreCase(instrumentDataSelectionBean.getDataStatus())) {
-            instrumentDataList = instrumentDataRepository.findByReportData_ReportStatusOrderByUpdatedDateDesc(ReportStatus.COMPLETED);
-        } else {
-            instrumentDataList =instrumentDataRepository.findAllByOrderByUpdatedDateDesc();
-        }
-
+//    @PostMapping(value = {"/view_instrumentData"})
+//    public String viewInstrumentCode(Model model, InstrumentDataSelectionBean instrumentDataSelectionBean) {
 //
-        model.addAttribute("dataStatus", "REGISTERED");
-        model.addAttribute("instrumentsData", instrumentDataList);
-        return "fileupload/client/view/viewInstrumentData";
-
-    }
+//
+//        List<InstrumentData> instrumentDataList = new ArrayList<>();
+//        if(instrumentDataSelectionBean.getDataStatus() == null ) {
+//
+//
+//        } else if("REGISTERED".equalsIgnoreCase(instrumentDataSelectionBean.getDataStatus())) {
+//            instrumentDataList = getInstrumentData(instrumentDataSelectionBean.getClient());
+//        } else if("COMPLETED".equalsIgnoreCase(instrumentDataSelectionBean.getDataStatus())) {
+//            instrumentDataList = instrumentDataRepository.findByReportData_ReportStatusOrderByUpdatedDateDesc(ReportStatus.COMPLETED);
+//        } else {
+//            instrumentDataList =instrumentDataRepository.findAllByOrderByUpdatedDateDesc();
+//        }
+//
+////
+//        model.addAttribute("dataStatus", "REGISTERED");
+//        model.addAttribute("instrumentsData", instrumentDataList);
+//        return "fileupload/client/view/viewInstrumentData";
+//
+//    }
 
     protected void processObject(Object obj, Client client) {
         if(obj instanceof InstrumentData) {
