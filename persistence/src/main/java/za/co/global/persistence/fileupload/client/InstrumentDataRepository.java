@@ -21,6 +21,10 @@ public interface InstrumentDataRepository extends JpaRepository<InstrumentData, 
             String portfolioCode, String instrumentCode, Client client,
             String portfolioCode1, String instrumentCode1, Client client1,  ReportStatus reportStatus);
 
+    List<InstrumentData> findAllByOrderByUpdatedDateDesc();
+
+    List<InstrumentData> findByReportData_ReportStatusOrderByUpdatedDateDesc(ReportStatus reportStatus);
+
 
 
 }
