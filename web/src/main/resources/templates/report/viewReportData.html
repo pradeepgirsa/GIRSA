@@ -16,18 +16,18 @@
 
         <!-- Main content -->
         <div class="content">
-            <div class="row">
-                <div class="col-xs-12">
-                    <div th:class="form-group">
-                        <label> <strong>Report Data Status * </strong></label>
-                        <select required="false" id="client" data-placeholder="Choose One..."  class="selectpicker form-control" name="clientId" >
-                            <option value="">Choose One...</option>
-                            <option text="REGISTERED">Wireframe</option>
-                            <option text="COMPLETED">Wireframe</option>
-                        </select>
-                    </div>
-                </div>
-            </div>
+            <!--<div class="row">-->
+                <!--<div class="col-xs-12">-->
+                    <!--<div th:class="form-group">-->
+                        <!--<label> <strong>Report Data Status * </strong></label>-->
+                        <!--<select required="false" id="client" data-placeholder="Choose One..."  class="selectpicker form-control" name="clientId" >-->
+                            <!--<option value="">Choose One...</option>-->
+                            <!--<option text="REGISTERED">Wireframe</option>-->
+                            <!--<option text="COMPLETED">Wireframe</option>-->
+                        <!--</select>-->
+                    <!--</div>-->
+                <!--</div>-->
+            <!--</div>-->
             <div class="row">
                 <div class="col-xs-12">
                     <div class="box box-primary">
@@ -51,7 +51,7 @@
                                         <td><span th:text="|${reportData.reportDate}|"/></td>
                                         <td><span th:text="|${reportData.createdDate}|"/></td>
                                         <td><span th:text="|${reportData.reportStatus}|"/></td>
-                                        <td><a th:if="${reportData.reportStatus} == ReportStatus.REGISTERED" th:href="|/update_reportDataStatus?reportDataId=${reportData.id}|">Mark as completed</a></td>
+                                        <td><a th:if="${reportData.reportStatus.name()} == 'REGISTERED'" th:href="|/update_reportDataStatus?reportDataId=${reportData.id}|">Mark as completed</a></td>
                                     </tr>
                                     </tbody>
                                 </table>
