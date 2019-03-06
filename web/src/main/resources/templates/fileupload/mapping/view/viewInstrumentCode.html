@@ -25,14 +25,12 @@
                                 <table class="table table-bordered table-hover">
                                     <thead>
                                         <tr>
-                                            <th>Id</th>
                                             <th>Manager Code</th>
                                             <th>Barra Code</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <tr th:each="instrumentCode : ${instrumentCodes}">
-                                            <td><span th:text="|${instrumentCode.id}|"/></td>
                                             <td><span th:text="|${instrumentCode.managerCode}|"/></td>
                                             <td><span th:text="|${instrumentCode.barraCode}|"/></td>
                                         </tr>

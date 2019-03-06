@@ -25,19 +25,17 @@
                                 <table class="table table-bordered table-hover">
                                     <thead>
                                         <tr>
-                                            <th>Id</th>
-                                            <th>DailyPricing IssuerName</th>
-                                            <th>Barra GIR IssuerName</th>
-                                            <th>Barra Code</th>
+                                            <th>Daily Pricing Issuer Name</th>
+                                            <th>BARRA GIR Issuer Name</th>
+                                            <th>BARRA CODE (IF LISTED)</th>
                                             <th>Issuer Code</th>
                                             <th>Market Capitalisation</th>
-                                            <th>Capital Reserves</th>
+                                            <th>Capital & Reserves</th>
 
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <tr th:each="issuerMapping : ${issuerMappings}">
-                                            <td><span th:text="|${issuerMapping.id}|"/></td>
                                             <td><span th:text="|${issuerMapping.dailyPricingIssuerName}|"/></td>
                                             <td><span th:text="|${issuerMapping.barraGIRIssuerName}|"/></td>
                                             <td><span th:text="|${issuerMapping.barraCode}|"/></td>

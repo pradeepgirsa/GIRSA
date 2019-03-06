@@ -25,16 +25,15 @@
                                 <table class="table table-bordered table-hover">
                                     <thead>
                                     <tr>
-                                        <th>Id</th>
                                         <th>Issuer</th>
                                         <th>Bond code</th>
                                         <th>Type</th>
                                         <th>Features</th>
                                         <th>Moodys Rating</th>
                                         <th>Fitch Rating</th>
-                                        <th>SAndP Rating</th>
+                                        <th>Standard And Poor's Rating</th>
                                         <th>Global Rating</th>
-                                        <th>Summary Rating</th>
+                                        <th>Summary rating</th>
                                         <th>Issue size (Rbn)</th>
                                         <th>Coupon (%)</th>
                                         <th>Issue date</th>
@@ -57,7 +56,6 @@
                                     </thead>
                                     <tbody>
                                         <tr th:each="dailyPrice : ${dailyPrices}">
-                                            <td><span th:text="|${dailyPrice.id}|"/></td>
                                             <td><span th:text="|${dailyPrice.issuer}|"/></td>
                                             <td><span th:text="|${dailyPrice.bondCode}|"/></td>
                                             <td><span th:text="|${dailyPrice.type}|"/></td>

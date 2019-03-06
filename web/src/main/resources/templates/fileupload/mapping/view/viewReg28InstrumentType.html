@@ -25,15 +25,14 @@
                                 <table class="table table-bordered table-hover">
                                     <thead>
                                         <tr>
-                                            <th>Id</th>
-                                            <th>Reg28 InstrType</th>
+                                            <th>Reg28_InstrType</th>
                                             <th>RSA or foreign</th>
                                             <th>Security Type</th>
                                             <th>Institution Type</th>
                                             <th>Market Cap</th>
                                             <th>BN Categories</th>
-                                            <th>ASISA Defined2</th>
-                                            <th>ACI Asset Class</th>
+                                            <th>ASISADefined2</th>
+                                            <th>ACIAssetClass</th>
                                             <th>AddClassification1</th>
                                             <th>AddClassification2</th>
                                             <th>AddClassification3</th>
@@ -42,7 +41,6 @@
                                     </thead>
                                     <tbody>
                                         <tr th:each="reg28InstrumentType : ${reg28InstrumentTypes}">
-                                            <td><span th:text="|${reg28InstrumentType.id}|"/></td>
                                             <td><span th:text="|${reg28InstrumentType.reg28InstrType}|"/></td>
                                             <td><span th:text="|${reg28InstrumentType.rsaOrForeign}|"/></td>
                                             <td><span th:text="|${reg28InstrumentType.securityType}|"/></td>

@@ -25,32 +25,30 @@
                                 <table class="table table-bordered table-hover">
                                     <thead>
                                         <tr>
-                                            <th>Id</th>
                                             <th>Security</th>
                                             <th>Description</th>
                                             <th>Exch</th>
                                             <th>R</th>
-                                            <th>Market Cap</th>
-                                            <th>Market Cap Live</th>
+                                            <th>MktCap</th>
+                                            <th>MktCapLive</th>
                                             <th>Index%</th>
-                                            <th>Index Price</th>
-                                            <th>Index Pts</th>
+                                            <th>IndexPrice</th>
+                                            <th>IndexPts</th>
                                             <th>YldHist%</th>
-                                            <th>Iwf</th>
-                                            <th>Issue</th>
+                                            <th>IWF</th>
+                                            <th>#Issue</th>
                                             <th>Bid</th>
                                             <th>Ask</th>
                                             <th>Last</th>
-                                            <th>positive_or_negative</th>
+                                            <th>+/-</th>
                                             <th>Sub Industry</th>
-                                            <th>GICS Code</th>
-                                            <th>PE Ratio</th>
+                                            <th>GICSCode</th>
+                                            <th>PERatio</th>
 
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <tr th:each="indice : ${indices}">
-                                            <td><span th:text="|${indice.id}|"/></td>
                                             <td><span th:text="|${indice.security}|"/></td>
                                             <td><span th:text="|${indice.description}|"/></td>
                                             <td><span th:text="|${indice.exch}|"/></td>

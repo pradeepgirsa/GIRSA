@@ -25,7 +25,6 @@
                                 <table class="table table-bordered table-hover">
                                     <thead>
                                     <tr>
-                                        <th>Id</th>
                                         <th>Alpha Code</th>
                                         <th>Industry</th>
                                         <th>SuperSector</th>
@@ -35,7 +34,6 @@
                                     </thead>
                                     <tbody>
                                         <tr th:each="additionalClassification : ${additionalClassifications}">
-                                            <td><span th:text="|${additionalClassification.id}|"/></td>
                                             <td><span th:text="|${additionalClassification.alphaCode}|"/></td>
                                             <td><span th:text="|${additionalClassification.industry}|"/></td>
                                             <td><span th:text="|${additionalClassification.superSector}|"/></td>

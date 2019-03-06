@@ -25,7 +25,6 @@
                                 <table class="table table-bordered table-hover">
                                     <thead>
                                         <tr>
-                                            <th>Id</th>
                                             <th>Manager Fund Code</th>
                                             <th>Client Fund Code</th>
                                             <th>Manager Fund Name</th>
@@ -37,7 +36,6 @@
                                     </thead>
                                     <tbody>
                                         <tr th:each="fundMapping : ${fundMappings}">
-                                            <td><span th:text="|${fundMapping.id}|"/></td>
                                             <td><span th:text="|${fundMapping.managerFundCode}|"/></td>
                                             <td><span th:text="|${fundMapping.clientFundCode}|"/></td>
                                             <td><span th:text="|${fundMapping.managerFundName}|"/></td>

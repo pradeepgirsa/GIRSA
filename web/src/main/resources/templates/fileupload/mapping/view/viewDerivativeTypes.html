@@ -25,7 +25,6 @@
                                 <table class="table table-bordered table-hover">
                                     <thead>
                                     <tr>
-                                        <th>Id</th>
                                         <th>Type of Derivative</th>
                                         <th>Local Classification</th>
                                         <th>Foreign Classification</th>
@@ -33,7 +32,6 @@
                                     </thead>
                                     <tbody>
                                         <tr th:each="derivativeType : ${derivativeTypes}">
-                                            <td><span th:text="|${derivativeType.id}|"/></td>
                                             <td><span th:text="|${derivativeType.type}|"/></td>
                                             <td><span th:text="|${derivativeType.localClassification}|"/></td>
                                             <td><span th:text="|${derivativeType.foreignClassification}|"/></td>
