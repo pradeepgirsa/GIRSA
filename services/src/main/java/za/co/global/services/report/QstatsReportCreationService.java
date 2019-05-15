@@ -64,7 +64,13 @@ public class QstatsReportCreationService implements ReportCreationService {
 
             // Create Cell Style for formatting Date
             CellStyle dateCellStyle = workbook.createCellStyle();
-            dateCellStyle.setDataFormat(createHelper.createDataFormat().getFormat("yyyy/mm/dd"));
+            dateCellStyle.setDataFormat(createHelper.createDataFormat().getFormat("dd/mm/yyyy"));
+
+            CellStyle numericCellStyle = workbook.createCellStyle();
+            dateCellStyle.setDataFormat(createHelper.createDataFormat().getFormat("##########"));
+
+            CellStyle numeric18Decimal2 = workbook.createCellStyle();
+            dateCellStyle.setDataFormat(createHelper.createDataFormat().getFormat("##################.00"));
 
             int rowNum = 1;
 
