@@ -11,6 +11,8 @@ import za.co.global.domain.EntityStatus;
 import za.co.global.domain.client.Client;
 import za.co.global.persistence.client.ClientRepository;
 
+import java.util.List;
+
 @Controller
 public class ClientController {
 
@@ -37,6 +39,12 @@ public class ClientController {
 
     @PostMapping(value = {"/create_client"})
     public ModelAndView saveClient(Model model, Client client) {
+        List<Client> clients = clientRepository.findAll();
+        for(Client existingClient: clients) {
+            if(existingClient.getClientName().equals(client.getClientName())) {
+                return new ModelAndView("client/createClient", "errorMessage", client.getClientName() + " already exists");
+            }
+        }
         client.setStatus(EntityStatus.ACTIVE);
         clientRepository.save(client);
         return new ModelAndView("client/createClient", "successMessage", client.getClientName() + " Client created successfully... ");

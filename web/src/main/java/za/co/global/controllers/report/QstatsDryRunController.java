@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
@@ -56,13 +57,17 @@ public class QstatsDryRunController extends AbstractQstatsReportController {
             netCurrentMarketValue = instrumentDataList.stream().map(InstrumentData::getCurrentMarketValue)
                     .reduce(BigDecimal::add).get();
 
+            String errorString = "Errors: ";
             for (InstrumentData instrumentData : instrumentDataList) {
                 ClientFundMapping clientFundMapping = clientFundMappingRepository.findByClientFundCode(instrumentData.getPortfolioCode());
                 ReportDataCollectionBean reportDataCollectionBean = getReportCollectionBean(instrumentData, netAsset, clientFundMapping, null, netCurrentMarketValue);
                 String error = validator.validate(reportDataCollectionBean);
                 if (error != null) {
-                    return modelAndView.addObject("errorMessage", error);
+                    errorString = errorString + ";  " + error;
                 }
+            }
+            if(!StringUtils.isEmpty(errorString)) {
+                return modelAndView.addObject("errorMessage", errorString);
             }
         } else {
             return modelAndView.addObject("errorMessage", "No instrument data to generate report");
