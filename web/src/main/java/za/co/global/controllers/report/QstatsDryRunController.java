@@ -57,13 +57,17 @@ public class QstatsDryRunController extends AbstractQstatsReportController {
             netCurrentMarketValue = instrumentDataList.stream().map(InstrumentData::getCurrentMarketValue)
                     .reduce(BigDecimal::add).get();
 
-            String errorString = "Errors: ";
+            String errorString = "";
             for (InstrumentData instrumentData : instrumentDataList) {
                 ClientFundMapping clientFundMapping = clientFundMappingRepository.findByClientFundCode(instrumentData.getPortfolioCode());
                 ReportDataCollectionBean reportDataCollectionBean = getReportCollectionBean(instrumentData, netAsset, clientFundMapping, null, netCurrentMarketValue);
                 String error = validator.validate(reportDataCollectionBean);
                 if (error != null) {
-                    errorString = errorString + ";  " + error;
+                    if(StringUtils.isEmpty(errorString)) {
+                        errorString = error;
+                    } else {
+                        errorString = errorString + ";  " + error;
+                    }
                 }
             }
             if(!StringUtils.isEmpty(errorString)) {

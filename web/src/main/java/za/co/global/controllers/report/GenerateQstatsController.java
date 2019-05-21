@@ -139,8 +139,9 @@ public class GenerateQstatsController extends AbstractQstatsReportController {
 
     private String createExcelFile(List<QStatsBean> qStatsBeans, Client client) throws GirsaException {
         try {
+            DateFormat dateFormat = new SimpleDateFormat("yyyyMMddhhmmss");
 //            String filePath = fileUploadFolder + File.separator + "Reports" + File.separator + client.getClientName() +"result.xlsx";
-            String filePath = fileUploadFolder + File.separator + "QStats_" + new Date() + ".xlsx";
+            String filePath = fileUploadFolder + File.separator + "QStats_" + dateFormat.format(new Date()) + ".xlsx";
             reportCreationService.createExcelFile(qStatsBeans, filePath);
 
             //TODO - store it in file detials
