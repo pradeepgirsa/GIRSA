@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet id="barra_asset_dsu3_table_1" author="Pradeep">
+        <createTable tableName="barra_asset_dsu3" >
+            <column name="id" type="bigint">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="ASSET_ID" type="varchar(255)"/>
+            <column name="ASSET_NAME" type="varchar(255)"/>
+            <column name="AFRICA_VALUES" type="NUMERIC(20, 3)"/>
+            <column name="EFF_EXPOSURE" type="NUMERIC(20, 3)"/>
+            <column name="MARKET_VALUE" type="NUMERIC(20, 3)"/>
+            <column name="EFF_WEIGHT" type="NUMERIC(20, 3)"/>
+            <column name="GIR_ISSUER" type="varchar(255)"/>
+            <column name="HOLDINGS" type="NUMERIC(20, 3)"/>
+            <column name="ICB_INDUSTRY" type="varchar(255)"/>
+            <column name="ICB_SUPER_SECTOR" type="varchar(255)"/>
+            <column name="INST_SUB_TYPE" type="varchar(255)"/>
+            <column name="INST_TYPE" type="varchar(255)"/>
+            <column name="LOCAL_MARKET" type="varchar(255)"/>
+            <column name="MARKET_CAPITALIZATION" type="NUMERIC(20, 3)"/>
+            <column name="PRICE" type="NUMERIC(20, 3)"/>
+            <column name="REG28INSTR_TYPE" type="varchar(255)"/>
+            <column name="SARB_CLASSIFICATION" type="varchar(255)"/>
+            <column name="AMOUNT_ISSUED" type="NUMERIC(20, 3)"/>
+            <column name="SUB_SECTOR" type="varchar(255)"/>
+            <column name="GICS_INDUSTRY_GROUP" type="varchar(255)"/>
+            <column name="TIME_TO_MATURITY" type="varchar(255)"/>
+            <column name="COUNTRY_OF_EXPOSURE" type="varchar(255)"/>
+            <column name="COUNTRY_OF_INCORPORATION" type="varchar(255)"/>
+            <column name="COUNTRY_OF_QUOTATION" type="varchar(255)"/>
+            <column name="MOODY_RATING" type="varchar(255)"/>
+            <column name="PARENT_ISSUER_ID" type="varchar(255)"/>
+            <column name="ISSUER_SHORT_NAME" type="varchar(255)"/>
+            <column name="NET_INDICATOR" type="boolean"/>
+
+        </createTable>
+
+        <addAutoIncrement columnDataType="bigint"
+                          columnName="id"
+                          incrementBy="1"
+                          startWith="100"
+                          tableName="barra_asset_dsu3"/>
+    </changeSet>
+
+</databaseChangeLog>
