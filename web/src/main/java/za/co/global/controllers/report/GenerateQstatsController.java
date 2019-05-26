@@ -2,11 +2,11 @@ package za.co.global.controllers.report;
 
 import liquibase.util.csv.CSVWriter;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.poi.hssf.usermodel.HSSFSheet;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -167,9 +167,9 @@ public class GenerateQstatsController extends AbstractQstatsReportController {
         try (InputStream inputStream = new FileInputStream(new File(excelFilePath));
              FileWriter my_csv = new FileWriter(csvFilePath);
              CSVWriter my_csv_output = new CSVWriter(my_csv)) {
-            HSSFWorkbook my_xls_workbook = new HSSFWorkbook(inputStream);
+            XSSFWorkbook my_xls_workbook = new XSSFWorkbook(inputStream);
             // Read worksheet into HSSFSheet
-            HSSFSheet my_worksheet = my_xls_workbook.getSheetAt(0);
+            XSSFSheet my_worksheet = my_xls_workbook.getSheetAt(0);
             // To iterate over the rows
             Iterator<Row> rowIterator = my_worksheet.iterator();
             // OpenCSV writer object to create CSV file
