@@ -1,6 +1,12 @@
 package za.co.global.controllers.report;
 
+import liquibase.util.csv.CSVWriter;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,16 +33,13 @@ import za.co.global.persistence.fileupload.mapping.AdditionalClassificationRepos
 import za.co.global.persistence.fileupload.mapping.DerivativeTypesRepository;
 import za.co.global.services.report.ReportCreationService;
 
-import java.io.File;
+import java.io.*;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 //import za.co.global.persistence.fileupload.client.TransactionListingRepository;
@@ -140,15 +143,69 @@ public class GenerateQstatsController extends AbstractQstatsReportController {
     private String createExcelFile(List<QStatsBean> qStatsBeans, Client client) throws GirsaException {
         try {
             DateFormat dateFormat = new SimpleDateFormat("yyyyMMddhhmmss");
+            String filename = "QStats_" + dateFormat.format(new Date());
 //            String filePath = fileUploadFolder + File.separator + "Reports" + File.separator + client.getClientName() +"result.xlsx";
-            String filePath = fileUploadFolder + File.separator + "QStats_" + dateFormat.format(new Date()) + ".xlsx";
+            String filePath = fileUploadFolder + File.separator + filename + ".xlsx";
             reportCreationService.createExcelFile(qStatsBeans, filePath);
+
+
+            String csvFilePath = fileUploadFolder + File.separator + filename + ".csv";
+            createCSVFileFromExcel(filePath, csvFilePath);
 
             //TODO - store it in file detials
             return filePath;
         } catch (GirsaException e) {
             LOGGER.error("Error while creating report file", e);
             throw new GirsaException("Error while creating report file", e);
+        } catch (IOException | InvalidFormatException e) {
+            LOGGER.error("Error while converting xlsx to csv file", e);
+            throw new GirsaException("Error while creating report file", e);
+        }
+    }
+
+    public void createCSVFileFromExcel(String excelFilePath, String csvFilePath) throws IOException, InvalidFormatException {
+        try (InputStream inputStream = new FileInputStream(new File(excelFilePath));
+             FileWriter my_csv = new FileWriter(csvFilePath);
+             CSVWriter my_csv_output = new CSVWriter(my_csv)) {
+            HSSFWorkbook my_xls_workbook = new HSSFWorkbook(inputStream);
+            // Read worksheet into HSSFSheet
+            HSSFSheet my_worksheet = my_xls_workbook.getSheetAt(0);
+            // To iterate over the rows
+            Iterator<Row> rowIterator = my_worksheet.iterator();
+            // OpenCSV writer object to create CSV file
+
+            //Loop through rows.
+            while (rowIterator.hasNext()) {
+                Row row = rowIterator.next();
+                int i = 0;//String array
+                //change this depending on the length of your sheet
+                String[] csvdata = new String[row.getPhysicalNumberOfCells()];
+                Iterator<Cell> cellIterator = row.cellIterator();
+                while (cellIterator.hasNext()) {
+                    Cell cell = cellIterator.next(); //Fetch CELL
+                    switch (cell.getCellType()) { //Identify CELL type
+                        //you need to add more code here based on
+                        //your requirement / transformations
+                        case Cell.CELL_TYPE_STRING:
+                            csvdata[i] = cell.getStringCellValue();
+                            break;
+                        case Cell.CELL_TYPE_BLANK:
+                            csvdata[i] = "";
+                            break;
+                        case Cell.CELL_TYPE_NUMERIC:
+                            csvdata[i] = "" + cell.getNumericCellValue();
+                            break;
+                        case Cell.CELL_TYPE_BOOLEAN:
+                            csvdata[i] = "" + cell.getBooleanCellValue();
+                            break;
+                        default:
+                                csvdata[i] = cell.getStringCellValue();
+                    }
+                    i = i + 1;
+                }
+                my_csv_output.writeNext(csvdata);
+            }
+
         }
     }
 
