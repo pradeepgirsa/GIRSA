@@ -19,19 +19,12 @@ import za.co.global.domain.report.ReportStatus;
 import java.math.BigDecimal;
 import java.util.List;
 
-/*import za.co.global.domain.fileupload.client.InstitutionalDetails;
-import za.co.global.domain.fileupload.client.NumberOfAccounts;
-import za.co.global.domain.fileupload.client.notused.Holding;
-import za.co.global.domain.fileupload.client.notused.HoldingCategory;
-import za.co.global.domain.fileupload.client.notused.Instrument;*/
-
 @Controller
 public class QstatsDryRunController extends AbstractQstatsReportController {
 
     private static final String VIEW_FILE = "report/dryRun/asisaQueueStatsDryRun";
 
     private static final Logger LOGGER = LoggerFactory.getLogger(QstatsDryRunController.class);
-
 
     @GetMapping("/dry_run_qstats")
     public ModelAndView displayScreen() {
@@ -44,39 +37,44 @@ public class QstatsDryRunController extends AbstractQstatsReportController {
     @PostMapping("/dry_run_qstats")
     public ModelAndView generateReport(String clientId) {
         ModelAndView modelAndView = new ModelAndView(VIEW_FILE);
+        try {
 
-        Client client = clientRepository.findOne(Long.parseLong(clientId));
-        ReportData reportData = reportDataRepository.findByReportStatusAndClient(ReportStatus.REGISTERED, client);
-        List<InstrumentData> instrumentDataList = getInstrumentData(client, reportData);
+            Client client = clientRepository.findOne(Long.parseLong(clientId));
+            ReportData reportData = reportDataRepository.findByReportStatusAndClient(ReportStatus.REGISTERED, client);
+            List<InstrumentData> instrumentDataList = getInstrumentData(client, reportData);
 
-        List<BarraAssetInfo> netAssets = barraAssetInfoRepository.findByNetIndicatorIsTrue();
-        BarraAssetInfo netAsset = netAssets.isEmpty() ? null : netAssets.get(0);
+            List<BarraAssetInfo> netAssets = barraAssetInfoRepository.findByNetIndicatorIsTrue();
+            BarraAssetInfo netAsset = netAssets.isEmpty() ? null : netAssets.get(0);
 
-        BigDecimal netCurrentMarketValue = BigDecimal.ZERO;
-        if (!CollectionUtils.isEmpty(instrumentDataList)) {
-            netCurrentMarketValue = instrumentDataList.stream().map(InstrumentData::getCurrentMarketValue)
-                    .reduce(BigDecimal::add).get();
+            BigDecimal netCurrentMarketValue = BigDecimal.ZERO;
+            if (!CollectionUtils.isEmpty(instrumentDataList)) {
+                netCurrentMarketValue = instrumentDataList.stream().map(InstrumentData::getCurrentMarketValue)
+                        .reduce(BigDecimal::add).get();
 
-            String errorString = "";
-            for (InstrumentData instrumentData : instrumentDataList) {
-                ClientFundMapping clientFundMapping = clientFundMappingRepository.findByClientFundCode(instrumentData.getPortfolioCode());
-                ReportDataCollectionBean reportDataCollectionBean = getReportCollectionBean(instrumentData, netAsset, clientFundMapping, null, netCurrentMarketValue);
-                String error = validator.validate(reportDataCollectionBean);
-                if (error != null) {
-                    if(StringUtils.isEmpty(errorString)) {
-                        errorString = error;
-                    } else {
-                        errorString = errorString + ";  " + error;
+                String errorString = "";
+                for (InstrumentData instrumentData : instrumentDataList) {
+                    ClientFundMapping clientFundMapping = clientFundMappingRepository.findByClientFundCode(instrumentData.getPortfolioCode());
+                    ReportDataCollectionBean reportDataCollectionBean = getReportCollectionBean(instrumentData, netAsset, clientFundMapping, null, netCurrentMarketValue);
+                    String error = validator.validate(reportDataCollectionBean);
+                    if (error != null) {
+                        if (StringUtils.isEmpty(errorString)) {
+                            errorString = error;
+                        } else {
+                            errorString = errorString + ";  " + error;
+                        }
                     }
                 }
+                if (!StringUtils.isEmpty(errorString)) {
+                    return modelAndView.addObject("errorMessage", errorString);
+                }
+            } else {
+                return modelAndView.addObject("errorMessage", "No instrument data to generate report");
             }
-            if(!StringUtils.isEmpty(errorString)) {
-                return modelAndView.addObject("errorMessage", errorString);
-            }
-        } else {
-            return modelAndView.addObject("errorMessage", "No instrument data to generate report");
+            return modelAndView.addObject("successMessage", "Dry run completed successfully, no errors");
+        } catch (Exception e) {
+            LOGGER.error("Error on report dry run", e);
+            return modelAndView.addObject("errorMessage", e.getMessage());
         }
-        return modelAndView.addObject("successMessage", "Dry run completed successfully, no errors");
     }
 
     @Override

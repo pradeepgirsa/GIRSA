@@ -70,6 +70,11 @@
 				<artifactId>excel-extractor</artifactId>
 				<version>1.0.2</version>
 			</dependency>
+			<dependency>
+				<groupId>org.slf4j</groupId>
+				<artifactId>slf4j-api</artifactId>
+				<version>1.7.26</version>
+			</dependency>
 			<!--<dependency>-->
 				<!--<groupId>com.oracle</groupId>-->
 				<!--<artifactId>ojdbc6</artifactId>-->
@@ -90,6 +95,11 @@
 				<groupId>org.liquibase</groupId>
 				<artifactId>liquibase-core</artifactId>
 				<version>3.6.2</version>
+			</dependency>
+			<dependency>
+				<groupId>commons-io</groupId>
+				<artifactId>commons-io</artifactId>
+				<version>2.6</version>
 			</dependency>
 
 		<!--<dependency>-->

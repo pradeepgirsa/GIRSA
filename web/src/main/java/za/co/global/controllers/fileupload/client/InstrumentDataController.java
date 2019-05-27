@@ -2,6 +2,8 @@ package za.co.global.controllers.fileupload.client;
 
 import com.gizbel.excel.enums.ExcelFactoryType;
 import org.apache.commons.io.FilenameUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,12 +28,17 @@ import za.co.global.services.upload.FileAndObjectResolver;
 import za.co.global.services.upload.GirsaExcelParser;
 
 import java.io.File;
-import java.util.*;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 @Controller
 public class InstrumentDataController extends BaseFileUploadController {
 
     private static final String FILE_TYPE = FileAndObjectResolver.INSTRUMENT_DATA.getFileType();
+
+    private final static Logger LOGGER = LoggerFactory.getLogger(InstrumentDataController.class);
 
     @Autowired
     private ClientRepository clientRepository;
@@ -46,9 +53,14 @@ public class InstrumentDataController extends BaseFileUploadController {
 
     @GetMapping("/upload_instrumentData")
     public ModelAndView showUpload() {
-        clients = clientRepository.findAll();
         ModelAndView modelAndView = new ModelAndView("fileupload/client/instrumentData");
-        modelAndView.addObject("clients", clients);
+        try {
+            clients = clientRepository.findAll();
+            modelAndView.addObject("clients", clients);
+        } catch (Exception e) {
+            LOGGER.error("Error on showUpload()", e);
+            modelAndView.addObject("errorMessage", e.getMessage());
+        }
         return modelAndView;
     }
 
@@ -56,19 +68,24 @@ public class InstrumentDataController extends BaseFileUploadController {
     @PostMapping("/upload_instrumentData")
     public ModelAndView fileUpload(@RequestParam("file") MultipartFile file, String clientId) {
         ModelAndView modelAndView = new ModelAndView("fileupload/client/instrumentData");
-        if (file.isEmpty()) {
-            modelAndView.addObject("errorMessage", "Please select a file and try again");
-        } else {
-            try {
-                Client client = clientRepository.findOne(Long.parseLong(clientId));
-                processFile(file, FILE_TYPE, client, null);
-                modelAndView.addObject("successMessage", "File Uploaded sucessfully... " + file.getOriginalFilename());
-            } catch (Exception e) {
-                modelAndView.addObject("errorMessage", e.getMessage());
+        try {
+            if (file.isEmpty()) {
+                modelAndView.addObject("errorMessage", "Please select a file and try again");
+            } else {
+                try {
+                    Client client = clientRepository.findOne(Long.parseLong(clientId));
+                    processFile(file, FILE_TYPE, client, null);
+                    modelAndView.addObject("successMessage", "File Uploaded sucessfully... " + file.getOriginalFilename());
+                } catch (Exception e) {
+                    modelAndView.addObject("errorMessage", e.getMessage());
+                }
             }
+            clients = clientRepository.findAll();
+            modelAndView.addObject("clients", clients);
+        } catch (Exception e) {
+            LOGGER.error("Error uploading instrument data", e);
+            modelAndView.addObject("errorMessage", e.getMessage());
         }
-        clients = clientRepository.findAll();
-        modelAndView.addObject("clients", clients);
         return modelAndView;
     }
 
@@ -97,7 +114,7 @@ public class InstrumentDataController extends BaseFileUploadController {
                 }
             }
         } else {
-            System.out.println("some other format");
+            throw new Exception("Only excel and zip files are allowed");
         }
     }
 

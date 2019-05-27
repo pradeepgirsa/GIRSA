@@ -2,6 +2,8 @@ package za.co.global.controllers.fileupload;
 
 import com.gizbel.excel.enums.ExcelFactoryType;
 import org.apache.commons.io.FilenameUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.multipart.MultipartFile;
@@ -28,9 +30,9 @@ public abstract class BaseFileUploadController {
     @Autowired
     private FileDetailsRepository fileDetailsRepository;
 
+    private final static Logger LOGGER = LoggerFactory.getLogger(BaseFileUploadController.class);
 
-
-    protected void processFile(MultipartFile file, String fileType, Client client, Product product) throws IOException, Exception {
+    protected void processFile(MultipartFile file, String fileType, Client client, Product product) throws Exception {
         // read and write the file to the selected location-
         byte[] bytes = file.getBytes();
 
@@ -54,7 +56,8 @@ public abstract class BaseFileUploadController {
                 }
             }
         } else {
-            System.out.println("some other format");
+            LOGGER.error("Only excel and zip files allowed, file format {} is not allowed", extension);
+            throw new Exception("Only excel and zip files allowed, file format '"+extension+"' is not allowed");
         }
     }
 
