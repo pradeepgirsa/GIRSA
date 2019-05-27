@@ -1,6 +1,8 @@
 package za.co.global.controllers.fileupload.barra;
 
 import com.gizbel.excel.enums.ExcelFactoryType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,7 +19,6 @@ import za.co.global.services.upload.FileAndObjectResolver;
 import za.co.global.services.upload.GirsaExcelParser;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -26,6 +27,8 @@ import java.util.Set;
 public class AssetInfoController extends BaseFileUploadController {
 
     public static final String FILE_TYPE = FileAndObjectResolver.BARRA_FILE.getFileType();
+
+    private final static Logger LOGGER = LoggerFactory.getLogger(AssetInfoController.class);
 
     @Autowired
     private BarraAssetInfoRepository barraAssetInfoRepository;
@@ -39,33 +42,44 @@ public class AssetInfoController extends BaseFileUploadController {
     @Transactional
     @PostMapping("/upload_assetInfo")
     public ModelAndView fileUpload(@RequestParam("file") MultipartFile file) {
+        LOGGER.debug("Uploading barra asset info...");
         if (file.isEmpty()) {
             return new ModelAndView("fileupload/system/assetInfo", "errorMessage", "Please select a file and try again");
         }
         try {
             processFile(file, FILE_TYPE, null, null);
-        } catch (IOException e) {
-            e.printStackTrace();
-            return new ModelAndView("fileupload/system/assetInfo", "errorMessage", e.getMessage());
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.error("Error", e);
             return new ModelAndView("fileupload/system/assetInfo", "errorMessage", e.getMessage());
         }
         return new ModelAndView("fileupload/system/assetInfo", "successMessage", "File Uploaded successfully... " + file.getOriginalFilename());
+
     }
 
     @GetMapping(value = {"/view_assetInfo"})
     public String viewAssetInfo(Model model) {
-        model.addAttribute("assetInfoList", barraAssetInfoRepository.findAll());
+        try {
+            LOGGER.debug("Navigating to view AssetInfo...");
+            model.addAttribute("assetInfoList", barraAssetInfoRepository.findAll());
+        } catch (Exception e) {
+            LOGGER.error("Error", e);
+            model.addAttribute("errorMessage", e.getMessage());
+        }
         return "fileupload/system/viewAssetInfo";
 
     }
 
     @GetMapping(value = "/view_asset")
-    public ModelAndView viewAssetData(@RequestParam(value = "assetId", required = false) String assetId){
-        BarraAssetInfo barraAssetInfo = barraAssetInfoRepository.findByAssetId(assetId);
+    public ModelAndView viewAssetData(@RequestParam(value = "assetId", required = false) String assetId) {
         ModelAndView modelAndView = new ModelAndView("fileupload/system/asset");
-        modelAndView.addObject("barraAssetInfo", barraAssetInfo);
+        try {
+            LOGGER.debug("Navigating to view Asset data...");
+            BarraAssetInfo barraAssetInfo = barraAssetInfoRepository.findByAssetId(assetId);
+            modelAndView.addObject("barraAssetInfo", barraAssetInfo);
+        } catch (Exception e) {
+            LOGGER.error("Error", e);
+            modelAndView.addObject("errorMessage", e.getMessage());
+        }
         return modelAndView;
     }
 
@@ -80,7 +94,7 @@ public class AssetInfoController extends BaseFileUploadController {
             for (Object obj : value) {
                 if (obj instanceof BarraAssetInfo) {
                     BarraAssetInfo barraAssetInfo = getAssetInfo(obj);
-                    if(!netIndicator) {
+                    if (!netIndicator) {
                         netIndicator = true;
                         barraAssetInfo.setNetIndicator(Boolean.TRUE.booleanValue());
                     }
@@ -89,11 +103,11 @@ public class AssetInfoController extends BaseFileUploadController {
             }
         }
     }
-    
+
     private BarraAssetInfo getAssetInfo(Object object) {
         BarraAssetInfo barraAssetInfo = (BarraAssetInfo) object;
         BarraAssetInfo existingBarraAssetInfo = barraAssetInfoRepository.findByAssetId(barraAssetInfo.getAssetId());
-        if(existingBarraAssetInfo == null) {
+        if (existingBarraAssetInfo == null) {
             return barraAssetInfo;
         }
         existingBarraAssetInfo.setAssetName(barraAssetInfo.getAssetName());
@@ -156,7 +170,7 @@ public class AssetInfoController extends BaseFileUploadController {
     }
 
     @Override
-    protected void processObject(Object obj) {       
+    protected void processObject(Object obj) {
     }
 
 }

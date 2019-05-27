@@ -1,5 +1,7 @@
 package za.co.global.controllers.report;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,23 +19,37 @@ public class ReportDataController {
     @Autowired
     protected ReportDataRepository reportDataRepository;
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(ReportDataController.class);
+
     @GetMapping("/view_reportData")
     public ModelAndView viewReportData() {
-        List<ReportData> reportDataList = reportDataRepository.findAll();
         ModelAndView modelAndView = new ModelAndView("report/viewReportData");
-        modelAndView.addObject("reportDataList", reportDataList);
+        try {
+            List<ReportData> reportDataList = reportDataRepository.findAll();
+            modelAndView.addObject("reportDataList", reportDataList);
+        } catch (Exception e) {
+            LOGGER.error("Error on report data view", e);
+            return modelAndView.addObject("errorMessage", e.getMessage());
+        }
         return modelAndView;
     }
 
     @GetMapping("/update_reportDataStatus")
-    public ModelAndView updateReportData(@RequestParam(value = "reportDataId", required = false) String reportDataId){
-        if(reportDataId != null) {
-            ReportData reportData = reportDataRepository.findOne(Long.parseLong(reportDataId));
-            if (reportData != null) {
-                reportData.setReportStatus(ReportStatus.COMPLETED);
-                reportDataRepository.save(reportData);
+    public ModelAndView updateReportData(@RequestParam(value = "reportDataId", required = false) String reportDataId) {
+        ModelAndView modelAndView = new ModelAndView("report/viewReportData");
+        try {
+            if (reportDataId != null) {
+                ReportData reportData = reportDataRepository.findOne(Long.parseLong(reportDataId));
+                if (reportData != null) {
+                    reportData.setReportStatus(ReportStatus.COMPLETED);
+                    reportDataRepository.save(reportData);
+                }
             }
+            modelAndView.addObject("reportDataList", reportDataRepository.findAll());
+        } catch (Exception e) {
+            LOGGER.error("Error updating report data status", e);
+            return modelAndView.addObject("errorMessage", e.getMessage());
         }
-        return viewReportData();
+        return modelAndView;
     }
 }

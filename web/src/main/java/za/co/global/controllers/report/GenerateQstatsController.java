@@ -126,6 +126,7 @@ public class GenerateQstatsController extends AbstractQstatsReportController {
                 modelAndView.addObject("errorMessage", "No instrument data to generate report");
             }
         } catch (GirsaException | ParseException e) {
+            LOGGER.error("Error generating report file", e);
             modelAndView.addObject("errorMessage", e.getMessage());
         }
         return modelAndView;
@@ -147,7 +148,6 @@ public class GenerateQstatsController extends AbstractQstatsReportController {
             //TODO - store it in file detials
             return filePath;
         } catch (GirsaException e) {
-            LOGGER.error("Error while creating report file", e);
             throw new GirsaException("Error while creating report file", e);
         }
     }
