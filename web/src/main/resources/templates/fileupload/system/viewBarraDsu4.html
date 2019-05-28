@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
+<head th:replace="fragments/head :: head"/>
+<body class="hold-transition skin-blue fixed sidebar-mini fuelux">
+<div class="wrapper">
+    <!-- Main Header -->
+    <header th:replace="fragments/header :: header"/>
+    <!-- Left side column. contains the logo and sidebar -->
+    <aside th:replace="fragments/side :: aside"/>
+
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+
+        <!-- Content Header (Page header) -->
+        <div class="content-header"><h1>View Barra DSU4</h1></div>
+
+        <!-- Main content -->
+        <div class="content">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="box box-primary">
+                        <div class="box-body">
+
+                            <div class="table-responsive">
+                                <table class="table table-bordered table-hover">
+                                    <thead>
+                                    <tr>
+                                        <th>Asset ID</th>
+                                        <th>Asset ID Type</th>
+                                        <th>Asset Name</th>
+                                        <th>Holdings</th>
+                                        <th>PRICE</th>
+                                        <th>Eff Exposure</th>
+                                        <th>Mkt Value</th>
+                                        <th>Inst. Type</th>
+                                        <th>Inst. Sub-type</th>
+                                        <th>Eff Weight (%)</th>
+                                        <th>GIR Issuer</th>
+                                        <th>Reg28_InstrType</th>
+                                        <th>SARB Classification</th>
+                                        <th>Africa Values</th>
+                                        <th>Price Currency</th>
+                                        <th>Local Market</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr th:each="assetDSU4 : ${assetDSU4List}">
+                                            <td><a th:href="|/view_dsu4?assetId=${assetDSU4.assetId}|"><span th:text="|${assetDSU4.assetId}|"/></a></td>
+                                            <td><span th:text="|${assetDSU4.assetIdType}|"/></td>
+                                            <td><span th:text="|${assetDSU4.assetName}|"/></td>
+                                            <td><span th:text="|${assetDSU4.holdings}|"/></td>
+                                            <td><span th:text="|${assetDSU4.price}|"/></td>
+                                            <td><span th:text="|${assetDSU4.effExposure}|"/></td>
+                                            <td><span th:text="|${assetDSU4.marketValue}|"/></td>
+                                            <td><span th:text="|${assetDSU4.instType}|"/></td>
+                                            <td><span th:text="|${assetDSU4.instSubType}|"/></td>
+                                            <td><span th:text="|${assetDSU4.effWeight}|"/></td>
+                                            <td><span th:text="|${assetDSU4.girIssuer}|"/></td>
+                                            <td><span th:text="|${assetDSU4.reg28InstrType}|"/></td>
+                                            <td><span th:text="|${assetDSU4.sarbClassification}|"/></td>
+                                            <td><span th:text="|${assetDSU4.africaValues}|"/></td>
+                                            <td><span th:text="|${assetDSU4.priceCurrency}|"/></td>
+                                            <td><span th:text="|${assetDSU4.localMarket}|"/></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div> <!-- box box-primary -->
+                </div> <!--col-xs-12 -->
+            </div><!-- row-->
+        </div><!-- content-->
+    </div> <!--content-wrapper -->
+    <!-- Main Footer -->
+    <footer th:replace="fragments/footer :: footer"/>
+    <div class="control-sidebar-bg"></div>
+</div> <!--wrapper -->
+<section th:replace="fragments/footer :: footerSection"/>
+</body>
+</html>

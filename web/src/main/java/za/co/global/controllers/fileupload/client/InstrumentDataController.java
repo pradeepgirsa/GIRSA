@@ -204,7 +204,8 @@ public class InstrumentDataController extends BaseFileUploadController {
     }
 
     protected List<InstrumentData> getInstrumentData(Client client) {
-            ReportData reportData = reportDataRepository.findByReportStatusAndClient(ReportStatus.REGISTERED, client);
+        List<ReportData> reportDatas = reportDataRepository.findByReportStatusAndClient(ReportStatus.REGISTERED, client);
+        ReportData reportData = reportDatas.isEmpty() ? null : reportDatas.get(0);
         List<InstrumentData> instrumentDataList = instrumentDataRepository.findByClientAndReportDataIsNull(client);
             if (reportData != null) {
                 List<InstrumentData> existingInstruments = instrumentDataRepository.findByClientAndReportData(client, reportData);

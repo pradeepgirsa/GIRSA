@@ -4,6 +4,8 @@ import za.co.global.domain.fileupload.client.DailyPricing;
 import za.co.global.domain.fileupload.client.Indices;
 import za.co.global.domain.fileupload.mapping.ClientFundMapping;
 import za.co.global.domain.fileupload.mapping.IssuerMapping;
+import za.co.global.domain.fileupload.system.AssetDSU3;
+import za.co.global.domain.fileupload.system.AssetDSU4;
 import za.co.global.domain.fileupload.system.BarraAssetInfo;
 
 public enum FileAndObjectResolver {
@@ -21,7 +23,9 @@ public enum FileAndObjectResolver {
     INDICES("INDICES", Indices.class),
     DAILY_PRICING("DAILY_PRICING", DailyPricing.class),
 //    TRANSACTION_LISTING("TRANSACTION_LISTING", TransactionListing.class),
-    DERIVATIVE_TYPES("DERIVATIVE_TYPES", za.co.global.domain.fileupload.mapping.DerivativeType.class);
+    DERIVATIVE_TYPES("DERIVATIVE_TYPES", za.co.global.domain.fileupload.mapping.DerivativeType.class),
+    BARRA_DSU3("BARRA_DSU3", AssetDSU3.class),
+    BARRA_DSU4("BARRA_DSU4", AssetDSU4.class);
     //DSU5("GIR_L2", za.co.global.domain.upload.DSU5_GIRREP4.class);
 
     private String fileType;

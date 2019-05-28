@@ -31,8 +31,18 @@
                     <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
                 </a>
                 <ul class="treeview-menu">
-                    <li><a th:href="|/upload_assetInfo|" >Upload</a></li>
-                    <li><a th:href="|/view_assetInfo|" >View</a></li>
+                    <li><a th:href="|/upload_assetInfo|" >Upload AssetInfo</a></li>
+                    <li><a th:href="|/view_assetInfo|" >View AssetInfo</a></li>
+                </ul>
+
+                <ul class="treeview-menu">
+                    <li><a th:href="|/upload_barra_dsu3|" >Upload DSU3</a></li>
+                    <li><a th:href="|/view_barra_dsu3|" >View DSU3</a></li>
+                </ul>
+
+                <ul class="treeview-menu">
+                    <li><a th:href="|/upload_barra_dsu4|" >Upload DSU4</a></li>
+                    <li><a th:href="|/view_barra_dsu4|" >View DSU4</a></li>
                 </ul>
             </li>
 
@@ -87,6 +97,11 @@
                     <li><a th:href="|/generate_qstats|" >Generate Report</a></li>
                     <li><a th:href="|/view_reportData|" >View Report Data</a></li>
                 </ul>
+            </li>
+
+            <li class="treeview" id="generatePerformanceReport" >
+                <a th:href="|/generate_performanceReport|"><i class="fa fa-th"></i><span>Performance Report</span>
+                </a>
             </li>
 
 

@@ -21,6 +21,7 @@
             <column name="GIR_ISSUER" type="varchar(255)"/>
             <column name="HOLDINGS" type="NUMERIC(20, 3)"/>
             <column name="INST_TYPE" type="varchar(255)"/>
+            <column name="INST_SUB_TYPE" type="varchar(255)"/>
             <column name="LOCAL_MARKET" type="varchar(255)"/>
             <column name="PRICE" type="NUMERIC(20, 3)"/>
             <column name="REG28INSTR_TYPE" type="varchar(255)"/>

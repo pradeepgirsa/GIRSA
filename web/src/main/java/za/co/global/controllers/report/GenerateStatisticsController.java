@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
@@ -20,9 +21,10 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+@Controller
 public class GenerateStatisticsController {
 
-    private static final String VIEW_FILE = "report/generateStatistics";
+    private static final String VIEW_FILE = "report/performanceStats";
 
     @Value("${file.upload.folder}")
     protected String fileUploadFolder;
@@ -35,13 +37,13 @@ public class GenerateStatisticsController {
     @Autowired
     private AssetDSU3Repository assetDSU3Repository;
 
-    @GetMapping("/generate_statistics")
+    @GetMapping("/generate_performanceReport")
     public ModelAndView displayScreen() {
         ModelAndView modelAndView = new ModelAndView(VIEW_FILE);
         return modelAndView;
     }
 
-    @PostMapping("/generate_statistics")
+    @PostMapping("/generate_performanceReport")
     public ModelAndView generateReport() {
 
         ModelAndView modelAndView = new ModelAndView(VIEW_FILE);
@@ -97,7 +99,7 @@ public class GenerateStatisticsController {
                    by Inst. sub type with composite value */
     private int addReport1(Sheet sheet, int i) {
         List<AssetDSU4> assetDSU4s = assetDSU4Repository.findFirst10ByInstSubTypeOrderByEffWeightDesc("Composite");
-        Row headerRow = sheet.createRow(1);
+        Row headerRow = sheet.createRow(i);
         headerRow.createCell(0).setCellValue("Identifier");
         headerRow.createCell(1).setCellValue("Top10 Fundlevel");
         headerRow.createCell(2).setCellValue("% Exposure");

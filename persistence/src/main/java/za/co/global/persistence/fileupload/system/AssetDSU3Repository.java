@@ -14,7 +14,7 @@ public interface AssetDSU3Repository extends JpaRepository<AssetDSU3, Long> {
 
     List<AssetDSU3> findFirst10ByInstSubTypeOrderByEffWeightDesc(String instSubType);
 
-    List<AssetDSU3> findFirst10OrderByEffWeightDesc();
+    List<AssetDSU3> findFirst10ByOrderByEffWeightDesc();
 
     @Query("SELECT icbIndustry, SUM(effWeight) FROM AssetDSU3 GROUP BY icbIndustry")
     List<Object> findEffWeightGroupByIcbIndustry();

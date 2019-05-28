@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
+<head th:replace="fragments/head :: head"/>
+<script>
+    $('.datepicker').datepicker();
+</script>
+<body class="hold-transition skin-blue fixed sidebar-mini fuelux">
+<div class="wrapper">
+    <!-- Main Header -->
+    <header th:replace="fragments/header :: header"/>
+    <!-- Left side column. contains the logo and sidebar -->
+    <aside th:replace="fragments/side :: aside"/>
+
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+        <section th:replace="fragments/message :: message"/>
+        <!-- Content Header (Page header) -->
+        <div class="content-header"><h1>PERFORMANCE STATS</h1></div>
+
+        <!-- Main content -->
+        <div class="content">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="box box-primary">
+                        <form role="form" method="post" th:action="@{/generate_performanceReport}">
+                            <div class="box-body">
+                                <!--<div th:class="form-group">-->
+                                    <!--<label> <strong>Report Date * </strong></label>-->
+                                    <!--<div class="input-group">-->
+                                        <!--<input type="text" class="form-control" placeholder="DD-MM-YYYY" id="reportDate"-->
+                                               <!--name="reportDate"/>-->
+                                        <!--<span class="input-group-addon"><i-->
+                                                <!--class="glyphicon glyphicon-calendar"></i></span>-->
+                                    <!--</div>-->
+                                <!--</div>-->
+                                <div class="form-group">
+                                    <button type="submit" class="box-title btn btn-primary" title="Submit">Generate
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div> <!-- box box-primary -->
+                </div> <!--col-xs-12 -->
+            </div> <!--row-->
+        </div> <!--content -->
+    </div> <!--content-wrapper -->
+    <!-- Main Footer -->
+    <footer th:replace="fragments/footer :: footer"/>
+    <div class="control-sidebar-bg"></div>
+</div> <!--wrapper -->
+<section th:replace="fragments/footer :: footerSection"/>
+</body>
+</html>

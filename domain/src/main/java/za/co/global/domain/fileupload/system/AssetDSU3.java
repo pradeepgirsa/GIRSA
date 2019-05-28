@@ -15,7 +15,7 @@ import java.math.BigDecimal;
 @Table(name = "barra_asset_dsu3")
 public class AssetDSU3 implements Serializable {
 
-    private static final long serialVersionUID = 5672532100913174632L;
+    private static final long serialVersionUID = 5672532110913374632L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
