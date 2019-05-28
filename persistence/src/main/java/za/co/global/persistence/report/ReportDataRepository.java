@@ -6,12 +6,12 @@ import za.co.global.domain.client.Client;
 import za.co.global.domain.report.ReportData;
 import za.co.global.domain.report.ReportStatus;
 
-import java.util.Date;
+import java.util.List;
 
 @Repository
 public interface ReportDataRepository extends JpaRepository<ReportData, Long> {
 
-    ReportData findByReportStatusAndClient(ReportStatus reportStatus, Client client);
+    List<ReportData> findByReportStatusAndClient(ReportStatus reportStatus, Client client);
 
 
 }

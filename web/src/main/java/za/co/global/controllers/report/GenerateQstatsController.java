@@ -37,7 +37,6 @@ import java.io.*;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
@@ -91,7 +90,8 @@ public class GenerateQstatsController extends AbstractQstatsReportController {
             Date reportDate = dateFormat.parse(reportDateInString);
 
             Client client = clientRepository.findOne(Long.parseLong(clientId));
-            ReportData reportData = reportDataRepository.findByReportStatusAndClient(ReportStatus.REGISTERED, client);
+            List<ReportData> reportDatas = reportDataRepository.findByReportStatusAndClient(ReportStatus.REGISTERED, client);
+            ReportData reportData = reportDatas.isEmpty() ? null : reportDatas.get(0);
             List<InstrumentData> instrumentDataList = getInstrumentData(client, reportData);
 
             if (reportData == null) {
@@ -106,7 +106,7 @@ public class GenerateQstatsController extends AbstractQstatsReportController {
             List<BarraAssetInfo> netAssets = barraAssetInfoRepository.findByNetIndicatorIsTrue();
             BarraAssetInfo netAsset = netAssets.isEmpty() ? null : netAssets.get(0);
 
-            BigDecimal netCurrentMarketValue = BigDecimal.ZERO;
+            BigDecimal netCurrentMarketValue;
             if (!CollectionUtils.isEmpty(instrumentDataList)) {
                 netCurrentMarketValue = instrumentDataList.stream().map(InstrumentData::getCurrentMarketValue)
                         .reduce(BigDecimal::add).get();
@@ -128,7 +128,7 @@ public class GenerateQstatsController extends AbstractQstatsReportController {
             } else {
                 modelAndView.addObject("errorMessage", "No instrument data to generate report");
             }
-        } catch (GirsaException | ParseException e) {
+        } catch (Exception e) {
             LOGGER.error("Error generating report file", e);
             modelAndView.addObject("errorMessage", e.getMessage());
         }

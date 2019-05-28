@@ -40,13 +40,14 @@ public class QstatsDryRunController extends AbstractQstatsReportController {
         try {
 
             Client client = clientRepository.findOne(Long.parseLong(clientId));
-            ReportData reportData = reportDataRepository.findByReportStatusAndClient(ReportStatus.REGISTERED, client);
+            List<ReportData> reportDatas = reportDataRepository.findByReportStatusAndClient(ReportStatus.REGISTERED, client);
+            ReportData reportData = reportDatas.isEmpty() ? null : reportDatas.get(0);
             List<InstrumentData> instrumentDataList = getInstrumentData(client, reportData);
 
             List<BarraAssetInfo> netAssets = barraAssetInfoRepository.findByNetIndicatorIsTrue();
             BarraAssetInfo netAsset = netAssets.isEmpty() ? null : netAssets.get(0);
 
-            BigDecimal netCurrentMarketValue = BigDecimal.ZERO;
+            BigDecimal netCurrentMarketValue;
             if (!CollectionUtils.isEmpty(instrumentDataList)) {
                 netCurrentMarketValue = instrumentDataList.stream().map(InstrumentData::getCurrentMarketValue)
                         .reduce(BigDecimal::add).get();
