@@ -12,17 +12,19 @@ public interface AssetDSU3Repository extends JpaRepository<AssetDSU3, Long> {
 
     AssetDSU3 findByAssetId(String assetId);
 
+    //TODO - net indicator false
     List<AssetDSU3> findFirst10ByInstSubTypeOrderByEffWeightDesc(String instSubType);
 
-    List<AssetDSU3> findFirst10ByOrderByEffWeightDesc();
+    //TODO - net indicator false
+    List<AssetDSU3> findFirst10ByNetIndicatorIsFalseOrderByEffWeightDesc();
 
-    @Query("SELECT icbIndustry, SUM(effWeight) FROM AssetDSU3 GROUP BY icbIndustry")
-    List<Object> findEffWeightGroupByIcbIndustry();
+    @Query("SELECT icbIndustry, SUM(effWeight) FROM AssetDSU3 WHERE netIndicator=false GROUP BY icbIndustry")
+    List<List<Object>> findEffWeightGroupByIcbIndustry();
 
-    @Query("SELECT localMarket, SUM(effWeight) FROM AssetDSU3 GROUP BY localMarket")
+    @Query("SELECT localMarket, SUM(effWeight) FROM AssetDSU3 WHERE netIndicator=false GROUP BY localMarket")
     List<Object> findEffWeightGroupByLocalMarket();
 
-    @Query("SELECT icbSuperSector, SUM(effWeight) FROM AssetDSU3 GROUP BY icbSuperSector")
+    @Query("SELECT icbSuperSector, SUM(effWeight) FROM AssetDSU3 WHERE netIndicator=false GROUP BY icbSuperSector")
     List<Object> findEffWeightGroupByIcbSuperSector();
 
 
