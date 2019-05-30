@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
+<head th:replace="fragments/head :: head"/>
+<body class="hold-transition skin-blue fixed sidebar-mini fuelux">
+<div class="wrapper">
+    <!-- Main Header -->
+    <header th:replace="fragments/header :: header"/>
+    <!-- Left side column. contains the logo and sidebar -->
+    <aside th:replace="fragments/side :: aside"/>
+
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+
+        <!-- Content Header (Page header) -->
+        <div class="content-header">
+            <a th:href="|/view_assetInfo|" type="button" class="close" id="close-asset" aria-hidden="true">Back</a>
+            <h1>Asset Information</h1>
+        </div>
+
+        <!-- Main content -->
+        <div class="content">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="box box-primary">
+                        <form method="POST" th:object="${assetDSU3}">
+                            <div class="box-body">
+                                <div th:class="form-group">
+                                    <label> <strong>Asset ID: </strong></label>
+                                    <span th:text="${assetDSU3.assetId}"/>
+                                </div>
+                                <div th:class="form-group">
+                                    <label> <strong>Asset Name: </strong></label>
+                                    <span th:text="${assetDSU3.assetName}"/>
+                                </div>
+                                <div th:class="form-group">
+                                    <label> <strong>Holdings: </strong></label>
+                                    <span th:text="${assetDSU3.holdings}"/>
+                                </div>
+                                <div th:class="form-group">
+                                    <label> <strong>Price: </strong></label>
+                                    <span th:text="${assetDSU3.price}"/>
+                                </div>
+                                <div th:class="form-group">
+                                    <label> <strong>Eff Exposure: </strong></label>
+                                    <span th:text="${assetDSU3.effExposure}"/>
+                                </div>
+                                <div th:class="form-group">
+                                    <label> <strong>Mkt Value: </strong></label>
+                                    <span th:text="${assetDSU3.marketValue}"/>
+                                </div>
+                                <div th:class="form-group">
+                                    <label> <strong>Inst. Sub-type: </strong></label>
+                                    <span th:text="${assetDSU3.instSubType}"/>
+                                </div>
+                                <div th:class="form-group">
+                                    <label> <strong>SARB Classification: </strong></label>
+                                    <span th:text="${assetDSU3.sarbClassification}"/>
+                                </div>
+                                <div th:class="form-group">
+                                    <label> <strong>Amount Issued: </strong></label>
+                                    <span th:text="${assetDSU3.amountIssued}"/>
+                                </div>
+                                <div th:class="form-group">
+                                    <label> <strong>ICB Industry: </strong></label>
+                                    <span th:text="${assetDSU3.icbIndustry}"/>
+                                </div>
+                                <div th:class="form-group">
+                                    <label> <strong>ICB Supersector: </strong></label>
+                                    <span th:text="${assetDSU3.icbSuperSector}"/>
+                                </div>
+                                <div th:class="form-group">
+                                    <label> <strong>Subsector: </strong></label>
+                                    <span th:text="${assetDSU3.subsector}"/>
+                                </div>
+                                <div th:class="form-group">
+                                    <label> <strong>GICS Industry Group: </strong></label>
+                                    <span th:text="${assetDSU3.gicsIndustryGroup}"/>
+                                </div>
+                                <div th:class="form-group">
+                                    <label> <strong>Time to Maturity: </strong></label>
+                                    <span th:text="${assetDSU3.timeToMaturity}"/>
+                                </div>
+                                <div th:class="form-group">
+                                    <label> <strong>Local Market: </strong></label>
+                                    <span th:text="${assetDSU3.localMarket}"/>
+                                </div>
+                                <div th:class="form-group">
+                                    <label> <strong>Country Of Exposure: </strong></label>
+                                    <span th:text="${assetDSU3.countryOfExposure}"/>
+                                </div>
+                                <div th:class="form-group">
+                                    <label> <strong>Country Of Incorporation: </strong></label>
+                                    <span th:text="${assetDSU3.countryOfIncorporation}"/>
+                                </div>
+                                <div th:class="form-group">
+                                    <label> <strong>Country Of Quotation: </strong></label>
+                                    <span th:text="${assetDSU3.countryOfQuotation}"/>
+                                </div>
+                                <div th:class="form-group">
+                                    <label> <strong>Moody Rating: </strong></label>
+                                    <span th:text="${assetDSU3.moodyRating}"/>
+                                </div>
+                                <div th:class="form-group">
+                                    <label> <strong>Parent IssuerID: </strong></label>
+                                    <span th:text="${assetDSU3.parentIssuerID}"/>
+                                </div>
+                                <div th:class="form-group">
+                                    <label> <strong>ISSUER SHORT NAME </strong></label>
+                                    <span th:text="${assetDSU3.issuerShortName}"/>
+                                </div>
+                            </div>
+                        </form>
+                    </div> <!-- box box-primary -->
+                </div> <!--col-xs-12 -->
+            </div> <!--row-->
+        </div> <!--content -->
+    </div> <!--content-wrapper -->
+    <!-- Main Footer -->
+    <footer th:replace="fragments/footer :: footer"/>
+    <div class="control-sidebar-bg"></div>
+</div> <!--wrapper -->
+<section th:replace="fragments/footer :: footerSection"/>
+</body>
+</html>

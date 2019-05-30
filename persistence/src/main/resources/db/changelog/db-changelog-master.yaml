@@ -39,9 +39,9 @@ databaseChangeLog:
 #          file: db/changelog/1.0.0/Create_Transaction_Listing_Changelog.xml
   - include:
           file: db/changelog/1.0.0/Create_InstrumentData_Changelog.xml
-
   - include:
             file: db/changelog/1.0.1/Create_Asset_DSU3_Changelog.xml
-
   - include:
               file: db/changelog/1.0.1/Create_Asset_DSU4_Changelog.xml
+  - include:
+              file: db/changelog/1.0.1/Create_SARB_Classification_Mapping_Changelog.xml

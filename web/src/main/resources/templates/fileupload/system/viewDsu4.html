@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
+<head th:replace="fragments/head :: head"/>
+<body class="hold-transition skin-blue fixed sidebar-mini fuelux">
+<div class="wrapper">
+    <!-- Main Header -->
+    <header th:replace="fragments/header :: header"/>
+    <!-- Left side column. contains the logo and sidebar -->
+    <aside th:replace="fragments/side :: aside"/>
+
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+
+        <!-- Content Header (Page header) -->
+        <div class="content-header">
+            <a th:href="|/view_assetInfo|" type="button" class="close" id="close-asset" aria-hidden="true">Back</a>
+            <h1>Asset Information</h1>
+        </div>
+
+        <!-- Main content -->
+        <div class="content">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="box box-primary">
+                        <form method="POST" th:object="${assetDSU4}">
+                            <div class="box-body">
+                                <div th:class="form-group">
+                                    <label> <strong>Asset ID: </strong></label>
+                                    <span th:text="${assetDSU4.assetId}"/>
+                                </div>
+                                <div th:class="form-group">
+                                    <label> <strong>Asset Name: </strong></label>
+                                    <span th:text="${assetDSU4.assetName}"/>
+                                </div>
+                                <div th:class="form-group">
+                                    <label> <strong>Holdings: </strong></label>
+                                    <span th:text="${assetDSU4.holdings}"/>
+                                </div>
+                                <div th:class="form-group">
+                                    <label> <strong>Price: </strong></label>
+                                    <span th:text="${assetDSU4.price}"/>
+                                </div>
+                                <div th:class="form-group">
+                                    <label> <strong>Eff Exposure: </strong></label>
+                                    <span th:text="${assetDSU4.effExposure}"/>
+                                </div>
+                                <div th:class="form-group">
+                                    <label> <strong>Mkt Value: </strong></label>
+                                    <span th:text="${assetDSU4.marketValue}"/>
+                                </div>
+                                <div th:class="form-group">
+                                    <label> <strong>Inst. Sub-type: </strong></label>
+                                    <span th:text="${assetDSU4.instSubType}"/>
+                                </div>
+                                <div th:class="form-group">
+                                    <label> <strong>SARB Classification: </strong></label>
+                                    <span th:text="${assetDSU4.sarbClassification}"/>
+                                </div>
+                            </div>
+                        </form>
+                    </div> <!-- box box-primary -->
+                </div> <!--col-xs-12 -->
+            </div> <!--row-->
+        </div> <!--content -->
+    </div> <!--content-wrapper -->
+    <!-- Main Footer -->
+    <footer th:replace="fragments/footer :: footer"/>
+    <div class="control-sidebar-bg"></div>
+</div> <!--wrapper -->
+<section th:replace="fragments/footer :: footerSection"/>
+</body>
+</html>

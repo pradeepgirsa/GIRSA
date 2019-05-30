@@ -71,11 +71,11 @@ public class BarraDSU4Controller extends BaseFileUploadController {
 
     @GetMapping(value = "/view_dsu4")
     public ModelAndView viewDsu4(@RequestParam(value = "assetId", required = false) String assetId) {
-        ModelAndView modelAndView = new ModelAndView("fileupload/system/dsu4");
+        ModelAndView modelAndView = new ModelAndView("fileupload/system/viewDsu4");
         try {
             LOGGER.debug("Navigating to view Asset data...");
             AssetDSU4 assetDSU4 = assetDSU4Repository.findByAssetId(assetId);
-            modelAndView.addObject("assetDSU4List", assetDSU4);
+            modelAndView.addObject("assetDSU4", assetDSU4);
         } catch (Exception e) {
             LOGGER.error("Error", e);
             modelAndView.addObject("errorMessage", e.getMessage());
