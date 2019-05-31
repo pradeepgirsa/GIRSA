@@ -11,6 +11,6 @@ public interface AssetDSU4Repository extends JpaRepository<AssetDSU4, Long> {
 
     AssetDSU4 findByAssetId(String assetId);
 
-    List<AssetDSU4> findFirst10ByInstSubTypeOrderByEffWeightDesc(String instSubType);
+    List<AssetDSU4> findFirst10ByNetIndicatorIsFalseAndInstSubTypeOrderByEffWeightDesc(String instSubType);
 
 }

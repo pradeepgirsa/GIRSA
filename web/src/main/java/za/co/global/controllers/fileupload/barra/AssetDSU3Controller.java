@@ -24,19 +24,20 @@ import java.util.Map;
 import java.util.Set;
 
 @Controller
-public class BarraDSU3Controller extends BaseFileUploadController {
+public class AssetDSU3Controller extends BaseFileUploadController {
 
     public static final String FILE_TYPE = FileAndObjectResolver.BARRA_DSU3.getFileType();
 
-    private final static Logger LOGGER = LoggerFactory.getLogger(BarraDSU3Controller.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(AssetDSU3Controller.class);
+    public static final String UPLOAD_FILE = "fileupload/system/dsu3";
+    public static final String ERROR_MESSAGE_FIELD = "errorMessage";
 
     @Autowired
     private AssetDSU3Repository assetDSU3Repository;
 
     @GetMapping("/upload_barra_dsu3")
     public ModelAndView showUpload() {
-        ModelAndView modelAndView = new ModelAndView("fileupload/system/dsu3");
-        return modelAndView;
+        return new ModelAndView(UPLOAD_FILE);
     }
 
     @Transactional
@@ -44,15 +45,15 @@ public class BarraDSU3Controller extends BaseFileUploadController {
     public ModelAndView fileUpload(@RequestParam("file") MultipartFile file) {
         LOGGER.debug("Uploading barra dsu3 info...");
         if (file.isEmpty()) {
-            return new ModelAndView("fileupload/system/dsu3", "errorMessage", "Please select a file and try again");
+            return new ModelAndView(UPLOAD_FILE, ERROR_MESSAGE_FIELD, "Please select a file and try again");
         }
         try {
             processFile(file, FILE_TYPE, null, null);
         } catch (Exception e) {
             LOGGER.error("Error", e);
-            return new ModelAndView("fileupload/system/dsu3", "errorMessage", e.getMessage());
+            return new ModelAndView(UPLOAD_FILE, ERROR_MESSAGE_FIELD, e.getMessage());
         }
-        return new ModelAndView("fileupload/system/dsu3", "successMessage", "Barra DSU3 File Uploaded successfully... " + file.getOriginalFilename());
+        return new ModelAndView(UPLOAD_FILE, "successMessage", "Barra DSU3 File Uploaded successfully... " + file.getOriginalFilename());
 
     }
 
@@ -63,7 +64,7 @@ public class BarraDSU3Controller extends BaseFileUploadController {
             model.addAttribute("assetDSU3List", assetDSU3Repository.findAll());
         } catch (Exception e) {
             LOGGER.error("Error", e);
-            model.addAttribute("errorMessage", e.getMessage());
+            model.addAttribute(ERROR_MESSAGE_FIELD, e.getMessage());
         }
         return "fileupload/system/viewBarraDsu3";
 
@@ -78,7 +79,7 @@ public class BarraDSU3Controller extends BaseFileUploadController {
             modelAndView.addObject("assetDSU3", assetDSU3);
         } catch (Exception e) {
             LOGGER.error("Error", e);
-            modelAndView.addObject("errorMessage", e.getMessage());
+            modelAndView.addObject(ERROR_MESSAGE_FIELD, e.getMessage());
         }
         return modelAndView;
     }
@@ -143,6 +144,7 @@ public class BarraDSU3Controller extends BaseFileUploadController {
 
     @Override
     protected void processObject(Object obj) {
+        //No implementation required
     }
 
 }

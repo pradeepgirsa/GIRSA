@@ -1,6 +1,9 @@
 package za.co.global.controllers.report;
 
-import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.util.CellReference;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.slf4j.Logger;
@@ -21,6 +24,7 @@ import za.co.global.persistence.fileupload.system.AssetDSU4Repository;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -49,13 +53,11 @@ public class GenerateStatisticsController {
 
     @GetMapping("/generate_performanceReport")
     public ModelAndView displayScreen() {
-        ModelAndView modelAndView = new ModelAndView(VIEW_FILE);
-        return modelAndView;
+        return new ModelAndView(VIEW_FILE);
     }
 
     @PostMapping("/generate_performanceReport")
     public ModelAndView generateReport() {
-
         ModelAndView modelAndView = new ModelAndView(VIEW_FILE);
         try {
             DateFormat dateFormat = new SimpleDateFormat("yyyyMMddhhmmss");
@@ -65,21 +67,19 @@ public class GenerateStatisticsController {
             try (Workbook workbook = new XSSFWorkbook();
                  FileOutputStream fileOut = new FileOutputStream(filePath)) {
 
-                CreationHelper createHelper = workbook.getCreationHelper();
+                workbook.getCreationHelper();
 
                 // Create a Sheet
                 Sheet sheet = workbook.createSheet();
 
-
-
-                int i = addReport1(sheet, 0);
-                i = addReport2(sheet, i);
-                i = addReport3(sheet, i);
-                i = addReport4(sheet, i);
-                i = addReport5(sheet, i);
-                i = addReport6(sheet, i);
-                addReport(sheet, i);
-
+                int i = 0;
+                i = addReport1(sheet, i);//DSU4- Top 10 By InstSubType with 'Composite' value
+                i = addReport2(sheet, i);//DSU3 - Top 10 By InstSubType with 'Equity Security' value
+                i = addReport3(sheet, i);//DSU3 - Top 10 By InstSubType with all value
+                i = addReport4(sheet, i);//DSU3 - Group By IcbIndustry and summing up eff weight and also displaying 'Excluding N/A'
+                i = addReport5(sheet, i);//DSU3 - Group By LocalMarket and summing up eff weight. Displaying first 10 and  displaying remaining values by summing up eff weight as Other
+                i = addReport6(sheet, i);//DSU3 - Group By IcbSuperSector and summing up eff weight
+                addReportForSARBClassificationAndAssetClass(sheet, i);//DSU3 - Group By SARB classification, summing up eff weight and mapping to AssetClass
 
                 // Resize all columns to fit the content size
                 for (int j = 0; j < 3; j++) {
@@ -87,13 +87,9 @@ public class GenerateStatisticsController {
                 }
 
                 // Write the output to a file
-
                 workbook.write(fileOut);
-
             }
-
             modelAndView.addObject("successMessage", "Performance report file created successfully, file: " + filePath);
-
         } catch (Exception e) {
             LOGGER.error("Error generating report file", e);
             modelAndView.addObject("errorMessage", e.getMessage());
@@ -112,9 +108,9 @@ public class GenerateStatisticsController {
         String sumString = null;
 
         // Data rows
-        List<AssetDSU4> assetDSU4s = assetDSU4Repository.findFirst10ByInstSubTypeOrderByEffWeightDesc("Composite");
-        for (AssetDSU4 assetDSU4: assetDSU4s) {
-            i+=1;
+        List<AssetDSU4> assetDSU4s = assetDSU4Repository.findFirst10ByNetIndicatorIsFalseAndInstSubTypeOrderByEffWeightDesc("Composite");
+        for (AssetDSU4 assetDSU4 : assetDSU4s) {
+            i += 1;
             Row row = sheet.createRow(i);
             row.createCell(0).setCellValue(assetDSU4.getAssetIdType());
             row.createCell(1).setCellValue(assetDSU4.getAssetName());
@@ -122,24 +118,25 @@ public class GenerateStatisticsController {
             Cell effWeightCell = row.createCell(2);
             effWeightCell.setCellValue(assetDSU4.getEffWeight().doubleValue());
             CellReference cr = new CellReference(effWeightCell);
-            sumString = sumString ==null ? cr.formatAsString() : (sumString + "," + cr.formatAsString());
+            sumString = sumString == null ? cr.formatAsString() : (sumString + "," + cr.formatAsString());
         }
 
-        i+=1;
+        i += 1;
         Row totalRow = sheet.createRow(i); //Total eff weight
         Cell totalCell = totalRow.createCell(2);
         totalCell.setCellType(Cell.CELL_TYPE_FORMULA);
-        totalCell.setCellFormula("SUM("+sumString+")");
+        totalCell.setCellFormula("SUM(" + sumString + ")");
 
         return i;
     }
 
-
+    /*Second report : Get top 10 DSU3 values - 'Identifier(InstSubType)', 'Top10 Equity(Asset name)' and '% Exposure(Eff weight)'
+                   by Inst. sub type with 'Equity Security' value */
     private int addReport2(Sheet sheet, int i) {
-        i+=1;
+        i += 1;
         sheet.createRow(i); //Empty row
 
-        i+=1;
+        i += 1;
         Row headerRow = sheet.createRow(i); //Header row
         headerRow.createCell(0).setCellValue("Identifier");
         headerRow.createCell(1).setCellValue("Top10 Equity");
@@ -148,9 +145,9 @@ public class GenerateStatisticsController {
         String sumString = null;
 
         //Data rows
-        List<AssetDSU3> assetDSU3s = assetDSU3Repository.findFirst10ByInstSubTypeOrderByEffWeightDesc("Equity Security");
-        for (AssetDSU3 assetDSU3: assetDSU3s) {
-            i+=1;
+        List<AssetDSU3> assetDSU3s = assetDSU3Repository.findFirst10ByNetIndicatorIsFalseAndInstSubTypeOrderByEffWeightDesc("Equity Security");
+        for (AssetDSU3 assetDSU3 : assetDSU3s) {
+            i += 1;
             Row row = sheet.createRow(i);
             row.createCell(0).setCellValue(assetDSU3.getInstSubType());
             row.createCell(1).setCellValue(assetDSU3.getAssetName());
@@ -158,24 +155,24 @@ public class GenerateStatisticsController {
             Cell effWeightCell = row.createCell(2);
             effWeightCell.setCellValue(assetDSU3.getEffWeight().doubleValue());
             CellReference cr = new CellReference(effWeightCell);
-            sumString = sumString ==null ? cr.formatAsString() : (sumString + "," + cr.formatAsString());
-
+            sumString = sumString == null ? cr.formatAsString() : (sumString + "," + cr.formatAsString());
         }
 
-        i+=1;
+        i += 1;
         Row totalRow = sheet.createRow(i); //Total eff weight
         Cell totalCell = totalRow.createCell(2);
         totalCell.setCellType(Cell.CELL_TYPE_FORMULA);
-        totalCell.setCellFormula("SUM("+sumString+")");
+        totalCell.setCellFormula("SUM(" + sumString + ")");
         return i;
     }
 
-
+    /*3rd report : Get top 10 DSU3 values - 'Identifier(InstSubType)', 'Top10 ALL(Asset name)' and '% Exposure(Eff weight)'
+                   by Inst. sub type irrespective of specific value*/
     private int addReport3(Sheet sheet, int i) {
-        i+=1;
+        i += 1;
         sheet.createRow(i); //Empty row
 
-        i+=1;
+        i += 1;
         Row headerRow = sheet.createRow(i); //Header row
         headerRow.createCell(0).setCellValue("Identifier");
         headerRow.createCell(1).setCellValue("Top10 ALL");
@@ -185,31 +182,33 @@ public class GenerateStatisticsController {
 
         //Data rows
         List<AssetDSU3> assetDSU3s = assetDSU3Repository.findFirst10ByNetIndicatorIsFalseOrderByEffWeightDesc();
-        for (AssetDSU3 assetDSU3: assetDSU3s) {
-            i+=1;
+        for (AssetDSU3 assetDSU3 : assetDSU3s) {
+            i += 1;
             Row row = sheet.createRow(i);
             row.createCell(0).setCellValue(assetDSU3.getInstSubType());
             row.createCell(1).setCellValue(assetDSU3.getAssetName());
+
             Cell effWeightCell = row.createCell(2);
             effWeightCell.setCellValue(assetDSU3.getEffWeight().doubleValue());
             CellReference cr = new CellReference(effWeightCell);
-            sumString = sumString ==null ? cr.formatAsString() : (sumString + "," + cr.formatAsString());
+            sumString = sumString == null ? cr.formatAsString() : (sumString + "," + cr.formatAsString());
         }
 
-        i+=1;
+        i += 1;
         Row totalRow = sheet.createRow(i); //Total eff weight
         Cell totalCell = totalRow.createCell(2);
         totalCell.setCellType(Cell.CELL_TYPE_FORMULA);
-        totalCell.setCellFormula("SUM("+sumString+")");
+        totalCell.setCellFormula("SUM(" + sumString + ")");
 
         return i;
     }
 
+    /*4th report : Get DSU3 values - 'ICB Industry(IcbIndustry)' and 'Exposure(Sum of Eff weight)' group by IcbIndustry*/
     private int addReport4(Sheet sheet, int i) {
-        i+=1;
+        i += 1;
         sheet.createRow(i); //Empty row
 
-        i+=1;
+        i += 1;
         Row headerRow = sheet.createRow(i); //Header row
         headerRow.createCell(0).setCellValue("ICB Industry");
         headerRow.createCell(1).setCellValue("Exposure");
@@ -218,101 +217,99 @@ public class GenerateStatisticsController {
         String sumExcludingNAString = null;
 
         //Data rows
-        List<List<Object>> assetDSU3s = assetDSU3Repository.findEffWeightSumGroupByIcbIndustry();
-        for (List<Object> list: assetDSU3s) {
-            i+=1;
+        List<Object[]> assetDSU3s = assetDSU3Repository.findEffWeightSumGroupByIcbIndustry();
+        for (Object[] objects : assetDSU3s) {
+            i += 1;
             Row row = sheet.createRow(i);
-            String icbIndustry = (String) list.get(0);
+            String icbIndustry = objects[0] != null ? (String) objects[0] : "";
             row.createCell(0).setCellValue(icbIndustry);
 
             Cell effWeightCell = row.createCell(1);
-            Double doubleaa = (Double) list.get(1);
-            effWeightCell.setCellValue(doubleaa);
+            BigDecimal effWeight = objects[1] != null ? (BigDecimal) objects[1] : BigDecimal.ZERO;
+            effWeightCell.setCellValue(effWeight.doubleValue());
             CellReference cr = new CellReference(effWeightCell);
-            sumString = sumString ==null ? cr.formatAsString() : (sumString + "," + cr.formatAsString());
-            if(!"N/A".equalsIgnoreCase(icbIndustry)) {
-                sumExcludingNAString = sumExcludingNAString ==null ? cr.formatAsString() : (sumExcludingNAString + "," + cr.formatAsString());
+            sumString = sumString == null ? cr.formatAsString() : (sumString + "," + cr.formatAsString());
+            if (!"N/A".equalsIgnoreCase(icbIndustry)) {
+                sumExcludingNAString = sumExcludingNAString == null ? cr.formatAsString() : (sumExcludingNAString + "," + cr.formatAsString());
             }
         }
 
-        i+=1;
+        i += 1;
         Row totalRow = sheet.createRow(i); //Total eff weight
         Cell totalCell = totalRow.createCell(1);
         totalCell.setCellType(Cell.CELL_TYPE_FORMULA);
-        totalCell.setCellFormula("SUM("+sumString+")");
+        totalCell.setCellFormula("SUM(" + sumString + ")");
 
-        i+=1;
+        i += 1;
         sheet.createRow(i); //Empty row
 
-        i+=1;
+        i += 1;
         Row excludingRow = sheet.createRow(i); //Total eff weight excluding 'N/A'
         excludingRow.createCell(0).setCellValue("Excluding \"N/A\"");
         Cell totalCellExcludingNA = excludingRow.createCell(1);
         totalCellExcludingNA.setCellType(Cell.CELL_TYPE_FORMULA);
-        totalCellExcludingNA.setCellFormula("SUM("+sumExcludingNAString+")");
+        totalCellExcludingNA.setCellFormula("SUM(" + sumExcludingNAString + ")");
 
         return i;
     }
 
-
-    /*Report: Group by 'Local Market' and summing up eff weight.
-    Displaying top 10 and remaining grouping as Other */
+    /*5th report : Get DSU3 values - 'Local Market(Local Market)' and 'Exposure(Sum of Eff weight)' group by LocalMarket
+     Displaying top 10 and remaining grouping as Other */
     private int addReport5(Sheet sheet, int i) {
-        i+=1;
+        i += 1;
         sheet.createRow(i); //Empty row
 
-        i+=1;
+        i += 1;
         Row headerRow = sheet.createRow(i); //Header row
         headerRow.createCell(0).setCellValue("Local Market");
         headerRow.createCell(1).setCellValue("Exposure");
 
         String sumFormula = null;
-        Double sumOfOther = 0d;
+        BigDecimal sumOfOtherEffWeight = BigDecimal.ZERO;
 
         //Data rows
-        List<List<Object>> assetDSU3s = assetDSU3Repository.findEffWeightSumGroupByLocalMarket();
+        List<Object[]> assetDSU3s = assetDSU3Repository.findEffWeightSumGroupByLocalMarket();
         int j = 0;
-        for (List<Object> list: assetDSU3s) {
-            j+=1;
-            i+=1;
-            if(j > 10) {
-                Double doubleaa = (Double) list.get(1);
-                sumOfOther = sumOfOther + doubleaa;
+        for (Object[] objects : assetDSU3s) {
+            j += 1;
+            i += 1;
+            BigDecimal effWeight = objects[1] != null ? (BigDecimal) objects[1] : BigDecimal.ZERO;
+            if (j > 10) {
+                sumOfOtherEffWeight = sumOfOtherEffWeight.add(effWeight);
             } else {
                 Row row = sheet.createRow(i);
-                String icbIndustry = (String) list.get(0);
-                row.createCell(0).setCellValue(icbIndustry);
+                String localMarket = objects[0] != null ? (String) objects[0] : "";
+                row.createCell(0).setCellValue(localMarket);
 
                 Cell effWeightCell = row.createCell(1);
-                Double doubleaa = (Double) list.get(1);
-                effWeightCell.setCellValue(doubleaa);
+                effWeightCell.setCellValue(effWeight.doubleValue());
                 CellReference cr = new CellReference(effWeightCell);
                 sumFormula = sumFormula == null ? cr.formatAsString() : (sumFormula + "," + cr.formatAsString());
             }
         }
 
-        i+=1;
-        Row OtherRow = sheet.createRow(i); //Other column
-        OtherRow.createCell(0).setCellValue("Other");
-        OtherRow.createCell(1).setCellValue(sumOfOther);
+        i += 1;
+        Row otherRow = sheet.createRow(i); //Other column
+        otherRow.createCell(0).setCellValue("Other");
+        otherRow.createCell(1).setCellValue(sumOfOtherEffWeight.doubleValue());
 
 
-        i+=1;
+        i += 1;
         Row totalRow = sheet.createRow(i); //Total eff weight
         Cell totalCell = totalRow.createCell(1);
         totalCell.setCellType(Cell.CELL_TYPE_FORMULA);
-        totalCell.setCellFormula("SUM("+sumFormula+")");
+        totalCell.setCellFormula("SUM(" + sumFormula + ")");
 
         return i;
     }
 
 
-    /*Report: Group by 'ICB Supersector' and summing up eff weight */
+    /*6th Report: Group by 'ICB Supersector' and summing up eff weight */
     private int addReport6(Sheet sheet, int i) {
-        i+=1;
+        i += 1;
         sheet.createRow(i); //Empty row
 
-        i+=1;
+        i += 1;
         Row headerRow = sheet.createRow(i); //Header row
         headerRow.createCell(0).setCellValue("ICB Supersector");
         headerRow.createCell(1).setCellValue("Exposure");
@@ -320,45 +317,43 @@ public class GenerateStatisticsController {
         String sumFormula = null;
 
         //Data rows
-        List<List<Object>> assetDSU3s = assetDSU3Repository.findEffWeightSumGroupByIcbSuperSector();
-        for (List<Object> list: assetDSU3s) {
-            i+=1;
-                Row row = sheet.createRow(i);
-                String icbIndustry = (String) list.get(0);
-                row.createCell(0).setCellValue(icbIndustry);
+        List<Object[]> assetDSU3s = assetDSU3Repository.findEffWeightSumGroupByIcbSuperSector();
+        for (Object[] objects : assetDSU3s) {
+            i += 1;
+            Row row = sheet.createRow(i);
+            String icbIndustry = objects[0] != null ? (String) objects[0] : "";
+            row.createCell(0).setCellValue(icbIndustry);
 
-                Cell effWeightCell = row.createCell(1);
-                Double doubleaa = (Double) list.get(1);
-                effWeightCell.setCellValue(doubleaa);
-                CellReference cr = new CellReference(effWeightCell);
-                sumFormula = sumFormula == null ? cr.formatAsString() : (sumFormula + "," + cr.formatAsString());
+            Cell effWeightCell = row.createCell(1);
+            BigDecimal effWeight = objects[1] != null ? (BigDecimal) objects[1] : BigDecimal.ZERO;
+            effWeightCell.setCellValue(effWeight.doubleValue());
+            CellReference cr = new CellReference(effWeightCell);
+            sumFormula = sumFormula == null ? cr.formatAsString() : (sumFormula + "," + cr.formatAsString());
         }
 
-
-        i+=1;
+        i += 1;
         Row totalRow = sheet.createRow(i); //Total eff weight
         Cell totalCell = totalRow.createCell(1);
         totalCell.setCellType(Cell.CELL_TYPE_FORMULA);
-        totalCell.setCellFormula("SUM("+sumFormula+")");
+        totalCell.setCellFormula("SUM(" + sumFormula + ")");
 
         return i;
     }
 
-
-
-    /*Report:  */
-    private int addReport(Sheet sheet, int i) {
-        i+=1;
+    /*7th report: Group by 'SARB Classification', summing up eff weight and mapping to AssetClass
+    * 8th Report: Group by AssetClass values and summing up eff weight
+    * 9th Report: Simplifying 8th report, i.e. taking out 'zero' values of eff weight*/
+    private int addReportForSARBClassificationAndAssetClass(Sheet sheet, int i) {
+        i += 1;
         sheet.createRow(i); //Empty row
 
-
-        Map<String, Double> assetClassWithEffWeightMap = new HashMap<>();
+        Map<String, BigDecimal> assetClassWithEffWeightMap = new HashMap<>();
         Map<String, String> sarbClassificationMappingMap = new HashMap<>();
         List<SARBClassificationMapping> sarbClassificationMappings = sarbClassificationMappingRepository.findAll();
         sarbClassificationMappings.forEach(sarbClassificationMapping ->
                 sarbClassificationMappingMap.put(sarbClassificationMapping.getSarbClassification(), sarbClassificationMapping.getAssetClass()));
 
-        i+=1;
+        i += 1;
         Row headerRow = sheet.createRow(i); //Header row
         headerRow.createCell(0).setCellValue("SARB Classification");
         headerRow.createCell(1).setCellValue("Asset Class");
@@ -366,114 +361,103 @@ public class GenerateStatisticsController {
 
         String sumFormula = null;
 
-
         //Data rows
-        List<List<Object>> assetDSU3s = assetDSU3Repository.findEffWeightSumGroupBySARBClassification();
-        for (List<Object> list: assetDSU3s) {
-            i+=1;
+        List<Object[]> assetDSU3s = assetDSU3Repository.findEffWeightSumGroupBySARBClassification();
+        for (Object[] objects : assetDSU3s) {
+            i += 1;
             Row row = sheet.createRow(i);
-            String sarbClassification = (String) list.get(0);
+            String sarbClassification = objects[0] != null ? (String) objects[0] : "";
             row.createCell(0).setCellValue(sarbClassification);
             String assetClass = sarbClassificationMappingMap.get(sarbClassification) == null ? "" : sarbClassificationMappingMap.get(sarbClassification);
             row.createCell(1).setCellValue(assetClass);
 
             Cell effWeightCell = row.createCell(2);
-            Double effWeightSum = (Double) list.get(1);
-            effWeightCell.setCellValue(effWeightSum);
+            BigDecimal effWeightSum = objects[1] != null ? (BigDecimal) objects[1] : BigDecimal.ZERO;
+            effWeightCell.setCellValue(effWeightSum.doubleValue());
             CellReference cr = new CellReference(effWeightCell);
             sumFormula = sumFormula == null ? cr.formatAsString() : (sumFormula + "," + cr.formatAsString());
 
-            if(!StringUtils.isEmpty(assetClass)) {
-                Double effWeight = assetClassWithEffWeightMap.get(assetClass);
-                if(effWeight != null) {
-                    effWeight+= effWeightSum;
+            if (!StringUtils.isEmpty(assetClass)) {
+                BigDecimal existingEffWeightSum = assetClassWithEffWeightMap.get(assetClass);
+                if (existingEffWeightSum != null) {
+                    existingEffWeightSum = existingEffWeightSum.add(effWeightSum);
                 } else {
-                    effWeight = effWeightSum;
+                    existingEffWeightSum = effWeightSum;
                 }
-                assetClassWithEffWeightMap.put(assetClass, effWeight);
+                assetClassWithEffWeightMap.put(assetClass, existingEffWeightSum);
             }
-
         }
 
-
-        i+=1;
+        i += 1;
         Row totalRow = sheet.createRow(i); //Total eff weight
         Cell totalCell = totalRow.createCell(2);
         totalCell.setCellType(Cell.CELL_TYPE_FORMULA);
-        totalCell.setCellFormula("SUM("+sumFormula+")");
-
-
-
+        totalCell.setCellFormula("SUM(" + sumFormula + ")");
 
         //Asset class report
-
-        i+=1;
+        i += 1;
         sheet.createRow(i); //Empty row
 
-        i+=1;
+        i += 1;
         Row assetClassheaderRow = sheet.createRow(i); //Header row
         assetClassheaderRow.createCell(0).setCellValue("Asset Class");
         assetClassheaderRow.createCell(1).setCellValue("Exposure");
 
         String assetClassSumFormula = null;
 
-        for(Map.Entry<String, Double> assetClassWithEffWeightEntry: assetClassWithEffWeightMap.entrySet()) {
+        for (Map.Entry<String, BigDecimal> assetClassWithEffWeightEntry : assetClassWithEffWeightMap.entrySet()) {
 
-            i+=1;
+            i += 1;
             Row row = sheet.createRow(i);
             String assetClass = assetClassWithEffWeightEntry.getKey();
             row.createCell(0).setCellValue(assetClass);
 
             Cell effWeightCell = row.createCell(1);
-            Double effWeightSum = assetClassWithEffWeightEntry.getValue();
-            effWeightCell.setCellValue(effWeightSum);
+            BigDecimal effWeightSum = assetClassWithEffWeightEntry.getValue();
+            effWeightCell.setCellValue(effWeightSum.doubleValue());
             CellReference cr = new CellReference(effWeightCell);
             sumFormula = sumFormula == null ? cr.formatAsString() : (sumFormula + "," + cr.formatAsString());
 
         }
 
-        i+=1;
+        i += 1;
         Row totalAssetClassRow = sheet.createRow(i); //Total eff weight
         Cell totalAssetClassCell = totalAssetClassRow.createCell(1);
         totalAssetClassCell.setCellType(Cell.CELL_TYPE_FORMULA);
-        totalAssetClassCell.setCellFormula("SUM("+assetClassSumFormula+")");
+        totalAssetClassCell.setCellFormula("SUM(" + assetClassSumFormula + ")");
 
 
         //Simplified Asset class report
-
-        i+=1;
+        i += 1;
         sheet.createRow(i); //Empty row
 
-        i+=1;
+        i += 1;
         Row simplifiedAssetClassheaderRow = sheet.createRow(i); //Header row
         simplifiedAssetClassheaderRow.createCell(0).setCellValue("Asset Class");
         simplifiedAssetClassheaderRow.createCell(1).setCellValue("Exposure");
 
         String simplifiedAssetClassSumFormula = null;
 
-        for(Map.Entry<String, Double> assetClassWithEffWeightEntry: assetClassWithEffWeightMap.entrySet()) {
-
-            Double effWeightSum = assetClassWithEffWeightEntry.getValue();
-            if(effWeightSum != 0.0) {
+        for (Map.Entry<String, BigDecimal> assetClassWithEffWeightEntry : assetClassWithEffWeightMap.entrySet()) {
+            BigDecimal effWeightSum = assetClassWithEffWeightEntry.getValue();
+            if (effWeightSum.compareTo(BigDecimal.ZERO) != 0) {
                 i += 1;
                 Row row = sheet.createRow(i);
                 String assetClass = assetClassWithEffWeightEntry.getKey();
                 row.createCell(0).setCellValue(assetClass);
 
                 Cell effWeightCell = row.createCell(1);
-                effWeightCell.setCellValue(effWeightSum);
+                effWeightCell.setCellValue(effWeightSum.doubleValue());
                 CellReference cr = new CellReference(effWeightCell);
                 sumFormula = sumFormula == null ? cr.formatAsString() : (sumFormula + "," + cr.formatAsString());
             }
-
         }
 
-        i+=1;
+        i += 1;
         Row totalSimplifiedAssetClassRow = sheet.createRow(i); //Total eff weight
         Cell totalSimplifiedAssetClassCell = totalSimplifiedAssetClassRow.createCell(1);
         totalSimplifiedAssetClassCell.setCellType(Cell.CELL_TYPE_FORMULA);
-        totalSimplifiedAssetClassCell.setCellFormula("SUM("+simplifiedAssetClassSumFormula+")");
-
+        totalSimplifiedAssetClassCell.setCellFormula("SUM(" + simplifiedAssetClassSumFormula + ")");
 
         return i;
     }
