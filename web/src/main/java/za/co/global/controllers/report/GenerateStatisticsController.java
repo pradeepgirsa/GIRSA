@@ -275,6 +275,7 @@ public class GenerateStatisticsController {
             Cell effWeightCell = row.createCell(1);
             BigDecimal effWeight = objects[1] != null ? (BigDecimal) objects[1] : BigDecimal.ZERO;
             effWeightCell.setCellValue(effWeight.doubleValue());
+            effWeightCell.setCellStyle(percentageCellStyle);
             CellReference cr = new CellReference(effWeightCell);
             sumString = sumString == null ? cr.formatAsString() : (sumString + "," + cr.formatAsString());
             if (!"N/A".equalsIgnoreCase(icbIndustry)) {
@@ -309,8 +310,13 @@ public class GenerateStatisticsController {
 
         i += 1;
         Row headerRow = sheet.createRow(i); //Header row
-        headerRow.createCell(0).setCellValue("Local Market");
-        headerRow.createCell(1).setCellValue("Exposure");
+        Cell cell0 = headerRow.createCell(0);
+        cell0.setCellValue("Local Market");
+        cell0.setCellStyle(headerCellStyle);
+
+        Cell cell1 = headerRow.createCell(1);
+        cell1.setCellValue("Exposure");
+        cell1.setCellStyle(headerCellStyle);
 
         String sumFormula = null;
         BigDecimal sumOfOtherEffWeight = BigDecimal.ZERO;
@@ -331,6 +337,7 @@ public class GenerateStatisticsController {
 
                 Cell effWeightCell = row.createCell(1);
                 effWeightCell.setCellValue(effWeight.doubleValue());
+                effWeightCell.setCellStyle(percentageCellStyle);
                 CellReference cr = new CellReference(effWeightCell);
                 sumFormula = sumFormula == null ? cr.formatAsString() : (sumFormula + "," + cr.formatAsString());
             }
@@ -339,15 +346,18 @@ public class GenerateStatisticsController {
         i += 1;
         Row otherRow = sheet.createRow(i); //Other column
         otherRow.createCell(0).setCellValue("Other");
-        otherRow.createCell(1).setCellValue(sumOfOtherEffWeight.doubleValue());
-
+        Cell otherCell = otherRow.createCell(1);
+        otherCell.setCellValue(sumOfOtherEffWeight.doubleValue());
+        otherCell.setCellStyle(percentageCellStyle);
+        CellReference cr = new CellReference(otherCell);
+        sumFormula = sumFormula == null ? cr.formatAsString() : (sumFormula + "," + cr.formatAsString());
 
         i += 1;
         Row totalRow = sheet.createRow(i); //Total eff weight
         Cell totalCell = totalRow.createCell(1);
         totalCell.setCellType(Cell.CELL_TYPE_FORMULA);
         totalCell.setCellFormula("SUM(" + sumFormula + ")");
-
+        totalCell.setCellStyle(percentageCellStyle);
         return i;
     }
 
@@ -359,8 +369,13 @@ public class GenerateStatisticsController {
 
         i += 1;
         Row headerRow = sheet.createRow(i); //Header row
-        headerRow.createCell(0).setCellValue("ICB Supersector");
-        headerRow.createCell(1).setCellValue("Exposure");
+        Cell cell0 = headerRow.createCell(0);
+        cell0.setCellValue("ICB Supersector");
+        cell0.setCellStyle(headerCellStyle);
+
+        Cell cell1 = headerRow.createCell(1);
+        cell1.setCellValue("Exposure");
+        cell1.setCellStyle(headerCellStyle);
 
         String sumFormula = null;
 
@@ -375,6 +390,7 @@ public class GenerateStatisticsController {
             Cell effWeightCell = row.createCell(1);
             BigDecimal effWeight = objects[1] != null ? (BigDecimal) objects[1] : BigDecimal.ZERO;
             effWeightCell.setCellValue(effWeight.doubleValue());
+            effWeightCell.setCellStyle(percentageCellStyle);
             CellReference cr = new CellReference(effWeightCell);
             sumFormula = sumFormula == null ? cr.formatAsString() : (sumFormula + "," + cr.formatAsString());
         }
@@ -384,7 +400,7 @@ public class GenerateStatisticsController {
         Cell totalCell = totalRow.createCell(1);
         totalCell.setCellType(Cell.CELL_TYPE_FORMULA);
         totalCell.setCellFormula("SUM(" + sumFormula + ")");
-
+        totalCell.setCellStyle(percentageCellStyle);
         return i;
     }
 
@@ -403,9 +419,17 @@ public class GenerateStatisticsController {
 
         i += 1;
         Row headerRow = sheet.createRow(i); //Header row
-        headerRow.createCell(0).setCellValue("SARB Classification");
-        headerRow.createCell(1).setCellValue("Asset Class");
-        headerRow.createCell(2).setCellValue("Exposure");
+        Cell cell0 = headerRow.createCell(0);
+        cell0.setCellValue("SARB Classification");
+        cell0.setCellStyle(headerCellStyle);
+
+        Cell cell1 = headerRow.createCell(1);
+        cell1.setCellValue("Asset Class");
+        cell1.setCellStyle(headerCellStyle);
+
+        Cell cell2 = headerRow.createCell(2);
+        cell2.setCellValue("Exposure");
+        cell2.setCellStyle(headerCellStyle);
 
         String sumFormula = null;
 
@@ -422,6 +446,7 @@ public class GenerateStatisticsController {
             Cell effWeightCell = row.createCell(2);
             BigDecimal effWeightSum = objects[1] != null ? (BigDecimal) objects[1] : BigDecimal.ZERO;
             effWeightCell.setCellValue(effWeightSum.doubleValue());
+            effWeightCell.setCellStyle(percentageCellStyle);
             CellReference cr = new CellReference(effWeightCell);
             sumFormula = sumFormula == null ? cr.formatAsString() : (sumFormula + "," + cr.formatAsString());
 
@@ -441,6 +466,7 @@ public class GenerateStatisticsController {
         Cell totalCell = totalRow.createCell(2);
         totalCell.setCellType(Cell.CELL_TYPE_FORMULA);
         totalCell.setCellFormula("SUM(" + sumFormula + ")");
+        totalCell.setCellStyle(percentageCellStyle);
 
         //Asset class report
         i += 1;
@@ -448,8 +474,15 @@ public class GenerateStatisticsController {
 
         i += 1;
         Row assetClassheaderRow = sheet.createRow(i); //Header row
-        assetClassheaderRow.createCell(0).setCellValue("Asset Class");
-        assetClassheaderRow.createCell(1).setCellValue("Exposure");
+        cell1 = assetClassheaderRow.createCell(0);
+        cell1.setCellValue("Asset Class");
+        cell1.setCellStyle(headerCellStyle);
+
+        cell2 = assetClassheaderRow.createCell(1);
+        cell2.setCellValue("Exposure");
+        cell2.setCellStyle(headerCellStyle);
+        /*assetClassheaderRow.createCell(0).setCellValue("Asset Class");
+        assetClassheaderRow.createCell(1).setCellValue("Exposure");*/
 
         String assetClassSumFormula = null;
 
@@ -463,6 +496,7 @@ public class GenerateStatisticsController {
             Cell effWeightCell = row.createCell(1);
             BigDecimal effWeightSum = assetClassWithEffWeightEntry.getValue();
             effWeightCell.setCellValue(effWeightSum.doubleValue());
+            effWeightCell.setCellStyle(percentageCellStyle);
             CellReference cr = new CellReference(effWeightCell);
             assetClassSumFormula = assetClassSumFormula == null ? cr.formatAsString() : (assetClassSumFormula + "," + cr.formatAsString());
 
@@ -473,7 +507,7 @@ public class GenerateStatisticsController {
         Cell totalAssetClassCell = totalAssetClassRow.createCell(1);
         totalAssetClassCell.setCellType(Cell.CELL_TYPE_FORMULA);
         totalAssetClassCell.setCellFormula("SUM(" + assetClassSumFormula + ")");
-
+        totalAssetClassCell.setCellStyle(percentageCellStyle);
 
         //Simplified Asset class report
         i += 1;
@@ -481,8 +515,16 @@ public class GenerateStatisticsController {
 
         i += 1;
         Row simplifiedAssetClassheaderRow = sheet.createRow(i); //Header row
-        simplifiedAssetClassheaderRow.createCell(0).setCellValue("Asset Class");
-        simplifiedAssetClassheaderRow.createCell(1).setCellValue("Exposure");
+        cell1 = simplifiedAssetClassheaderRow.createCell(0);
+        cell1.setCellValue("Asset Class");
+        cell1.setCellStyle(headerCellStyle);
+
+        cell2 = simplifiedAssetClassheaderRow.createCell(1);
+        cell2.setCellValue("Exposure");
+        cell2.setCellStyle(headerCellStyle);
+
+        /*simplifiedAssetClassheaderRow.createCell(0).setCellValue("Asset Class");
+        simplifiedAssetClassheaderRow.createCell(1).setCellValue("Exposure");*/
 
         String simplifiedAssetClassSumFormula = null;
 
@@ -496,6 +538,7 @@ public class GenerateStatisticsController {
 
                 Cell effWeightCell = row.createCell(1);
                 effWeightCell.setCellValue(effWeightSum.doubleValue());
+                effWeightCell.setCellStyle(percentageCellStyle);
                 CellReference cr = new CellReference(effWeightCell);
                 simplifiedAssetClassSumFormula = simplifiedAssetClassSumFormula == null ? cr.formatAsString() : (simplifiedAssetClassSumFormula + "," + cr.formatAsString());
             }
@@ -506,7 +549,7 @@ public class GenerateStatisticsController {
         Cell totalSimplifiedAssetClassCell = totalSimplifiedAssetClassRow.createCell(1);
         totalSimplifiedAssetClassCell.setCellType(Cell.CELL_TYPE_FORMULA);
         totalSimplifiedAssetClassCell.setCellFormula("SUM(" + simplifiedAssetClassSumFormula + ")");
-
+        totalSimplifiedAssetClassCell.setCellStyle(percentageCellStyle);
         return i;
     }
 
