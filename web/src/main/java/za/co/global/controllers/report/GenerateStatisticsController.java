@@ -160,9 +160,17 @@ public class GenerateStatisticsController {
 
         i += 1;
         Row headerRow = sheet.createRow(i); //Header row
-        headerRow.createCell(0).setCellValue("Identifier");
-        headerRow.createCell(1).setCellValue("Top10 Equity");
-        headerRow.createCell(2).setCellValue("% Exposure");
+        Cell cell0 = headerRow.createCell(0);
+        cell0.setCellValue("Identifier");
+        cell0.setCellStyle(headerCellStyle);
+
+        Cell cell1 = headerRow.createCell(1);
+        cell1.setCellValue("Top10 Equity");
+        cell1.setCellStyle(headerCellStyle);
+
+        Cell cell2 = headerRow.createCell(2);
+        cell2.setCellValue("% Exposure");
+        cell2.setCellStyle(headerCellStyle);
 
         String sumString = null;
 
@@ -176,6 +184,7 @@ public class GenerateStatisticsController {
 
             Cell effWeightCell = row.createCell(2);
             effWeightCell.setCellValue(assetDSU3.getEffWeight().doubleValue());
+            effWeightCell.setCellStyle(percentageCellStyle);
             CellReference cr = new CellReference(effWeightCell);
             sumString = sumString == null ? cr.formatAsString() : (sumString + "," + cr.formatAsString());
         }
@@ -185,6 +194,7 @@ public class GenerateStatisticsController {
         Cell totalCell = totalRow.createCell(2);
         totalCell.setCellType(Cell.CELL_TYPE_FORMULA);
         totalCell.setCellFormula("SUM(" + sumString + ")");
+        totalCell.setCellStyle(percentageCellStyle);
         return i;
     }
 
@@ -196,9 +206,18 @@ public class GenerateStatisticsController {
 
         i += 1;
         Row headerRow = sheet.createRow(i); //Header row
-        headerRow.createCell(0).setCellValue("Identifier");
-        headerRow.createCell(1).setCellValue("Top10 ALL");
-        headerRow.createCell(2).setCellValue("% Exposure");
+
+        Cell cell0 = headerRow.createCell(0);
+        cell0.setCellValue("Identifier");
+        cell0.setCellStyle(headerCellStyle);
+
+        Cell cell1 = headerRow.createCell(1);
+        cell1.setCellValue("Top10 ALL");
+        cell1.setCellStyle(headerCellStyle);
+
+        Cell cell2 = headerRow.createCell(2);
+        cell2.setCellValue("% Exposure");
+        cell2.setCellStyle(headerCellStyle);
 
         String sumString = null;
 
@@ -212,6 +231,7 @@ public class GenerateStatisticsController {
 
             Cell effWeightCell = row.createCell(2);
             effWeightCell.setCellValue(assetDSU3.getEffWeight().doubleValue());
+            effWeightCell.setCellStyle(percentageCellStyle);
             CellReference cr = new CellReference(effWeightCell);
             sumString = sumString == null ? cr.formatAsString() : (sumString + "," + cr.formatAsString());
         }
@@ -221,7 +241,7 @@ public class GenerateStatisticsController {
         Cell totalCell = totalRow.createCell(2);
         totalCell.setCellType(Cell.CELL_TYPE_FORMULA);
         totalCell.setCellFormula("SUM(" + sumString + ")");
-
+        totalCell.setCellStyle(percentageCellStyle);
         return i;
     }
 
@@ -232,8 +252,14 @@ public class GenerateStatisticsController {
 
         i += 1;
         Row headerRow = sheet.createRow(i); //Header row
-        headerRow.createCell(0).setCellValue("ICB Industry");
-        headerRow.createCell(1).setCellValue("Exposure");
+
+        Cell cell1 = headerRow.createCell(0);
+        cell1.setCellValue("ICB Industry");
+        cell1.setCellStyle(headerCellStyle);
+
+        Cell cell2 = headerRow.createCell(1);
+        cell2.setCellValue("Exposure");
+        cell2.setCellStyle(headerCellStyle);
 
         String sumString = null;
         String sumExcludingNAString = null;
@@ -261,7 +287,7 @@ public class GenerateStatisticsController {
         Cell totalCell = totalRow.createCell(1);
         totalCell.setCellType(Cell.CELL_TYPE_FORMULA);
         totalCell.setCellFormula("SUM(" + sumString + ")");
-
+        totalCell.setCellStyle(percentageCellStyle);
         i += 1;
         sheet.createRow(i); //Empty row
 
@@ -271,7 +297,7 @@ public class GenerateStatisticsController {
         Cell totalCellExcludingNA = excludingRow.createCell(1);
         totalCellExcludingNA.setCellType(Cell.CELL_TYPE_FORMULA);
         totalCellExcludingNA.setCellFormula("SUM(" + sumExcludingNAString + ")");
-
+        totalCellExcludingNA.setCellStyle(percentageCellStyle);
         return i;
     }
 
