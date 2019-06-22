@@ -24,20 +24,20 @@
             <!--<column name="currency" type="varchar(50)"/>-->
             <!--<column name="instr_id" type="varchar(20)"/>-->
             <!--<column name="isin" type="varchar(50)"/>-->
-            <!--<column name="instr_trade_type" type="NUMERIC(20, 3)"/>-->
+            <!--<column name="instr_trade_type" type="NUMERIC(28,  10)"/>-->
             <!--<column name="issuer_code" type="varchar(20)"/>-->
             <!--<column name="issuer_name" type="varchar(50)"/>-->
             <!--<column name="yield_type" type="varchar(20)"/>-->
-            <!--<column name="interest_rate" type="NUMERIC(20, 3)"/>-->
+            <!--<column name="interest_rate" type="NUMERIC(28,  10)"/>-->
             <!--<column name="linked_index" type="varchar(20)"/>-->
             <!--<column name="spread" type="varchar(20)"/>-->
             <!--<column name="inflation_index" type="varchar(20)"/>-->
             <!--<column name="inflation_lag" type="varchar(50)"/>-->
-            <!--<column name="inflation_base_value" type="NUMERIC(20, 3)"/>-->
+            <!--<column name="inflation_base_value" type="NUMERIC(28,  10)"/>-->
             <!--<column name="date_issue" type="varchar(20)"/>-->
-            <!--<column name="nominal" type="NUMERIC(20, 3)"/>-->
+            <!--<column name="nominal" type="NUMERIC(28,  10)"/>-->
             <!--<column name="date_maturity" type="varchar(20)"/>-->
-            <!--<column name="maturity_value" type="NUMERIC(20, 3)"/>-->
+            <!--<column name="maturity_value" type="NUMERIC(28,  10)"/>-->
             <!--<column name="interest_freq" type="varchar(20)"/>-->
             <!--<column name="dates_book_close" type="varchar(20)"/>-->
             <!--<column name="dates_coupon_payment" type="varchar(20)"/>-->

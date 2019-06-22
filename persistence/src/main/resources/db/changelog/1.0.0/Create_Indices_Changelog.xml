@@ -15,21 +15,21 @@
             <column name="description" type="varchar(100)"/>
             <column name="exch" type="varchar(20)"/>
             <column name="r" type="varchar(20)"/>
-            <column name="market_cap" type="NUMERIC(20, 3)"/>
-            <column name="market_cap_live" type="NUMERIC(20, 3)"/>
-            <column name="index_percentage" type="NUMERIC(20, 3)"/>
-            <column name="index_price" type="NUMERIC(20, 3)"/>
-            <column name="index_points" type="NUMERIC(20, 3)"/>
-            <column name="yld_hist" type="NUMERIC(20, 3)"/>
-            <column name="iwf" type="NUMERIC(20, 3)"/>
-            <column name="issue" type="NUMERIC(20, 3)"/>
-            <column name="bid" type="NUMERIC(20, 3)"/>
-            <column name="ask" type="NUMERIC(20, 3)"/>
-            <column name="last" type="NUMERIC(20, 3)"/>
-            <column name="positive_or_negative" type="NUMERIC(20, 3)"/>
+            <column name="market_cap" type="NUMERIC(28,  10)"/>
+            <column name="market_cap_live" type="NUMERIC(28,  10)"/>
+            <column name="index_percentage" type="NUMERIC(28,  10)"/>
+            <column name="index_price" type="NUMERIC(28,  10)"/>
+            <column name="index_points" type="NUMERIC(28,  10)"/>
+            <column name="yld_hist" type="NUMERIC(28,  10)"/>
+            <column name="iwf" type="NUMERIC(28,  10)"/>
+            <column name="issue" type="NUMERIC(28,  10)"/>
+            <column name="bid" type="NUMERIC(28,  10)"/>
+            <column name="ask" type="NUMERIC(28,  10)"/>
+            <column name="last" type="NUMERIC(28,  10)"/>
+            <column name="positive_or_negative" type="NUMERIC(28,  10)"/>
             <column name="sub_industry" type="varchar(200)"/>
             <column name="gics_code" type="varchar(20)"/>
-            <column name="pe_ratio" type="NUMERIC(20, 3)"/>
+            <column name="pe_ratio" type="NUMERIC(28,  10)"/>
             <column name="type" type="varchar(50)"/>
         </createTable>
 

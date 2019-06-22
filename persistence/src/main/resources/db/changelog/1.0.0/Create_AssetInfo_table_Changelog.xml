@@ -14,24 +14,24 @@
             <column name="ASSET_ID" type="varchar(255)"/>
             <column name="ASSET_ID_TYPE" type="varchar(255)"/>
             <column name="ASSET_NAME" type="varchar(255)"/>
-            <column name="AFRICA_VALUES" type="NUMERIC(20, 3)"/>
-            <column name="EFF_EXPOSURE" type="NUMERIC(20, 3)"/>
-            <column name="MARKET_VALUE" type="NUMERIC(20, 3)"/>
-            <column name="EFF_WEIGHT" type="NUMERIC(20, 3)"/>
+            <column name="AFRICA_VALUES" type="NUMERIC(28,  10)"/>
+            <column name="EFF_EXPOSURE" type="NUMERIC(28,  10)"/>
+            <column name="MARKET_VALUE" type="NUMERIC(28,  10)"/>
+            <column name="EFF_WEIGHT" type="NUMERIC(28,  10)"/>
             <column name="GIR_ISSUER" type="varchar(255)"/>
-            <column name="HOLDINGS" type="NUMERIC(20, 3)"/>
+            <column name="HOLDINGS" type="NUMERIC(28,  10)"/>
             <column name="ICB_INDUSTRY" type="varchar(255)"/>
             <column name="ICB_SUPER_SECTOR" type="varchar(255)"/>
             <column name="INST_SUB_TYPE" type="varchar(255)"/>
             <column name="INST_TYPE" type="varchar(255)"/>
             <column name="LOCAL_MARKET" type="varchar(255)"/>
-            <column name="MARKET_CAPITALIZATION" type="NUMERIC(20, 3)"/>
-            <column name="PRICE" type="NUMERIC(20, 3)"/>
+            <column name="MARKET_CAPITALIZATION" type="NUMERIC(28,  10)"/>
+            <column name="PRICE" type="NUMERIC(28,  10)"/>
             <column name="REG28INSTR_TYPE" type="varchar(255)"/>
             <column name="REG30INSTR_TYPE" type="varchar(255)"/>
             <column name="SARB_CLASSIFICATION" type="varchar(255)"/>
-            <column name="SHARES_OUTSTANDING" type="NUMERIC(20, 3)"/>
-            <column name="AMOUNT_ISSUED" type="NUMERIC(20, 3)"/>
+            <column name="SHARES_OUTSTANDING" type="NUMERIC(28,  10)"/>
+            <column name="AMOUNT_ISSUED" type="NUMERIC(28,  10)"/>
             <column name="GIR_INDUSTRY_ICB" type="varchar(255)"/>
             <column name="GIR_SECTOR_ICB" type="varchar(255)"/>
             <column name="GIR_SUB_SECTOR_ICB" type="varchar(255)"/>
@@ -46,12 +46,12 @@
             <column name="TIME_TO_MATURITY" type="varchar(255)"/>
             <column name="WEIGHTED_AVG_LIFE" type="varchar(255)"/>
             <column name="PRICING_REDEMPTION_DATE" type="date"/>
-            <column name="CURRENT_YIELD_IN_PERCENT" type="NUMERIC(20, 3)"/>
-            <column name="COUPON_IN_PERCENTAGE" type="NUMERIC(20, 3)"/>
+            <column name="CURRENT_YIELD_IN_PERCENT" type="NUMERIC(28,  10)"/>
+            <column name="COUPON_IN_PERCENTAGE" type="NUMERIC(28,  10)"/>
             <column name="FIRST_COUPON_DATE" type="varchar(255)"/>
             <column name="EFFECTIVE_DURATION" type="varchar(255)"/>
             <column name="MACAULAY_DURATION" type="varchar(255)"/>
-            <column name="MODIFIED_DURATION" type="NUMERIC(20, 3)"/>
+            <column name="MODIFIED_DURATION" type="NUMERIC(28,  10)"/>
             <column name="PRICE_CURRENCY" type="varchar(255)"/>
             <column name="COUNTRY_OF_EXPOSURE" type="varchar(255)"/>
             <column name="COUNTRY_OF_INCORPORATION" type="varchar(255)"/>

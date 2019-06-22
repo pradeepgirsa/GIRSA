@@ -20,8 +20,8 @@
             <column name="standard_and_poor_rating" type="varchar(10)"/>
             <column name="global_rating" type="varchar(10)"/>
             <column name="summary_rating" type="varchar(30)"/>
-            <column name="issue_size" type="NUMERIC(20,3)"/>
-            <column name="coupon" type="NUMERIC(20,3)"/>
+            <column name="issue_size" type="NUMERIC(28,  10)"/>
+            <column name="coupon" type="NUMERIC(28,  10)"/>
             <column name="issue_date" type="date"/>
             <column name="maturity_or_call_date" type="date"/>
             <column name="govi_benchmark" type="varchar(30)"/>
@@ -30,10 +30,10 @@
             <column name="spread_to_govi_one_day_change" type="varchar(30)"/>
             <column name="spread_to_jibar_or_asw" type="varchar(30)"/>
             <column name="spread_to_jibar_or_asw_one_day_change" type="varchar(30)"/>
-            <column name="current_yield" type="NUMERIC(20,3)"/>
+            <column name="current_yield" type="NUMERIC(28,  10)"/>
             <column name="liquidity_no_of_trades" type="varchar(10)"/>
             <column name="liquidity_nominal_traded" type="varchar(30)"/>
-            <column name="sbr_fair_value" type="NUMERIC(20,3)"/>
+            <column name="sbr_fair_value" type="NUMERIC(28,  10)"/>
             <column name="last_traded_date" type="date"/>
             <column name="last_mtm_change_date" type="date"/>
         </createTable>

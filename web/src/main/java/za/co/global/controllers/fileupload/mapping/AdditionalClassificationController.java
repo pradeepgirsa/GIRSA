@@ -64,7 +64,7 @@ public class AdditionalClassificationController extends BaseFileUploadController
 
     private AdditionalClassification getAdditionalClassification(Object obj) {
         AdditionalClassification ex = (AdditionalClassification) obj;
-        AdditionalClassification existing = additionalClassificationRepository.findByAlphaCode(ex.getAlphaCode());
+        AdditionalClassification existing = additionalClassificationRepository.findByIndustryAndSectorAndSuperSectorAndSubSector(ex.getIndustry(), ex.getSector(), ex.getSuperSector(), ex.getSubSector());
         if(existing == null) {
             return ex;
         }

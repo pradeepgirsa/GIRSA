@@ -43,20 +43,24 @@ public class QstatsReportValidator implements Validator<ReportDataCollectionBean
         }
 
         if(reportDataCollectionBean.getReg28InstrumentType() == null) {
-            return "There is no Reg28 mapping to Barra asset id: "+ barraAssetInfo.getAssetId()+", Reg28_InstrType: "+barraAssetInfo.getReg28InstrType();
+            if(!(barraAssetInfo.getReg28InstrType() == null && barraAssetInfo.getInstSubType().equalsIgnoreCase("Composite") )) {
+                return "There is no Reg28 mapping to Barra asset id: " + barraAssetInfo.getAssetId() + ", Reg28_InstrType: " + barraAssetInfo.getReg28InstrType();
+            }
         }
 
-        if(reportDataCollectionBean.getIssuerMapping() == null || reportDataCollectionBean.getIssuerMapping().getIssuerCode() == null) {
-            return "There is no issuer code mapped to the GIR issuer:"+ barraAssetInfo.getGirIssuer();
+        if(reportDataCollectionBean.getIssuerMapping() != null) {
+            if(reportDataCollectionBean.getIssuerMapping().getIssuerCode() == null) {
+                return "There is no issuer code mapped to the GIR issuer:" + barraAssetInfo.getGirIssuer();
+            }
         }
 
-        if(reportDataCollectionBean.getMaturityDate() == null) { //TODO - check maturity date with asset id or instrument code.
-            return "There is no Maturity date mapping to Barra asset id:'"+ barraAssetInfo.getAssetId()+"', Instrument code:"+ instrumentCode.getManagerCode();
-        }
+//        if(reportDataCollectionBean.getMaturityDate() == null) { //TODO - check maturity date with asset id or instrument code.
+//            return "There is no Maturity date mapping to Barra asset id:'"+ barraAssetInfo.getAssetId()+"', Instrument code:"+ instrumentCode.getManagerCode();
+//        }
 
-        if(dailyPricing == null) {
-            return "There is no daily pricing entry to the GIR issuer:"+ barraAssetInfo.getGirIssuer() + ", Barra asset id:"+barraAssetInfo.getAssetId();
-        }
+//        if(dailyPricing == null) {
+//            return "There is no daily pricing entry to the GIR issuer:"+ barraAssetInfo.getGirIssuer() + ", Barra asset id:"+barraAssetInfo.getAssetId();
+//        }
         if(fundMapping == null || fundMapping.getClientFundCode() == null) {
             return "There is no client fund mapping to Portfolio code:"+instrumentData.getPortfolioCode();
         }

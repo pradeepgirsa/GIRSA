@@ -74,7 +74,10 @@ public class QstatsReportCreationService implements ReportCreationService {
             numericCellStyle.setDataFormat(createHelper.createDataFormat().getFormat("##########"));
 
             CellStyle numeric18Decimal2 = workbook.createCellStyle();
-            numeric18Decimal2.setDataFormat(createHelper.createDataFormat().getFormat("##################.00"));
+            numeric18Decimal2.setDataFormat(createHelper.createDataFormat().getFormat("0.000000"));
+            CellStyle percentageCellStyle = workbook.createCellStyle();
+            percentageCellStyle.setDataFormat(workbook.createDataFormat().getFormat("0.000000%"));
+
 
             int rowNum = 1;
 
@@ -127,7 +130,7 @@ public class QstatsReportCreationService implements ReportCreationService {
                 BigDecimal couponRate = qStatsBean.getCouponRate() != null ? qStatsBean.getCouponRate() : BigDecimal.ZERO;
                 BigDecimal currentYield = qStatsBean.getCurrentYield();
                 BigDecimal effWeight = qStatsBean.getEffWeight();
-                if(couponRate != null && effWeight != null && currentYield != null && qStatsBean.getMaturityDate().after(qStatsBean.getQuarter())) {
+                if(qStatsBean.getMaturityDate() != null && couponRate != null && effWeight != null && currentYield != null && qStatsBean.getMaturityDate().after(qStatsBean.getQuarter())) {
                     String reportDateCellReference = CellReference.convertNumToColString(4)+rowNum;
                     String resetMaturityDateCellReference = CellReference.convertNumToColString(27)+rowNum;
                     String formula=String.format("MDURATION(%s,%s,"+
@@ -179,7 +182,7 @@ public class QstatsReportCreationService implements ReportCreationService {
                 if(qStatsBean.getPerOfPort() != null) {
                     perOdPertCell.setCellValue(qStatsBean.getPerOfPort().doubleValue());
                     perOdPertCell.setCellType(Cell.CELL_TYPE_NUMERIC);
-                    perOdPertCell.setCellStyle(numeric18Decimal2);
+                    perOdPertCell.setCellStyle(percentageCellStyle);
                 }
 
                 Cell weightingCell = row.createCell(18);
@@ -212,7 +215,9 @@ public class QstatsReportCreationService implements ReportCreationService {
                 sharesInIssueCell.setCellStyle(numericCellStyle);
 
                 row.createCell(23).setCellValue(qStatsBean.getAddClassification());
-                row.createCell(25).setCellValue(qStatsBean.getIssuerCode());
+                if(qStatsBean.getIssuerCode() != null) {
+                    row.createCell(25).setCellValue(qStatsBean.getIssuerCode());
+                }
 
                 Cell couponRateCell = row.createCell(26);
                 if(couponRate != null) {
@@ -268,7 +273,7 @@ public class QstatsReportCreationService implements ReportCreationService {
                     perIssuedCapCell.setCellValue(qStatsBean.getPerIssuedCap().doubleValue());
                 }
                 perIssuedCapCell.setCellType(Cell.CELL_TYPE_NUMERIC);
-                perIssuedCapCell.setCellStyle(numeric18Decimal2);
+                perIssuedCapCell.setCellStyle(percentageCellStyle);
 
                 Cell capitalReservesCell = row.createCell(39);
                 if(qStatsBean.getCapitalReserves() != null) {

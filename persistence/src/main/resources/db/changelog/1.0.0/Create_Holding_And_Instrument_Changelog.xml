@@ -16,10 +16,10 @@
             <!--</column>-->
             <!--<column name="portfolio_name" type="varchar(50)"/>-->
             <!--<column name="currency" type="varchar(3)"/>-->
-            <!--<column name="net_base_current_book_value" type="NUMERIC(20, 3)"/>-->
-            <!--<column name="net_base_prior_market_value" type="NUMERIC(20, 3)"/>-->
-            <!--<column name="net_base_current_market_value" type="NUMERIC(20, 3)"/>-->
-            <!--<column name="net_percent_of_market_value" type="NUMERIC(20, 3)"/>-->
+            <!--<column name="net_base_current_book_value" type="NUMERIC(28,  10)"/>-->
+            <!--<column name="net_base_prior_market_value" type="NUMERIC(28,  10)"/>-->
+            <!--<column name="net_base_current_market_value" type="NUMERIC(28,  10)"/>-->
+            <!--<column name="net_percent_of_market_value" type="NUMERIC(28,  10)"/>-->
             <!--<column name="client_id" type="bigint" />-->
             <!--<column name="report_data_id" type="bigint">-->
                 <!--<constraints nullable="true"/>-->
@@ -59,10 +59,10 @@
                 <!--<constraints nullable="false"/>-->
             <!--</column>-->
             <!--<column name="category" type="varchar(50)"/>-->
-            <!--<column name="t_base_current_book_value" type="NUMERIC(20, 3)"/>-->
-            <!--<column name="t_base_prior_market_value" type="NUMERIC(20, 3)"/>-->
-            <!--<column name="t_percent_of_market_value" type="NUMERIC(20, 3)"/>-->
-            <!--<column name="t_base_current_market_value" type="NUMERIC(20, 3)"/>-->
+            <!--<column name="t_base_current_book_value" type="NUMERIC(28,  10)"/>-->
+            <!--<column name="t_base_prior_market_value" type="NUMERIC(28,  10)"/>-->
+            <!--<column name="t_percent_of_market_value" type="NUMERIC(28,  10)"/>-->
+            <!--<column name="t_base_current_market_value" type="NUMERIC(28,  10)"/>-->
         <!--</createTable>-->
 
         <!--<addAutoIncrement columnDataType="bigint"-->
@@ -98,23 +98,23 @@
             <!--<column name="issue_currency" type="varchar(3)">-->
                 <!--<constraints nullable="false"/>-->
             <!--</column>-->
-            <!--<column name="nominal_value" type="NUMERIC(20, 3)">-->
+            <!--<column name="nominal_value" type="NUMERIC(28,  10)">-->
                 <!--<constraints nullable="false"/>-->
             <!--</column>-->
-            <!--<column name="base_price" type="NUMERIC(20, 3)"/>-->
-            <!--<column name="holding_price" type="NUMERIC(20, 3)"/>-->
-            <!--<column name="percent_of_change_base_price" type="NUMERIC(20, 3)"/>-->
-            <!--<column name="current_book_value" type="NUMERIC(20, 3)">-->
+            <!--<column name="base_price" type="NUMERIC(28,  10)"/>-->
+            <!--<column name="holding_price" type="NUMERIC(28,  10)"/>-->
+            <!--<column name="percent_of_change_base_price" type="NUMERIC(28,  10)"/>-->
+            <!--<column name="current_book_value" type="NUMERIC(28,  10)">-->
                 <!--<constraints nullable="false"/>-->
             <!--</column>-->
-            <!--<column name="base_current_book_value" type="NUMERIC(20, 3)"/>-->
-            <!--<column name="base_prior_market_value" type="NUMERIC(20, 3)"/>-->
-            <!--<column name="base_current_market_value" type="NUMERIC(20, 3)">-->
+            <!--<column name="base_current_book_value" type="NUMERIC(28,  10)"/>-->
+            <!--<column name="base_prior_market_value" type="NUMERIC(28,  10)"/>-->
+            <!--<column name="base_current_market_value" type="NUMERIC(28,  10)">-->
                 <!--<constraints nullable="false"/>-->
             <!--</column>-->
-            <!--<column name="base_change_market_value" type="NUMERIC(20, 3)"/>-->
-            <!--<column name="percent_of_change_mkt_value" type="NUMERIC(20, 3)"/>-->
-            <!--<column name="percent_of_market_value" type="NUMERIC(20, 3)"/>-->
+            <!--<column name="base_change_market_value" type="NUMERIC(28,  10)"/>-->
+            <!--<column name="percent_of_change_mkt_value" type="NUMERIC(28,  10)"/>-->
+            <!--<column name="percent_of_market_value" type="NUMERIC(28,  10)"/>-->
         <!--</createTable>-->
 
         <!--<addAutoIncrement columnDataType="bigint"-->

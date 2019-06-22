@@ -17,13 +17,13 @@
             <!--<column name="fund_code" type="varchar(20)">-->
                 <!--<constraints nullable="false" unique="true"/>-->
             <!--</column>-->
-            <!--<column name="institutional_total" type="NUMERIC(20,3)">-->
+            <!--<column name="institutional_total" type="NUMERIC(28,  10)">-->
                 <!--<constraints nullable="false"/>-->
             <!--</column>-->
-            <!--<column name="total" type="NUMERIC(20,3)">-->
+            <!--<column name="total" type="NUMERIC(28,  10)">-->
                 <!--<constraints nullable="false"/>-->
             <!--</column>-->
-            <!--<column name="percentage" type="NUMERIC(20,3)"/>-->
+            <!--<column name="percentage" type="NUMERIC(28,  10)"/>-->
             <!--<column name="date" type="DATE">-->
                 <!--<constraints nullable="false"/>-->
             <!--</column>-->

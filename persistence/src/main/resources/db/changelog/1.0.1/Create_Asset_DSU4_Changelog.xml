@@ -14,16 +14,16 @@
             <column name="ASSET_ID" type="varchar(255)"/>
             <column name="ASSET_ID_TYPE" type="varchar(255)"/>
             <column name="ASSET_NAME" type="varchar(255)"/>
-            <column name="AFRICA_VALUES" type="NUMERIC(20, 3)"/>
-            <column name="EFF_EXPOSURE" type="NUMERIC(20, 3)"/>
-            <column name="MARKET_VALUE" type="NUMERIC(20, 3)"/>
-            <column name="EFF_WEIGHT" type="NUMERIC(20, 3)"/>
+            <column name="AFRICA_VALUES" type="NUMERIC(28,  10)"/>
+            <column name="EFF_EXPOSURE" type="NUMERIC(28,  10)"/>
+            <column name="MARKET_VALUE" type="NUMERIC(28,  10)"/>
+            <column name="EFF_WEIGHT" type="NUMERIC(28,  10)"/>
             <column name="GIR_ISSUER" type="varchar(255)"/>
-            <column name="HOLDINGS" type="NUMERIC(20, 3)"/>
+            <column name="HOLDINGS" type="NUMERIC(28,  10)"/>
             <column name="INST_TYPE" type="varchar(255)"/>
             <column name="INST_SUB_TYPE" type="varchar(255)"/>
             <column name="LOCAL_MARKET" type="varchar(255)"/>
-            <column name="PRICE" type="NUMERIC(20, 3)"/>
+            <column name="PRICE" type="NUMERIC(28,  10)"/>
             <column name="REG28INSTR_TYPE" type="varchar(255)"/>
             <column name="SARB_CLASSIFICATION" type="varchar(255)"/>
             <column name="PRICE_CURRENCY" type="varchar(255)"/>

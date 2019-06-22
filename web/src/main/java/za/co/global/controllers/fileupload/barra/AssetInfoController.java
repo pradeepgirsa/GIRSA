@@ -98,6 +98,7 @@ public class AssetInfoController extends BaseFileUploadController {
                         netIndicator = true;
                         barraAssetInfo.setNetIndicator(Boolean.TRUE.booleanValue());
                     }
+                    LOGGER.info("barra seet mkt: {}", barraAssetInfo.getMarketCapitalization());
                     barraAssetInfoRepository.save(barraAssetInfo);
                 }
             }

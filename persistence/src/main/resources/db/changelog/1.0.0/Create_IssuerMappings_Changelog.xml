@@ -16,7 +16,7 @@
             <column name="barra_code" type="varchar(20)"/>
             <column name="issuer_code" type="varchar(20)"/>
             <column name="market_capitalisation" type="NUMERIC(15,3)"/>
-            <column name="capital_reserves" type="NUMERIC(20,3)"/>
+            <column name="capital_reserves" type="NUMERIC(28,  10)"/>
         </createTable>
 
         <addAutoIncrement columnDataType="bigint"

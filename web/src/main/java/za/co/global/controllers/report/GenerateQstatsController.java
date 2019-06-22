@@ -198,6 +198,9 @@ public class GenerateQstatsController extends AbstractQstatsReportController {
                         case Cell.CELL_TYPE_BOOLEAN:
                             csvdata[i] = "" + cell.getBooleanCellValue();
                             break;
+                        case Cell.CELL_TYPE_FORMULA:
+                            csvdata[i] = "" + cell.getNumericCellValue();
+                            break;
                         default:
                                 csvdata[i] = cell.getStringCellValue();
                     }
@@ -276,18 +279,19 @@ public class GenerateQstatsController extends AbstractQstatsReportController {
 
         qStatsBean.setAddClassification(getAdditionalClassification(barraAssetInfo, reg28InstrumentType, qStatsBean.getAciAssetclass()));
 
-        //TODO - verify as it is date or days
+        Date tradeDate = instrument.getTradeDate();
+        if(maturityDate != null && tradeDate != null) {
+            qStatsBean.setTtmInc(new BigDecimal(TimeUnit.DAYS.convert((maturityDate.getTime() - tradeDate.getTime()), TimeUnit.MILLISECONDS)));
+        }
 
-        qStatsBean.setTtmInc(new BigDecimal(TimeUnit.DAYS.convert((reportDate.getTime() - new Date().getTime()), TimeUnit.MILLISECONDS)));
 
-
-        qStatsBean.setIssuerCode(issuerMapping.getIssuerCode());
+        if(issuerMapping != null) {
+            qStatsBean.setIssuerCode(issuerMapping.getIssuerCode());
+        }
 
         qStatsBean.setResetMaturityDate(barraAssetInfo.getPricingRedemptionDate());
 
-        //TODO - verify as it is date or days
-        Date tradeDate = instrument.getTradeDate();
-        BigDecimal ttmCur = tradeDate != null ? BigDecimal.valueOf(TimeUnit.DAYS.convert((tradeDate.getTime() - new Date().getTime()), TimeUnit.MILLISECONDS)) :
+        BigDecimal ttmCur = maturityDate != null ? BigDecimal.valueOf(TimeUnit.DAYS.convert((maturityDate.getTime() - reportDate.getTime()), TimeUnit.MILLISECONDS)) :
                 null;
         qStatsBean.setTtmCur(ttmCur);
 
@@ -301,12 +305,12 @@ public class GenerateQstatsController extends AbstractQstatsReportController {
             if (!StringUtils.isEmpty(dailyPricing.getMoodys())) {
                 rating = dailyPricing.getMoodys();
                 ratingAgency = "Moody's";
+            }  else if (!StringUtils.isEmpty(dailyPricing.getStandardAndPoor())) {
+                rating = dailyPricing.getStandardAndPoor();
+                ratingAgency = "Standard & Poor's";
             } else if (!StringUtils.isEmpty(dailyPricing.getFitch())) {
                 rating = dailyPricing.getFitch();
                 ratingAgency = "Fitch Group";
-            } else if (!StringUtils.isEmpty(dailyPricing.getStandardAndPoor())) {
-                rating = dailyPricing.getStandardAndPoor();
-                ratingAgency = "Standard & Poor's";
             } else if (!StringUtils.isEmpty(dailyPricing.getGlobal())) {
                 rating = dailyPricing.getGlobal();
                 ratingAgency = "Global";
@@ -320,17 +324,19 @@ public class GenerateQstatsController extends AbstractQstatsReportController {
         qStatsBean.setCompConDeb(Boolean.FALSE);
 
         BigDecimal marketCap = Optional.ofNullable(issuerMapping).map(IssuerMapping::getMarketCapitalisation).orElse(null);
-        qStatsBean.setMarketCap(marketCap);
+        qStatsBean.setMarketCapIssuer(marketCap);
 
         BigDecimal capReserves = Optional.ofNullable(issuerMapping).map(IssuerMapping::getCapitalReserves).orElse(null);
         qStatsBean.setCapitalReserves(capReserves);
 
         if (qStatsBean.getMarketValue() != null && marketCap != null && marketCap.compareTo(BigDecimal.ZERO) != 0) {
-            qStatsBean.setPerIssuedCap(qStatsBean.getMarketValue().divide(marketCap, 3, RoundingMode.HALF_UP));
+            qStatsBean.setPerIssuedCap(qStatsBean.getMarketValue().divide(marketCap, 8, RoundingMode.HALF_UP));
         }
 
         qStatsBean.setAsiSADefined1(reg28InstrType);
-        qStatsBean.setAsiSADefined2(reg28InstrumentType.getAsisaDefined2());
+        if(reg28InstrumentType != null) {
+            qStatsBean.setAsiSADefined2(reg28InstrumentType.getAsisaDefined2());
+        }
         qStatsBean.setAsiSADefined3(null);
         qStatsBean.setAsiSADefined4(null);
         qStatsBean.setAsiSADefined5(null);
@@ -346,16 +352,16 @@ public class GenerateQstatsController extends AbstractQstatsReportController {
 
         String addClassification = null;
         if ("DE".equals(aciAssetClass)) {
-            List<AdditionalClassification> additionalClassifications = additionalClassificationRepository.findByIndustryAndSectorAndSuperSectorAndSubSector(barraAssetInfo.getGirIndustryICB(),
+            AdditionalClassification additionalClassifications = additionalClassificationRepository.findByIndustryAndSectorAndSuperSectorAndSubSector(barraAssetInfo.getGirIndustryICB(),
                     barraAssetInfo.getGirSectorICB(), barraAssetInfo.getGirSupersectorICB(), barraAssetInfo.getGirSubsectorICB());
-            if (!additionalClassifications.isEmpty()) {
-                addClassification = additionalClassifications.get(0).getAlphaCode();
+            if (additionalClassifications != null) {
+                addClassification = additionalClassifications.getAlphaCode();
             }
         }
-        if (!StringUtils.isEmpty(addClassification)) {
-            if (StringUtils.isEmpty(reg28InstrumentType.getAddClassificationThree())) {
+        if (StringUtils.isEmpty(addClassification) && reg28InstrumentType != null) {
+            if (!StringUtils.isEmpty(reg28InstrumentType.getAddClassificationThree())) {
                 addClassification = reg28InstrumentType.getAddClassificationThree();
-            } else if (StringUtils.isEmpty(reg28InstrumentType.getAddClassificationTwo())) {
+            } else if (!StringUtils.isEmpty(reg28InstrumentType.getAddClassificationTwo())) {
                 addClassification = reg28InstrumentType.getAddClassificationTwo();
             } else {
                 addClassification = reg28InstrumentType.getAddClassificationOne();
