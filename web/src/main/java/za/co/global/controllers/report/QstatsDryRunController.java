@@ -17,7 +17,9 @@ import za.co.global.domain.report.ReportDataCollectionBean;
 import za.co.global.domain.report.ReportStatus;
 
 import java.math.BigDecimal;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 public class QstatsDryRunController extends AbstractQstatsReportController {
@@ -45,17 +47,28 @@ public class QstatsDryRunController extends AbstractQstatsReportController {
             List<InstrumentData> instrumentDataList = getInstrumentData(client, reportData);
 
             List<BarraAssetInfo> netAssets = barraAssetInfoRepository.findByNetIndicatorIsTrue();
-            BarraAssetInfo netAsset = netAssets.isEmpty() ? null : netAssets.get(0);
+            //BarraAssetInfo netAsset = netAssets.isEmpty() ? null : netAssets.get(0);
+            Map<String, BarraAssetInfo> netAssetMap = new HashMap<>();
+            for(BarraAssetInfo barraAssetInfo : netAssets) {
+                netAssetMap.put(barraAssetInfo.getFundName(), barraAssetInfo);
+            }
 
-            BigDecimal netCurrentMarketValue;
             if (!CollectionUtils.isEmpty(instrumentDataList)) {
-                netCurrentMarketValue = instrumentDataList.stream().map(InstrumentData::getCurrentMarketValue)
-                        .reduce(BigDecimal::add).get();
+
+                List<Object[]> totalCurrentMVGroupByPortfolioCode = instrumentDataRepository.findTotalCurrentMarketValueGroupByPortfolioCode();
+                Map<String, BigDecimal> fundTotalMarketValueMap = new HashMap<>();
+                for (Object[] objects : totalCurrentMVGroupByPortfolioCode) {
+                    String portfolioCode = objects[0] != null ? (String) objects[0] : null;
+                    BigDecimal totalCurrentMarketValue = objects[1] != null ? (BigDecimal) objects[1] : BigDecimal.ZERO;
+                    fundTotalMarketValueMap.put(portfolioCode, totalCurrentMarketValue);
+                }
+
 
                 String errorString = "";
                 for (InstrumentData instrumentData : instrumentDataList) {
                     ClientFundMapping clientFundMapping = clientFundMappingRepository.findByClientFundCode(instrumentData.getPortfolioCode());
-                    ReportDataCollectionBean reportDataCollectionBean = getReportCollectionBean(instrumentData, netAsset, clientFundMapping, null, netCurrentMarketValue);
+//                    BarraAssetInfo netAsset = netAssetMap.get(clientFundMapping.)
+                    ReportDataCollectionBean reportDataCollectionBean = getReportCollectionBean(instrumentData, netAssetMap, clientFundMapping, null, fundTotalMarketValueMap);
                     String error = validator.validate(reportDataCollectionBean);
                     if (error != null) {
                         if (StringUtils.isEmpty(errorString)) {

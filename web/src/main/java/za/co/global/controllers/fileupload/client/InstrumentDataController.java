@@ -36,7 +36,7 @@ import java.util.Set;
 @Controller
 public class InstrumentDataController extends BaseFileUploadController {
 
-    private static final String FILE_TYPE = FileAndObjectResolver.INSTRUMENT_DATA.getFileType();
+    private static final String FILE_TYPE = FileAndObjectResolver.CLIENT_FILE.getFileType();
 
     private final static Logger LOGGER = LoggerFactory.getLogger(InstrumentDataController.class);
 

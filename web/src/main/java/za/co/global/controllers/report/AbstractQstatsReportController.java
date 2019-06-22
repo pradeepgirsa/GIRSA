@@ -166,10 +166,12 @@ public abstract class AbstractQstatsReportController {
         return issuerMapping;
     }
 
-    protected BarraAssetInfo getBarraAssetInfo(InstrumentCode instrumentCode) {
+    protected BarraAssetInfo getBarraAssetInfo(InstrumentCode instrumentCode, ClientFundMapping clientFundMapping) {
         BarraAssetInfo barraAssetInfo = null;
-        if(instrumentCode != null && instrumentCode.getBarraCode() != null) {
-            barraAssetInfo = barraAssetInfoRepository.findByAssetId(instrumentCode.getBarraCode());
+        String barraFundName = clientFundMapping != null ? clientFundMapping.getBarraFundName() : null;
+        String barraAssetId = instrumentCode != null ? instrumentCode.getBarraCode() : null;
+        if(barraAssetId != null && barraFundName != null) {
+            barraAssetInfo = barraAssetInfoRepository.findByAssetIdAndFundName(barraAssetId, barraFundName);
         }
         return barraAssetInfo;
     }
@@ -178,12 +180,12 @@ public abstract class AbstractQstatsReportController {
         return dailyPricingRepository.findByBondCode(assetId);
     }
 
-    protected ReportDataCollectionBean getReportCollectionBean(InstrumentData instrumentData, BarraAssetInfo netAsset,
-                                                               ClientFundMapping clientFundMapping, Date reportDate, BigDecimal netCurrentMarketValue) {
+    protected ReportDataCollectionBean getReportCollectionBean(InstrumentData instrumentData, Map<String, BarraAssetInfo> netAssetMap,
+                                                               ClientFundMapping clientFundMapping, Date reportDate, Map<String, BigDecimal> fundTotalMarketValueMap) {
 
         InstrumentCode instrumentCode = instrumentCodeRepository.findByManagerCode(instrumentData.getInstrumentCode());
 
-        BarraAssetInfo barraAssetInfo = getBarraAssetInfo(instrumentCode);
+        BarraAssetInfo barraAssetInfo = getBarraAssetInfo(instrumentCode, clientFundMapping);
 
         Reg28InstrumentType reg28InstrumentType = getReg28InstrumentType(barraAssetInfo);
 
@@ -192,6 +194,9 @@ public abstract class AbstractQstatsReportController {
         DailyPricing dailyPricing = getDailyPricing(instrumentData.getInstrumentCode());
 
         Date maturityDate = getMaturityDate(barraAssetInfo);
+
+        BigDecimal netCurrentMarketValue = getFundTotalMarketValue(instrumentData, fundTotalMarketValueMap);
+        BarraAssetInfo netAsset = getNetBarraAssetInfo(netAssetMap, clientFundMapping);
 
         ReportDataCollectionBean reportDataCollectionBean = new ReportDataCollectionBean.Builder()
                 .setInstrumentData(instrumentData)
@@ -208,6 +213,20 @@ public abstract class AbstractQstatsReportController {
                 .build();
 
         return reportDataCollectionBean;
+    }
+
+    private BarraAssetInfo getNetBarraAssetInfo(Map<String, BarraAssetInfo> netAssetMap, ClientFundMapping clientFundMapping) {
+        if(netAssetMap != null) {
+            return netAssetMap.get(clientFundMapping.getBarraFundName());
+        }
+        return null;
+    }
+
+    private BigDecimal getFundTotalMarketValue(InstrumentData instrumentData, Map<String, BigDecimal> fundTotalMarketValueMap) {
+        if(fundTotalMarketValueMap != null) {
+            return fundTotalMarketValueMap.get(instrumentData.getPortfolioCode());
+        }
+        return null;
     }
 
     private Reg28InstrumentType getReg28InstrumentType(BarraAssetInfo barraAssetInfo) {

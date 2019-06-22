@@ -9,7 +9,7 @@ import java.util.List;
 @Repository
 public interface BarraAssetInfoRepository extends JpaRepository<BarraAssetInfo, Long> {
 
-    BarraAssetInfo findByAssetId(String assetId);
+    BarraAssetInfo findByAssetIdAndFundName(String assetId, String fundName);
 
     List<BarraAssetInfo> findByNetIndicatorIsTrue();
 

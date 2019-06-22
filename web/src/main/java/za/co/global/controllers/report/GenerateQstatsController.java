@@ -103,17 +103,20 @@ public class GenerateQstatsController extends AbstractQstatsReportController {
 
 
             List<QStatsBean> qStatsBeans = new ArrayList<>();
+
             List<BarraAssetInfo> netAssets = barraAssetInfoRepository.findByNetIndicatorIsTrue();
-            BarraAssetInfo netAsset = netAssets.isEmpty() ? null : netAssets.get(0);
+            //BarraAssetInfo netAsset = netAssets.isEmpty() ? null : netAssets.get(0);
+            Map<String, BarraAssetInfo> netAssetMap = new HashMap<>();
+            for(BarraAssetInfo barraAssetInfo : netAssets) {
+                netAssetMap.put(barraAssetInfo.getFundName(), barraAssetInfo);
+            }
 
             BigDecimal netCurrentMarketValue;
             if (!CollectionUtils.isEmpty(instrumentDataList)) {
-                netCurrentMarketValue = instrumentDataList.stream().map(InstrumentData::getCurrentMarketValue)
-                        .reduce(BigDecimal::add).get();
 
                 for (InstrumentData instrumentData : instrumentDataList) {
                     ClientFundMapping clientFundMapping = clientFundMappingRepository.findByClientFundCode(instrumentData.getPortfolioCode());
-                    ReportDataCollectionBean reportDataCollectionBean = getReportCollectionBean(instrumentData, netAsset, clientFundMapping, reportDate, netCurrentMarketValue);
+                    ReportDataCollectionBean reportDataCollectionBean = getReportCollectionBean(instrumentData, netAssetMap, clientFundMapping, reportDate, null);
                     validate(reportDataCollectionBean);
                     qStatsBeans.add(getQStatsBean(reportDate, client, reportDataCollectionBean));
                     if (instrumentData.getReportData() == null) {
@@ -123,7 +126,7 @@ public class GenerateQstatsController extends AbstractQstatsReportController {
                 }
                 reportDataRepository.save(reportData);
 
-                String filePath = createExcelFile(qStatsBeans, client);
+                String filePath = createExcelFile(qStatsBeans, client, reportDateInString);
                 modelAndView.addObject("successMessage", "Qstats file created successfully, file: " + filePath);
             } else {
                 modelAndView.addObject("errorMessage", "No instrument data to generate report");
@@ -141,10 +144,9 @@ public class GenerateQstatsController extends AbstractQstatsReportController {
             throw new GirsaException(reportError);
     }
 
-    private String createExcelFile(List<QStatsBean> qStatsBeans, Client client) throws GirsaException {
+    private String createExcelFile(List<QStatsBean> qStatsBeans, Client client, String reportDateInString) throws GirsaException {
         try {
-            DateFormat dateFormat = new SimpleDateFormat("yyyyMMddhhmmss");
-            String filename = "QStats_" + dateFormat.format(new Date());
+            String filename = String.format("QStats_%s_%s", client.getClientName(), reportDateInString);
 //            String filePath = fileUploadFolder + File.separator + "Reports" + File.separator + client.getClientName() +"result.xlsx";
             String filePath = fileUploadFolder + File.separator + filename + ".xlsx";
             reportCreationService.createExcelFile(qStatsBeans, filePath);

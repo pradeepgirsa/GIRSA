@@ -20,6 +20,10 @@ public class BarraAssetInfo implements Serializable {
     @Column(name = "ID")
     private Long id;
 
+    @Id
+    @Column(name = "FUND_NAME")
+    private String fundName;
+
     @ExcelColumnHeader(columnHeader = "Asset ID")
     @Column(name = "ASSET_ID")
     private String assetId;
@@ -695,6 +699,14 @@ public class BarraAssetInfo implements Serializable {
         this.netIndicator = netIndicator;
     }
 
+    public String getFundName() {
+        return fundName;
+    }
+
+    public void setFundName(String fundName) {
+        this.fundName = fundName;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -703,6 +715,7 @@ public class BarraAssetInfo implements Serializable {
         BarraAssetInfo that = (BarraAssetInfo) o;
 
         if (assetId != null ? !assetId.equals(that.assetId) : that.assetId != null) return false;
+        if (fundName != null ? !fundName.equals(that.fundName) : that.fundName != null) return false;
         if (assetIdType != null ? !assetIdType.equals(that.assetIdType) : that.assetIdType != null) return false;
         if (assetName != null ? !assetName.equals(that.assetName) : that.assetName != null) return false;
         if (holdings != null ? !holdings.equals(that.holdings) : that.holdings != null) return false;
@@ -792,6 +805,7 @@ public class BarraAssetInfo implements Serializable {
         int result = assetId != null ? assetId.hashCode() : 0;
         result = 31 * result + (assetIdType != null ? assetIdType.hashCode() : 0);
         result = 31 * result + (assetName != null ? assetName.hashCode() : 0);
+        result = 31 * result + (fundName != null ? fundName.hashCode() : 0);
         result = 31 * result + (holdings != null ? holdings.hashCode() : 0);
         result = 31 * result + (price != null ? price.hashCode() : 0);
         result = 31 * result + (effExposure != null ? effExposure.hashCode() : 0);

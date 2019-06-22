@@ -37,6 +37,7 @@ public class QstatsReportValidator implements Validator<ReportDataCollectionBean
             return "There is no net value for current market base value, portfolio code:"+ instrumentData.getPortfolioCode()
                     +", instrument code:" + instrumentData.getInstrumentCode();
         }
+        //TODO - if difference is 1 value then ignore the condition
         if(netAsset.getEffExposure().compareTo(netCurrentMarketValue) != 0) {
             return "Net eff exposure from barra and net base current market values are not equal- portfolio code:"
                     + instrumentData.getPortfolioCode() +", instrument code:" + instrumentData.getInstrumentCode();

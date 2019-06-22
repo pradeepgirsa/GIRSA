@@ -70,11 +70,11 @@ public class AssetInfoController extends BaseFileUploadController {
     }
 
     @GetMapping(value = "/view_asset")
-    public ModelAndView viewAssetData(@RequestParam(value = "assetId", required = false) String assetId) {
+    public ModelAndView viewAssetData(@RequestParam(value = "assetId", required = false) String assetId, @RequestParam(value = "fundName", required = false) String fundName) {
         ModelAndView modelAndView = new ModelAndView("fileupload/system/asset");
         try {
             LOGGER.debug("Navigating to view Asset data...");
-            BarraAssetInfo barraAssetInfo = barraAssetInfoRepository.findByAssetId(assetId);
+            BarraAssetInfo barraAssetInfo = barraAssetInfoRepository.findByAssetIdAndFundName(assetId, fundName);
             modelAndView.addObject("barraAssetInfo", barraAssetInfo);
         } catch (Exception e) {
             LOGGER.error("Error", e);
@@ -88,6 +88,7 @@ public class AssetInfoController extends BaseFileUploadController {
         GirsaExcelParser parser = new GirsaExcelParser(ExcelFactoryType.COLUMN_NAME_BASED_EXTRACTION);
         Map<String, List<Object>> result = parser.parse(file, fileType); //Whatever excel file you want
         Set<Map.Entry<String, List<Object>>> entries = result.entrySet();
+        String fundName = getBarraFundName(file.getName());
         for (Map.Entry<String, List<Object>> map : entries) {
             List<Object> value = map.getValue();
             boolean netIndicator = false;
@@ -98,16 +99,31 @@ public class AssetInfoController extends BaseFileUploadController {
                         netIndicator = true;
                         barraAssetInfo.setNetIndicator(Boolean.TRUE.booleanValue());
                     }
-                    LOGGER.info("barra seet mkt: {}", barraAssetInfo.getMarketCapitalization());
+                    barraAssetInfo.setFundName(fundName);
+                    LOGGER.info("Saving barra asset id:{}, fundname:{}", barraAssetInfo.getAssetId(), fundName);
                     barraAssetInfoRepository.save(barraAssetInfo);
                 }
             }
         }
     }
 
+    private String getBarraFundName(String filename) {
+        int index = filename.indexOf("-");
+        if(index != -1) {
+            return filename.substring(0, index).trim();
+        } else {
+            int dotIndex = filename.lastIndexOf(".");
+            if(dotIndex != -1) {
+                return filename.substring(0, dotIndex).trim();
+            }
+            return filename;
+        }
+
+    }
+
     private BarraAssetInfo getAssetInfo(Object object) {
         BarraAssetInfo barraAssetInfo = (BarraAssetInfo) object;
-        BarraAssetInfo existingBarraAssetInfo = barraAssetInfoRepository.findByAssetId(barraAssetInfo.getAssetId());
+        BarraAssetInfo existingBarraAssetInfo = barraAssetInfoRepository.findByAssetIdAndFundName(barraAssetInfo.getAssetId(), barraAssetInfo.getFundName());
         if (existingBarraAssetInfo == null) {
             return barraAssetInfo;
         }

@@ -14,7 +14,7 @@ public enum FileAndObjectResolver {
     BARRA_FILE("BARRA_FILE", BarraAssetInfo.class),
     ADDITIONAL_CLASSIFICATION("ADDITIONAL_CLASSIFICATION", za.co.global.domain.fileupload.mapping.AdditionalClassification.class),
     INSTRUMENT_CODE("INSTRUMENT_CODE", za.co.global.domain.fileupload.mapping.InstrumentCode.class),
-    INSTRUMENT_DATA("INSTRUMENT_DATA", za.co.global.domain.fileupload.client.InstrumentData.class),
+    CLIENT_FILE("CLIENT_FILE", za.co.global.domain.fileupload.client.InstrumentData.class),
     ISSUER_MAPPINGS("ISSUER_MAPPINGS", IssuerMapping.class),
     CLIENT_FUND_MAPPING("CLIENT_FUND_MAPPING", ClientFundMapping.class),
 //    INSTITUTIONAL_DETAILS("INSTITUTIONAL_DETAILS", za.co.global.domain.fileupload.client.InstitutionalDetails.class),
