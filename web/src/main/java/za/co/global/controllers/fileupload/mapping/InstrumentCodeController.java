@@ -40,9 +40,9 @@ public class InstrumentCodeController extends BaseFileUploadController {
         try {
             processFile(file, FILE_TYPE, null, null);
         } catch (IOException e) {
-            return new ModelAndView("fileupload/mapping/instrumentCode", "errorMessage", e.getMessage());
+            return new ModelAndView("fileupload/mapping/instrumentCode", "errorMessage", "Error: "+e.getMessage());
         } catch (Exception e) {
-            return new ModelAndView("fileupload/mapping/instrumentCode", "errorMessage", e.getMessage());
+            return new ModelAndView("fileupload/mapping/instrumentCode", "errorMessage", "Error: "+e.getMessage());
         }
         return new ModelAndView("fileupload/mapping/instrumentCode", "successMessage", "File Uploaded sucessfully... " + file.getOriginalFilename());
     }
@@ -57,9 +57,20 @@ public class InstrumentCodeController extends BaseFileUploadController {
     @Override
     protected void processObject(Object obj) {
         if(obj instanceof InstrumentCode) {
-            InstrumentCode ex = (InstrumentCode) obj;
-            instrumentCodeRepository.save(ex);
+            InstrumentCode instrumentCode = getInstrumentCode(obj);
+            instrumentCodeRepository.save(instrumentCode);
         }
+    }
+
+    private InstrumentCode getInstrumentCode(Object object) {
+        InstrumentCode instrumentCode = (InstrumentCode) object;
+        InstrumentCode existingInstrumentCode= instrumentCodeRepository.findByManagerCode(instrumentCode.getManagerCode());
+        if(existingInstrumentCode == null) {
+            return instrumentCode;
+        }
+
+        existingInstrumentCode.setBarraCode(instrumentCode.getBarraCode());
+        return existingInstrumentCode;
     }
 
 }

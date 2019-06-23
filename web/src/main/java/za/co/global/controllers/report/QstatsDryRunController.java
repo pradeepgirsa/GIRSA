@@ -66,7 +66,7 @@ public class QstatsDryRunController extends AbstractQstatsReportController {
 
                 String errorString = "";
                 for (InstrumentData instrumentData : instrumentDataList) {
-                    ClientFundMapping clientFundMapping = clientFundMappingRepository.findByClientFundCode(instrumentData.getPortfolioCode());
+                    ClientFundMapping clientFundMapping = clientFundMappingRepository.findByManagerFundCode(instrumentData.getPortfolioCode());
 //                    BarraAssetInfo netAsset = netAssetMap.get(clientFundMapping.)
                     ReportDataCollectionBean reportDataCollectionBean = getReportCollectionBean(instrumentData, netAssetMap, clientFundMapping, null, fundTotalMarketValueMap);
                     String error = validator.validate(reportDataCollectionBean);
@@ -87,7 +87,7 @@ public class QstatsDryRunController extends AbstractQstatsReportController {
             return modelAndView.addObject("successMessage", "Dry run completed successfully, no errors");
         } catch (Exception e) {
             LOGGER.error("Error on report dry run", e);
-            return modelAndView.addObject("errorMessage", e.getMessage());
+            return modelAndView.addObject("errorMessage", "Error: "+e.getMessage());
         }
     }
 

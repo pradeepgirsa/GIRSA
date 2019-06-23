@@ -29,7 +29,7 @@ public class ReportDataController {
             modelAndView.addObject("reportDataList", reportDataList);
         } catch (Exception e) {
             LOGGER.error("Error on report data view", e);
-            return modelAndView.addObject("errorMessage", e.getMessage());
+            return modelAndView.addObject("errorMessage", "Error: "+e.getMessage());
         }
         return modelAndView;
     }
@@ -48,7 +48,7 @@ public class ReportDataController {
             modelAndView.addObject("reportDataList", reportDataRepository.findAll());
         } catch (Exception e) {
             LOGGER.error("Error updating report data status", e);
-            return modelAndView.addObject("errorMessage", e.getMessage());
+            return modelAndView.addObject("errorMessage", "Error: "+e.getMessage());
         }
         return modelAndView;
     }

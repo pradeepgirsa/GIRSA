@@ -50,7 +50,7 @@ public class AssetInfoController extends BaseFileUploadController {
             processFile(file, FILE_TYPE, null, null);
         } catch (Exception e) {
             LOGGER.error("Error", e);
-            return new ModelAndView("fileupload/system/assetInfo", "errorMessage", e.getMessage());
+            return new ModelAndView("fileupload/system/assetInfo", "errorMessage", "Error: "+e.getMessage());
         }
         return new ModelAndView("fileupload/system/assetInfo", "successMessage", "File Uploaded successfully... " + file.getOriginalFilename());
 
@@ -63,7 +63,7 @@ public class AssetInfoController extends BaseFileUploadController {
             model.addAttribute("assetInfoList", barraAssetInfoRepository.findAll());
         } catch (Exception e) {
             LOGGER.error("Error", e);
-            model.addAttribute("errorMessage", e.getMessage());
+            model.addAttribute("errorMessage", "Error: "+e.getMessage());
         }
         return "fileupload/system/viewAssetInfo";
 
@@ -78,7 +78,7 @@ public class AssetInfoController extends BaseFileUploadController {
             modelAndView.addObject("barraAssetInfo", barraAssetInfo);
         } catch (Exception e) {
             LOGGER.error("Error", e);
-            modelAndView.addObject("errorMessage", e.getMessage());
+            modelAndView.addObject("errorMessage", "Error: "+e.getMessage());
         }
         return modelAndView;
     }

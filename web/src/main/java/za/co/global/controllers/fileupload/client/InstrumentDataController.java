@@ -18,7 +18,6 @@ import za.co.global.domain.client.Client;
 import za.co.global.domain.fileupload.FileDetails;
 import za.co.global.domain.fileupload.client.InstrumentData;
 import za.co.global.domain.product.Product;
-import za.co.global.domain.report.ReportData;
 import za.co.global.domain.report.ReportStatus;
 import za.co.global.persistence.client.ClientRepository;
 import za.co.global.persistence.fileupload.client.InstrumentDataRepository;
@@ -59,7 +58,7 @@ public class InstrumentDataController extends BaseFileUploadController {
             modelAndView.addObject("clients", clients);
         } catch (Exception e) {
             LOGGER.error("Error on showUpload()", e);
-            modelAndView.addObject("errorMessage", e.getMessage());
+            modelAndView.addObject("errorMessage", "Error: "+e.getMessage());
         }
         return modelAndView;
     }
@@ -77,14 +76,14 @@ public class InstrumentDataController extends BaseFileUploadController {
                     processFile(file, FILE_TYPE, client, null);
                     modelAndView.addObject("successMessage", "File Uploaded sucessfully... " + file.getOriginalFilename());
                 } catch (Exception e) {
-                    modelAndView.addObject("errorMessage", e.getMessage());
+                    modelAndView.addObject("errorMessage", "Error: "+e.getMessage());
                 }
             }
             clients = clientRepository.findAll();
             modelAndView.addObject("clients", clients);
         } catch (Exception e) {
             LOGGER.error("Error uploading instrument data", e);
-            modelAndView.addObject("errorMessage", e.getMessage());
+            modelAndView.addObject("errorMessage", "Error: "+e.getMessage());
         }
         return modelAndView;
     }
@@ -180,6 +179,7 @@ public class InstrumentDataController extends BaseFileUploadController {
                         ", client:"+client.getClientName()+ ", instrument code: "+instrumentData.getInstrumentCode());
             }
             if(instumentDataList.size() == 1) {
+                LOGGER.info("Overriding client data, portfolio code:{}, instrument code:{}, client:{}", instrumentData.getPortfolioCode(), instrumentData.getInstrumentCode(), client.getClientName());
                 InstrumentData instrumentDataToSave = instumentDataList.get(0);
                 instrumentDataToSave.setCurrentBookValue(instrumentData.getCurrentBookValue());
                 instrumentDataToSave.setCurrentMarketValue(instrumentData.getCurrentMarketValue());
@@ -201,18 +201,6 @@ public class InstrumentDataController extends BaseFileUploadController {
                 instrumentDataRepository.save(instrumentData);
             }
         }
-    }
-
-    protected List<InstrumentData> getInstrumentData(Client client) {
-        List<ReportData> reportDatas = reportDataRepository.findByReportStatusAndClient(ReportStatus.REGISTERED, client);
-        ReportData reportData = reportDatas.isEmpty() ? null : reportDatas.get(0);
-        List<InstrumentData> instrumentDataList = instrumentDataRepository.findByClientAndReportDataIsNull(client);
-            if (reportData != null) {
-                List<InstrumentData> existingInstruments = instrumentDataRepository.findByClientAndReportData(client, reportData);
-                existingInstruments.forEach(instrumentData -> instrumentDataList.add(instrumentData));
-            }
-
-        return instrumentDataList;
     }
 
     @Override

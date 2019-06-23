@@ -40,9 +40,9 @@ public class Reg28InstrumentTypeController extends BaseFileUploadController {
         try {
             processFile(file, FILE_TYPE, null, null);
         } catch (IOException e) {
-            return new ModelAndView("fileupload/mapping/reg28InstrumentType", "errorMessage", e.getMessage());
+            return new ModelAndView("fileupload/mapping/reg28InstrumentType", "errorMessage", "Error: "+e.getMessage());
         } catch (Exception e) {
-            return new ModelAndView("fileupload/mapping/reg28InstrumentType", "errorMessage", e.getMessage());
+            return new ModelAndView("fileupload/mapping/reg28InstrumentType", "errorMessage", "Error: "+e.getMessage());
         }
         return new ModelAndView("fileupload/mapping/reg28InstrumentType", "successMessage", "File Uploaded sucessfully... " + file.getOriginalFilename());
     }

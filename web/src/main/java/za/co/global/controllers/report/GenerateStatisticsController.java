@@ -102,7 +102,7 @@ public class GenerateStatisticsController {
             modelAndView.addObject("successMessage", "Performance report file created successfully, file: " + filePath);
         } catch (Exception e) {
             LOGGER.error("Error generating report file", e);
-            modelAndView.addObject("errorMessage", e.getMessage());
+            modelAndView.addObject("errorMessage", "Error: "+e.getMessage());
         }
         return modelAndView;
     }

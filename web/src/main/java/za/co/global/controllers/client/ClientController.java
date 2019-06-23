@@ -43,7 +43,7 @@ public class ClientController {
             return "client/viewClients";
         } catch (Exception e) {
             LOGGER.error("Error while viewing clients", e);
-            model.addAttribute("errorMessage", e.getMessage());
+            model.addAttribute("errorMessage", "Error: "+e.getMessage());
             return "client/viewClients";
         }
 
@@ -66,7 +66,7 @@ public class ClientController {
             return new ModelAndView("client/createClient", "successMessage", client.getClientName() + " Client created successfully... ");
         } catch (Exception e) {
             LOGGER.error("Error while saving client", e);
-            return new ModelAndView("client/createClient", "errorMessage", e.getMessage());
+            return new ModelAndView("client/createClient", "errorMessage", "Error: "+e.getMessage());
         }
     }
 

@@ -47,9 +47,9 @@ public class IndicesController extends BaseFileUploadController {
         try {
             processFile(file, FILE_TYPE, null, null);
         } catch (IOException e) {
-            return new ModelAndView("fileupload/mapping/indices", "errorMessage", e.getMessage());
+            return new ModelAndView("fileupload/mapping/indices", "errorMessage", "Error: "+e.getMessage());
         } catch (Exception e) {
-            return new ModelAndView("fileupload/mapping/indices", "errorMessage", e.getMessage());
+            return new ModelAndView("fileupload/mapping/indices", "errorMessage", "Error: "+e.getMessage());
         }
         return new ModelAndView("fileupload/mapping/indices", "successMessage", "File Uploaded sucessfully... " + file.getOriginalFilename());
     }

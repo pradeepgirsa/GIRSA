@@ -115,7 +115,7 @@ public class GenerateQstatsController extends AbstractQstatsReportController {
             if (!CollectionUtils.isEmpty(instrumentDataList)) {
 
                 for (InstrumentData instrumentData : instrumentDataList) {
-                    ClientFundMapping clientFundMapping = clientFundMappingRepository.findByClientFundCode(instrumentData.getPortfolioCode());
+                    ClientFundMapping clientFundMapping = clientFundMappingRepository.findByManagerFundCode(instrumentData.getPortfolioCode());
                     ReportDataCollectionBean reportDataCollectionBean = getReportCollectionBean(instrumentData, netAssetMap, clientFundMapping, reportDate, null);
                     validate(reportDataCollectionBean);
                     qStatsBeans.add(getQStatsBean(reportDate, client, reportDataCollectionBean));
@@ -133,7 +133,7 @@ public class GenerateQstatsController extends AbstractQstatsReportController {
             }
         } catch (Exception e) {
             LOGGER.error("Error generating report file", e);
-            modelAndView.addObject("errorMessage", e.getMessage());
+            modelAndView.addObject("errorMessage", "Error: "+e.getMessage());
         }
         return modelAndView;
     }
@@ -227,7 +227,7 @@ public class GenerateQstatsController extends AbstractQstatsReportController {
         InstrumentData instrument = reportDataCollectionBean.getInstrumentData();
 
         QStatsBean qStatsBean = new QStatsBean();
-        qStatsBean.setAciFundCode(clientFundMapping.getClientFundCode());
+        qStatsBean.setAciFundCode(clientFundMapping.getManagerFundCode()); //TODO - verify clinet fund code or manager fund code
         String fundName = !StringUtils.isEmpty(clientFundMapping.getManagerFundName()) ?
                 clientFundMapping.getManagerFundName() : instrument.getPortfolioName();
         qStatsBean.setFundName(fundName);
@@ -261,7 +261,7 @@ public class GenerateQstatsController extends AbstractQstatsReportController {
         qStatsBean.setMarketValue(instrument.getCurrentMarketValue());
 
         BigDecimal perOfPort = qStatsBean.getMarketValue() != null ?
-                qStatsBean.getMarketValue().divide(qStatsBean.getMvTotal(), 3, BigDecimal.ROUND_FLOOR) : null;
+                qStatsBean.getMarketValue().divide(qStatsBean.getMvTotal(), 8, BigDecimal.ROUND_HALF_UP) : null;
         qStatsBean.setPerOfPort(perOfPort);
 
         if ("DE".equalsIgnoreCase(qStatsBean.getAciAssetclass())) {

@@ -39,9 +39,9 @@ public class ClientFundMappingController extends BaseFileUploadController {
         try {
             processFile(file, FILE_TYPE, null, null);
         } catch (IOException e) {
-            return new ModelAndView("fileupload/mapping/clientFundMapping", "errorMessage", e.getMessage());
+            return new ModelAndView("fileupload/mapping/clientFundMapping", "errorMessage", "Error: "+e.getMessage());
         } catch (Exception e) {
-            return new ModelAndView("fileupload/mapping/clientFundMapping", "errorMessage", e.getMessage());
+            return new ModelAndView("fileupload/mapping/clientFundMapping", "errorMessage", "Error: "+e.getMessage());
         }
         return new ModelAndView("fileupload/mapping/clientFundMapping", "successMessage", "File Uploaded sucessfully... " + file.getOriginalFilename());
     }
@@ -64,7 +64,7 @@ public class ClientFundMappingController extends BaseFileUploadController {
     private ClientFundMapping getClientFundMapping(Object object) {
         ClientFundMapping clientFundMapping = (ClientFundMapping) object;
         //TODO - check with manager fundcode
-        ClientFundMapping existingClientFundMapping = clientFundMappingRepository.findByClientFundCode(clientFundMapping.getManagerFundCode());
+        ClientFundMapping existingClientFundMapping = clientFundMappingRepository.findByManagerFundCode(clientFundMapping.getManagerFundCode());
         if(existingClientFundMapping == null) {
             return clientFundMapping;
         }

@@ -41,10 +41,10 @@ public class DerivativeTypesController extends BaseFileUploadController {
             processFile(file, FILE_TYPE, null, null);
         } catch (IOException e) {
             e.printStackTrace();
-            return new ModelAndView("fileupload/mapping/derivativeTypes", "errorMessage", e.getMessage());
+            return new ModelAndView("fileupload/mapping/derivativeTypes", "errorMessage", "Error: "+e.getMessage());
         } catch (Exception e) {
             e.printStackTrace();
-            return new ModelAndView("fileupload/mapping/derivativeTypes", "errorMessage", e.getMessage());
+            return new ModelAndView("fileupload/mapping/derivativeTypes", "errorMessage", "Error: "+e.getMessage());
         }
         return new ModelAndView("fileupload/mapping/derivativeTypes", "successMessage", "File Uploaded sucessfully... " + file.getOriginalFilename());
     }

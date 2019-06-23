@@ -40,9 +40,9 @@ public class AdditionalClassificationController extends BaseFileUploadController
         try {
             processFile(file, FILE_TYPE, null, null);
         } catch (IOException e) {
-            return new ModelAndView("fileupload/mapping/additionalClassification", "errorMessage", e.getMessage());
+            return new ModelAndView("fileupload/mapping/additionalClassification", "errorMessage", "Error: "+e.getMessage());
         } catch (Exception e) {
-            return new ModelAndView("fileupload/mapping/additionalClassification", "errorMessage", e.getMessage());
+            return new ModelAndView("fileupload/mapping/additionalClassification", "errorMessage", "Error: "+e.getMessage());
         }
         return new ModelAndView("fileupload/mapping/additionalClassification", "successMessage", "File Uploaded sucessfully... " + file.getOriginalFilename());
     }

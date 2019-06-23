@@ -45,7 +45,7 @@ public class LoginController {
             }
         } catch (Exception e) {
             LOGGER.error("Error on logout", e);
-            model.addObject("errorMessage", e.getMessage());
+            model.addObject("errorMessage", "Error: "+e.getMessage());
         }
         model.setViewName("users/login");
         return model;
@@ -72,7 +72,7 @@ public class LoginController {
             return "users/login";
         } catch (Exception e) {
             LOGGER.error("Error on logout", e);
-            model.addAttribute("errorMessage", e.getMessage());
+            model.addAttribute("errorMessage", "Error: "+e.getMessage());
             return "";
         }
     }
@@ -91,7 +91,7 @@ public class LoginController {
             }
         } catch (Exception e) {
             LOGGER.error("Error on logout", e);
-            model.addAttribute("errorMessage", e.getMessage());
+            model.addAttribute("errorMessage", "Error: "+e.getMessage());
             return "users/login";
         }
     }

@@ -40,9 +40,9 @@ public class IssuerMappingsController extends BaseFileUploadController {
         try {
             processFile(file, FILE_TYPE, null, null);
         } catch (IOException e) {
-            return new ModelAndView("fileupload/mapping/issuerMappings", "errorMessage", e.getMessage());
+            return new ModelAndView("fileupload/mapping/issuerMappings", "errorMessage", "Error: "+e.getMessage());
         } catch (Exception e) {
-            return new ModelAndView("fileupload/mapping/issuerMappings", "errorMessage", e.getMessage());
+            return new ModelAndView("fileupload/mapping/issuerMappings", "errorMessage", "Error: "+e.getMessage());
         }
         return new ModelAndView("fileupload/mapping/issuerMappings", "successMessage", "File Uploaded sucessfully... " + file.getOriginalFilename());
     }
@@ -57,9 +57,24 @@ public class IssuerMappingsController extends BaseFileUploadController {
     @Override
     protected void processObject(Object obj) {
         if(obj instanceof IssuerMapping) {
-            IssuerMapping ex = (IssuerMapping) obj;
+            IssuerMapping ex = getIssuerMapping(obj);
             issuerMappingsRepository.save(ex);
         }
+    }
+
+    private IssuerMapping getIssuerMapping(Object object) {
+        IssuerMapping issuerMapping = (IssuerMapping) object;
+        IssuerMapping existingIssuerMapping= issuerMappingsRepository.findByDailyPricingIssuerName(issuerMapping.getDailyPricingIssuerName());
+        if(existingIssuerMapping == null) {
+            return issuerMapping;
+        }
+
+        existingIssuerMapping.setBarraCode(issuerMapping.getBarraCode());
+        existingIssuerMapping.setBarraGIRIssuerName(issuerMapping.getBarraGIRIssuerName());
+        existingIssuerMapping.setCapitalReserves(issuerMapping.getCapitalReserves());
+        existingIssuerMapping.setIssuerCode(issuerMapping.getIssuerCode());
+        existingIssuerMapping.setMarketCapitalisation(issuerMapping.getMarketCapitalisation());
+        return existingIssuerMapping;
     }
 
 }

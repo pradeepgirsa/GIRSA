@@ -42,10 +42,10 @@ public class DailyPricingMappingController extends BaseFileUploadController {
             processFile(file, FILE_TYPE, null, null);
         } catch (IOException e) {
             e.printStackTrace();
-            return new ModelAndView("fileupload/mapping/dailyPricing", "errorMessage", e.getMessage());
+            return new ModelAndView("fileupload/mapping/dailyPricing", "errorMessage", "Error: "+e.getMessage());
         } catch (Exception e) {
             e.printStackTrace();
-            return new ModelAndView("fileupload/mapping/dailyPricing", "errorMessage", e.getMessage());
+            return new ModelAndView("fileupload/mapping/dailyPricing", "errorMessage", "Error: "+e.getMessage());
         }
         return new ModelAndView("fileupload/mapping/dailyPricing", "successMessage", "File Uploaded sucessfully... " + file.getOriginalFilename());
     }

@@ -1,6 +1,7 @@
 package za.co.global.controllers.report;
 
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import za.co.global.domain.client.Client;
 import za.co.global.domain.fileupload.client.DailyPricing;
@@ -31,6 +32,8 @@ import java.time.Year;
 import java.util.*;
 
 public abstract class AbstractQstatsReportController {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(AbstractQstatsReportController.class);
 
     @Autowired
     protected ClientFundMappingRepository clientFundMappingRepository;
@@ -183,6 +186,7 @@ public abstract class AbstractQstatsReportController {
     protected ReportDataCollectionBean getReportCollectionBean(InstrumentData instrumentData, Map<String, BarraAssetInfo> netAssetMap,
                                                                ClientFundMapping clientFundMapping, Date reportDate, Map<String, BigDecimal> fundTotalMarketValueMap) {
 
+        LOGGER.info("Report data collection for instrument code:{}, portfolio code:{}", instrumentData.getInstrumentCode(), instrumentData.getPortfolioCode());
         InstrumentCode instrumentCode = instrumentCodeRepository.findByManagerCode(instrumentData.getInstrumentCode());
 
         BarraAssetInfo barraAssetInfo = getBarraAssetInfo(instrumentCode, clientFundMapping);

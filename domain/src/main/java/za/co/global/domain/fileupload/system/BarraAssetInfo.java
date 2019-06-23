@@ -20,7 +20,6 @@ public class BarraAssetInfo implements Serializable {
     @Column(name = "ID")
     private Long id;
 
-    @Id
     @Column(name = "FUND_NAME")
     private String fundName;
 
