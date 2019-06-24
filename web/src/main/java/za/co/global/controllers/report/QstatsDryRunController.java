@@ -2,6 +2,7 @@ package za.co.global.controllers.report;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 import za.co.global.domain.client.Client;
+import za.co.global.domain.exception.GirsaException;
 import za.co.global.domain.fileupload.client.InstrumentData;
 import za.co.global.domain.fileupload.mapping.ClientFundMapping;
 import za.co.global.domain.fileupload.system.BarraAssetInfo;
@@ -16,7 +18,10 @@ import za.co.global.domain.report.ReportData;
 import za.co.global.domain.report.ReportDataCollectionBean;
 import za.co.global.domain.report.ReportStatus;
 
+import java.io.*;
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,6 +32,9 @@ public class QstatsDryRunController extends AbstractQstatsReportController {
     private static final String VIEW_FILE = "report/dryRun/asisaQueueStatsDryRun";
 
     private static final Logger LOGGER = LoggerFactory.getLogger(QstatsDryRunController.class);
+
+    @Value("${file.upload.folder}")
+    protected String fileUploadFolder;
 
     @GetMapping("/dry_run_qstats")
     public ModelAndView displayScreen() {
@@ -79,7 +87,8 @@ public class QstatsDryRunController extends AbstractQstatsReportController {
                     }
                 }
                 if (!StringUtils.isEmpty(errorString)) {
-                    return modelAndView.addObject("errorMessage", errorString);
+                    String errorFile = createErrorFile(client, errorString);
+                    return modelAndView.addObject("errorMessage", "Errors on validation, find details in file: "+errorFile);
                 }
             } else {
                 return modelAndView.addObject("errorMessage", "No instrument data to generate report");
@@ -89,6 +98,16 @@ public class QstatsDryRunController extends AbstractQstatsReportController {
             LOGGER.error("Error on report dry run", e);
             return modelAndView.addObject("errorMessage", "Error: "+e.getMessage());
         }
+    }
+
+    private String createErrorFile(Client client, String errorsData) throws GirsaException, IOException {
+        String filename = String.format("QStats_%s_%s", client.getClientName(), new SimpleDateFormat("yyyy-MM-ddHH").format(new Date()));
+        String filePath = fileUploadFolder + File.separator + filename + ".txt";
+        try (Writer writer = new BufferedWriter(new OutputStreamWriter(
+                new FileOutputStream(filePath), "utf-8"))){
+            writer.write(errorsData);
+        }
+        return filePath;
     }
 
     @Override
