@@ -73,6 +73,7 @@ public class QstatsDryRunController extends AbstractQstatsReportController {
 
 
                 String errorString = "";
+                String lineSeparator = System.getProperty("line.separator");
                 for (InstrumentData instrumentData : instrumentDataList) {
                     ClientFundMapping clientFundMapping = clientFundMappingRepository.findByManagerFundCode(instrumentData.getPortfolioCode());
 //                    BarraAssetInfo netAsset = netAssetMap.get(clientFundMapping.)
@@ -82,13 +83,13 @@ public class QstatsDryRunController extends AbstractQstatsReportController {
                         if (StringUtils.isEmpty(errorString)) {
                             errorString = error;
                         } else {
-                            errorString = errorString + ";  " + error;
+                            errorString = errorString + lineSeparator + error;
                         }
                     }
                 }
                 if (!StringUtils.isEmpty(errorString)) {
                     String errorFile = createErrorFile(client, errorString);
-                    return modelAndView.addObject("errorMessage", "Errors on validation, find details in file: "+errorFile);
+                    return modelAndView.addObject("errorMessage", "Errors on validations, find details in file: "+errorFile);
                 }
             } else {
                 return modelAndView.addObject("errorMessage", "No instrument data to generate report");
@@ -101,7 +102,7 @@ public class QstatsDryRunController extends AbstractQstatsReportController {
     }
 
     private String createErrorFile(Client client, String errorsData) throws GirsaException, IOException {
-        String filename = String.format("QStats_%s_%s", client.getClientName(), new SimpleDateFormat("yyyy-MM-ddHH").format(new Date()));
+        String filename = String.format("QStats_Error_%s_%s", client.getClientName(), new SimpleDateFormat("yyyy-MM-ddHHmmss").format(new Date()));
         String filePath = fileUploadFolder + File.separator + filename + ".txt";
         try (Writer writer = new BufferedWriter(new OutputStreamWriter(
                 new FileOutputStream(filePath), "utf-8"))){
