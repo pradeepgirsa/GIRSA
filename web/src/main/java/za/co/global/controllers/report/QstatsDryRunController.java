@@ -47,6 +47,8 @@ public class QstatsDryRunController extends AbstractQstatsReportController {
     @PostMapping("/dry_run_qstats")
     public ModelAndView generateReport(String clientId) {
         ModelAndView modelAndView = new ModelAndView(VIEW_FILE);
+        List<Client> clients = clientRepository.findAll();
+        modelAndView.addObject("clients", clients);
         try {
 
             Client client = clientRepository.findOne(Long.parseLong(clientId));

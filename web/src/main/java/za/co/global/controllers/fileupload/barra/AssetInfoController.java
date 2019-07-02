@@ -70,11 +70,11 @@ public class AssetInfoController extends BaseFileUploadController {
     }
 
     @GetMapping(value = "/view_asset")
-    public ModelAndView viewAssetData(@RequestParam(value = "assetId", required = false) String assetId, @RequestParam(value = "fundName", required = false) String fundName) {
+    public ModelAndView viewAssetData(@RequestParam(value = "assetId", required = false) Long id) {
         ModelAndView modelAndView = new ModelAndView("fileupload/system/asset");
         try {
             LOGGER.debug("Navigating to view Asset data...");
-            BarraAssetInfo barraAssetInfo = barraAssetInfoRepository.findByAssetIdAndFundName(assetId, fundName);
+            BarraAssetInfo barraAssetInfo = barraAssetInfoRepository.findOne(id);
             modelAndView.addObject("barraAssetInfo", barraAssetInfo);
         } catch (Exception e) {
             LOGGER.error("Error", e);

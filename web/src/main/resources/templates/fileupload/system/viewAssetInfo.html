@@ -84,7 +84,7 @@
                                     </thead>
                                     <tbody>
                                         <tr th:each="barraAssetInfo : ${assetInfoList}">
-                                            <td><a th:href="|/view_asset?assetId=${barraAssetInfo.assetId}&fundName=${barraAssetInfo.fundName}|"><span th:text="|${barraAssetInfo.assetId}|"/></a></td>
+                                            <td><span th:text="|${barraAssetInfo.assetId}|"/></td>
                                             <td><span th:text="|${barraAssetInfo.fundName}|"/></td>
                                             <td><span th:text="|${barraAssetInfo.assetIdType}|"/></td>
                                             <td><span th:text="|${barraAssetInfo.assetName}|"/></td>

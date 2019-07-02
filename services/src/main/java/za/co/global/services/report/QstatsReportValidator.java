@@ -24,8 +24,15 @@ public class QstatsReportValidator implements Validator<ReportDataCollectionBean
         BigDecimal netCurrentMarketValue = reportDataCollectionBean.getNetCurrentMarketValue();
         ClientFundMapping fundMapping = reportDataCollectionBean.getClientFundMapping();
 
-
-        if(instrumentCode == null || barraAssetInfo == null) {
+        if(fundMapping == null) {
+            return "There is no fund mapped to portfolio code: " + instrumentData.getInstrumentCode()
+                    +", fix fund mappings";
+        }
+        if(barraAssetInfo == null) {
+            return "There is no Barra asset mapped to portfolio code: " + instrumentData.getPortfolioCode()
+                    + " and instrument code: "+instrumentData.getInstrumentCode();
+        }
+        if(instrumentCode == null) {
             return "There is no matching barra asset for instrument code: " + instrumentData.getInstrumentCode()
                     +", fix instrument codes or barra asset";
         }
