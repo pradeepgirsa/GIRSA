@@ -161,7 +161,7 @@ public abstract class AbstractQstatsReportController {
         String girIssuer = Optional.ofNullable(barraAssetInfo).map(BarraAssetInfo::getGirIssuer).orElse(null);
         IssuerMapping issuerMapping = null;
         if(girIssuer != null) {
-            List<IssuerMapping> issuerMappings =issuerMappingsRepository.findByBarraGIRIssuerNameIgnoreCase(girIssuer);
+            List<IssuerMapping> issuerMappings = issuerMappingsRepository.findByBarraGIRIssuerName(girIssuer);
             if(!issuerMappings.isEmpty()) {
                 issuerMapping = issuerMappings.get(0);
             }
@@ -179,8 +179,13 @@ public abstract class AbstractQstatsReportController {
         return barraAssetInfo;
     }
 
-    protected DailyPricing getDailyPricing(String assetId) {
-        return dailyPricingRepository.findByBondCode(assetId);
+    protected DailyPricing getDailyPricing(String assetId, IssuerMapping issuerMapping) {
+        DailyPricing dailyPricing = dailyPricingRepository.findByBondCode(assetId);
+        if(dailyPricing == null && issuerMapping != null) {
+            List<DailyPricing> dailyPricings = dailyPricingRepository.findByIssuer(issuerMapping.getDailyPricingIssuerName());
+            dailyPricing = dailyPricings.isEmpty() ? null : dailyPricings.get(0);
+        }
+        return dailyPricing;
     }
 
     protected ReportDataCollectionBean getReportCollectionBean(InstrumentData instrumentData, Map<String, BarraAssetInfo> netAssetMap,
@@ -195,7 +200,7 @@ public abstract class AbstractQstatsReportController {
 
         IssuerMapping issuerMapping = getIssuerMapping(barraAssetInfo);
 
-        DailyPricing dailyPricing = getDailyPricing(instrumentData.getInstrumentCode());
+        DailyPricing dailyPricing = getDailyPricing(instrumentData.getInstrumentCode(), issuerMapping);
 
         Date maturityDate = getMaturityDate(barraAssetInfo);
 

@@ -12,7 +12,7 @@ public interface IssuerMappingsRepository extends JpaRepository<IssuerMapping, L
     IssuerMapping findByIssuerCode(String issuerCode);
     IssuerMapping findByBarraCode(String barraCode);
 
-    List<IssuerMapping> findByBarraGIRIssuerNameIgnoreCase(String barraGirIssuerName);
+    List<IssuerMapping> findByBarraGIRIssuerName(String barraGirIssuerName);
 
     IssuerMapping findByDailyPricingIssuerName(String dailyPricingIssuerName);
 }

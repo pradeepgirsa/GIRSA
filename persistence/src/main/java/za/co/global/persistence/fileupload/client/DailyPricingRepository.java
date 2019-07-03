@@ -5,6 +5,7 @@ import org.springframework.stereotype.Repository;
 import za.co.global.domain.fileupload.client.DailyPricing;
 
 import java.util.Date;
+import java.util.List;
 
 @Repository
 public interface DailyPricingRepository extends JpaRepository<DailyPricing, Long> {
@@ -14,4 +15,6 @@ public interface DailyPricingRepository extends JpaRepository<DailyPricing, Long
     DailyPricing findByBondCode(String bondCode);
 
     DailyPricing findByIssuerAndBondCodeAndIssueDate(String issuer, String bondCode, Date issueDate);
+
+    List<DailyPricing> findByIssuer(String issuer);
 }
