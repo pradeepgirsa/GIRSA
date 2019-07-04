@@ -46,8 +46,14 @@ public class QstatsReportValidator implements Validator<ReportDataCollectionBean
         }
         //TODO - if difference is 1 value then ignore the condition
         if(netAsset.getEffExposure().compareTo(netCurrentMarketValue) != 0) {
-            return "Net eff exposure from barra and net base current market values are not equal- portfolio code:"
-                    + instrumentData.getPortfolioCode() +", instrument code:" + instrumentData.getInstrumentCode();
+            double netEffExposure = netAsset.getEffExposure().abs().doubleValue();
+            double netCurrentMarketValueInDouble = netCurrentMarketValue.abs().doubleValue();
+            double dif = netEffExposure > netCurrentMarketValueInDouble ? netEffExposure - netCurrentMarketValueInDouble :
+                    netCurrentMarketValueInDouble - netEffExposure;
+            if(dif > 5.00d) {
+                return "Net eff exposure from barra and net base current market values are not equal- portfolio code:"
+                        + instrumentData.getPortfolioCode() + ", instrument code:" + instrumentData.getInstrumentCode();
+            }
         }
 
         if(reportDataCollectionBean.getReg28InstrumentType() == null) {
