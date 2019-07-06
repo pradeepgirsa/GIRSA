@@ -189,7 +189,8 @@ public abstract class AbstractQstatsReportController {
     }
 
     protected ReportDataCollectionBean getReportCollectionBean(InstrumentData instrumentData, Map<String, BarraAssetInfo> netAssetMap,
-                                                               ClientFundMapping clientFundMapping, Date reportDate, Map<String, BigDecimal> fundTotalMarketValueMap) {
+                                                               ClientFundMapping clientFundMapping, Date reportDate,
+                                                               Map<String, BigDecimal> fundTotalMarketValueMap, Map<String, Boolean> netAssetEffExposureVerifyMap) {
 
         LOGGER.info("Report data collection for instrument code:{}, portfolio code:{}", instrumentData.getInstrumentCode(), instrumentData.getPortfolioCode());
         InstrumentCode instrumentCode = instrumentCodeRepository.findByManagerCode(instrumentData.getInstrumentCode());
@@ -207,6 +208,8 @@ public abstract class AbstractQstatsReportController {
         BigDecimal netCurrentMarketValue = getFundTotalMarketValue(instrumentData, fundTotalMarketValueMap);
         BarraAssetInfo netAsset = getNetBarraAssetInfo(netAssetMap, clientFundMapping);
 
+
+
         ReportDataCollectionBean reportDataCollectionBean = new ReportDataCollectionBean.Builder()
                 .setInstrumentData(instrumentData)
                 .setBarraAssetInfo(barraAssetInfo)
@@ -219,6 +222,7 @@ public abstract class AbstractQstatsReportController {
                 .setIssuerMapping(issuerMapping)
                 .setDailyPricing(dailyPricing)
                 .setSettlementDate(reportDate)
+                .setNetAssetEffExposureVerifyMap(netAssetEffExposureVerifyMap)
                 .build();
 
         return reportDataCollectionBean;

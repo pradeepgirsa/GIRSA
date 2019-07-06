@@ -73,20 +73,23 @@ public class QstatsDryRunController extends AbstractQstatsReportController {
                     fundTotalMarketValueMap.put(portfolioCode, totalCurrentMarketValue);
                 }
 
+                 /*Adding this map to verify the equivalence netEffExposure and netCurrent market
+        values for fund level not for every instrument  */
+                Map<String, Boolean> netAssetEffExposureVerifyMap = new HashMap<>();
+                for(String fundName: netAssetMap.keySet()) {
+                    netAssetEffExposureVerifyMap.put(fundName, Boolean.FALSE);
+                }
+
 
                 String errorString = "";
                 String lineSeparator = System.getProperty("line.separator");
                 for (InstrumentData instrumentData : instrumentDataList) {
                     ClientFundMapping clientFundMapping = clientFundMappingRepository.findByManagerFundCode(instrumentData.getPortfolioCode());
 //                    BarraAssetInfo netAsset = netAssetMap.get(clientFundMapping.)
-                    ReportDataCollectionBean reportDataCollectionBean = getReportCollectionBean(instrumentData, netAssetMap, clientFundMapping, null, fundTotalMarketValueMap);
-                    String error = validator.validate(reportDataCollectionBean);
-                    if (error != null) {
-                        if (StringUtils.isEmpty(errorString)) {
-                            errorString = error;
-                        } else {
-                            errorString = errorString + lineSeparator + error;
-                        }
+                    ReportDataCollectionBean reportDataCollectionBean = getReportCollectionBean(instrumentData, netAssetMap, clientFundMapping, null, fundTotalMarketValueMap, netAssetEffExposureVerifyMap);
+                    if(reportDataCollectionBean.getBarraAssetInfo() != null) {
+                        String error = validator.validate(reportDataCollectionBean);
+                        errorString = addToErrorString(errorString, lineSeparator, error);
                     }
                 }
                 if (!StringUtils.isEmpty(errorString)) {
@@ -101,6 +104,17 @@ public class QstatsDryRunController extends AbstractQstatsReportController {
             LOGGER.error("Error on report dry run", e);
             return modelAndView.addObject("errorMessage", "Error: "+e.getMessage());
         }
+    }
+
+    private String addToErrorString(String errorString, String lineSeparator, String error) {
+        if (error != null) {
+            if (StringUtils.isEmpty(errorString)) {
+                errorString = error;
+            } else {
+                errorString = errorString + lineSeparator + error;
+            }
+        }
+        return errorString;
     }
 
     private String createErrorFile(Client client, String errorsData) throws GirsaException, IOException {

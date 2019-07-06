@@ -125,8 +125,6 @@ public class QstatsReportCreationService implements ReportCreationService {
 
                 Cell weightedAvgDuration = row.createCell(8);
 
-
-
                 BigDecimal couponRate = qStatsBean.getCouponRate() != null ? qStatsBean.getCouponRate() : BigDecimal.ZERO;
                 BigDecimal currentYield = qStatsBean.getCurrentYield();
                 BigDecimal effWeight = qStatsBean.getEffWeight();
@@ -138,7 +136,6 @@ public class QstatsReportCreationService implements ReportCreationService {
                     weightedAvgDuration.setCellFormula(formula);
                     weightedAvgDuration.setCellType(Cell.CELL_TYPE_FORMULA);
                 }
-
 
                 BigDecimal weightedAvgMaturity = null;
                 if(qStatsBean.getModifiedDuration() != null && effWeight != null) {

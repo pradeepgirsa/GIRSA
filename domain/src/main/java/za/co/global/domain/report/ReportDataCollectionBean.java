@@ -10,6 +10,7 @@ import za.co.global.domain.fileupload.system.BarraAssetInfo;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.Map;
 
 public class ReportDataCollectionBean {
 
@@ -26,6 +27,7 @@ public class ReportDataCollectionBean {
     private InstrumentData instrumentData;
     private Date settlementDate;
     private BigDecimal netCurrentMarketValue;
+    private Map<String, Boolean> netAssetEffExposureVerifyMap;
 
     public static class Builder {
         private BarraAssetInfo netAsset;
@@ -41,6 +43,7 @@ public class ReportDataCollectionBean {
         private DailyPricing dailyPricing;
         private Date settlementDate;
         private BigDecimal netCurrentMarketValue;
+        private Map<String, Boolean> netAssetEffExposureVerifyMap;
 
         public Builder setNetAsset(BarraAssetInfo netAsset) {
             this.netAsset = netAsset;
@@ -107,6 +110,11 @@ public class ReportDataCollectionBean {
             return this;
         }
 
+        public Builder setNetAssetEffExposureVerifyMap(Map<String, Boolean> netAssetEffExposureVerifyMap) {
+            this.netAssetEffExposureVerifyMap = netAssetEffExposureVerifyMap;
+            return this;
+        }
+
 
         public ReportDataCollectionBean build() {
             return new ReportDataCollectionBean(this);
@@ -130,6 +138,7 @@ public class ReportDataCollectionBean {
         this.dailyPricing = builder.dailyPricing;
         this.settlementDate = builder.settlementDate;
         this.netCurrentMarketValue = builder.netCurrentMarketValue;
+        this.netAssetEffExposureVerifyMap = builder.netAssetEffExposureVerifyMap;
     }
 
     public BarraAssetInfo getNetAsset() {
@@ -182,5 +191,9 @@ public class ReportDataCollectionBean {
 
     public BigDecimal getNetCurrentMarketValue() {
         return netCurrentMarketValue;
+    }
+
+    public Map<String, Boolean> getNetAssetEffExposureVerifyMap() {
+        return netAssetEffExposureVerifyMap;
     }
 }

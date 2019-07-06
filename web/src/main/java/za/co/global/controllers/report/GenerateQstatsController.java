@@ -114,14 +114,23 @@ public class GenerateQstatsController extends AbstractQstatsReportController {
             BigDecimal netCurrentMarketValue;
             if (!CollectionUtils.isEmpty(instrumentDataList)) {
 
+                 /*Adding this map to verify the equivalence netEffExposure and netCurrent market
+        values for fund level not for every instrument  */
+                Map<String, Boolean> netAssetEffExposureVerifyMap = new HashMap<>();
+                for(String fundName: netAssetMap.keySet()) {
+                    netAssetEffExposureVerifyMap.put(fundName, Boolean.FALSE);
+                }
+
                 for (InstrumentData instrumentData : instrumentDataList) {
                     ClientFundMapping clientFundMapping = clientFundMappingRepository.findByManagerFundCode(instrumentData.getPortfolioCode());
-                    ReportDataCollectionBean reportDataCollectionBean = getReportCollectionBean(instrumentData, netAssetMap, clientFundMapping, reportDate, null);
-                    validate(reportDataCollectionBean);
-                    qStatsBeans.add(getQStatsBean(reportDate, client, reportDataCollectionBean));
-                    if (instrumentData.getReportData() == null) {
-                        reportData.getInstrumentDataList().add(instrumentData);
-                        instrumentData.setReportData(reportData);
+                    ReportDataCollectionBean reportDataCollectionBean = getReportCollectionBean(instrumentData, netAssetMap, clientFundMapping, reportDate, null, netAssetEffExposureVerifyMap);
+                    if(reportDataCollectionBean.getBarraAssetInfo() != null) {
+                        validate(reportDataCollectionBean);
+                        qStatsBeans.add(getQStatsBean(reportDate, client, reportDataCollectionBean));
+                        if (instrumentData.getReportData() == null) {
+                            reportData.getInstrumentDataList().add(instrumentData);
+                            instrumentData.setReportData(reportData);
+                        }
                     }
                 }
                 reportDataRepository.save(reportData);
@@ -390,7 +399,13 @@ public class GenerateQstatsController extends AbstractQstatsReportController {
 
     private String getACIAssetClass(BarraAssetInfo barraAssetInfo, String reg28InstrType, Reg28InstrumentType reg28InstrumentType) {
         String aciAssetClass = null;
-        if ("SETTLEMENT".equalsIgnoreCase(barraAssetInfo.getAssetName()) && "1.2(a)".equalsIgnoreCase(reg28InstrType)) {
+        if(barraAssetInfo.getAssetName() != null && barraAssetInfo.getAssetName().trim().startsWith("DC_L")) {
+            aciAssetClass = "DC";
+        } else if(barraAssetInfo.getAssetName() != null && barraAssetInfo.getAssetName().trim().startsWith("DM_L")) {
+            aciAssetClass = "DM";
+        } else if(barraAssetInfo.getAssetName() != null && barraAssetInfo.getAssetName().trim().startsWith("DO_L")) {
+            aciAssetClass = "DO";
+        } else if ("SETTLEMENT".equalsIgnoreCase(barraAssetInfo.getAssetName()) && "1.2(a)".equalsIgnoreCase(reg28InstrType)) {
             aciAssetClass = "FS";
         } else if ("Fund".equalsIgnoreCase(barraAssetInfo.getInstType()) || "Composite".equalsIgnoreCase(barraAssetInfo.getInstType())) {
             if (reg28InstrumentType != null && "LOCAL".equalsIgnoreCase(reg28InstrumentType.getAsisaDefined2())) {
