@@ -116,14 +116,10 @@ public class GenerateQstatsController extends AbstractQstatsReportController {
 
                  /*Adding this map to verify the equivalence netEffExposure and netCurrent market
         values for fund level not for every instrument  */
-                Map<String, Boolean> netAssetEffExposureVerifyMap = new HashMap<>();
-                for(String fundName: netAssetMap.keySet()) {
-                    netAssetEffExposureVerifyMap.put(fundName, Boolean.FALSE);
-                }
 
                 for (InstrumentData instrumentData : instrumentDataList) {
                     ClientFundMapping clientFundMapping = clientFundMappingRepository.findByManagerFundCode(instrumentData.getPortfolioCode());
-                    ReportDataCollectionBean reportDataCollectionBean = getReportCollectionBean(instrumentData, netAssetMap, clientFundMapping, reportDate, null, netAssetEffExposureVerifyMap);
+                    ReportDataCollectionBean reportDataCollectionBean = getReportCollectionBean(instrumentData, netAssetMap, clientFundMapping, reportDate, null, null);
                     if(reportDataCollectionBean.getBarraAssetInfo() != null) {
                         validate(reportDataCollectionBean);
                         qStatsBeans.add(getQStatsBean(reportDate, client, reportDataCollectionBean));
@@ -149,8 +145,10 @@ public class GenerateQstatsController extends AbstractQstatsReportController {
 
     private void validate(ReportDataCollectionBean reportDataCollectionBean) throws GirsaException {
         String error = validator.validate(reportDataCollectionBean);
-        if (error != null)
+        if (error != null) {
+            LOGGER.error("Error on validation", error);
             throw new GirsaException(reportError);
+        }
     }
 
     private String createExcelFile(List<QStatsBean> qStatsBeans, Client client, String reportDateInString) throws GirsaException {

@@ -40,23 +40,25 @@ public class QstatsReportValidator implements Validator<ReportDataCollectionBean
         }
 
         //This need to be verified to fund only once that is why added this map as once tha values is true it is not going to check it again
-        if(!netAssetEffExposureVerifyMap.get(barraAssetInfo.getFundName())) {
-            netAssetEffExposureVerifyMap.put(barraAssetInfo.getFundName(), Boolean.TRUE);
-            if (netAsset == null || netAsset.getEffExposure() == null) {
-                return "There is no value for net eff exposure in barra fund:"+barraAssetInfo.getFundName();
-            }
-            if (netCurrentMarketValue == null) {
-                return "There is no net value for current market base value, portfolio code:" + instrumentData.getPortfolioCode();
-            }
-            //TODO - if difference is 1 value then ignore the condition
-            if (netAsset.getEffExposure().compareTo(netCurrentMarketValue) != 0) {
-                double netEffExposure = netAsset.getEffExposure().abs().doubleValue();
-                double netCurrentMarketValueInDouble = netCurrentMarketValue.abs().doubleValue();
-                double dif = netEffExposure > netCurrentMarketValueInDouble ? netEffExposure - netCurrentMarketValueInDouble :
-                        netCurrentMarketValueInDouble - netEffExposure;
-                if (dif > 5.00d) {
-                    return "Net eff exposure from barra and net base current market values are not equal- portfolio code:"
-                            + instrumentData.getPortfolioCode() + ", barra fund name:" + barraAssetInfo.getFundName();
+        if(netAssetEffExposureVerifyMap != null) {
+            if (netAssetEffExposureVerifyMap.get(barraAssetInfo.getFundName()) != null && !netAssetEffExposureVerifyMap.get(barraAssetInfo.getFundName())) {
+                netAssetEffExposureVerifyMap.put(barraAssetInfo.getFundName(), Boolean.TRUE);
+                if (netAsset == null || netAsset.getEffExposure() == null) {
+                    return "There is no value for net eff exposure in barra fund:" + barraAssetInfo.getFundName();
+                }
+                if (netCurrentMarketValue == null) {
+                    return "There is no net value for current market base value, portfolio code:" + instrumentData.getPortfolioCode();
+                }
+                //TODO - if difference is 1 value then ignore the condition
+                if (netAsset.getEffExposure().compareTo(netCurrentMarketValue) != 0) {
+                    double netEffExposure = netAsset.getEffExposure().abs().doubleValue();
+                    double netCurrentMarketValueInDouble = netCurrentMarketValue.abs().doubleValue();
+                    double dif = netEffExposure > netCurrentMarketValueInDouble ? netEffExposure - netCurrentMarketValueInDouble :
+                            netCurrentMarketValueInDouble - netEffExposure;
+                    if (dif > 5.00d) {
+                        return "Net eff exposure from barra and net base current market values are not equal- portfolio code:"
+                                + instrumentData.getPortfolioCode() + ", barra fund name:" + barraAssetInfo.getFundName();
+                    }
                 }
             }
         }
