@@ -131,7 +131,7 @@ public class GenerateQstatsController extends AbstractQstatsReportController {
                 }
                 reportDataRepository.save(reportData);
 
-                String filePath = createExcelFile(qStatsBeans, client, reportDateInString);
+                String filePath = createExcelFile(qStatsBeans, client, reportDate);
                 modelAndView.addObject("successMessage", "Qstats file created successfully, file: " + filePath);
             } else {
                 modelAndView.addObject("errorMessage", "No instrument data to generate report");
@@ -151,10 +151,11 @@ public class GenerateQstatsController extends AbstractQstatsReportController {
         }
     }
 
-    private String createExcelFile(List<QStatsBean> qStatsBeans, Client client, String reportDateInString) throws GirsaException {
+    private String createExcelFile(List<QStatsBean> qStatsBeans, Client client, Date reportDate) throws GirsaException {
         try {
-            String filename = String.format("QStats_%s_%s", client.getClientName(), new Date().getTime()+"");
-//            String filePath = fileUploadFolder + File.separator + "Reports" + File.separator + client.getClientName() +"result.xlsx";
+            DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+            String reportDateInString = dateFormat.format(reportDate);
+            String filename = String.format("QStats_%s_%s", client.getClientName(), reportDateInString);
             String filePath = fileUploadFolder + File.separator + filename + ".xlsx";
             reportCreationService.createExcelFile(qStatsBeans, filePath);
 
