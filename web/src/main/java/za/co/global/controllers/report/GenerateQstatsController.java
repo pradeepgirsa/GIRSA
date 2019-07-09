@@ -111,7 +111,6 @@ public class GenerateQstatsController extends AbstractQstatsReportController {
                 netAssetMap.put(barraAssetInfo.getFundName(), barraAssetInfo);
             }
 
-            BigDecimal netCurrentMarketValue;
             if (!CollectionUtils.isEmpty(instrumentDataList)) {
 
                  /*Adding this map to verify the equivalence netEffExposure and netCurrent market
@@ -123,10 +122,10 @@ public class GenerateQstatsController extends AbstractQstatsReportController {
                     if(reportDataCollectionBean.getBarraAssetInfo() != null) {
                         validate(reportDataCollectionBean);
                         qStatsBeans.add(getQStatsBean(reportDate, client, reportDataCollectionBean));
-                        if (instrumentData.getReportData() == null) {
-                            reportData.getInstrumentDataList().add(instrumentData);
-                            instrumentData.setReportData(reportData);
-                        }
+                    }
+                    if (instrumentData.getReportData() == null) {
+                        reportData.getInstrumentDataList().add(instrumentData);
+                        instrumentData.setReportData(reportData);
                     }
                 }
                 reportDataRepository.save(reportData);
