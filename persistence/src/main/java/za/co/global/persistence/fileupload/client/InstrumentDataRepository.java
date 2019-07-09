@@ -24,7 +24,7 @@ public interface InstrumentDataRepository extends JpaRepository<InstrumentData, 
 
     List<InstrumentData> findAllByOrderByUpdatedDateDesc();
 
-    @Query("SELECT portfolioCode, SUM(currentMarketValue) FROM InstrumentData GROUP BY portfolioCode")
+    @Query("SELECT i.portfolioCode, SUM(i.currentMarketValue) FROM InstrumentData i join i.reportData r WHERE r is null or r.reportStatus='REGISTERED' GROUP BY  i.portfolioCode")
     List<Object[]> findTotalCurrentMarketValueGroupByPortfolioCode();
 
     List<InstrumentData> findByReportData_ReportStatusOrderByUpdatedDateDesc(ReportStatus reportStatus);
