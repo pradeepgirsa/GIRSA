@@ -13,4 +13,6 @@ public interface BarraAssetInfoRepository extends JpaRepository<BarraAssetInfo, 
 
     List<BarraAssetInfo> findByNetIndicatorIsTrue();
 
+    BarraAssetInfo findByNetIndicatorIsTrueAndFundName(String fundName);
+
 }

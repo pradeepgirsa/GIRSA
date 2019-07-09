@@ -98,6 +98,13 @@ public class AssetInfoController extends BaseFileUploadController {
                     if (!netIndicator) {
                         netIndicator = true;
                         barraAssetInfo.setNetIndicator(Boolean.TRUE.booleanValue());
+                        BarraAssetInfo netAsset = barraAssetInfoRepository.findByNetIndicatorIsTrueAndFundName(fundName);
+                        if(netAsset != null) {
+                            convertBarraAssetInfo(barraAssetInfo, netAsset);
+                            netAsset.setAssetId(barraAssetInfo.getAssetId());
+                            barraAssetInfoRepository.save(netAsset);
+                            continue;
+                        }
                     }
                     barraAssetInfo.setFundName(fundName);
                     LOGGER.info("Saving barra asset id:{}, fundname:{}", barraAssetInfo.getAssetId(), fundName);
@@ -128,6 +135,12 @@ public class AssetInfoController extends BaseFileUploadController {
             barraAssetInfo.setFundName(fundName);
             return barraAssetInfo;
         }
+        convertBarraAssetInfo(barraAssetInfo, existingBarraAssetInfo);
+
+        return existingBarraAssetInfo;
+    }
+
+    private void convertBarraAssetInfo(BarraAssetInfo barraAssetInfo, BarraAssetInfo existingBarraAssetInfo) {
         existingBarraAssetInfo.setAssetName(barraAssetInfo.getAssetName());
         existingBarraAssetInfo.setAfricaValues(barraAssetInfo.getAfricaValues());
         existingBarraAssetInfo.setAmountIssued(barraAssetInfo.getAmountIssued());
@@ -183,8 +196,6 @@ public class AssetInfoController extends BaseFileUploadController {
         existingBarraAssetInfo.setUltimateIssuerID(barraAssetInfo.getUltimateIssuerID());
         existingBarraAssetInfo.setUltimateIssuerName(barraAssetInfo.getUltimateIssuerName());
         existingBarraAssetInfo.setWeightedAverageLife(barraAssetInfo.getWeightedAverageLife());
-
-        return existingBarraAssetInfo;
     }
 
     @Override

@@ -160,16 +160,16 @@ public class GenerateQstatsController extends AbstractQstatsReportController {
             reportCreationService.createExcelFile(qStatsBeans, filePath);
 
 
-            String csvFilePath = fileUploadFolder + File.separator + filename + ".csv";
-            createCSVFileFromExcel(filePath, csvFilePath);
+//            String csvFilePath = fileUploadFolder + File.separator + filename + ".csv";
+//            createCSVFileFromExcel(filePath, csvFilePath);
 
             //TODO - store it in file detials
             return filePath;
         } catch (GirsaException e) {
             throw new GirsaException("Error while creating report file", e);
-        } catch (IOException | InvalidFormatException e) {
-            LOGGER.error("Error while converting xlsx to csv file", e);
-            throw new GirsaException("Error while creating report file", e);
+//        } catch (IOException | InvalidFormatException e) {
+//            LOGGER.error("Error while converting xlsx to csv file", e);
+//            throw new GirsaException("Error while creating report file", e);
         }
     }
 
