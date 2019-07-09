@@ -94,7 +94,7 @@ public class AssetInfoController extends BaseFileUploadController {
             boolean netIndicator = false;
             for (Object obj : value) {
                 if (obj instanceof BarraAssetInfo) {
-                    BarraAssetInfo barraAssetInfo = getAssetInfo(obj);
+                    BarraAssetInfo barraAssetInfo = getAssetInfo(obj, fundName);
                     if (!netIndicator) {
                         netIndicator = true;
                         barraAssetInfo.setNetIndicator(Boolean.TRUE.booleanValue());
@@ -121,10 +121,11 @@ public class AssetInfoController extends BaseFileUploadController {
 
     }
 
-    private BarraAssetInfo getAssetInfo(Object object) {
+    private BarraAssetInfo getAssetInfo(Object object, String fundName) {
         BarraAssetInfo barraAssetInfo = (BarraAssetInfo) object;
-        BarraAssetInfo existingBarraAssetInfo = barraAssetInfoRepository.findByAssetIdAndFundName(barraAssetInfo.getAssetId(), barraAssetInfo.getFundName());
+        BarraAssetInfo existingBarraAssetInfo = barraAssetInfoRepository.findByAssetIdAndFundName(barraAssetInfo.getAssetId(), fundName);
         if (existingBarraAssetInfo == null) {
+            barraAssetInfo.setFundName(fundName);
             return barraAssetInfo;
         }
         existingBarraAssetInfo.setAssetName(barraAssetInfo.getAssetName());

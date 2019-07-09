@@ -419,7 +419,7 @@ public class GenerateQstatsController extends AbstractQstatsReportController {
             } else if (derivativeType != null && "FOREIGN".equalsIgnoreCase(reg28InstrumentType.getAsisaDefined2())) {
                 aciAssetClass = derivativeType.getForeignClassification();
             }
-            if (StringUtils.isEmpty(aciAssetClass)) {
+            if (reg28InstrumentType!= null && StringUtils.isEmpty(aciAssetClass)) {
                 aciAssetClass = reg28InstrumentType.getAciAssetClass();
             }
         }
