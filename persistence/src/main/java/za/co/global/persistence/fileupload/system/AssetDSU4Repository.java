@@ -9,7 +9,9 @@ import java.util.List;
 @Repository
 public interface AssetDSU4Repository extends JpaRepository<AssetDSU4, Long> {
 
-    AssetDSU4 findByAssetId(String assetId);
+    AssetDSU4 findByAssetIdAndFundName(String assetId, String fundName);
+
+    AssetDSU4 findByNetIndicatorIsTrueAndFundName(String fundName);
 
     List<AssetDSU4> findFirst10ByNetIndicatorIsFalseAndInstSubTypeOrderByEffWeightDesc(String instSubType);
 

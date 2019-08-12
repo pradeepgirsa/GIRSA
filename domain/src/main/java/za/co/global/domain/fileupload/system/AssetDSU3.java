@@ -22,6 +22,9 @@ public class AssetDSU3 implements Serializable {
     @Column(name = "ID")
     private Long id;
 
+    @Column(name = "FUND_NAME")
+    private String fundName;
+
     @ExcelColumnHeader(columnHeader = "Asset ID")
     @Column(name = "ASSET_ID")
     private String assetId;
@@ -365,4 +368,11 @@ public class AssetDSU3 implements Serializable {
         this.netIndicator = netIndicator;
     }
 
+    public String getFundName() {
+        return fundName;
+    }
+
+    public void setFundName(String fundName) {
+        this.fundName = fundName;
+    }
 }

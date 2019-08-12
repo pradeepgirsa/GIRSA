@@ -71,11 +71,11 @@ public class AssetDSU3Controller extends BaseFileUploadController {
     }
 
     @GetMapping(value = "/view_dsu3")
-    public ModelAndView viewDsu3(@RequestParam(value = "assetId", required = false) String assetId) {
+    public ModelAndView viewDsu3(@RequestParam(value = "assetId", required = false) Long id) {
         ModelAndView modelAndView = new ModelAndView("fileupload/system/viewDsu3");
         try {
             LOGGER.debug("Navigating to view Asset data...");
-            AssetDSU3 assetDSU3 = assetDSU3Repository.findByAssetId(assetId);
+            AssetDSU3 assetDSU3 = assetDSU3Repository.findOne(id);
             modelAndView.addObject("assetDSU3", assetDSU3);
         } catch (Exception e) {
             LOGGER.error("Error", e);
@@ -89,28 +89,44 @@ public class AssetDSU3Controller extends BaseFileUploadController {
         GirsaExcelParser parser = new GirsaExcelParser(ExcelFactoryType.COLUMN_NAME_BASED_EXTRACTION);
         Map<String, List<Object>> result = parser.parse(file, fileType); //Whatever excel file you want
         Set<Map.Entry<String, List<Object>>> entries = result.entrySet();
+        String fundName = getBarraFundName(file.getName());
         for (Map.Entry<String, List<Object>> map : entries) {
             List<Object> value = map.getValue();
             boolean netIndicator = false;
             for (Object obj : value) {
                 if (obj instanceof AssetDSU3) {
-                    AssetDSU3 assetDSU3 = getAssetDsu3(obj);
+                    AssetDSU3 assetDSU3 = getAssetDsu3(obj, fundName);
                     if (!netIndicator) {
                         netIndicator = true;
                         assetDSU3.setNetIndicator(Boolean.TRUE.booleanValue());
+                        AssetDSU3 netAssetDSU3 = assetDSU3Repository.findByNetIndicatorIsTrueAndFundName(fundName);
+                        if(netAssetDSU3 != null) {
+                            convertAssetDSU3(assetDSU3, netAssetDSU3);
+                            netAssetDSU3.setAssetId(assetDSU3.getAssetId());
+                            assetDSU3Repository.save(netAssetDSU3);
+                            continue;
+                        }
                     }
+                    assetDSU3.setFundName(fundName);
                     assetDSU3Repository.save(assetDSU3);
                 }
             }
         }
     }
 
-    private AssetDSU3 getAssetDsu3(Object object) {
+    private AssetDSU3 getAssetDsu3(Object object, String fundName) {
         AssetDSU3 assetDSU3 = (AssetDSU3) object;
-        AssetDSU3 existingAssetDsu3 = assetDSU3Repository.findByAssetId(assetDSU3.getAssetId());
+        AssetDSU3 existingAssetDsu3 = assetDSU3Repository.findByAssetIdAndFundName(assetDSU3.getAssetId(), fundName);
         if (existingAssetDsu3 == null) {
+            existingAssetDsu3.setFundName(fundName);
             return assetDSU3;
         }
+        convertAssetDSU3(assetDSU3, existingAssetDsu3);
+
+        return existingAssetDsu3;
+    }
+
+    private void convertAssetDSU3(AssetDSU3 assetDSU3, AssetDSU3 existingAssetDsu3) {
         existingAssetDsu3.setAssetName(assetDSU3.getAssetName());
         existingAssetDsu3.setAfricaValues(assetDSU3.getAfricaValues());
         existingAssetDsu3.setAmountIssued(assetDSU3.getAmountIssued());
@@ -138,8 +154,6 @@ public class AssetDSU3Controller extends BaseFileUploadController {
         existingAssetDsu3.setSubsector(assetDSU3.getSubsector());
         existingAssetDsu3.setTimeToMaturity(assetDSU3.getTimeToMaturity());
         existingAssetDsu3.setIssuerShortName(assetDSU3.getIssuerShortName());
-
-        return existingAssetDsu3;
     }
 
     @Override

@@ -114,19 +114,6 @@ public class AssetInfoController extends BaseFileUploadController {
         }
     }
 
-    private String getBarraFundName(String filename) {
-        int index = filename.indexOf("-");
-        if(index != -1) {
-            return filename.substring(0, index).trim();
-        } else {
-            int dotIndex = filename.lastIndexOf(".");
-            if(dotIndex != -1) {
-                return filename.substring(0, dotIndex).trim();
-            }
-            return filename;
-        }
-
-    }
 
     private BarraAssetInfo getAssetInfo(Object object, String fundName) {
         BarraAssetInfo barraAssetInfo = (BarraAssetInfo) object;

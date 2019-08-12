@@ -100,4 +100,18 @@ public abstract class BaseFileUploadController {
 
     protected abstract void processObject(Object object);
 
+    protected String getBarraFundName(String filename) {
+        int index = filename.indexOf("-");
+        if(index != -1) {
+            return filename.substring(0, index).trim();
+        } else {
+            int dotIndex = filename.lastIndexOf(".");
+            if(dotIndex != -1) {
+                return filename.substring(0, dotIndex).trim();
+            }
+            return filename;
+        }
+
+    }
+
 }

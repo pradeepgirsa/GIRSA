@@ -22,6 +22,9 @@ public class AssetDSU4 implements Serializable {
     @Column(name = "ID")
     private Long id;
 
+    @Column(name = "FUND_NAME")
+    private String fundName;
+
     @ExcelColumnHeader(columnHeader = "Asset ID")
     @Column(name = "ASSET_ID")
     private String assetId;
@@ -231,5 +234,13 @@ public class AssetDSU4 implements Serializable {
 
     public void setPriceCurrency(String priceCurrency) {
         this.priceCurrency = priceCurrency;
+    }
+
+    public String getFundName() {
+        return fundName;
+    }
+
+    public void setFundName(String fundName) {
+        this.fundName = fundName;
     }
 }

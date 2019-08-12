@@ -25,6 +25,7 @@
                                 <table class="table table-bordered table-hover">
                                     <thead>
                                     <tr>
+                                        <th>Fund Name</th>
                                         <th>Asset ID</th>
                                         <th>Asset ID Type</th>
                                         <th>Asset Name</th>
@@ -45,7 +46,8 @@
                                     </thead>
                                     <tbody>
                                         <tr th:each="assetDSU4 : ${assetDSU4List}">
-                                            <td><a th:href="|/view_dsu4?assetId=${assetDSU4.assetId}|"><span th:text="|${assetDSU4.assetId}|"/></a></td>
+                                            <td><span th:text="|${assetDSU4.fundName}|"/></td>
+                                            <td><span th:text="|${assetDSU4.assetId}|"/></td>
                                             <td><span th:text="|${assetDSU4.assetIdType}|"/></td>
                                             <td><span th:text="|${assetDSU4.assetName}|"/></td>
                                             <td><span th:text="|${assetDSU4.holdings}|"/></td>

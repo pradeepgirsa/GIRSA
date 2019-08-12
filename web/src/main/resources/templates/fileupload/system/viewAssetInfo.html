@@ -25,6 +25,7 @@
                                 <table class="table table-bordered table-hover">
                                     <thead>
                                     <tr>
+                                        <th>Fund Name</th>
                                         <th>Asset ID</th>
                                         <th>Asset ID Type</th>
                                         <th>Asset Name</th>
@@ -84,8 +85,8 @@
                                     </thead>
                                     <tbody>
                                         <tr th:each="barraAssetInfo : ${assetInfoList}">
-                                            <td><span th:text="|${barraAssetInfo.assetId}|"/></td>
                                             <td><span th:text="|${barraAssetInfo.fundName}|"/></td>
+                                            <td><span th:text="|${barraAssetInfo.assetId}|"/></td>
                                             <td><span th:text="|${barraAssetInfo.assetIdType}|"/></td>
                                             <td><span th:text="|${barraAssetInfo.assetName}|"/></td>
                                             <td><span th:text="|${barraAssetInfo.holdings}|"/></td>
