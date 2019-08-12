@@ -234,7 +234,7 @@ public class GenerateQstatsController extends AbstractQstatsReportController {
         InstrumentData instrument = reportDataCollectionBean.getInstrumentData();
 
         QStatsBean qStatsBean = new QStatsBean();
-        qStatsBean.setAciFundCode(clientFundMapping.getManagerFundCode()); //TODO - verify clinet fund code or manager fund code
+        qStatsBean.setAciFundCode(clientFundMapping.getClientFundCode());
         String fundName = !StringUtils.isEmpty(clientFundMapping.getManagerFundName()) ?
                 clientFundMapping.getManagerFundName() : instrument.getPortfolioName();
         qStatsBean.setFundName(fundName);
@@ -247,7 +247,12 @@ public class GenerateQstatsController extends AbstractQstatsReportController {
         qStatsBean.setInstitutionalTotal(instrument.getInstitutionTotal());
         qStatsBean.setNoOfAccounts(instrument.getNoOfAccounts());
 
-        String aciAssetClass = getACIAssetClass(barraAssetInfo, reg28InstrType, reg28InstrumentType);
+        if(reg28InstrumentType != null) {
+            qStatsBean.setAsiSADefined2(reg28InstrumentType.getAsisaDefined2());
+        } else if(StringUtils.isEmpty(barraAssetInfo.getReg28InstrType()) || "N/A".equalsIgnoreCase(barraAssetInfo.getReg28InstrType())) {
+            qStatsBean.setAsiSADefined2("ZAR".equals(instrument.getInstrumentCurrency()) ? "LOCAL" : "FOREIGN");
+        }
+        String aciAssetClass = getACIAssetClass(barraAssetInfo, reg28InstrType, qStatsBean.getAsiSADefined2(), reg28InstrumentType);
         qStatsBean.setAciAssetclass(aciAssetClass);
 
         qStatsBean.setInstrCode(instrument.getInstrumentCode());
@@ -272,7 +277,7 @@ public class GenerateQstatsController extends AbstractQstatsReportController {
         qStatsBean.setPerOfPort(perOfPort);
 
         if ("DE".equalsIgnoreCase(qStatsBean.getAciAssetclass())) {
-            String type = StringUtils.isEmpty(clientFundMapping.getComments()) ? StringUtils.EMPTY : clientFundMapping.getComments();
+            String type = StringUtils.isEmpty(clientFundMapping.getComments()) ? StringUtils.EMPTY : clientFundMapping.getComments().trim();
             Indices indices = indicesRepository.findBySecurityAndType(instrument.getInstrumentCode(), type);
             if (indices != null) {
                 qStatsBean.setWeighting(indices.getIndexPercentage());
@@ -285,6 +290,7 @@ public class GenerateQstatsController extends AbstractQstatsReportController {
 
         qStatsBean.setMarketCap(getMarketCapitalisation(barraAssetInfo));
         qStatsBean.setSharesInIssue(getSharesOutStanding(barraAssetInfo));
+
 
         qStatsBean.setAddClassification(getAdditionalClassification(barraAssetInfo, reg28InstrumentType, qStatsBean.getAciAssetclass()));
 
@@ -343,9 +349,7 @@ public class GenerateQstatsController extends AbstractQstatsReportController {
         }
 
         qStatsBean.setAsiSADefined1(reg28InstrType);
-        if(reg28InstrumentType != null) {
-            qStatsBean.setAsiSADefined2(reg28InstrumentType.getAsisaDefined2());
-        }
+
         qStatsBean.setAsiSADefined3(null);
         qStatsBean.setAsiSADefined4(null);
         qStatsBean.setAsiSADefined5(null);
@@ -395,7 +399,7 @@ public class GenerateQstatsController extends AbstractQstatsReportController {
         return isAfrican;
     }
 
-    private String getACIAssetClass(BarraAssetInfo barraAssetInfo, String reg28InstrType, Reg28InstrumentType reg28InstrumentType) {
+    private String getACIAssetClass(BarraAssetInfo barraAssetInfo, String reg28InstrType, String asisaDefined2, Reg28InstrumentType reg28InstrumentType) {
         String aciAssetClass = null;
         if(barraAssetInfo.getAssetName() != null && barraAssetInfo.getAssetName().trim().startsWith("DC_L")) {
             aciAssetClass = "DC";
@@ -403,14 +407,14 @@ public class GenerateQstatsController extends AbstractQstatsReportController {
             aciAssetClass = "DM";
         } else if(barraAssetInfo.getAssetName() != null && barraAssetInfo.getAssetName().trim().startsWith("DO_L")) {
             aciAssetClass = "DO";
+        } else if ("Composite".equalsIgnoreCase(barraAssetInfo.getAssetIdType())) {
+           aciAssetClass = "LOCAL".equals(asisaDefined2) ? "LUT" : "FUT";
+        } else if("3.1(a)(i)".equalsIgnoreCase(reg28InstrType) || "3.1(a)(ii)".equalsIgnoreCase(reg28InstrType) || "3.1(a)(iii)".equalsIgnoreCase(reg28InstrType)) {
+            aciAssetClass = "2nd on JSE".equals(barraAssetInfo.getSarbClassification()) ? "DES" : "DEP";
         } else if ("SETTLEMENT".equalsIgnoreCase(barraAssetInfo.getAssetName()) && "1.2(a)".equalsIgnoreCase(reg28InstrType)) {
             aciAssetClass = "FS";
         } else if ("Fund".equalsIgnoreCase(barraAssetInfo.getInstType()) || "Composite".equalsIgnoreCase(barraAssetInfo.getInstType())) {
-            if (reg28InstrumentType != null && "LOCAL".equalsIgnoreCase(reg28InstrumentType.getAsisaDefined2())) {
-                aciAssetClass = "LUT";
-            } else {
-                aciAssetClass = "FUT";
-            }
+            aciAssetClass = "LOCAL".equals(asisaDefined2) ? "LUT" : "FUT";
         } else {
             DerivativeType derivativeType = derivativeTypesRepository.findByType(barraAssetInfo.getInstType());
             if (derivativeType != null && "LOCAL".equalsIgnoreCase(reg28InstrumentType.getAsisaDefined2())) {

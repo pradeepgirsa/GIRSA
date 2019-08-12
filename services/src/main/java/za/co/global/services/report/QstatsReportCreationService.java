@@ -18,7 +18,7 @@ public class QstatsReportCreationService implements ReportCreationService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(QstatsReportCreationService.class);
 
-    private static String[] columns = {"ACIFundCode", "FundName", "ManCoCode", "CreatedDate", "Quarter",
+    private static String[] columns = { "Quarter", "ManCoCode", "CreatedDate", "ACIFundCode", "FundName",
             "MVTotal", "InstitutionalTotal", "NoOfAccounts", "WeightAvgDuration", "WeightAvgMaturity", "ACIAssetClass",
             "InstrCode", "Holding", "BV", "CurrencyCode", "SecurityName", "MV", "PerOfPort", "Weighting", "EqtIndexLink",
             "African", "MarketCap", "SharesInIssue", "AddClassification", "TTMInc", "IssuerCode", "CouponRate",
@@ -86,17 +86,17 @@ public class QstatsReportCreationService implements ReportCreationService {
             for (QStatsBean qStatsBean : qStatsBeans) {
                 Row row = sheet.createRow(rowNum++);
 
-                row.createCell(0).setCellValue(qStatsBean.getAciFundCode());
-                row.createCell(1).setCellValue(qStatsBean.getFundName());
-                row.createCell(2).setCellValue(qStatsBean.getMancoCode());
+                row.createCell(3).setCellValue(qStatsBean.getAciFundCode());
+                row.createCell(4).setCellValue(qStatsBean.getFundName());
+                row.createCell(1).setCellValue(qStatsBean.getMancoCode());
 
-                Cell createdDateCell = row.createCell(3);
+                Cell createdDateCell = row.createCell(2);
                 if(qStatsBean.getCreatedDate() != null) {
                     createdDateCell.setCellValue(qStatsBean.getCreatedDate());
                 }
                 createdDateCell.setCellStyle(dateCellStyle);
 
-                Cell quarterDateCell = row.createCell(4);
+                Cell quarterDateCell = row.createCell(0);
                 if(qStatsBean.getQuarter() != null) {
                     quarterDateCell.setCellValue(qStatsBean.getQuarter());
                 }
@@ -224,13 +224,13 @@ public class QstatsReportCreationService implements ReportCreationService {
                 couponRateCell.setCellStyle(numeric18Decimal2);
 
                 Cell maturityDate = row.createCell(27);
-                if(qStatsBean.getMaturityDate() != null) {
+                if(qStatsBean.getMaturityDate() != null && qStatsBean.getMaturityDate().after(qStatsBean.getQuarter())) {
                     maturityDate.setCellValue(qStatsBean.getMaturityDate());
                 }
                 maturityDate.setCellStyle(dateCellStyle);
 
                 Cell resetMaturityDate = row.createCell(28);
-                if(qStatsBean.getResetMaturityDate() != null) {
+                if(qStatsBean.getResetMaturityDate() != null && qStatsBean.getMaturityDate().after(qStatsBean.getQuarter())) {
                     resetMaturityDate.setCellValue(qStatsBean.getResetMaturityDate());
                 }
                 resetMaturityDate.setCellStyle(dateCellStyle);
