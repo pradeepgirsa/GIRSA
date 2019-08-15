@@ -12,6 +12,7 @@
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="ASSET_ID" type="varchar(255)"/>
+            <column name="FUND_NAME" type="varchar(255)"/>
             <column name="ASSET_ID_TYPE" type="varchar(255)"/>
             <column name="ASSET_NAME" type="varchar(255)"/>
             <column name="AFRICA_VALUES" type="NUMERIC(28,  10)"/>
