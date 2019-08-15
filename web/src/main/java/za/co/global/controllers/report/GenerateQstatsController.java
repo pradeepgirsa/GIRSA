@@ -90,6 +90,7 @@ public class GenerateQstatsController extends AbstractQstatsReportController {
             Date reportDate = dateFormat.parse(reportDateInString);
 
             Client client = clientRepository.findOne(Long.parseLong(clientId));
+            /*Using this ReportData as the clinet data need to  */
             List<ReportData> reportDatas = reportDataRepository.findByReportStatusAndClient(ReportStatus.REGISTERED, client);
             ReportData reportData = reportDatas.isEmpty() ? null : reportDatas.get(0);
             List<InstrumentData> instrumentDataList = getInstrumentData(client, reportData);
@@ -116,11 +117,21 @@ public class GenerateQstatsController extends AbstractQstatsReportController {
                  /*Adding this map to verify the equivalence netEffExposure and netCurrent market
         values for fund level not for every instrument  */
 
+                Map<String, BigDecimal> fundTotalMarketValueMap = new HashMap<>();
+                /*Iterate through instruments and map all required data and get Qstats report required data */
                 for (InstrumentData instrumentData : instrumentDataList) {
                     ClientFundMapping clientFundMapping = clientFundMappingRepository.findByManagerFundCode(instrumentData.getPortfolioCode());
+                    /* fundTotalMarketValueMap and netAssetEffExposureVerifyMap as passing as null as no not doing */
                     ReportDataCollectionBean reportDataCollectionBean = getReportCollectionBean(instrumentData, netAssetMap, clientFundMapping, reportDate, null, null);
-                    if(reportDataCollectionBean.getBarraAssetInfo() != null) {
+                    BarraAssetInfo barraAssetInfo = reportDataCollectionBean.getBarraAssetInfo();
+
+                    /* Note: Added this condition after taking out validation 'instument must map to barra asset'
+                    If instrument mapped to barra asset then add it to Qstats report
+                     * Adding mv to total mv if instrument mapped to barra asset
+                     *Setting reportData to instrument even if it not mapped to barra asset as it should not included for next quarter report*/
+                    if(barraAssetInfo != null) {
                         validate(reportDataCollectionBean);
+                        addTotalMV(fundTotalMarketValueMap, instrumentData, barraAssetInfo); //TODO- remove in future - Doing this extra calculation beacuse netEffExpsosure and total MV validation commented
                         qStatsBeans.add(getQStatsBean(reportDate, client, reportDataCollectionBean));
                     }
                     if (instrumentData.getReportData() == null) {
@@ -130,7 +141,8 @@ public class GenerateQstatsController extends AbstractQstatsReportController {
                 }
                 reportDataRepository.save(reportData);
 
-                String filePath = createExcelFile(qStatsBeans, client, reportDate);
+                /*Creating excel file using Qstats data */
+                String filePath = createExcelFile(qStatsBeans, client, reportDate, fundTotalMarketValueMap);
                 modelAndView.addObject("successMessage", "Qstats file created successfully, file: " + filePath);
             } else {
                 modelAndView.addObject("errorMessage", "No instrument data to generate report");
@@ -142,6 +154,14 @@ public class GenerateQstatsController extends AbstractQstatsReportController {
         return modelAndView;
     }
 
+    private void addTotalMV(Map<String, BigDecimal> fundTotalMarketValueMap, InstrumentData instrumentData, BarraAssetInfo barraAssetInfo) {
+        BigDecimal totalMV = instrumentData.getCurrentMarketValue();
+        if(fundTotalMarketValueMap.get(barraAssetInfo.getFundName()) != null) {
+            totalMV = fundTotalMarketValueMap.get(barraAssetInfo.getFundName()).add(instrumentData.getCurrentMarketValue());
+        }
+        fundTotalMarketValueMap.put(barraAssetInfo.getFundName(), totalMV);
+    }
+
     private void validate(ReportDataCollectionBean reportDataCollectionBean) throws GirsaException {
         String error = validator.validate(reportDataCollectionBean);
         if (error != null) {
@@ -150,13 +170,13 @@ public class GenerateQstatsController extends AbstractQstatsReportController {
         }
     }
 
-    private String createExcelFile(List<QStatsBean> qStatsBeans, Client client, Date reportDate) throws GirsaException {
+    private String createExcelFile(List<QStatsBean> qStatsBeans, Client client, Date reportDate, Map<String, BigDecimal> fundTotalMarketValueMap) throws GirsaException {
         try {
             DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
             String reportDateInString = dateFormat.format(reportDate);
             String filename = String.format("QStats_%s_%s", client.getClientName(), reportDateInString);
             String filePath = fileUploadFolder + File.separator + filename + ".xlsx";
-            reportCreationService.createExcelFile(qStatsBeans, filePath);
+            reportCreationService.createExcelFile(qStatsBeans, filePath, fundTotalMarketValueMap);
 
 
 //            String csvFilePath = fileUploadFolder + File.separator + filename + ".csv";
@@ -242,6 +262,7 @@ public class GenerateQstatsController extends AbstractQstatsReportController {
         qStatsBean.setCreatedDate(new Date()); //report generated date
         qStatsBean.setQuarter(reportDate); //Selected report date
         qStatsBean.setMvTotal(netAsset.getEffExposure()); //Validated this with total current market base value for equality
+        qStatsBean.setBarraFundname(barraAssetInfo.getFundName()); //We can remove this once after enabling validation of  effExposure and portfolio-instruments total
 
 
         qStatsBean.setInstitutionalTotal(instrument.getInstitutionTotal());

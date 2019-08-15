@@ -6,6 +6,7 @@ import java.util.Date;
 public class QStatsBean {
     private String aciFundCode;
     private String fundName;
+    private String barraFundname;
     private String mancoCode;
     private Date createdDate;
     private Date quarter;
@@ -451,5 +452,13 @@ public class QStatsBean {
 
     public void setModifiedDuration(BigDecimal modifiedDuration) {
         this.modifiedDuration = modifiedDuration;
+    }
+
+    public String getBarraFundname() {
+        return barraFundname;
+    }
+
+    public void setBarraFundname(String barraFundname) {
+        this.barraFundname = barraFundname;
     }
 }

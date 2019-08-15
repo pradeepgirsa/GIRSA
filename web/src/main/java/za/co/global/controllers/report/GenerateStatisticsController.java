@@ -404,9 +404,9 @@ public class GenerateStatisticsController {
         return i;
     }
 
-    /*7th report: Group by 'SARB Classification', summing up eff weight and mapping to AssetClass
-    * 8th Report: Group by AssetClass values and summing up eff weight
-    * 9th Report: Simplifying 8th report, i.e. taking out 'zero' values of eff weight*/
+    /*th report: Group by 'SARB Classification', summing up eff weight and mapping to AssetClass
+    * 7th Report: Group by AssetClass values and summing up eff weight
+    * 8th Report: Simplifying 8th report, i.e. taking out 'zero' values of eff weight*/
     private int addReportForSARBClassificationAndAssetClass(Sheet sheet, int i, CellStyle headerCellStyle, CellStyle percentageCellStyle) {
         i += 1;
         sheet.createRow(i); //Empty row
@@ -417,56 +417,52 @@ public class GenerateStatisticsController {
         sarbClassificationMappings.forEach(sarbClassificationMapping ->
                 sarbClassificationMappingMap.put(sarbClassificationMapping.getSarbClassification(), sarbClassificationMapping.getAssetClass()));
 
-        i += 1;
-        Row headerRow = sheet.createRow(i); //Header row
-        Cell cell0 = headerRow.createCell(0);
-        cell0.setCellValue("SARB Classification");
-        cell0.setCellStyle(headerCellStyle);
-
-        Cell cell1 = headerRow.createCell(1);
-        cell1.setCellValue("Asset Class");
-        cell1.setCellStyle(headerCellStyle);
-
-        Cell cell2 = headerRow.createCell(2);
-        cell2.setCellValue("Exposure");
-        cell2.setCellStyle(headerCellStyle);
-
-        String sumFormula = null;
+//        i += 1;
+//        Row headerRow = sheet.createRow(i); //Header row
+//        Cell cell0 = headerRow.createCell(0);
+//        cell0.setCellValue("SARB Classification");
+//        cell0.setCellStyle(headerCellStyle);
+//
+//        Cell cell1 = headerRow.createCell(1);
+//        cell1.setCellValue("Asset Class");
+//        cell1.setCellStyle(headerCellStyle);
+//
+//        Cell cell2 = headerRow.createCell(2);
+//        cell2.setCellValue("Exposure");
+//        cell2.setCellStyle(headerCellStyle);
+//
+//        String sumFormula = null;
 
         //Data rows
         List<Object[]> assetDSU3s = assetDSU3Repository.findEffWeightSumGroupBySARBClassification();
         for (Object[] objects : assetDSU3s) {
-            i += 1;
-            Row row = sheet.createRow(i);
+//            i += 1;
+//            Row row = sheet.createRow(i);
             String sarbClassification = objects[0] != null ? (String) objects[0] : "";
-            row.createCell(0).setCellValue(sarbClassification);
+//            row.createCell(0).setCellValue(sarbClassification);
             String assetClass = sarbClassificationMappingMap.get(sarbClassification) == null ? "" : sarbClassificationMappingMap.get(sarbClassification);
-            row.createCell(1).setCellValue(assetClass);
+//            row.createCell(1).setCellValue(assetClass);
 
-            Cell effWeightCell = row.createCell(2);
+//            Cell effWeightCell = row.createCell(2);
             BigDecimal effWeightSum = objects[1] != null ? (BigDecimal) objects[1] : BigDecimal.ZERO;
-            effWeightCell.setCellValue(effWeightSum.doubleValue());
-            effWeightCell.setCellStyle(percentageCellStyle);
-            CellReference cr = new CellReference(effWeightCell);
-            sumFormula = sumFormula == null ? cr.formatAsString() : (sumFormula + "," + cr.formatAsString());
+//            effWeightCell.setCellValue(effWeightSum.doubleValue());
+//            effWeightCell.setCellStyle(percentageCellStyle);
+//            CellReference cr = new CellReference(effWeightCell);
+//            sumFormula = sumFormula == null ? cr.formatAsString() : (sumFormula + "," + cr.formatAsString());
 
             if (!StringUtils.isEmpty(assetClass)) {
                 BigDecimal existingEffWeightSum = assetClassWithEffWeightMap.get(assetClass);
-                if (existingEffWeightSum != null) {
-                    existingEffWeightSum = existingEffWeightSum.add(effWeightSum);
-                } else {
-                    existingEffWeightSum = effWeightSum;
-                }
+                existingEffWeightSum = existingEffWeightSum != null ? existingEffWeightSum.add(effWeightSum) : effWeightSum;
                 assetClassWithEffWeightMap.put(assetClass, existingEffWeightSum);
             }
         }
 
-        i += 1;
-        Row totalRow = sheet.createRow(i); //Total eff weight
-        Cell totalCell = totalRow.createCell(2);
-        totalCell.setCellType(Cell.CELL_TYPE_FORMULA);
-        totalCell.setCellFormula("SUM(" + sumFormula + ")");
-        totalCell.setCellStyle(percentageCellStyle);
+//        i += 1;
+//        Row totalRow = sheet.createRow(i); //Total eff weight
+//        Cell totalCell = totalRow.createCell(2);
+//        totalCell.setCellType(Cell.CELL_TYPE_FORMULA);
+//        totalCell.setCellFormula("SUM(" + sumFormula + ")");
+//        totalCell.setCellStyle(percentageCellStyle);
 
         //Asset class report
         i += 1;
@@ -474,11 +470,11 @@ public class GenerateStatisticsController {
 
         i += 1;
         Row assetClassheaderRow = sheet.createRow(i); //Header row
-        cell1 = assetClassheaderRow.createCell(0);
+        Cell cell1 = assetClassheaderRow.createCell(0);
         cell1.setCellValue("Asset Class");
         cell1.setCellStyle(headerCellStyle);
 
-        cell2 = assetClassheaderRow.createCell(1);
+        Cell cell2 = assetClassheaderRow.createCell(1);
         cell2.setCellValue("Exposure");
         cell2.setCellStyle(headerCellStyle);
         /*assetClassheaderRow.createCell(0).setCellValue("Asset Class");

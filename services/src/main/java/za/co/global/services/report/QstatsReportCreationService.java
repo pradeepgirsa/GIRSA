@@ -12,6 +12,7 @@ import za.co.global.domain.report.QStatsBean;
 import java.io.FileOutputStream;
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class QstatsReportCreationService implements ReportCreationService {
@@ -27,7 +28,7 @@ public class QstatsReportCreationService implements ReportCreationService {
             "ASISADefined2", "ASISADefined3", "ASISADefined4", "ASISADefined5"};
 
     @Override
-    public void createExcelFile(List<QStatsBean> qStatsBeans, String filePath) throws GirsaException {
+    public void createExcelFile(List<QStatsBean> qStatsBeans, String filePath, Map<String, BigDecimal> fundTotalMarketValueMap) throws GirsaException {
 
         // Create a Workbook
         try (Workbook workbook = new XSSFWorkbook();
@@ -103,8 +104,8 @@ public class QstatsReportCreationService implements ReportCreationService {
                 quarterDateCell.setCellStyle(dateCellStyle);
 
                 Cell mvTotalCell = row.createCell(5);
-                if(qStatsBean.getMvTotal() != null) {
-                    mvTotalCell.setCellValue(qStatsBean.getMvTotal().doubleValue());
+                if(fundTotalMarketValueMap.get(qStatsBean.getBarraFundname()) != null) {
+                    mvTotalCell.setCellValue(fundTotalMarketValueMap.get(qStatsBean.getBarraFundname()).doubleValue());
                 }
                 mvTotalCell.setCellType(Cell.CELL_TYPE_NUMERIC);
                 mvTotalCell.setCellStyle(numeric18Decimal2);
