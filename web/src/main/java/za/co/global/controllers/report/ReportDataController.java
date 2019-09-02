@@ -7,8 +7,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+import za.co.global.domain.client.Client;
+import za.co.global.domain.fileupload.client.InstrumentData;
 import za.co.global.domain.report.ReportData;
 import za.co.global.domain.report.ReportStatus;
+import za.co.global.persistence.fileupload.client.InstrumentDataRepository;
 import za.co.global.persistence.report.ReportDataRepository;
 
 import java.util.List;
@@ -18,6 +21,9 @@ public class ReportDataController {
 
     @Autowired
     protected ReportDataRepository reportDataRepository;
+
+    @Autowired
+    protected InstrumentDataRepository instrumentDataRepository;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ReportDataController.class);
 
@@ -42,6 +48,9 @@ public class ReportDataController {
                 ReportData reportData = reportDataRepository.findOne(Long.parseLong(reportDataId));
                 if (reportData != null) {
                     reportData.setReportStatus(ReportStatus.COMPLETED);
+
+                    deleteInstrumentData(reportData.getClient());
+
                     reportDataRepository.save(reportData);
                 }
             }
@@ -51,5 +60,12 @@ public class ReportDataController {
             return modelAndView.addObject("errorMessage", "Error: "+e.getMessage());
         }
         return modelAndView;
+    }
+
+    private void deleteInstrumentData(Client client) {
+        List<InstrumentData> instrumentDataList = instrumentDataRepository.findByClient(client);
+        for(InstrumentData instrumentData :  instrumentDataList) {
+            instrumentDataRepository.delete(instrumentData);
+        }
     }
 }

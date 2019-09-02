@@ -45,6 +45,10 @@ public class IssuerMapping implements Serializable {
     @ExcelColumnHeader(columnHeader = "Capital & Reserves", dataType = "big_decimal")
     private BigDecimal capitalReserves;
 
+    @Column(name = "add_classification")
+    @ExcelColumnHeader(columnHeader = "AddClassification")
+    private String addClassification;
+
     public Long getId() {
         return id;
     }
@@ -99,6 +103,14 @@ public class IssuerMapping implements Serializable {
 
     public void setCapitalReserves(BigDecimal capitalReserves) {
         this.capitalReserves = capitalReserves;
+    }
+
+    public String getAddClassification() {
+        return addClassification;
+    }
+
+    public void setAddClassification(String addClassification) {
+        this.addClassification = addClassification;
     }
 
     @Override

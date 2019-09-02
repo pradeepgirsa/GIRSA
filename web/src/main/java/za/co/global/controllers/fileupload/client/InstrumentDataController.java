@@ -2,6 +2,7 @@ package za.co.global.controllers.fileupload.client;
 
 import com.gizbel.excel.enums.ExcelFactoryType;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,7 @@ import za.co.global.domain.client.Client;
 import za.co.global.domain.fileupload.FileDetails;
 import za.co.global.domain.fileupload.client.InstrumentData;
 import za.co.global.domain.product.Product;
+import za.co.global.domain.report.ReportData;
 import za.co.global.domain.report.ReportStatus;
 import za.co.global.persistence.client.ClientRepository;
 import za.co.global.persistence.fileupload.client.InstrumentDataRepository;
@@ -27,6 +29,7 @@ import za.co.global.services.upload.FileAndObjectResolver;
 import za.co.global.services.upload.GirsaExcelParser;
 
 import java.io.File;
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -100,6 +103,7 @@ public class InstrumentDataController extends BaseFileUploadController {
 
         String extension = FilenameUtils.getExtension(file.getOriginalFilename());
         if ("xls".equals(extension) || "xlsx".equals(extension)) {
+            deleteInstrumentData(client);
             readFileAndStoreInDB(uploadedFile, fileType, client);
         } else if ("zip".equals(extension)) {
             String unzipFolderName = uploadedFile.getParent() + File.separator + FilenameUtils.removeExtension(uploadedFile.getName());
@@ -109,6 +113,11 @@ public class InstrumentDataController extends BaseFileUploadController {
                 if ("xls".equals(extension) || "xlsx".equals(extension)) {
                     saveFileDetails(null, null, fileDetails, extractedFile);
 
+                    /*This can be active if we no need to delete all instrument data on Mark as completed*/
+                    //List<InstrumentData> instrumentDataList = getInstrumentData(client);
+
+                    deleteInstrumentData(client);
+
                     readFileAndStoreInDB(extractedFile, fileType, client);
                 }
             }
@@ -116,6 +125,25 @@ public class InstrumentDataController extends BaseFileUploadController {
             throw new Exception("Only excel and zip files are allowed");
         }
     }
+
+    private void deleteInstrumentData(Client client) {
+        List<InstrumentData> instrumentDataList = instrumentDataRepository.findByClient(client);
+        for(InstrumentData instrumentData :  instrumentDataList) {
+            instrumentDataRepository.delete(instrumentData);
+        }
+    }
+
+//    protected List<InstrumentData> getInstrumentData(Client client) {
+//        List<ReportData> reportDatas = reportDataRepository.findByReportStatusAndClient(ReportStatus.REGISTERED, client);
+//        ReportData reportData = reportDatas.isEmpty() ? null : reportDatas.get(0);
+//
+//        List<InstrumentData> instrumentDataList = instrumentDataRepository.findByClientAndReportDataIsNull(client);
+//        if(reportData != null && ReportStatus.REGISTERED == reportData.getReportStatus()) {
+//            List<InstrumentData> existingInstruments = instrumentDataRepository.findByClientAndReportData(client, reportData);
+//            existingInstruments.forEach(instrumentData -> instrumentDataList.add(instrumentData));
+//        }
+//        return instrumentDataList;
+//    }
 
     protected void readFileAndStoreInDB(File file, String fileType, Client client) throws Exception {
         GirsaExcelParser parser = new GirsaExcelParser(ExcelFactoryType.COLUMN_NAME_BASED_EXTRACTION);
@@ -171,23 +199,21 @@ public class InstrumentDataController extends BaseFileUploadController {
             if(instrumentData == null){
                 throw new IllegalStateException("Something wrong with data");
             }
-            List<InstrumentData> instumentDataList = instrumentDataRepository.findByPortfolioCodeAndInstrumentCodeAndClientAndReportDataIsNullOrPortfolioCodeAndInstrumentCodeAndClientAndReportData_ReportStatus(
-                    instrumentData.getPortfolioCode(), instrumentData.getInstrumentCode(), client,
-                    instrumentData.getPortfolioCode(), instrumentData.getInstrumentCode(), client, ReportStatus.REGISTERED);
+            List<InstrumentData> instumentDataList = instrumentDataRepository.findByPortfolioCodeAndInstrumentCodeAndClient(instrumentData.getPortfolioCode(), instrumentData.getInstrumentCode(), client);
             if(instumentDataList.size() > 1) {
-                throw new IllegalStateException("Found duplicate instument record with same Portfolio:" + instrumentData.getPortfolioCode() +
+                throw new IllegalStateException("Found duplicate instrument record with same Portfolio:" + instrumentData.getPortfolioCode() +
                         ", client:"+client.getClientName()+ ", instrument code: "+instrumentData.getInstrumentCode());
             }
             if(instumentDataList.size() == 1) {
                 LOGGER.info("Overriding client data, portfolio code:{}, instrument code:{}, client:{}", instrumentData.getPortfolioCode(), instrumentData.getInstrumentCode(), client.getClientName());
                 InstrumentData instrumentDataToSave = instumentDataList.get(0);
-                instrumentDataToSave.setCurrentBookValue(instrumentData.getCurrentBookValue());
-                instrumentDataToSave.setCurrentMarketValue(instrumentData.getCurrentMarketValue());
+                instrumentDataToSave.setCurrentBookValue(addAndGetValue(instrumentDataToSave.getCurrentBookValue(), instrumentData.getCurrentBookValue()));
+                instrumentDataToSave.setCurrentMarketValue(addAndGetValue(instrumentDataToSave.getCurrentMarketValue(), instrumentData.getCurrentMarketValue()));
                 instrumentDataToSave.setInstitutionTotal(instrumentData.getInstitutionTotal());
                 instrumentDataToSave.setInstrumentCode(instrumentData.getInstrumentCode());
                 instrumentDataToSave.setInstrumentCurrency(instrumentData.getInstrumentCurrency());
                 instrumentDataToSave.setMarketValueTotal(instrumentData.getMarketValueTotal());
-                instrumentDataToSave.setNominalUnits(instrumentData.getNominalUnits());
+                instrumentDataToSave.setNominalUnits(addAndGetValue(instrumentDataToSave.getNominalUnits(), instrumentData.getNominalUnits()));
                 instrumentDataToSave.setNoOfAccounts(instrumentData.getNoOfAccounts());
                 instrumentDataToSave.setInstrumentDescription(instrumentData.getInstrumentDescription());
                 instrumentDataToSave.setPortfolioCode (instrumentData.getPortfolioCode());
@@ -201,6 +227,17 @@ public class InstrumentDataController extends BaseFileUploadController {
                 instrumentDataRepository.save(instrumentData);
             }
         }
+    }
+
+    private BigDecimal addAndGetValue(BigDecimal previousValue, BigDecimal newValue) {
+        if(previousValue != null) {
+            if(newValue != null) {
+                return previousValue.add(newValue);
+            } else {
+                return previousValue;
+            }
+        }
+        return newValue;
     }
 
     @Override

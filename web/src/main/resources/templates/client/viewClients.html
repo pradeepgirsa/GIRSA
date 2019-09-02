@@ -29,7 +29,7 @@
                                         <th>Client Name</th>
                                         <th>Description</th>
                                         <th>Status</th>
-                                        <th>Edit</th>
+                                        <!--<th>Edit</th>-->
 
                                     </tr>
                                     </thead>
@@ -44,13 +44,13 @@
                                              <td></td>-->
                                             <td><span th:text="|${client.description}|"/></td>
                                             <td><span th:text="|${client.status}|"/></td>
-                                            <td>
-                                                <a th:href="|/updateClient?clientId=${client.id}|" th:onclick="|loadingScreen()|" data-toggle="modal"
-                                                   data-target=".bs-view-modal"><i class="glyphicon glyphicon-edit" alt="Edit" data-toggle="tooltip" title="Edit Client"/> &nbsp; </a>
-                                                <!--<a th:href="|/manageCompanyWindow?companyID=${company.id}&amp;delete=true|" data-toggle="modal"-->
-                                                <!--data-target=".bs-view-modal-delete" class="delete-trash-icon"><i class="glyphicon glyphicon-trash" alt="Remove" data-toggle="tooltip" title="Remove"/> &nbsp;  </a>-->
-                                                <!--<a th:href="|/viewCompanyReport?companyID=${company.id}|"><i class="glyphicon glyphicon-list-alt" alt="Pull report" data-toggle="tooltip" title="Pull report"/></a>-->
-                                            </td>
+                                            <!--<td>-->
+                                                <!--<a th:href="|/updateClient?clientId=${client.id}|" th:onclick="|loadingScreen()|" data-toggle="modal"-->
+                                                   <!--data-target=".bs-view-modal"><i class="glyphicon glyphicon-edit" alt="Edit" data-toggle="tooltip" title="Edit Client"/> &nbsp; </a>-->
+                                                <!--&lt;!&ndash;<a th:href="|/manageCompanyWindow?companyID=${company.id}&amp;delete=true|" data-toggle="modal"&ndash;&gt;-->
+                                                <!--&lt;!&ndash;data-target=".bs-view-modal-delete" class="delete-trash-icon"><i class="glyphicon glyphicon-trash" alt="Remove" data-toggle="tooltip" title="Remove"/> &nbsp;  </a>&ndash;&gt;-->
+                                                <!--&lt;!&ndash;<a th:href="|/viewCompanyReport?companyID=${company.id}|"><i class="glyphicon glyphicon-list-alt" alt="Pull report" data-toggle="tooltip" title="Pull report"/></a>&ndash;&gt;-->
+                                            <!--</td>-->
 
                                         </tr>
                                     </tbody>

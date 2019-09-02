@@ -11,7 +11,6 @@ import za.co.global.domain.fileupload.mapping.InstrumentCode;
 import za.co.global.domain.fileupload.mapping.IssuerMapping;
 import za.co.global.domain.fileupload.mapping.Reg28InstrumentType;
 import za.co.global.domain.fileupload.system.BarraAssetInfo;
-import za.co.global.domain.report.ReportData;
 import za.co.global.domain.report.ReportDataCollectionBean;
 import za.co.global.persistence.client.ClientRepository;
 import za.co.global.persistence.fileupload.client.DailyPricingRepository;
@@ -148,12 +147,12 @@ public abstract class AbstractQstatsReportController {
         return null;
     }
 
-    protected List<InstrumentData> getInstrumentData(Client client, ReportData reportData) {
-        List<InstrumentData> instrumentDataList = instrumentDataRepository.findByClientAndReportDataIsNull(client);
-        if(reportData != null) {
-            List<InstrumentData> existingInstruments = instrumentDataRepository.findByClientAndReportData(client, reportData);
-            existingInstruments.forEach(instrumentData -> instrumentDataList.add(instrumentData));
-        }
+    protected List<InstrumentData> getInstrumentData(Client client) {
+        List<InstrumentData> instrumentDataList = instrumentDataRepository.findByClient(client);
+//        if(reportData != null && ReportStatus.REGISTERED == reportData.getReportStatus()) {
+//            List<InstrumentData> existingInstruments = instrumentDataRepository.findByClientAndReportData(client, reportData);
+//            existingInstruments.forEach(instrumentData -> instrumentDataList.add(instrumentData));
+//        }
         return instrumentDataList;
     }
 

@@ -73,9 +73,9 @@ public class InstrumentData implements Serializable {
     @JoinColumn(name = "client_id")
     private Client client;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "report_data_id", insertable = false, updatable = false)
-    private ReportData reportData;
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "report_data_id", insertable = false, updatable = false)
+//    private ReportData reportData;
 
     @Column(name = "updated_date")
     private Date updatedDate;
@@ -192,13 +192,13 @@ public class InstrumentData implements Serializable {
         this.client = client;
     }
 
-    public ReportData getReportData() {
-        return reportData;
-    }
-
-    public void setReportData(ReportData reportData) {
-        this.reportData = reportData;
-    }
+//    public ReportData getReportData() {
+//        return reportData;
+//    }
+//
+//    public void setReportData(ReportData reportData) {
+//        this.reportData = reportData;
+//    }
 
     public Date getUpdatedDate() {
         return updatedDate;
@@ -236,7 +236,7 @@ public class InstrumentData implements Serializable {
             return false;
         if (tradeDate != null ? !tradeDate.equals(that.tradeDate) : that.tradeDate != null) return false;
         if (client != null ? !client.equals(that.client) : that.client != null) return false;
-        if (reportData != null ? !reportData.equals(that.reportData) : that.reportData != null) return false;
+//        if (reportData != null ? !reportData.equals(that.reportData) : that.reportData != null) return false;
         return updatedDate != null ? updatedDate.equals(that.updatedDate) : that.updatedDate == null;
     }
 
@@ -255,7 +255,7 @@ public class InstrumentData implements Serializable {
         result = 31 * result + (currentMarketValue != null ? currentMarketValue.hashCode() : 0);
         result = 31 * result + (tradeDate != null ? tradeDate.hashCode() : 0);
         result = 31 * result + (client != null ? client.hashCode() : 0);
-        result = 31 * result + (reportData != null ? reportData.hashCode() : 0);
+//        result = 31 * result + (reportData != null ? reportData.hashCode() : 0);
         result = 31 * result + (updatedDate != null ? updatedDate.hashCode() : 0);
         return result;
     }
@@ -277,7 +277,7 @@ public class InstrumentData implements Serializable {
                 ", currentMarketValue=" + currentMarketValue +
                 ", tradeDate=" + tradeDate +
                 ", client=" + client +
-                ", reportData=" + reportData +
+//                ", reportData=" + reportData +
                 ", updatedDate=" + updatedDate +
                 '}';
     }

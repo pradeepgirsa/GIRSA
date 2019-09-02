@@ -54,7 +54,7 @@ public class QstatsDryRunController extends AbstractQstatsReportController {
             Client client = clientRepository.findOne(Long.parseLong(clientId));
             List<ReportData> reportDatas = reportDataRepository.findByReportStatusAndClient(ReportStatus.REGISTERED, client);
             ReportData reportData = reportDatas.isEmpty() ? null : reportDatas.get(0);
-            List<InstrumentData> instrumentDataList = getInstrumentData(client, reportData);
+            List<InstrumentData> instrumentDataList = getInstrumentData(client);
 
             List<BarraAssetInfo> netAssets = barraAssetInfoRepository.findByNetIndicatorIsTrue();
             //BarraAssetInfo netAsset = netAssets.isEmpty() ? null : netAssets.get(0);

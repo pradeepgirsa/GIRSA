@@ -93,7 +93,7 @@ public class GenerateQstatsController extends AbstractQstatsReportController {
             /*Using this ReportData as the clinet data need to  */
             List<ReportData> reportDatas = reportDataRepository.findByReportStatusAndClient(ReportStatus.REGISTERED, client);
             ReportData reportData = reportDatas.isEmpty() ? null : reportDatas.get(0);
-            List<InstrumentData> instrumentDataList = getInstrumentData(client, reportData);
+            List<InstrumentData> instrumentDataList = getInstrumentData(client);
 
             if (reportData == null) {
                 reportData = new ReportData();
@@ -134,10 +134,11 @@ public class GenerateQstatsController extends AbstractQstatsReportController {
                         addTotalMV(fundTotalMarketValueMap, instrumentData, barraAssetInfo); //TODO- remove in future - Doing this extra calculation beacuse netEffExpsosure and total MV validation commented
                         qStatsBeans.add(getQStatsBean(reportDate, client, reportDataCollectionBean));
                     }
-                    if (instrumentData.getReportData() == null) {
-                        reportData.getInstrumentDataList().add(instrumentData);
-                        instrumentData.setReportData(reportData);
-                    }
+                    /* This code will be active if we are not deleting client file data after report mark as completed */
+//                    if (instrumentData.getReportData() == null) {
+//                        reportData.getInstrumentDataList().add(instrumentData);
+//                        instrumentData.setReportData(reportData);
+//                    }
                 }
                 reportDataRepository.save(reportData);
 
@@ -276,7 +277,16 @@ public class GenerateQstatsController extends AbstractQstatsReportController {
         String aciAssetClass = getACIAssetClass(barraAssetInfo, reg28InstrType, qStatsBean.getAsiSADefined2(), reg28InstrumentType);
         qStatsBean.setAciAssetclass(aciAssetClass);
 
-        qStatsBean.setInstrCode(instrument.getInstrumentCode());
+        if("ACC_EX".equals(barraAssetInfo.getAssetId().trim())) {
+            qStatsBean.setInstrCode("ACC_EX");
+            qStatsBean.setSecurityName("Fees ZAR");
+        } else if("ACC_INC".equals(barraAssetInfo.getAssetId().trim())) {
+            qStatsBean.setInstrCode("ACC_INC");
+            qStatsBean.setSecurityName("Accrued Income ZAR");
+        } else {
+            qStatsBean.setInstrCode(instrument.getInstrumentCode());
+            qStatsBean.setSecurityName(instrument.getInstrumentDescription());
+        }
 
 
         qStatsBean.setMaturityDate(maturityDate);
@@ -290,7 +300,6 @@ public class GenerateQstatsController extends AbstractQstatsReportController {
         qStatsBean.setHolding(instrument.getNominalUnits());
         qStatsBean.setBookValue(instrument.getCurrentBookValue());
         qStatsBean.setCurrencyCode(instrument.getInstrumentCurrency());
-        qStatsBean.setSecurityName(instrument.getInstrumentDescription());
         qStatsBean.setMarketValue(instrument.getCurrentMarketValue());
 
         BigDecimal perOfPort = qStatsBean.getMarketValue() != null ?
@@ -312,9 +321,6 @@ public class GenerateQstatsController extends AbstractQstatsReportController {
         qStatsBean.setMarketCap(getMarketCapitalisation(barraAssetInfo));
         qStatsBean.setSharesInIssue(getSharesOutStanding(barraAssetInfo));
 
-
-        qStatsBean.setAddClassification(getAdditionalClassification(barraAssetInfo, reg28InstrumentType, qStatsBean.getAciAssetclass()));
-
         Date tradeDate = instrument.getTradeDate();
         if(maturityDate != null && tradeDate != null) {
             qStatsBean.setTtmInc(new BigDecimal(TimeUnit.DAYS.convert((maturityDate.getTime() - tradeDate.getTime()), TimeUnit.MILLISECONDS)));
@@ -330,10 +336,6 @@ public class GenerateQstatsController extends AbstractQstatsReportController {
         BigDecimal ttmCur = maturityDate != null ? BigDecimal.valueOf(TimeUnit.DAYS.convert((maturityDate.getTime() - reportDate.getTime()), TimeUnit.MILLISECONDS)) :
                 null;
         qStatsBean.setTtmCur(ttmCur);
-
-        qStatsBean.setInstrRateST(null);
-        qStatsBean.setInstrRateLT(null);
-
 
         String rating = null;
         String ratingAgency = null;
@@ -355,6 +357,11 @@ public class GenerateQstatsController extends AbstractQstatsReportController {
         qStatsBean.setIssuerRateST(rating);
         qStatsBean.setIssuerRateLT(rating);
 
+        qStatsBean.setInstrRateST(null);
+
+        if(dailyPricing != null && instrument.getInstrumentCode().equals(dailyPricing.getBondCode())) {
+            qStatsBean.setInstrRateLT(rating);
+        }
 
         qStatsBean.setRateAgency(ratingAgency);
         qStatsBean.setCompConDeb(Boolean.FALSE);
@@ -364,6 +371,8 @@ public class GenerateQstatsController extends AbstractQstatsReportController {
 
         BigDecimal capReserves = Optional.ofNullable(issuerMapping).map(IssuerMapping::getCapitalReserves).orElse(null);
         qStatsBean.setCapitalReserves(capReserves);
+
+        qStatsBean.setAddClassification(getAdditionalClassification(barraAssetInfo, reg28InstrumentType, qStatsBean.getAciAssetclass(), issuerMapping));
 
         if (qStatsBean.getMarketValue() != null && marketCap != null && marketCap.compareTo(BigDecimal.ZERO) != 0) {
             qStatsBean.setPerIssuedCap(qStatsBean.getMarketValue().divide(marketCap, 8, RoundingMode.HALF_UP));
@@ -382,10 +391,13 @@ public class GenerateQstatsController extends AbstractQstatsReportController {
         return Optional.ofNullable(barraAssetInfo).map(BarraAssetInfo::getCoupon).orElse(null);
     }
 
-    private String getAdditionalClassification(BarraAssetInfo barraAssetInfo, Reg28InstrumentType reg28InstrumentType, String aciAssetClass) {
+    private String getAdditionalClassification(BarraAssetInfo barraAssetInfo, Reg28InstrumentType reg28InstrumentType, String aciAssetClass, IssuerMapping issuerMapping) {
 
         String addClassification = null;
-        if ("DE".equals(aciAssetClass)) {
+        if(issuerMapping != null) {
+            addClassification = issuerMapping.getAddClassification();
+        }
+        if (StringUtils.isEmpty(addClassification) && "DE".equals(aciAssetClass)) {
             AdditionalClassification additionalClassifications = additionalClassificationRepository.findByIndustryAndSectorAndSuperSectorAndSubSector(barraAssetInfo.getGirIndustryICB(),
                     barraAssetInfo.getGirSectorICB(), barraAssetInfo.getGirSupersectorICB(), barraAssetInfo.getGirSubsectorICB());
             if (additionalClassifications != null) {
@@ -431,6 +443,8 @@ public class GenerateQstatsController extends AbstractQstatsReportController {
         } else if ("Composite".equalsIgnoreCase(barraAssetInfo.getAssetIdType())) {
            aciAssetClass = "LOCAL".equals(asisaDefined2) ? "LUT" : "FUT";
         } else if("3.1(a)(i)".equalsIgnoreCase(reg28InstrType) || "3.1(a)(ii)".equalsIgnoreCase(reg28InstrType) || "3.1(a)(iii)".equalsIgnoreCase(reg28InstrType)) {
+            aciAssetClass = "2nd on JSE".equals(barraAssetInfo.getSarbClassification()) ? "DES" : "DEP";
+        } else if("4.1(a)(i)".equalsIgnoreCase(reg28InstrType) || "4.1(a)(ii)".equalsIgnoreCase(reg28InstrType) || "4.1(a)(iii)".equalsIgnoreCase(reg28InstrType)) {
             aciAssetClass = "2nd on JSE".equals(barraAssetInfo.getSarbClassification()) ? "DES" : "DEP";
         } else if ("SETTLEMENT".equalsIgnoreCase(barraAssetInfo.getAssetName()) && "1.2(a)".equalsIgnoreCase(reg28InstrType)) {
             aciAssetClass = "FS";
