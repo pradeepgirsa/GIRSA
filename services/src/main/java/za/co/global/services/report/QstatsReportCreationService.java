@@ -234,9 +234,9 @@ public class QstatsReportCreationService implements ReportCreationService {
                 Cell couponRateCell = row.createCell(26);
                 if(couponRate != null) {
                     couponRateCell.setCellValue(couponRate.setScale(6, BigDecimal.ROUND_HALF_DOWN).doubleValue());
+                    couponRateCell.setCellType(Cell.CELL_TYPE_NUMERIC);
+                    couponRateCell.setCellStyle(percentageCellStyle);
                 }
-                couponRateCell.setCellType(Cell.CELL_TYPE_NUMERIC);
-                couponRateCell.setCellStyle(numeric18Decimal2);
 
                 Cell maturityDate = row.createCell(27);
                 if(qStatsBean.getMaturityDate() != null && qStatsBean.getMaturityDate().after(qStatsBean.getQuarter())) {
@@ -283,9 +283,9 @@ public class QstatsReportCreationService implements ReportCreationService {
                 Cell perIssuedCapCell = row.createCell(38);
                 if(qStatsBean.getPerIssuedCap() != null) {
                     perIssuedCapCell.setCellValue(qStatsBean.getPerIssuedCap().doubleValue());
+                    perIssuedCapCell.setCellType(Cell.CELL_TYPE_NUMERIC);
+                    perIssuedCapCell.setCellStyle(percentageCellStyle);
                 }
-                perIssuedCapCell.setCellType(Cell.CELL_TYPE_NUMERIC);
-                perIssuedCapCell.setCellStyle(percentageCellStyle);
 
                 Cell capitalReservesCell = row.createCell(39);
                 if(qStatsBean.getCapitalReserves() != null) {
