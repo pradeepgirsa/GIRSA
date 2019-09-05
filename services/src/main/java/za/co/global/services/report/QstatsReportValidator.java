@@ -40,21 +40,22 @@ public class QstatsReportValidator implements Validator<ReportDataCollectionBean
         if(netAssetEffExposureVerifyMap != null) {
             if (netAssetEffExposureVerifyMap.get(barraAssetInfo.getFundName()) != null && !netAssetEffExposureVerifyMap.get(barraAssetInfo.getFundName())) {
                 netAssetEffExposureVerifyMap.put(barraAssetInfo.getFundName(), Boolean.TRUE);
-                if (netAsset == null || netAsset.getEffExposure() == null) {
+                if (barraAssetInfo != null && (netAsset == null || netAsset.getEffExposure() == null)) {
                     return "There is no net eff exposure value for barra fund:" + barraAssetInfo.getFundName();
                 }
-                if (netCurrentMarketValue == null) {
-                    return "There is no net current market base value for client, portfolio code:" + instrumentData.getPortfolioCode();
-                }
-                //TODO - if difference is 1 value then ignore the condition
-                if (netAsset.getEffExposure().compareTo(netCurrentMarketValue) != 0) {
-                    double netEffExposure = netAsset.getEffExposure().abs().doubleValue();
-                    double netCurrentMarketValueInDouble = netCurrentMarketValue.abs().doubleValue();
-                    double dif = netEffExposure > netCurrentMarketValueInDouble ? netEffExposure - netCurrentMarketValueInDouble :
-                            netCurrentMarketValueInDouble - netEffExposure;
-                    if (dif > 5.00d) {
-                        return "Net eff exposure from barra and net base current market value from client are not equal- portfolio code:"
-                                + instrumentData.getPortfolioCode() + ", barra fund name:" + barraAssetInfo.getFundName();
+                if (netCurrentMarketValue != null) {
+                    // return "There is no net current market base value for client, portfolio code:" + instrumentData.getPortfolioCode();
+
+                    //TODO - if difference is 1 value then ignore the condition
+                    if (netAsset.getEffExposure().compareTo(netCurrentMarketValue) != 0) {
+                        double netEffExposure = netAsset.getEffExposure().abs().doubleValue();
+                        double netCurrentMarketValueInDouble = netCurrentMarketValue.abs().doubleValue();
+                        double dif = netEffExposure > netCurrentMarketValueInDouble ? netEffExposure - netCurrentMarketValueInDouble :
+                                netCurrentMarketValueInDouble - netEffExposure;
+                        if (dif > 5.00d) {
+                            return "Net eff exposure from barra and net base current market value from client are not equal- portfolio code:"
+                                    + instrumentData.getPortfolioCode() + ", barra fund name:" + barraAssetInfo.getFundName();
+                        }
                     }
                 }
             }
@@ -66,11 +67,11 @@ public class QstatsReportValidator implements Validator<ReportDataCollectionBean
             }
         }
 
-        if(reportDataCollectionBean.getIssuerMapping() != null) {
-            if(reportDataCollectionBean.getIssuerMapping().getIssuerCode() == null) {
-                return "There is no issuer code mapped to the barra fund: "+barraAssetInfo.getFundName()+", GIR issuer:" + barraAssetInfo.getGirIssuer();
-            }
-        }
+//        if(reportDataCollectionBean.getIssuerMapping() != null) {
+//            if(reportDataCollectionBean.getIssuerMapping().getIssuerCode() == null) {
+//                return "There is no issuer code mapped to the barra fund: "+barraAssetInfo.getFundName()+", GIR issuer:" + barraAssetInfo.getGirIssuer();
+//            }
+//        }
 
 //        if(reportDataCollectionBean.getMaturityDate() == null) { //TODO - check maturity date with asset id or instrument code.
 //            return "There is no Maturity date mapping to Barra asset id:'"+ barraAssetInfo.getAssetId()+"', Instrument code:"+ instrumentCode.getManagerCode();
