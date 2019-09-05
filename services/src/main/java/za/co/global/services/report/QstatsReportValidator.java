@@ -43,7 +43,7 @@ public class QstatsReportValidator implements Validator<ReportDataCollectionBean
                 if (barraAssetInfo != null && (netAsset == null || netAsset.getEffExposure() == null)) {
                     return "There is no net eff exposure value for barra fund:" + barraAssetInfo.getFundName();
                 }
-                if (netCurrentMarketValue != null) {
+                if (netCurrentMarketValue != null && barraAssetInfo != null) {
                     // return "There is no net current market base value for client, portfolio code:" + instrumentData.getPortfolioCode();
 
                     //TODO - if difference is 1 value then ignore the condition
