@@ -137,12 +137,11 @@ public class QstatsReportCreationService implements ReportCreationService {
                             couponRateCellReference+","+ currentYield.doubleValue()+",2,4)*"+ effWeight.doubleValue()+"*"+365.25, reportDateCellReference, resetMaturityDateCellRef);
                     weightedAvgDuration.setCellFormula(formula);
                     weightedAvgDuration.setCellType(Cell.CELL_TYPE_FORMULA);
-
+                    weightedAvgDuration.setCellStyle(numeric18Decimal2);
                 } else {
                     weightedAvgDuration.setCellValue(0d);
                     weightedAvgDuration.setCellType(Cell.CELL_TYPE_NUMERIC);
                 }
-                weightedAvgDuration.setCellStyle(numeric18Decimal2);
 
 //                BigDecimal weightedAvgMaturity = null;
 //                if(qStatsBean.getModifiedDuration() != null && effWeight != null) {
