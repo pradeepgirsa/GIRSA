@@ -302,10 +302,6 @@ public class GenerateQstatsController extends AbstractQstatsReportController {
         qStatsBean.setCurrencyCode(instrument.getInstrumentCurrency());
         qStatsBean.setMarketValue(instrument.getCurrentMarketValue());
 
-        BigDecimal perOfPort = qStatsBean.getMarketValue() != null ?
-                qStatsBean.getMarketValue().divide(qStatsBean.getMvTotal(), 8, BigDecimal.ROUND_HALF_UP) : null;
-        qStatsBean.setPerOfPort(perOfPort);
-
         if ("DE".equalsIgnoreCase(qStatsBean.getAciAssetclass())) {
             String type = StringUtils.isEmpty(clientFundMapping.getComments()) ? StringUtils.EMPTY : clientFundMapping.getComments().trim();
             Indices indices = indicesRepository.findBySecurityAndType(instrument.getInstrumentCode(), type);

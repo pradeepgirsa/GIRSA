@@ -104,11 +104,16 @@ public class QstatsReportCreationService implements ReportCreationService {
                 quarterDateCell.setCellStyle(dateCellStyle);
 
                 Cell mvTotalCell = row.createCell(5);
-                if(fundTotalMarketValueMap.get(qStatsBean.getBarraFundname()) != null) {
-                    mvTotalCell.setCellValue(fundTotalMarketValueMap.get(qStatsBean.getBarraFundname()).doubleValue());
+                BigDecimal totalMV = fundTotalMarketValueMap.get(qStatsBean.getBarraFundname());
+                if(totalMV != null) {
+                    mvTotalCell.setCellValue(totalMV.doubleValue());
                 }
                 mvTotalCell.setCellType(Cell.CELL_TYPE_NUMERIC);
                 mvTotalCell.setCellStyle(numeric18Decimal2);
+
+                BigDecimal perOfPort = qStatsBean.getMarketValue() != null && totalMV != null ?
+                        qStatsBean.getMarketValue().divide(totalMV, 8, BigDecimal.ROUND_HALF_DOWN) : null;
+                qStatsBean.setPerOfPort(perOfPort);
 
                 Cell institutionalTotalCell = row.createCell(6);
                 if(qStatsBean.getInstitutionalTotal() != null) {
