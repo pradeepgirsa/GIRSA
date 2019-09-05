@@ -75,9 +75,9 @@ public class QstatsReportCreationService implements ReportCreationService {
             numericCellStyle.setDataFormat(createHelper.createDataFormat().getFormat("##########"));
 
             CellStyle numeric18Decimal2 = workbook.createCellStyle();
-            numeric18Decimal2.setDataFormat(createHelper.createDataFormat().getFormat("0.######"));
+            numeric18Decimal2.setDataFormat(createHelper.createDataFormat().getFormat("#.######"));
             CellStyle percentageCellStyle = workbook.createCellStyle();
-            percentageCellStyle.setDataFormat(workbook.createDataFormat().getFormat("0.######%"));
+            percentageCellStyle.setDataFormat(workbook.createDataFormat().getFormat("#.######%"));
 
 
             int rowNum = 1;
@@ -105,14 +105,14 @@ public class QstatsReportCreationService implements ReportCreationService {
 
                 Cell mvTotalCell = row.createCell(5);
                 if(fundTotalMarketValueMap.get(qStatsBean.getBarraFundname()) != null) {
-                    mvTotalCell.setCellValue(fundTotalMarketValueMap.get(qStatsBean.getBarraFundname()).setScale(6, BigDecimal.ROUND_HALF_DOWN).doubleValue());
+                    mvTotalCell.setCellValue(fundTotalMarketValueMap.get(qStatsBean.getBarraFundname()).doubleValue());
                 }
                 mvTotalCell.setCellType(Cell.CELL_TYPE_NUMERIC);
                 mvTotalCell.setCellStyle(numeric18Decimal2);
 
                 Cell institutionalTotalCell = row.createCell(6);
                 if(qStatsBean.getInstitutionalTotal() != null) {
-                    institutionalTotalCell.setCellValue(qStatsBean.getInstitutionalTotal().setScale(6, BigDecimal.ROUND_HALF_DOWN).doubleValue());
+                    institutionalTotalCell.setCellValue(qStatsBean.getInstitutionalTotal().doubleValue());
                 }
                 institutionalTotalCell.setCellType(Cell.CELL_TYPE_NUMERIC);
                 institutionalTotalCell.setCellStyle(numeric18Decimal2);
@@ -165,7 +165,7 @@ public class QstatsReportCreationService implements ReportCreationService {
 
 
 //                if(weightedAvgMaturity != null) {
-//                    weightedAvgMaturityCell.setCellValue(weightedAvgMaturity.setScale(6, BigDecimal.ROUND_HALF_DOWN).doubleValue());
+//                    weightedAvgMaturityCell.setCellValue(weightedAvgMaturity.doubleValue());
 //                }
 //                weightedAvgMaturityCell.setCellType(Cell.CELL_TYPE_NUMERIC);
 

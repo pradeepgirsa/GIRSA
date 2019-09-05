@@ -53,8 +53,8 @@ public class QstatsReportValidator implements Validator<ReportDataCollectionBean
                         double dif = netEffExposure > netCurrentMarketValueInDouble ? netEffExposure - netCurrentMarketValueInDouble :
                                 netCurrentMarketValueInDouble - netEffExposure;
                         if (dif > 5.00d) {
-                            return "Net eff exposure from barra and net base current market value from client are not equal- portfolio code:"
-                                    + instrumentData.getPortfolioCode() + ", barra fund name:" + barraAssetInfo.getFundName();
+                            return "Net eff exposure from barra and total MV value from client are not equal - fund name:"+
+                            barraAssetInfo.getFundName() + ", portfolio code:" + instrumentData.getPortfolioCode() ;
                         }
                     }
                 }
