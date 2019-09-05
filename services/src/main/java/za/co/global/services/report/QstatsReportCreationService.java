@@ -75,9 +75,9 @@ public class QstatsReportCreationService implements ReportCreationService {
             numericCellStyle.setDataFormat(createHelper.createDataFormat().getFormat("##########"));
 
             CellStyle numeric18Decimal2 = workbook.createCellStyle();
-            numeric18Decimal2.setDataFormat(createHelper.createDataFormat().getFormat("0.000000"));
-//            CellStyle percentageCellStyle = workbook.createCellStyle();
-//            percentageCellStyle.setDataFormat(workbook.createDataFormat().getFormat("0.000000%"));
+            numeric18Decimal2.setDataFormat(createHelper.createDataFormat().getFormat("0.######"));
+            CellStyle percentageCellStyle = workbook.createCellStyle();
+            percentageCellStyle.setDataFormat(workbook.createDataFormat().getFormat("0.######%"));
 
 
             int rowNum = 1;
@@ -137,8 +137,12 @@ public class QstatsReportCreationService implements ReportCreationService {
                             couponRateCellReference+","+ currentYield.doubleValue()+",2,4)*"+ effWeight.doubleValue()+"*"+365.25, reportDateCellReference, resetMaturityDateCellRef);
                     weightedAvgDuration.setCellFormula(formula);
                     weightedAvgDuration.setCellType(Cell.CELL_TYPE_FORMULA);
-                    weightedAvgDuration.setCellStyle(numeric18Decimal2);
+
+                } else {
+                    weightedAvgDuration.setCellValue(0d);
+                    weightedAvgDuration.setCellType(Cell.CELL_TYPE_NUMERIC);
                 }
+                weightedAvgDuration.setCellStyle(numeric18Decimal2);
 
 //                BigDecimal weightedAvgMaturity = null;
 //                if(qStatsBean.getModifiedDuration() != null && effWeight != null) {
@@ -155,6 +159,9 @@ public class QstatsReportCreationService implements ReportCreationService {
                     weightedAvgMaturityCell.setCellFormula(formula);
                     weightedAvgMaturityCell.setCellType(Cell.CELL_TYPE_FORMULA);
                     weightedAvgMaturityCell.setCellStyle(numeric18Decimal2);
+                } else {
+                    weightedAvgMaturityCell.setCellValue(0d);
+                    weightedAvgMaturityCell.setCellType(Cell.CELL_TYPE_NUMERIC);
                 }
 
 
@@ -193,9 +200,9 @@ public class QstatsReportCreationService implements ReportCreationService {
 
                 Cell perOdPertCell = row.createCell(17);
                 if(qStatsBean.getPerOfPort() != null) {
-                    perOdPertCell.setCellValue(qStatsBean.getPerOfPort().multiply(BigDecimal.valueOf(100)).doubleValue());
+                    perOdPertCell.setCellValue(qStatsBean.getPerOfPort().doubleValue());
                     perOdPertCell.setCellType(Cell.CELL_TYPE_NUMERIC);
-                    perOdPertCell.setCellStyle(numeric18Decimal2);
+                    perOdPertCell.setCellStyle(percentageCellStyle);
                 }
 
                 Cell weightingCell = row.createCell(18);
@@ -283,7 +290,7 @@ public class QstatsReportCreationService implements ReportCreationService {
 
                 Cell perIssuedCapCell = row.createCell(38);
                 if(qStatsBean.getPerIssuedCap() != null) {
-                    perIssuedCapCell.setCellValue((qStatsBean.getPerIssuedCap().multiply(BigDecimal.valueOf(100))).doubleValue());
+                    perIssuedCapCell.setCellValue((qStatsBean.getPerIssuedCap()).doubleValue());
                     perIssuedCapCell.setCellType(Cell.CELL_TYPE_NUMERIC);
                     perIssuedCapCell.setCellStyle(numeric18Decimal2);
                 }
