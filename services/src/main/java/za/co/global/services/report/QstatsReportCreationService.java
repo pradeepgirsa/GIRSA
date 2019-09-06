@@ -244,7 +244,7 @@ public class QstatsReportCreationService implements ReportCreationService {
                 }
 
                 Cell couponRateCell = row.createCell(26);
-                if(couponRate != null && qStatsBean.getCouponRate().compareTo(BigDecimal.ZERO) != 0) {
+                if(couponRate != null && couponRate.compareTo(BigDecimal.ZERO) != 0) {
                     couponRateCell.setCellValue((couponRate.multiply(BigDecimal.valueOf(100))).doubleValue());
                     couponRateCell.setCellStyle(numeric18Decimal2);
                 }
