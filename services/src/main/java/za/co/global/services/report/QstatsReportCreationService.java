@@ -75,9 +75,9 @@ public class QstatsReportCreationService implements ReportCreationService {
             numericCellStyle.setDataFormat(createHelper.createDataFormat().getFormat("##########"));
 
             CellStyle numeric18Decimal2 = workbook.createCellStyle();
-            numeric18Decimal2.setDataFormat(createHelper.createDataFormat().getFormat("0.######"));
+            numeric18Decimal2.setDataFormat(createHelper.createDataFormat().getFormat("0.00####"));
             CellStyle percentageCellStyle = workbook.createCellStyle();
-            percentageCellStyle.setDataFormat(workbook.createDataFormat().getFormat("0.######%"));
+            percentageCellStyle.setDataFormat(workbook.createDataFormat().getFormat("0.00####%"));
 
 
             int rowNum = 1;
