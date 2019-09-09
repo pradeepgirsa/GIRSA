@@ -134,12 +134,13 @@ public class QstatsReportCreationService implements ReportCreationService {
                 BigDecimal couponRate = qStatsBean.getCouponRate() != null ? qStatsBean.getCouponRate() : BigDecimal.ZERO;
                 BigDecimal currentYield = qStatsBean.getCurrentYield();
                 BigDecimal effWeight = qStatsBean.getEffWeight();
-                if(qStatsBean.getResetMaturityDate() != null && couponRate != null && effWeight != null && currentYield != null && qStatsBean.getResetMaturityDate().after(qStatsBean.getQuarter())) {
+                if(qStatsBean.getResetMaturityDate() != null && couponRate != null && qStatsBean.getPerOfPort() != null && currentYield != null && qStatsBean.getResetMaturityDate().after(qStatsBean.getQuarter())) {
                     String reportDateCellReference = CellReference.convertNumToColString(0)+rowNum;
                     String resetMaturityDateCellRef = CellReference.convertNumToColString(28)+rowNum;
                     String couponRateCellReference = CellReference.convertNumToColString(26)+rowNum;
+                    String perOfPortCellReference = CellReference.convertNumToColString(17)+rowNum;
                     String formula=String.format("MDURATION(%s,%s,"+
-                            couponRateCellReference+","+ currentYield.doubleValue()+",2,4)*"+ effWeight.doubleValue()+"*"+365.25, reportDateCellReference, resetMaturityDateCellRef);
+                            couponRateCellReference+"," + currentYield.doubleValue() + ",2,4)*" + perOfPortCellReference + "*"+365.25, reportDateCellReference, resetMaturityDateCellRef);
                     weightedAvgDuration.setCellFormula(formula);
                     weightedAvgDuration.setCellType(Cell.CELL_TYPE_FORMULA);
                     weightedAvgDuration.setCellStyle(numeric18Decimal2);
@@ -154,12 +155,13 @@ public class QstatsReportCreationService implements ReportCreationService {
 //                }
 
                 Cell weightedAvgMaturityCell = row.createCell(9);
-                if(qStatsBean.getMaturityDate() != null && couponRate != null && effWeight != null && currentYield != null && qStatsBean.getMaturityDate().after(qStatsBean.getQuarter())) {
+                if(qStatsBean.getMaturityDate() != null && couponRate != null && qStatsBean.getPerOfPort() != null && currentYield != null && qStatsBean.getMaturityDate().after(qStatsBean.getQuarter())) {
                     String reportDateCellReference = CellReference.convertNumToColString(0)+rowNum;
                     String maturityDateCellReference = CellReference.convertNumToColString(27)+rowNum;
                     String couponRateCellReference = CellReference.convertNumToColString(26)+rowNum;
+                    String perOfPortCellReference = CellReference.convertNumToColString(17)+rowNum;
                     String formula=String.format("MDURATION(%s,%s,"+
-                            couponRateCellReference+","+ currentYield.doubleValue()+",2,4)*"+ effWeight.doubleValue()+"*"+365.25, reportDateCellReference, maturityDateCellReference);
+                            couponRateCellReference+ "," + currentYield.doubleValue() + ",2,4)*"+ perOfPortCellReference + "*" + 365.25, reportDateCellReference, maturityDateCellReference);
                     weightedAvgMaturityCell.setCellFormula(formula);
                     weightedAvgMaturityCell.setCellType(Cell.CELL_TYPE_FORMULA);
                     weightedAvgMaturityCell.setCellStyle(numeric18Decimal2);
