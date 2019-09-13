@@ -66,34 +66,44 @@ public class GenerateStatisticsController {
 
                 workbook.getCreationHelper();
 
-                // Create a Sheet
-                Sheet sheet = workbook.createSheet();
+                List<String> distinctFundNames = assetDSU3Repository.findDistinctFundNameAndNetIndicatorFalse();
+                for(String funName: assetDSU4Repository.findDistinctFundNameAndNetIndicatorFalse()) {
+                    if(!distinctFundNames.contains(funName)) {
+                        distinctFundNames.add(funName);
+                    }
+                }
 
-                CellStyle percentageCellStyle = workbook.createCellStyle();
-                percentageCellStyle.setDataFormat(workbook.createDataFormat().getFormat("0.00%"));
+                for (String fundName: distinctFundNames) {
 
-                // Create a Font for styling header cells
-                Font headerFont = workbook.createFont();
-                headerFont.setBold(true);
-                headerFont.setFontHeightInPoints((short) 14);
+                    // Create a Sheet
+                    Sheet sheet = workbook.createSheet(fundName);
+
+                    CellStyle percentageCellStyle = workbook.createCellStyle();
+                    percentageCellStyle.setDataFormat(workbook.createDataFormat().getFormat("0.00%"));
+
+                    // Create a Font for styling header cells
+                    Font headerFont = workbook.createFont();
+                    headerFont.setBold(true);
+                    headerFont.setFontHeightInPoints((short) 14);
 //            headerFont.setColor(IndexedColors.RED.getIndex());
 
-                // Create a CellStyle with the font
-                CellStyle headerCellStyle = workbook.createCellStyle();
-                headerCellStyle.setFont(headerFont);
+                    // Create a CellStyle with the font
+                    CellStyle headerCellStyle = workbook.createCellStyle();
+                    headerCellStyle.setFont(headerFont);
 
-                int i = 0;
-                i = addReport1(sheet, i, headerCellStyle, percentageCellStyle);//DSU4- Top 10 By InstSubType with 'Composite' value
-                i = addReport2(sheet, i, headerCellStyle, percentageCellStyle);//DSU3 - Top 10 By InstSubType with 'Equity Security' value
-                i = addReport3(sheet, i, headerCellStyle, percentageCellStyle);//DSU3 - Top 10 By InstSubType with all value
-                i = addReport4(sheet, i, headerCellStyle, percentageCellStyle);//DSU3 - Group By IcbIndustry and summing up eff weight and also displaying 'Excluding N/A'
-                i = addReport5(sheet, i, headerCellStyle, percentageCellStyle);//DSU3 - Group By LocalMarket and summing up eff weight. Displaying first 10 and  displaying remaining values by summing up eff weight as Other
-                i = addReport6(sheet, i, headerCellStyle, percentageCellStyle);//DSU3 - Group By IcbSuperSector and summing up eff weight
-                addReportForSARBClassificationAndAssetClass(sheet, i, headerCellStyle, percentageCellStyle);//DSU3 - Group By SARB classification, summing up eff weight and mapping to AssetClass
+                    int i = 0;
+                    i = addReport1(sheet, i, headerCellStyle, percentageCellStyle, fundName);//DSU4- Top 10 By InstSubType with 'Composite' value
+                    i = addReport2(sheet, i, headerCellStyle, percentageCellStyle, fundName);//DSU3 - Top 10 By InstSubType with 'Equity Security' value
+                    i = addReport3(sheet, i, headerCellStyle, percentageCellStyle, fundName);//DSU3 - Top 10 By InstSubType with all value
+                    i = addReport4(sheet, i, headerCellStyle, percentageCellStyle, fundName);//DSU3 - Group By IcbIndustry and summing up eff weight and also displaying 'Excluding N/A'
+                    i = addReport5(sheet, i, headerCellStyle, percentageCellStyle, fundName);//DSU3 - Group By LocalMarket and summing up eff weight. Displaying first 10 and  displaying remaining values by summing up eff weight as Other
+                    i = addReport6(sheet, i, headerCellStyle, percentageCellStyle, fundName);//DSU3 - Group By IcbSuperSector and summing up eff weight
+                    addReportForSARBClassificationAndAssetClass(sheet, i, headerCellStyle, percentageCellStyle, fundName);//DSU3 - Group By SARB classification, summing up eff weight and mapping to AssetClass
 
-                // Resize all columns to fit the content size
-                for (int j = 0; j < 3; j++) {
-                    sheet.autoSizeColumn(j);
+                    // Resize all columns to fit the content size
+                    for (int j = 0; j < 3; j++) {
+                        sheet.autoSizeColumn(j);
+                    }
                 }
 
                 // Write the output to a file
@@ -109,7 +119,7 @@ public class GenerateStatisticsController {
 
     /*First report : Get top 10 DSU4 values - 'Identifier(Asset Id type)', 'Top10 Fundlevel(Asset name)' and '% Exposure(Eff weight)'
                    by Inst. sub type with composite value */
-    private int addReport1(Sheet sheet, int i, CellStyle headerCellStyle, CellStyle percentageCellStyle) {
+    private int addReport1(Sheet sheet, int i, CellStyle headerCellStyle, CellStyle percentageCellStyle, String fundName) {
         Row headerRow = sheet.createRow(i); //Header row
         Cell cell0 = headerRow.createCell(0);
         cell0.setCellValue("Identifier");
@@ -127,7 +137,7 @@ public class GenerateStatisticsController {
         String sumString = null;
 
         // Data rows
-        List<AssetDSU4> assetDSU4s = assetDSU4Repository.findFirst10ByNetIndicatorIsFalseAndInstSubTypeOrderByEffWeightDesc("Composite");
+        List<AssetDSU4> assetDSU4s = assetDSU4Repository.findFirst10ByNetIndicatorIsFalseAndInstSubTypeAndFundNameOrderByEffWeightDesc("Composite", fundName);
         for (AssetDSU4 assetDSU4 : assetDSU4s) {
             i += 1;
             Row row = sheet.createRow(i);
@@ -154,7 +164,7 @@ public class GenerateStatisticsController {
 
     /*Second report : Get top 10 DSU3 values - 'Identifier(InstSubType)', 'Top10 Equity(Asset name)' and '% Exposure(Eff weight)'
                    by Inst. sub type with 'Equity Security' value */
-    private int addReport2(Sheet sheet, int i, CellStyle headerCellStyle, CellStyle percentageCellStyle) {
+    private int addReport2(Sheet sheet, int i, CellStyle headerCellStyle, CellStyle percentageCellStyle, String fundName) {
         i += 1;
         sheet.createRow(i); //Empty row
 
@@ -175,7 +185,7 @@ public class GenerateStatisticsController {
         String sumString = null;
 
         //Data rows
-        List<AssetDSU3> assetDSU3s = assetDSU3Repository.findFirst10ByNetIndicatorIsFalseAndInstSubTypeOrderByEffWeightDesc("Equity Security");
+        List<AssetDSU3> assetDSU3s = assetDSU3Repository.findFirst10ByNetIndicatorIsFalseAndInstSubTypeAndFundNameOrderByEffWeightDesc("Equity Security", fundName);
         for (AssetDSU3 assetDSU3 : assetDSU3s) {
             i += 1;
             Row row = sheet.createRow(i);
@@ -200,7 +210,7 @@ public class GenerateStatisticsController {
 
     /*3rd report : Get top 10 DSU3 values - 'Identifier(InstSubType)', 'Top10 ALL(Asset name)' and '% Exposure(Eff weight)'
                    by Inst. sub type irrespective of specific value*/
-    private int addReport3(Sheet sheet, int i, CellStyle headerCellStyle, CellStyle percentageCellStyle) {
+    private int addReport3(Sheet sheet, int i, CellStyle headerCellStyle, CellStyle percentageCellStyle, String fundName) {
         i += 1;
         sheet.createRow(i); //Empty row
 
@@ -222,7 +232,7 @@ public class GenerateStatisticsController {
         String sumString = null;
 
         //Data rows
-        List<AssetDSU3> assetDSU3s = assetDSU3Repository.findFirst10ByNetIndicatorIsFalseOrderByEffWeightDesc();
+        List<AssetDSU3> assetDSU3s = assetDSU3Repository.findFirst10ByNetIndicatorIsFalseAndFundNameOrderByEffWeightDesc(fundName);
         for (AssetDSU3 assetDSU3 : assetDSU3s) {
             i += 1;
             Row row = sheet.createRow(i);
@@ -246,7 +256,7 @@ public class GenerateStatisticsController {
     }
 
     /*4th report : Get DSU3 values - 'ICB Industry(IcbIndustry)' and 'Exposure(Sum of Eff weight)' group by IcbIndustry*/
-    private int addReport4(Sheet sheet, int i, CellStyle headerCellStyle, CellStyle percentageCellStyle) {
+    private int addReport4(Sheet sheet, int i, CellStyle headerCellStyle, CellStyle percentageCellStyle, String fundName) {
         i += 1;
         sheet.createRow(i); //Empty row
 
@@ -265,7 +275,7 @@ public class GenerateStatisticsController {
         String sumExcludingNAString = null;
 
         //Data rows
-        List<Object[]> assetDSU3s = assetDSU3Repository.findEffWeightSumGroupByIcbIndustry();
+        List<Object[]> assetDSU3s = assetDSU3Repository.findEffWeightSumByFundNameGroupByIcbIndustry(fundName);
         for (Object[] objects : assetDSU3s) {
             i += 1;
             Row row = sheet.createRow(i);
@@ -304,7 +314,7 @@ public class GenerateStatisticsController {
 
     /*5th report : Get DSU3 values - 'Local Market(Local Market)' and 'Exposure(Sum of Eff weight)' group by LocalMarket
      Displaying top 10 and remaining grouping as Other */
-    private int addReport5(Sheet sheet, int i, CellStyle headerCellStyle, CellStyle percentageCellStyle) {
+    private int addReport5(Sheet sheet, int i, CellStyle headerCellStyle, CellStyle percentageCellStyle, String fundName) {
         i += 1;
         sheet.createRow(i); //Empty row
 
@@ -322,7 +332,7 @@ public class GenerateStatisticsController {
         BigDecimal sumOfOtherEffWeight = BigDecimal.ZERO;
 
         //Data rows
-        List<Object[]> assetDSU3s = assetDSU3Repository.findEffWeightSumGroupByLocalMarket();
+        List<Object[]> assetDSU3s = assetDSU3Repository.findEffWeightSumByFundNameGroupByLocalMarket(fundName);
         int j = 0;
         for (Object[] objects : assetDSU3s) {
             j += 1;
@@ -363,7 +373,7 @@ public class GenerateStatisticsController {
 
 
     /*6th Report: Group by 'ICB Supersector' and summing up eff weight */
-    private int addReport6(Sheet sheet, int i, CellStyle headerCellStyle, CellStyle percentageCellStyle) {
+    private int addReport6(Sheet sheet, int i, CellStyle headerCellStyle, CellStyle percentageCellStyle, String fundName) {
         i += 1;
         sheet.createRow(i); //Empty row
 
@@ -380,7 +390,7 @@ public class GenerateStatisticsController {
         String sumFormula = null;
 
         //Data rows
-        List<Object[]> assetDSU3s = assetDSU3Repository.findEffWeightSumGroupByIcbSuperSector();
+        List<Object[]> assetDSU3s = assetDSU3Repository.findEffWeightSumByFundNameGroupByIcbSuperSector(fundName);
         for (Object[] objects : assetDSU3s) {
             i += 1;
             Row row = sheet.createRow(i);
@@ -407,7 +417,7 @@ public class GenerateStatisticsController {
     /*th report: Group by 'SARB Classification', summing up eff weight and mapping to AssetClass
     * 7th Report: Group by AssetClass values and summing up eff weight
     * 8th Report: Simplifying 8th report, i.e. taking out 'zero' values of eff weight*/
-    private int addReportForSARBClassificationAndAssetClass(Sheet sheet, int i, CellStyle headerCellStyle, CellStyle percentageCellStyle) {
+    private int addReportForSARBClassificationAndAssetClass(Sheet sheet, int i, CellStyle headerCellStyle, CellStyle percentageCellStyle, String fundName) {
         i += 1;
         sheet.createRow(i); //Empty row
 
@@ -434,7 +444,7 @@ public class GenerateStatisticsController {
 //        String sumFormula = null;
 
         //Data rows
-        List<Object[]> assetDSU3s = assetDSU3Repository.findEffWeightSumGroupBySARBClassification();
+        List<Object[]> assetDSU3s = assetDSU3Repository.findEffWeightSumByFundNameGroupBySARBClassification(fundName);
         for (Object[] objects : assetDSU3s) {
 //            i += 1;
 //            Row row = sheet.createRow(i);

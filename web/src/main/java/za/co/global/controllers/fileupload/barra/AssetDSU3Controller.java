@@ -116,14 +116,18 @@ public class AssetDSU3Controller extends BaseFileUploadController {
 
     private AssetDSU3 getAssetDsu3(Object object, String fundName) {
         AssetDSU3 assetDSU3 = (AssetDSU3) object;
-        AssetDSU3 existingAssetDsu3 = assetDSU3Repository.findByAssetIdAndFundName(assetDSU3.getAssetId(), fundName);
-        if (existingAssetDsu3 == null) {
-            assetDSU3.setFundName(fundName);
-            return assetDSU3;
-        }
-        convertAssetDSU3(assetDSU3, existingAssetDsu3);
+        LOGGER.info("DSU3: Asset id="+assetDSU3.getAssetId()+" fundNAme="+fundName);
+        if(assetDSU3.getAssetId() != null && fundName != null) {
+            AssetDSU3 existingAssetDsu3 = assetDSU3Repository.findByAssetIdAndFundName(assetDSU3.getAssetId(), fundName);
+            if (existingAssetDsu3 == null) {
+                assetDSU3.setFundName(fundName);
+                return assetDSU3;
+            }
+            convertAssetDSU3(assetDSU3, existingAssetDsu3);
 
-        return existingAssetDsu3;
+            return existingAssetDsu3;
+        }
+        return null;
     }
 
     private void convertAssetDSU3(AssetDSU3 assetDSU3, AssetDSU3 existingAssetDsu3) {
