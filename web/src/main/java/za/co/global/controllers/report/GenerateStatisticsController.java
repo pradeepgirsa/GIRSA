@@ -152,12 +152,14 @@ public class GenerateStatisticsController {
             sumString = sumString == null ? cr.formatAsString() : (sumString + "," + cr.formatAsString());
         }
 
-        i += 1;
-        Row totalRow = sheet.createRow(i); //Total eff weight
-        Cell totalCell = totalRow.createCell(2);
-        totalCell.setCellType(Cell.CELL_TYPE_FORMULA);
-        totalCell.setCellFormula("SUM(" + sumString + ")");
-        totalCell.setCellStyle(percentageCellStyle);
+        if(sumString != null) {
+            i += 1;
+            Row totalRow = sheet.createRow(i); //Total eff weight
+            Cell totalCell = totalRow.createCell(2);
+            totalCell.setCellType(Cell.CELL_TYPE_FORMULA);
+            totalCell.setCellFormula("SUM(" + sumString + ")");
+            totalCell.setCellStyle(percentageCellStyle);
+        }
 
         return i;
     }
@@ -199,12 +201,14 @@ public class GenerateStatisticsController {
             sumString = sumString == null ? cr.formatAsString() : (sumString + "," + cr.formatAsString());
         }
 
-        i += 1;
-        Row totalRow = sheet.createRow(i); //Total eff weight
-        Cell totalCell = totalRow.createCell(2);
-        totalCell.setCellType(Cell.CELL_TYPE_FORMULA);
-        totalCell.setCellFormula("SUM(" + sumString + ")");
-        totalCell.setCellStyle(percentageCellStyle);
+        if(sumString != null) {
+            i += 1;
+            Row totalRow = sheet.createRow(i); //Total eff weight
+            Cell totalCell = totalRow.createCell(2);
+            totalCell.setCellType(Cell.CELL_TYPE_FORMULA);
+            totalCell.setCellFormula("SUM(" + sumString + ")");
+            totalCell.setCellStyle(percentageCellStyle);
+        }
         return i;
     }
 
@@ -246,12 +250,14 @@ public class GenerateStatisticsController {
             sumString = sumString == null ? cr.formatAsString() : (sumString + "," + cr.formatAsString());
         }
 
-        i += 1;
-        Row totalRow = sheet.createRow(i); //Total eff weight
-        Cell totalCell = totalRow.createCell(2);
-        totalCell.setCellType(Cell.CELL_TYPE_FORMULA);
-        totalCell.setCellFormula("SUM(" + sumString + ")");
-        totalCell.setCellStyle(percentageCellStyle);
+        if(sumString != null) {
+            i += 1;
+            Row totalRow = sheet.createRow(i); //Total eff weight
+            Cell totalCell = totalRow.createCell(2);
+            totalCell.setCellType(Cell.CELL_TYPE_FORMULA);
+            totalCell.setCellFormula("SUM(" + sumString + ")");
+            totalCell.setCellStyle(percentageCellStyle);
+        }
         return i;
     }
 
@@ -293,22 +299,28 @@ public class GenerateStatisticsController {
             }
         }
 
-        i += 1;
-        Row totalRow = sheet.createRow(i); //Total eff weight
-        Cell totalCell = totalRow.createCell(1);
-        totalCell.setCellType(Cell.CELL_TYPE_FORMULA);
-        totalCell.setCellFormula("SUM(" + sumString + ")");
-        totalCell.setCellStyle(percentageCellStyle);
-        i += 1;
-        sheet.createRow(i); //Empty row
+        if(sumString != null) {
+            i += 1;
+            Row totalRow = sheet.createRow(i); //Total eff weight
+            Cell totalCell = totalRow.createCell(1);
+            totalCell.setCellType(Cell.CELL_TYPE_FORMULA);
+            totalCell.setCellFormula("SUM(" + sumString + ")");
+            totalCell.setCellStyle(percentageCellStyle);
 
-        i += 1;
-        Row excludingRow = sheet.createRow(i); //Total eff weight excluding 'N/A'
-        excludingRow.createCell(0).setCellValue("Excluding \"N/A\"");
-        Cell totalCellExcludingNA = excludingRow.createCell(1);
-        totalCellExcludingNA.setCellType(Cell.CELL_TYPE_FORMULA);
-        totalCellExcludingNA.setCellFormula("SUM(" + sumExcludingNAString + ")");
-        totalCellExcludingNA.setCellStyle(percentageCellStyle);
+            i += 1;
+            sheet.createRow(i); //Empty row
+        }
+
+
+        if(sumExcludingNAString != null) {
+            i += 1;
+            Row excludingRow = sheet.createRow(i); //Total eff weight excluding 'N/A'
+            excludingRow.createCell(0).setCellValue("Excluding \"N/A\"");
+            Cell totalCellExcludingNA = excludingRow.createCell(1);
+            totalCellExcludingNA.setCellType(Cell.CELL_TYPE_FORMULA);
+            totalCellExcludingNA.setCellFormula("SUM(" + sumExcludingNAString + ")");
+            totalCellExcludingNA.setCellStyle(percentageCellStyle);
+        }
         return i;
     }
 
@@ -353,21 +365,23 @@ public class GenerateStatisticsController {
             }
         }
 
-        i += 1;
-        Row otherRow = sheet.createRow(i); //Other column
-        otherRow.createCell(0).setCellValue("Other");
-        Cell otherCell = otherRow.createCell(1);
-        otherCell.setCellValue(sumOfOtherEffWeight.doubleValue());
-        otherCell.setCellStyle(percentageCellStyle);
-        CellReference cr = new CellReference(otherCell);
-        sumFormula = sumFormula == null ? cr.formatAsString() : (sumFormula + "," + cr.formatAsString());
+        if(sumFormula != null) {
+            i += 1;
+            Row otherRow = sheet.createRow(i); //Other column
+            otherRow.createCell(0).setCellValue("Other");
+            Cell otherCell = otherRow.createCell(1);
+            otherCell.setCellValue(sumOfOtherEffWeight.doubleValue());
+            otherCell.setCellStyle(percentageCellStyle);
+            CellReference cr = new CellReference(otherCell);
+            sumFormula = sumFormula == null ? cr.formatAsString() : (sumFormula + "," + cr.formatAsString());
 
-        i += 1;
-        Row totalRow = sheet.createRow(i); //Total eff weight
-        Cell totalCell = totalRow.createCell(1);
-        totalCell.setCellType(Cell.CELL_TYPE_FORMULA);
-        totalCell.setCellFormula("SUM(" + sumFormula + ")");
-        totalCell.setCellStyle(percentageCellStyle);
+            i += 1;
+            Row totalRow = sheet.createRow(i); //Total eff weight
+            Cell totalCell = totalRow.createCell(1);
+            totalCell.setCellType(Cell.CELL_TYPE_FORMULA);
+            totalCell.setCellFormula("SUM(" + sumFormula + ")");
+            totalCell.setCellStyle(percentageCellStyle);
+        }
         return i;
     }
 
@@ -405,12 +419,14 @@ public class GenerateStatisticsController {
             sumFormula = sumFormula == null ? cr.formatAsString() : (sumFormula + "," + cr.formatAsString());
         }
 
-        i += 1;
-        Row totalRow = sheet.createRow(i); //Total eff weight
-        Cell totalCell = totalRow.createCell(1);
-        totalCell.setCellType(Cell.CELL_TYPE_FORMULA);
-        totalCell.setCellFormula("SUM(" + sumFormula + ")");
-        totalCell.setCellStyle(percentageCellStyle);
+        if(sumFormula != null) {
+            i += 1;
+            Row totalRow = sheet.createRow(i); //Total eff weight
+            Cell totalCell = totalRow.createCell(1);
+            totalCell.setCellType(Cell.CELL_TYPE_FORMULA);
+            totalCell.setCellFormula("SUM(" + sumFormula + ")");
+            totalCell.setCellStyle(percentageCellStyle);
+        }
         return i;
     }
 
@@ -508,12 +524,14 @@ public class GenerateStatisticsController {
 
         }
 
-        i += 1;
-        Row totalAssetClassRow = sheet.createRow(i); //Total eff weight
-        Cell totalAssetClassCell = totalAssetClassRow.createCell(1);
-        totalAssetClassCell.setCellType(Cell.CELL_TYPE_FORMULA);
-        totalAssetClassCell.setCellFormula("SUM(" + assetClassSumFormula + ")");
-        totalAssetClassCell.setCellStyle(percentageCellStyle);
+        if(assetClassSumFormula != null) {
+            i += 1;
+            Row totalAssetClassRow = sheet.createRow(i); //Total eff weight
+            Cell totalAssetClassCell = totalAssetClassRow.createCell(1);
+            totalAssetClassCell.setCellType(Cell.CELL_TYPE_FORMULA);
+            totalAssetClassCell.setCellFormula("SUM(" + assetClassSumFormula + ")");
+            totalAssetClassCell.setCellStyle(percentageCellStyle);
+        }
 
         //Simplified Asset class report
         i += 1;
@@ -550,12 +568,14 @@ public class GenerateStatisticsController {
             }
         }
 
-        i += 1;
-        Row totalSimplifiedAssetClassRow = sheet.createRow(i); //Total eff weight
-        Cell totalSimplifiedAssetClassCell = totalSimplifiedAssetClassRow.createCell(1);
-        totalSimplifiedAssetClassCell.setCellType(Cell.CELL_TYPE_FORMULA);
-        totalSimplifiedAssetClassCell.setCellFormula("SUM(" + simplifiedAssetClassSumFormula + ")");
-        totalSimplifiedAssetClassCell.setCellStyle(percentageCellStyle);
+        if(simplifiedAssetClassSumFormula != null) {
+            i += 1;
+            Row totalSimplifiedAssetClassRow = sheet.createRow(i); //Total eff weight
+            Cell totalSimplifiedAssetClassCell = totalSimplifiedAssetClassRow.createCell(1);
+            totalSimplifiedAssetClassCell.setCellType(Cell.CELL_TYPE_FORMULA);
+            totalSimplifiedAssetClassCell.setCellFormula("SUM(" + simplifiedAssetClassSumFormula + ")");
+            totalSimplifiedAssetClassCell.setCellStyle(percentageCellStyle);
+        }
         return i;
     }
 
