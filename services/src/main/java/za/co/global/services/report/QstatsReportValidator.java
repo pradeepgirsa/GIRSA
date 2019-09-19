@@ -60,7 +60,7 @@ public class QstatsReportValidator implements Validator<ReportDataCollectionBean
                 }
             }
         }
-        if(reportDataCollectionBean.getReg28InstrumentType() == null) {
+        if(barraAssetInfo != null && reportDataCollectionBean.getReg28InstrumentType() == null) {
             if(!(barraAssetInfo.getReg28InstrType() == null && (barraAssetInfo.getInstSubType().equalsIgnoreCase("Composite")
                     || barraAssetInfo.getInstType().equalsIgnoreCase("ETF") || barraAssetInfo.getInstType().equalsIgnoreCase("Exchange Traded Fund") ))) {
                 return "There is no Reg28 mapping to barra fund:"+barraAssetInfo.getFundName()+", asset id: " + barraAssetInfo.getAssetId() + ", Reg28_InstrType: " + barraAssetInfo.getReg28InstrType();
