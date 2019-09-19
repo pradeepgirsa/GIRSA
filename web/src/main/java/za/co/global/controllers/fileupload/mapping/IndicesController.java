@@ -81,11 +81,12 @@ public class IndicesController extends BaseFileUploadController {
 
     private Indices getIndices(Object object, String type) {
         Indices indices = (Indices) object;
-        if(!StringUtils.isEmpty(type)) {
+        if(StringUtils.isEmpty(type)) {
             type = StringUtils.EMPTY;
         }
         Indices existingIndice = indicesRepository.findBySecurityAndType(indices.getSecurity(), type);
         if(existingIndice == null) {
+            indices.setType(type);
             return indices;
         }
         existingIndice.setAsk(indices.getAsk());
