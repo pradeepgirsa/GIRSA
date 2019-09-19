@@ -118,6 +118,8 @@ public class GenerateQstatsController extends AbstractQstatsReportController {
         values for fund level not for every instrument  */
 
                 Map<String, BigDecimal> fundTotalMarketValueMap = new HashMap<>();
+
+                Map<String, QStatsBean> qStatsBeanMap = new HashMap<>();
                 /*Iterate through instruments and map all required data and get Qstats report required data */
                 for (InstrumentData instrumentData : instrumentDataList) {
                     ClientFundMapping clientFundMapping = clientFundMappingRepository.findByManagerFundCode(instrumentData.getPortfolioCode());
@@ -129,17 +131,27 @@ public class GenerateQstatsController extends AbstractQstatsReportController {
                     If instrument mapped to barra asset then add it to Qstats report
                      * Adding mv to total mv if instrument mapped to barra asset
                      *Setting reportData to instrument even if it not mapped to barra asset as it should not included for next quarter report*/
-                    if(barraAssetInfo != null) {
+//                    if(barraAssetInfo != null) {
                         validate(reportDataCollectionBean);
                         addTotalMV(fundTotalMarketValueMap, instrumentData, barraAssetInfo); //TODO- remove in future - Doing this extra calculation beacuse netEffExpsosure and total MV validation commented
-                        qStatsBeans.add(getQStatsBean(reportDate, client, reportDataCollectionBean));
-                    }
+
+                        QStatsBean qStatsBean = getQStatsBean(reportDate, client, reportDataCollectionBean);
+
+                        String key = getUpdatedQstatsBean(qStatsBeanMap, qStatsBean); //This is due to ACC_EX replacing fundName
+                        qStatsBeanMap.put(key, qStatsBean);
+
+//                    }
                     /* This code will be active if we are not deleting client file data after report mark as completed */
 //                    if (instrumentData.getReportData() == null) {
 //                        reportData.getInstrumentDataList().add(instrumentData);
 //                        instrumentData.setReportData(reportData);
 //                    }
                 }
+
+                for(QStatsBean qStatsBean : qStatsBeanMap.values()) {
+                    qStatsBeans.add(qStatsBean);
+                }
+
                 reportDataRepository.save(reportData);
 
                 /*Creating excel file using Qstats data */
@@ -153,6 +165,28 @@ public class GenerateQstatsController extends AbstractQstatsReportController {
             modelAndView.addObject("errorMessage", "Error: "+e.getMessage());
         }
         return modelAndView;
+    }
+
+    private String getUpdatedQstatsBean(Map<String, QStatsBean> qStatsBeanMap, QStatsBean qStatsBean) {
+        String key = qStatsBean.getAciFundCode() + ":" + qStatsBean.getInstrCode();
+        QStatsBean qStatsBean1 = qStatsBeanMap.get(key);
+        if(qStatsBean1 != null){
+            qStatsBean.setBookValue(addAndGetValue(qStatsBean1.getBookValue(), qStatsBean.getBookValue()));
+            qStatsBean.setMarketValue(addAndGetValue(qStatsBean1.getMarketValue(), qStatsBean.getMarketValue()));
+            qStatsBean.setHolding(addAndGetValue(qStatsBean1.getHolding(), qStatsBean.getHolding()));
+        }
+        return key;
+    }
+
+    private BigDecimal addAndGetValue(BigDecimal previousValue, BigDecimal newValue) {
+        if(previousValue != null) {
+            if(newValue != null) {
+                return previousValue.add(newValue);
+            } else {
+                return previousValue;
+            }
+        }
+        return newValue;
     }
 
     private void addTotalMV(Map<String, BigDecimal> fundTotalMarketValueMap, InstrumentData instrumentData, BarraAssetInfo barraAssetInfo) {
@@ -302,7 +336,7 @@ public class GenerateQstatsController extends AbstractQstatsReportController {
         qStatsBean.setCurrencyCode(instrument.getInstrumentCurrency());
         qStatsBean.setMarketValue(instrument.getCurrentMarketValue());
 
-        if ("DE".equalsIgnoreCase(qStatsBean.getAciAssetclass())) {
+        if (qStatsBean.getAciAssetclass() != null && qStatsBean.getAciAssetclass().indexOf("DE") != -1) {
             String type = StringUtils.isEmpty(clientFundMapping.getComments()) ? StringUtils.EMPTY : clientFundMapping.getComments().trim();
             Indices indices = indicesRepository.findBySecurityAndType(instrument.getInstrumentCode(), type);
             if (indices != null) {
@@ -390,7 +424,7 @@ public class GenerateQstatsController extends AbstractQstatsReportController {
     private String getAdditionalClassification(BarraAssetInfo barraAssetInfo, Reg28InstrumentType reg28InstrumentType, String aciAssetClass, IssuerMapping issuerMapping) {
 
         String addClassification = null;
-        if(issuerMapping != null) {
+        if(issuerMapping != null && ("DB".equals(aciAssetClass) || "DM".equals(aciAssetClass) || "DBU".equals(aciAssetClass))) {
             addClassification = issuerMapping.getAddClassification();
         }
         if (StringUtils.isEmpty(addClassification) && "DE".equals(aciAssetClass)) {

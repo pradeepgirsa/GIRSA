@@ -37,10 +37,10 @@ public class QstatsReportValidator implements Validator<ReportDataCollectionBean
         }
 
         //This need to be verified to fund only once that is why added this map as once tha values is true it is not going to check it again
-        if(netAssetEffExposureVerifyMap != null) {
+        if(netAssetEffExposureVerifyMap != null && barraAssetInfo != null) {
             if (netAssetEffExposureVerifyMap.get(barraAssetInfo.getFundName()) != null && !netAssetEffExposureVerifyMap.get(barraAssetInfo.getFundName())) {
                 netAssetEffExposureVerifyMap.put(barraAssetInfo.getFundName(), Boolean.TRUE);
-                if (barraAssetInfo != null && (netAsset == null || netAsset.getEffExposure() == null)) {
+                if ( netAsset == null || netAsset.getEffExposure() == null) {
                     return "There is no net eff exposure value for barra fund:" + barraAssetInfo.getFundName();
                 }
                 if (netCurrentMarketValue != null && barraAssetInfo != null) {
