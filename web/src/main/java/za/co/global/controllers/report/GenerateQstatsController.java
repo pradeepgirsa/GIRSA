@@ -473,13 +473,13 @@ public class GenerateQstatsController extends AbstractQstatsReportController {
             aciAssetClass = "DO";
         } else if (barraAssetInfo != null && "Composite".equalsIgnoreCase(barraAssetInfo.getAssetIdType())) {
            aciAssetClass = "LOCAL".equals(asisaDefined2) ? "LUT" : "FUT";
-        } else if(barraAssetInfo != null && "3.1(a)(i)".equalsIgnoreCase(reg28InstrType) || "3.1(a)(ii)".equalsIgnoreCase(reg28InstrType) || "3.1(a)(iii)".equalsIgnoreCase(reg28InstrType)) {
+        } else if(barraAssetInfo != null && ("3.1(a)(i)".equalsIgnoreCase(reg28InstrType) || "3.1(a)(ii)".equalsIgnoreCase(reg28InstrType) || "3.1(a)(iii)".equalsIgnoreCase(reg28InstrType))) {
             aciAssetClass = "2nd on JSE".equals(barraAssetInfo.getSarbClassification()) ? "DES" : "DEP";
-        } else if(barraAssetInfo != null && "4.1(a)(i)".equalsIgnoreCase(reg28InstrType) || "4.1(a)(ii)".equalsIgnoreCase(reg28InstrType) || "4.1(a)(iii)".equalsIgnoreCase(reg28InstrType)) {
+        } else if(barraAssetInfo != null && ("4.1(a)(i)".equalsIgnoreCase(reg28InstrType) || "4.1(a)(ii)".equalsIgnoreCase(reg28InstrType) || "4.1(a)(iii)".equalsIgnoreCase(reg28InstrType))) {
             aciAssetClass = "2nd on JSE".equals(barraAssetInfo.getSarbClassification()) ? "DES" : "DEP";
         } else if (barraAssetInfo != null && "SETTLEMENT".equalsIgnoreCase(barraAssetInfo.getAssetName()) && "1.2(a)".equalsIgnoreCase(reg28InstrType)) {
             aciAssetClass = "FS";
-        } else if (barraAssetInfo != null && "Fund".equalsIgnoreCase(barraAssetInfo.getInstType()) || "Composite".equalsIgnoreCase(barraAssetInfo.getInstType())) {
+        } else if (barraAssetInfo != null && ("Fund".equalsIgnoreCase(barraAssetInfo.getInstType()) || "Composite".equalsIgnoreCase(barraAssetInfo.getInstType()))) {
             aciAssetClass = "LOCAL".equals(asisaDefined2) ? "LUT" : "FUT";
         } else {
             if(barraAssetInfo != null) {
