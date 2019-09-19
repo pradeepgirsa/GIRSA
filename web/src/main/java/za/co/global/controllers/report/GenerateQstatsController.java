@@ -337,7 +337,7 @@ public class GenerateQstatsController extends AbstractQstatsReportController {
         qStatsBean.setCurrencyCode(instrument.getInstrumentCurrency());
         qStatsBean.setMarketValue(instrument.getCurrentMarketValue());
 
-        if (qStatsBean.getAciAssetclass() != null && qStatsBean.getAciAssetclass().indexOf("DE") != -1) {
+        if (qStatsBean.getAciAssetclass() != null && ("DE".equals(qStatsBean.getAciAssetclass()) || "DEP".equals(qStatsBean.getAciAssetclass()) || "DES".equals(qStatsBean.getAciAssetclass()))) {
             String type = StringUtils.isEmpty(clientFundMapping.getComments()) ? StringUtils.EMPTY : clientFundMapping.getComments().trim();
             Indices indices = indicesRepository.findBySecurityAndType(instrument.getInstrumentCode(), type);
             if (indices != null) {

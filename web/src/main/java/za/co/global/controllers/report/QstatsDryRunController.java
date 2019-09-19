@@ -87,10 +87,10 @@ public class QstatsDryRunController extends AbstractQstatsReportController {
                     ClientFundMapping clientFundMapping = clientFundMappingRepository.findByManagerFundCode(instrumentData.getPortfolioCode());
 //                    BarraAssetInfo netAsset = netAssetMap.get(clientFundMapping.)
                     ReportDataCollectionBean reportDataCollectionBean = getReportCollectionBean(instrumentData, netAssetMap, clientFundMapping, null, fundTotalMarketValueMap, netAssetEffExposureVerifyMap);
-                    if(reportDataCollectionBean.getBarraAssetInfo() != null) {
+//                    if(reportDataCollectionBean.getBarraAssetInfo() != null) {
                         String error = validator.validate(reportDataCollectionBean);
                         errorString = addToErrorString(errorString, lineSeparator, error);
-                    }
+//                    }
                 }
                 if (!StringUtils.isEmpty(errorString)) {
                     String errorFile = createErrorFile(client, errorString);

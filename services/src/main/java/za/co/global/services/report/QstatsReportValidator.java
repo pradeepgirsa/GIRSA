@@ -28,10 +28,9 @@ public class QstatsReportValidator implements Validator<ReportDataCollectionBean
         if(fundMapping == null || fundMapping.getClientFundCode() == null) {
             return "There is no fund mapped to portfolio code: " + instrumentData.getPortfolioCode();
         }
-//        if(barraAssetInfo == null) {
-//            return "There is no Barra asset mapped to portfolio code: " + instrumentData.getPortfolioCode()
-//                    + " and instrument code: "+instrumentData.getInstrumentCode();
-//        }
+        if(netAssetEffExposureVerifyMap != null && barraAssetInfo == null) {
+            return "There is no Barra asset mapped to instrument : " + instrumentData.getInstrumentCode() + " of fund: " + fundMapping.getBarraFundName();
+        }
         if(instrumentCode == null) {
             return "There is no matching barra asset for instrument code: " + instrumentData.getInstrumentCode();
         }
