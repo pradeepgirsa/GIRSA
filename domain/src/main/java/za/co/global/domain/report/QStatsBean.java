@@ -14,6 +14,7 @@ public class QStatsBean {
     private BigDecimal mvTotal;
     private BigDecimal institutionalTotal;
     private BigDecimal noOfAccounts;
+    private String portfolioCode;
 
     @Deprecated
     private BigDecimal weightedAvgDuration;
@@ -460,5 +461,13 @@ public class QStatsBean {
 
     public void setBarraFundname(String barraFundname) {
         this.barraFundname = barraFundname;
+    }
+
+    public String getPortfolioCode() {
+        return portfolioCode;
+    }
+
+    public void setPortfolioCode(String portfolioCode) {
+        this.portfolioCode = portfolioCode;
     }
 }

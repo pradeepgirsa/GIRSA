@@ -104,7 +104,7 @@ public class QstatsReportCreationService implements ReportCreationService {
                 quarterDateCell.setCellStyle(dateCellStyle);
 
                 Cell mvTotalCell = row.createCell(5);
-                BigDecimal totalMV = fundTotalMarketValueMap.get(qStatsBean.getBarraFundname());
+                BigDecimal totalMV = fundTotalMarketValueMap.get(qStatsBean.getPortfolioCode());
                 if(totalMV != null) {
                     mvTotalCell.setCellValue(totalMV.doubleValue());
                 }

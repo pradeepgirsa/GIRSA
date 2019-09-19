@@ -191,10 +191,10 @@ public class GenerateQstatsController extends AbstractQstatsReportController {
 
     private void addTotalMV(Map<String, BigDecimal> fundTotalMarketValueMap, InstrumentData instrumentData, BarraAssetInfo barraAssetInfo) {
         BigDecimal totalMV = instrumentData.getCurrentMarketValue();
-        if(fundTotalMarketValueMap.get(barraAssetInfo.getFundName()) != null) {
-            totalMV = fundTotalMarketValueMap.get(barraAssetInfo.getFundName()).add(instrumentData.getCurrentMarketValue());
+        if(barraAssetInfo != null && fundTotalMarketValueMap.get(barraAssetInfo.getFundName()) != null) {
+            totalMV = fundTotalMarketValueMap.get(instrumentData.getPortfolioCode()).add(instrumentData.getCurrentMarketValue());
         }
-        fundTotalMarketValueMap.put(barraAssetInfo.getFundName(), totalMV);
+        fundTotalMarketValueMap.put(instrumentData.getPortfolioCode(), totalMV);
     }
 
     private void validate(ReportDataCollectionBean reportDataCollectionBean) throws GirsaException {
@@ -289,6 +289,7 @@ public class GenerateQstatsController extends AbstractQstatsReportController {
         InstrumentData instrument = reportDataCollectionBean.getInstrumentData();
 
         QStatsBean qStatsBean = new QStatsBean();
+        qStatsBean.setPortfolioCode(instrument.getPortfolioCode());
         qStatsBean.setAciFundCode(clientFundMapping.getClientFundCode());
         String fundName = !StringUtils.isEmpty(clientFundMapping.getManagerFundName()) ?
                 clientFundMapping.getManagerFundName() : instrument.getPortfolioName();
