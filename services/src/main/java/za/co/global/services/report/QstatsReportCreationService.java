@@ -111,7 +111,8 @@ public class QstatsReportCreationService implements ReportCreationService {
                 mvTotalCell.setCellType(Cell.CELL_TYPE_NUMERIC);
                 mvTotalCell.setCellStyle(numeric18Decimal2);
 
-                BigDecimal perOfPort = qStatsBean.getMarketValue() != null && totalMV != null ?
+                BigDecimal perOfPort = (qStatsBean.getMarketValue() != null && totalMV != null &&
+                        totalMV.compareTo(BigDecimal.ZERO) != 0 && qStatsBean.getMarketValue().compareTo(BigDecimal.ZERO) != 0) ?
                         qStatsBean.getMarketValue().divide(totalMV, 9, BigDecimal.ROUND_HALF_UP) : null;
                 qStatsBean.setPerOfPort(perOfPort);
 
